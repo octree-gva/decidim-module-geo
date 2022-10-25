@@ -11,7 +11,7 @@
 
 # Decidim::Geo
 
-Component for manage geo files, like shapefiles, in a participatory space.
+Component for manage geo files, like shapefiles, in a participatory space for 0.26.3 version.
 
 ## Usage
 
