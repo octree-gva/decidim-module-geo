@@ -1,0 +1,15 @@
+<% content_for :sidebar_menu_nav do %>
+  <%= sidebar_menu(:admin_geo_menu).render %>
+<% end %>
+
+<%= render "layouts/decidim/admin/application" do %>
+  <div class="process-title">
+    <div class="process-title-content">
+      <%= link_to "Shapefiles", decidim_geo.shapefiles_path, target: "_blank" %>
+    </div>
+  </div>
+
+  <div class="process-content">
+    <%= yield %>
+  </div>
+<% end %>

@@ -9,6 +9,8 @@ Decidim.register_component(:geo) do |component|
 
   component.settings(:global) do |settings|
     settings.attribute :announcement, type: :text, translated: true, editor: true
+    settings.attribute :geocoding_enabled, type: :boolean, default: false
+    settings.attribute :attachments_allowed, type: :boolean, default: true
   end
 
   component.settings(:step) do |settings|

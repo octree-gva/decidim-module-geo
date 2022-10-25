@@ -1,6 +1,14 @@
 ---
 en:
   decidim:
+    admin:
+      title: Shapefiles
+      actions:
+        new_shapefile: New Shapefile
+      fields:
+        title: Name
+        created_at: Created at
+        actions: Actions
     components:
       geo:
         name: Geo

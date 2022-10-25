@@ -11,8 +11,8 @@ module Decidim
 
       routes do
         # Add admin engine routes here
-        resources :geo
         resources :shapefiles
+        root to: 'shapefiles#index'
       end
 
      initializer "decidim_geo.admin_mount_routes" do
@@ -33,26 +33,28 @@ module Decidim
         end
       end
 
-      initializer "decidim_geo.geo_menu" do
-        byebug
+      initializer "decidim_geo.admin_geo_menu" do
         Decidim.menu :admin_geo_menu do |menu|
           menu.add_item :shapefiles,
                         I18n.t("menu.geo", scope: "decidim.admin", default: "Shapefiles"),
                         decidim_admin_geo.shapefiles_path,
                         position: 1,
-                        active: is_active_link?(decidim_admin_geo.shapefiles_path, :inclusive)
+                        active: is_active_link?(decidim_admin_geo.shapefiles_path, :inclusive),
+                        if: defined?(current_user) && current_user&.read_attribute("admin")
 
           menu.add_item :configurations,
                         I18n.t("menu.geo", scope: "decidim.admin", default: "Configurations"),
                         decidim_admin_geo.shapefiles_path,
                         position: 1,
-                        active: is_active_link?(decidim_admin_geo.shapefiles_path, :inclusive)
+                        active: is_active_link?(decidim_admin_geo.shapefiles_path, :inclusive),
+                        if: defined?(current_user) && current_user&.read_attribute("admin")
           
           menu.add_item :application_zone,
                         I18n.t("menu.geo", scope: "decidim.admin", default: "Application Zones"),
                         decidim_admin_geo.shapefiles_path,
                         position: 1,
-                        active: is_active_link?(decidim_admin_geo.shapefiles_path, :inclusive)
+                        active: is_active_link?(decidim_admin_geo.shapefiles_path, :inclusive),
+                        if: defined?(current_user) && current_user&.read_attribute("admin")
         end
       end
 

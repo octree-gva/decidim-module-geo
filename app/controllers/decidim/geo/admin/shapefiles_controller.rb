@@ -6,8 +6,14 @@ module Decidim
       class ShapefilesController < Decidim::Geo::Admin::ApplicationController
         
         def index
-          byebug
           #enforce_permission_to :list
+        end
+
+        def new
+          # enforce_permission_to :create, :shapefile
+          @form = form(Decidim::Geo::Admin::ShapefileForm).from_params(
+            attachment: form(AttachmentForm).from_params({})
+          )
         end
         
         def uploader
