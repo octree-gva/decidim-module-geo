@@ -1,0 +1,12 @@
+---
+en:
+  decidim:
+    components:
+      geo:
+        name: Geo
+        settings:
+          global:
+            announcement: Announcement
+          step:
+            announcement: Announcement   
+

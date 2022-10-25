@@ -1,0 +1,6 @@
+export DATABASE_HOST=localhost
+export DATABASE_USERNAME=decidim
+export DATABASE_PASSWORD='TEST-baeGhi4Ohtahcee5eejoaxaiwaezaiGo'
+export RAILS_ENV=development
+export SMTP_DOMAIN=mailer
+export SMTP_PORT=25
