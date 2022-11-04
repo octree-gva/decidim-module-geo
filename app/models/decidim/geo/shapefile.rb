@@ -20,6 +20,10 @@ module Decidim
 
       component_manifest_name "shapefiles"
 
+      translatable_fields :title
+
+      validates :title
+
     end
   end
 end

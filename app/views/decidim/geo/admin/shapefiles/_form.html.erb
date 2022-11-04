@@ -1,0 +1,25 @@
+<% content_for :sidebar_menu_nav do %>
+  <%= sidebar_menu(:admin_geo_menu).render %>
+<% end %>
+
+<div class="card">
+  <div class="card-divider">
+    <h2 class="card-title"><%= title %></h2>
+  </div>
+
+  <% byebug %>
+  <div class="row column">
+    <fieldset>
+      <legend><%= t(".attachment_legend") %></legend>
+      <%= form.fields_for :attachment, @form.attachment do |form| %>
+        <div class="row column">
+          <%= form.text_field :title %>
+        </div>
+
+        <div class="row column">
+          <%= form.upload :file, optional: false %>
+        </div>
+      <% end %>
+    </fieldset>
+  </div>
+</div>

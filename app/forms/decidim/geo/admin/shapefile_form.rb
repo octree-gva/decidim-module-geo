@@ -4,12 +4,13 @@ module Decidim
   module Geo
     module Admin
       # A form object to be used when admin users want to upload a shapefile.
-      class ShapefileForm < Decidim::Form
+      class ShapefileForm < Decidim::AttachmentForm
         include Decidim::TranslatableAttributes
         include Decidim::AttachmentAttributes
+        include Decidim::HasUploadValidations
         include Decidim::ApplicationHelper
 
-        mimic :shapefile
+        mimic :shapefile 
 
         attribute :attachment, AttachmentForm
 
@@ -18,8 +19,8 @@ module Decidim
         def map_model(model)
           super(model)
           
-          self.attachment = if model.documents.first.present?
-                              { file: model.documents.first.file, title: translated_attribute(model.documents.first.title) }
+          self.attachment = if model.attachments.first.present?
+                              { file: model.attachments.first.file, title: translated_attribute(model.attachments.first.title) }
                             else
                               {}
                             end

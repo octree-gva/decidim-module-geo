@@ -1,0 +1,10 @@
+
+
+<%= decidim_form_for(@form, html: { class: "form new_shapefile shapefile_form_admin" }) do |form| %>
+  <%= render partial: "form", object: form, locals: { title: t(".title") } %>
+
+  <div class="button--double form-general-submit">
+    <%= form.submit t(".create") %>
+  </div>
+<% end %>
+

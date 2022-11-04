@@ -1,14 +1,25 @@
 ---
 en:
   decidim:
-    admin:
-      title: Shapefiles
-      actions:
-        new_shapefile: New Shapefile
-      fields:
-        title: Name
-        created_at: Created at
-        actions: Actions
+    geo: 
+      admin:
+        shapefiles:
+          title: Shapefiles
+          new:
+            title: Upload Shapefiles
+            create: Create
+          actions:
+            new_shapefile: New Shapefile
+            new:
+              attachment_legend: Put your zip file here
+          fields:
+            title: Name
+            created_at: Created at
+            actions: Actions
+          form:
+            attachment_legend: Upload a zip file contenig shapefiles
+      content_blocks:
+        name: Maps 
     components:
       geo:
         name: Geo
@@ -16,5 +27,6 @@ en:
           global:
             announcement: Announcement
           step:
-            announcement: Announcement   
+            announcement: Announcement
+      
 
