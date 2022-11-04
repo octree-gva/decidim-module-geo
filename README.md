@@ -32,19 +32,23 @@ Participation on the map, means:
 * Overview participation: Be able to consult what happens where.
 * Participate: Be able to pin points, select zones, etc. while participating
 
-This project is its early stage, and has it is quiet ambicious, we open CO-FUNDING and setup a public Roadmap here: [https://octreegva.notion.site/Roadmap-Decidim-GEO-f191fcb9e220401f8135514a7bd41aab](https://octreegva.notion.site/Roadmap-Decidim-GEO-f191fcb9e220401f8135514a7bd41aab)
+This project is its early stage, and has it is quiet ambicious, we open CO-FUNDING and setup a public Roadmap here: [https://octreegva.notion.site/Roadmap-Decidim-GEO-f191fcb9e220401f8135514a7bd41aab](https://octreegva.notion.site/Roadmap-Decidim-GEO-f191fcb9e220401f8135514a7bd41aab).
 
-# Why it's not on MetaDecidim?
-We think Decidim is already over complicated to install and setup. This module uses PosGis extensions on a postgres database, that can be hard to install. We block the proposal to metadecidim until these points are solved:
+If you are curious on how it started, [we've made some slide to present the project](https://drive.google.com/file/d/1lfQJumDg0Ic-RZi-R3MM8frYtKN7PB_S/view?usp=sharing).
 
-- We have stable release.
-- We have feedbacks from participants that it is actually usefull.
-- We have feedbacks from Decidim's admins that this is actually improving participation.
-- Decidim run primarly on docker, with an updated documentation on installation. (We, at Octree is working on it for a while)
 
-## Usage
+## How it works?
 
-Decidim GEO creates a GEO administrations
+Posgis can load Shapesfiles that can represents anything: neighbourghoods, cities, states, trees, public spaces.
+We use this module to map a shape to an application zone, to be able to geo-references all the participatory processes of the plateform. This way we can offer better consultation experience, and open new perspective for participation.
+
+<img
+    src="https://github.com/octree-gva/meta/blob/main/decidim/static/geo/admin.png?raw=true"
+    alt="Administration of the GEO space" />
+<img
+    src="https://github.com/octree-gva/meta/blob/main/decidim/static/geo/consult.png?raw=true"
+    alt="Administration of the GEO space" />
+
 
 ## Installation
 
@@ -62,6 +66,8 @@ bundle exec rails decidim-geo:install:migrations
 bundle exec rails db:migrate
 ```
 
+You will need a posgis database, at least version 14 to be able to do the migration.
+
 ## Testing
 ```
 bundle exec rake test_app
@@ -72,7 +78,7 @@ bundle exec rake test_app
 Run a postgres database
 ```
 docker-compose up -d
-source .env.local
+cp .env.sample .env.local && source .env.local
 ```
 
 Run if you haven't already:
@@ -96,7 +102,15 @@ Access your local environment [localhost:3000](http://localhost:3000)
 
 ## Contributing
 
-See [Decidim](https://github.com/decidim/decidim).
+We are not yet ready for contributions, but we are working on a goood workflow
+
+# Why it's not on MetaDecidim?
+We think Decidim is already over complicated to install and setup. This module uses PosGis extensions on a postgres database, that can be hard to install. We block the proposal to metadecidim until these points are solved:
+
+- We have stable release.
+- We have feedbacks from participants that it is actually usefull.
+- We have feedbacks from Decidim's admins that this is actually improving participation.
+- Decidim run primarly on docker, with an updated documentation on installation. (We, at Octree is working on it for a while)
 
 ## License
 
