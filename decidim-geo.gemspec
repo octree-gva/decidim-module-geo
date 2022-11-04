@@ -6,8 +6,8 @@ require 'decidim/geo/version'
 
 Gem::Specification.new do |s|
   s.version = Decidim::Geo.version
-  s.authors = ['Hadrien Froger', 'Renato Silva']
-  s.email = ['hadrien@octree.ch', 'renato@octree.ch']
+  s.authors = ['Hadrien Froger', 'Renato Silva', 'Simon Mulquin']
+  s.email = ['hadrien@octree.ch', 'renato@octree.ch', 'simon@octree.ch']
   s.license = 'AGPL-3.0'
   s.homepage = 'https://github.com/decidim/decidim-module-geo'
   s.required_ruby_version = '>= 2.7'
