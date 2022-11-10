@@ -6,10 +6,11 @@
 /pkg/
 /spec/reports/
 /tmp/
-
+/vendor
 # rspec failure tracking
 .rspec-failures
-
+.env.*
+!.env.sample
 # default test application
 spec/decidim_dummy_app
 

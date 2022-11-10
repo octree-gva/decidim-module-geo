@@ -5,7 +5,7 @@ services:
     volumes:
       - pg-data-test:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=TEST-baeGhi4Ohtahcee5eejoaxaiwaezaiGo
+      - POSTGRES_PASSWORD=insecure-password
       - POSTGRES_USER=decidim
       - POSTGRES_DB=decidim_test
     ports:
