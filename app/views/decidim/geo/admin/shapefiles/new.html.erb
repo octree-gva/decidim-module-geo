@@ -1,7 +1,10 @@
 
+<% content_for :sidebar_menu_nav do %>
+  <%= sidebar_menu(:admin_geo_menu).render %>
+<% end %>
 
 <%= decidim_form_for(@form, html: { class: "form new_shapefile shapefile_form_admin" }) do |form| %>
-  <%= render partial: "form", object: form, locals: { title: t(".title") } %>
+  <%= render partial: "form", locals: { form: form, title: t(".title") } %>
 
   <div class="button--double form-general-submit">
     <%= form.submit t(".create") %>

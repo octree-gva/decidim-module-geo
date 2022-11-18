@@ -18,12 +18,23 @@
         <thead>
           <tr>
             <th><%= I18n.t("fields.title", scope: "decidim.geo.admin.shapefiles") %></th>
+            <th><%= I18n.t("fields.description", scope: "decidim.geo.admin.shapefiles") %></th>
+            <th><%= I18n.t("fields.file_name", scope: "decidim.geo.admin.shapefiles") %></th>
             <th><%= I18n.t("fields.created_at", scope: "decidim.geo.admin.shapefiles") %></th>
             <th><%= I18n.t("fields.actions", scope: "decidim.geo.admin.shapefiles") %></th>
             <th><span class="action-space icon"></span></th>
           </tr>
         </thead>
         <tbody>
+        <% @shapefiles.each do |shapefile| %>
+          <tr>
+            <td><%= shapefile.title %><br></td>
+            <td><%= shapefile.description %><br></td>
+            <td><%= shapefile.shapefile.identifier %><br></td>
+            <td><%= shapefile.created_at %><br></td>
+            <td><span class="action-space icon"></span></td>
+          </tr>
+        <% end %>
         </tbody>
       </table>
     </div>

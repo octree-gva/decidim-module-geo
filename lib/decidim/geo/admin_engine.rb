@@ -11,7 +11,9 @@ module Decidim
 
       routes do
         # Add admin engine routes here
-        resources :shapefiles
+        resources :shapefiles do 
+          resources :attachments
+        end
         root to: 'shapefiles#index'
       end
 

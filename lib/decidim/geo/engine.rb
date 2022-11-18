@@ -25,7 +25,7 @@ module Decidim
             }
           ]
 
-          content_block.default!
+          # content_block.default!
         end
       end
 

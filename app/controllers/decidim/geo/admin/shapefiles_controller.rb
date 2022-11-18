@@ -7,27 +7,26 @@ module Decidim
         
         def index
           #enforce_permission_to :list
+          @shapefiles = Decidim::Geo::Shapefile.all
         end
 
         def new
           # enforce_permission_to :create, :shapefile
-          @form = form(Decidim::Geo::Admin::ShapefileForm).from_params(
-            attachment: form(AttachmentForm).from_params({})
-          )
+          @form = Decidim::Geo::Admin::ShapefileForm.new
         end
 
         def create
           #enforce_permission_to :create, :shapefile
           @form = form(Decidim::Geo::Admin::ShapefileForm).from_params(params)
 
-          Admin::CreateProposal.call(@form) do
+          Admin::CreateShapefile.call(@form) do
             on(:ok) do
-              flash[:notice] = I18n.t("proposals.create.success", scope: "decidim.proposals.admin")
-              redirect_to proposals_path
+              flash[:notice] = I18n.t("shapefiles.actions.create.success", scope: "decidim.geo.admin")
+              redirect_to shapefiles_path
             end
 
             on(:invalid) do
-              flash.now[:alert] = I18n.t("proposals.create.invalid", scope: "decidim.proposals.admin")
+              flash.now[:alert] = @form.errors.full_messages_for(:base).join(',')
               render action: "new"
             end
           end
