@@ -33,6 +33,7 @@ module Decidim
         attr_reader :form
 
         def create_shapefile
+          form.shapefile.original_filename = "shapefile.zip"
           @shapefile = Decidim::Geo::Shapefile.create!(
             title: form.title,
             description: form.description,
