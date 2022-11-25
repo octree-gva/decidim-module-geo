@@ -1,6 +1,6 @@
-import { createLayerGroup } from "./decidim_geo_utils";
+const { createLayerGroup, createMarker, createParentControlInputelement } = require("./decidim_geo_utils");
 
-export function createNestedControls(
+function createNestedControls(
   map,
   {
     label,

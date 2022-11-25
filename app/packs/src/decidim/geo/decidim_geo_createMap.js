@@ -1,5 +1,8 @@
-import utils from "./decidim_geo_utils";
-import createNestedControls from "./decidim_geo_createNestedControls";
+const utils = require("./decidim_geo_utils.js");
+const queries = require("./decidim_geo_queries");
+const {
+  default: createNestedControls,
+} = require("./decidim_geo_createNestedControls.js");
 
 async function createMap() {
   var map = L.map("map", { center: [46.521297, 6.632541], zoom: 14 });
@@ -16,7 +19,7 @@ async function createMap() {
 
   var {
     data: { participatoryProcesses },
-  } = await utils.getDecidimData(participatoryProcessesQuery);
+  } = await utils.getDecidimData(queries.participatoryProcessesQuery);
   createNestedControls(map, {
     label: "processes",
     data: participatoryProcesses,
@@ -32,5 +35,4 @@ async function createMap() {
   });
 }
 
-
-export default createMap;
+createMap();

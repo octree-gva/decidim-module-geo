@@ -1,4 +1,4 @@
-const participatoryProcessesQuery = `{  
+export const participatoryProcessesQuery = `{  
   participatoryProcesses {
     id
     title {
@@ -23,5 +23,3 @@ const participatoryProcessesQuery = `{
     }
   }
 }`;
-
-export default participatoryProcessesQuery;
