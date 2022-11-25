@@ -35,7 +35,7 @@ export function createLayerGroup(collection, createEntityMarkers) {
 
 export async function getDecidimData(query) {
   var collection = await window
-    .fetch("https://participer.lausanne.ch/api", {
+    .fetch("http://localhost:3000/api", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
