@@ -16,3 +16,6 @@ spec/decidim_dummy_app
 
 # default development application
 development_app
+
+# node_modules
+node_modules

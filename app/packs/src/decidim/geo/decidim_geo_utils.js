@@ -4,10 +4,6 @@ export function createMarker({ description, location, href }) {
   );
 }
 
-export function createPolygon(entity) {
-  return L.polygon(entity.polygon);
-}
-
 export function getParticipatoryProcessesNodes(participatoryProcess) {
   var components = participatoryProcess.components;
   if (components && components.length > 0) {
@@ -46,7 +42,6 @@ export async function getDecidimData(query) {
     })
     .then(async response => {
       const res = await response.json();
-      console.log(res);
       return res;
     })
     .catch(alert);

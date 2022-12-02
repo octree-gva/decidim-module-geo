@@ -3,12 +3,18 @@ const queries = require("./decidim_geo_queries");
 const {
   default: createNestedControls,
 } = require("./decidim_geo_createNestedControls.js");
+const {
+  default: createCustomLayerControl,
+} = require("./decidim_geo_createCustomLayerControl.js");
+const {
+  default: getAreasGeoJSON,
+} = require("./decidim_geo_getAreasGeoJSON.js");
 
 async function createMap() {
-  var map = L.map("map", { center: [46.521297, 6.632541], zoom: 14 });
+  const map = L.map("map", { center: [46.521297, 6.632541], zoom: 14 });
   map.zoomControl.setPosition("topright");
 
-  var osm = L.tileLayer(
+  const osm = L.tileLayer(
     "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
     {
       maxZoom: 19,
@@ -17,7 +23,7 @@ async function createMap() {
     }
   ).addTo(map);
 
-  var {
+  const {
     data: { participatoryProcesses },
   } = await utils.getDecidimData(queries.participatoryProcessesQuery);
   createNestedControls(map, {
@@ -32,6 +38,13 @@ async function createMap() {
       },
       href: () => "/test",
     },
+  });
+
+  const geojsonFeature = await getAreasGeoJSON();
+  const areasLayer = L.geoJSON(geojsonFeature);
+  createCustomLayerControl(map, {
+    label: "areas",
+    layer: areasLayer,
   });
 }
 
