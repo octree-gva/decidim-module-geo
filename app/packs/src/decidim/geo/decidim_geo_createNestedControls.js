@@ -1,4 +1,11 @@
-const { createLayerGroup, createMarker, createParentControlInputelement } = require("./decidim_geo_utils");
+const {
+  createLayerGroup,
+  createMarker,
+  createControlInputElement,
+} = require("./decidim_geo_utils");
+const {
+  default: createCustomLayerControl,
+} = require("./decidim_geo_createCustomLayerControl.js");
 
 function createNestedControls(
   map,
@@ -44,26 +51,34 @@ function createNestedControls(
   });
 
   var subLayerGroups = {};
-  Object.keys(subGroupsMarkers).forEach(group => {
+  const controlsMap = Object.keys(subGroupsMarkers).map(group => {
     subLayerGroups[group] = L.layerGroup(subGroupsMarkers[group]);
+    return createCustomLayerControl(map, {
+      level: "child",
+      label: group,
+      layer: L.layerGroup(subGroupsMarkers[group]),
+    });
   });
-  var subControls = L.control.layers({}, subLayerGroups, {
+
+  var childControls = L.control.layers({}, subLayerGroups, {
     collapsed: false,
     position: "topleft",
   });
+  console.log({ childControls, controlsMap });
 
-  var NestedControl = L.Control.extend({
+  var ParentControl = L.Control.extend({
     options: {
       collapsed: false,
       position: "topleft",
     },
 
     onAdd: function (map) {
-      return createParentControlInputelement({
+      return createControlInputElement({
+        level: "parent",
         label,
         changeEventHandler: event => {
           var layers = Object.values(allLayerGroup._layers);
-          subControls._layerControlInputs.forEach(subInput => {
+          childControls._layerControlInputs.forEach(subInput => {
             if (subInput.checked != event.target.checked) {
               //this need to be a click event in order to trigger leaflet _onInputClick method
               // and keep the layer aligned with the corresponding input state
@@ -89,8 +104,8 @@ function createNestedControls(
     },
   });
 
-  map.addControl(new NestedControl());
-  subControls.addTo(map);
+  map.addControl(new ParentControl());
+  childControls.addTo(map);
 }
 
 export default createNestedControls;

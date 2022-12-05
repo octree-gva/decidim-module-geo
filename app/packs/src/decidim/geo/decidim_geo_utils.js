@@ -52,7 +52,11 @@ export async function getDecidimData(query) {
   return [];
 }
 
-export function createParentControlInputelement({ label, changeEventHandler }) {
+export function createControlInputElement({
+  level = 'parent',
+  label,
+  changeEventHandler,
+}) {
   var item = L.DomUtil.create("label");
 
   var input = L.DomUtil.create("input");
@@ -64,10 +68,14 @@ export function createParentControlInputelement({ label, changeEventHandler }) {
   labelElement.textContent += " " + label;
   item.appendChild(labelElement);
 
-  var container = L.DomUtil.create("div", "decidimGeo__customControl__parent");
+  var container = L.DomUtil.create("div", `decidimGeo__customControl__${level}`);
   container.appendChild(item);
+
+  //prevent leaflet css override
+  var control = L.DomUtil.create("div");
+  control.appendChild(container);
 
   L.DomEvent.disableClickPropagation(input);
   input.addEventListener("change", changeEventHandler);
-  return container;
+  return control;
 }
