@@ -1,6 +1,6 @@
 const { createControlInputElement } = require("./decidim_geo_utils");
 
-function createCustomLayerControl(map, { label, layer, level = "parent" }) {
+function createCustomLayerControl(map, { label, layer, group }) {
   const CustomLayerControl = L.Control.extend({
     options: {
       collapsed: false,
@@ -9,7 +9,7 @@ function createCustomLayerControl(map, { label, layer, level = "parent" }) {
 
     onAdd: function (map) {
       return createControlInputElement({
-        level,
+        group,
         label,
         changeEventHandler: event => {
           if (event.target.checked) {
@@ -23,10 +23,11 @@ function createCustomLayerControl(map, { label, layer, level = "parent" }) {
   });
 
   const control = new CustomLayerControl({}, layer);
-  if (level === "parent") {
+  if (group) {
+    return control;
+  } else {
     return map.addControl(control);
   }
-  return control;
 }
 
 export default createCustomLayerControl;

@@ -2,6 +2,7 @@ const {
   createLayerGroup,
   createMarker,
   createControlInputElement,
+  displayNestedLayers,
 } = require("./decidim_geo_utils");
 const {
   default: createCustomLayerControl,
@@ -22,9 +23,7 @@ function createNestedControls(
   }
 ) {
   var subGroupsMarkers = {};
-
-  var allLayerGroup = createLayerGroup(data, entity => {
-    //format api data for markers
+  createLayerGroup(data, entity => {
     var subGroup = getSubGroupName(entity);
 
     var markers = [];
@@ -50,21 +49,13 @@ function createNestedControls(
     return markers;
   });
 
-  var subLayerGroups = {};
-  const controlsMap = Object.keys(subGroupsMarkers).map(group => {
-    subLayerGroups[group] = L.layerGroup(subGroupsMarkers[group]);
+  const childControls = Object.keys(subGroupsMarkers).map(group => {
     return createCustomLayerControl(map, {
-      level: "child",
+      group: label,
       label: group,
       layer: L.layerGroup(subGroupsMarkers[group]),
     });
   });
-
-  var childControls = L.control.layers({}, subLayerGroups, {
-    collapsed: false,
-    position: "topleft",
-  });
-  console.log({ childControls, controlsMap });
 
   var ParentControl = L.Control.extend({
     options: {
@@ -74,38 +65,18 @@ function createNestedControls(
 
     onAdd: function (map) {
       return createControlInputElement({
-        level: "parent",
         label,
         changeEventHandler: event => {
-          var layers = Object.values(allLayerGroup._layers);
-          childControls._layerControlInputs.forEach(subInput => {
-            if (subInput.checked != event.target.checked) {
-              //this need to be a click event in order to trigger leaflet _onInputClick method
-              // and keep the layer aligned with the corresponding input state
-              subInput.dispatchEvent(
-                new MouseEvent("click", {
-                  view: window,
-                  bubbles: false,
-                  cancelable: false,
-                })
-              );
-            }
+          childControls.forEach(control => {
+            displayNestedLayers(control._container, event.target.checked);
           });
-          for (var i = 0; i < layers.length; i++) {
-            var layer = layers[i];
-            if (event.target.checked) {
-              map.addLayer(layer);
-            } else if (map.hasLayer(layer)) {
-              map.removeLayer(layer);
-            }
-          }
         },
       });
     },
   });
 
   map.addControl(new ParentControl());
-  childControls.addTo(map);
+  childControls.forEach(control => map.addControl(control));
 }
 
 export default createNestedControls;

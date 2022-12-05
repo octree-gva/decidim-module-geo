@@ -52,30 +52,56 @@ export async function getDecidimData(query) {
   return [];
 }
 
+const CONTROLLED_INPUT_CLASS = "decidimGeo__customControl__input";
+
 export function createControlInputElement({
-  level = 'parent',
+  group,
   label,
   changeEventHandler,
 }) {
-  var item = L.DomUtil.create("label");
+  //prevent leaflet css override
+  const control = L.DomUtil.create("div");
+  const container = L.DomUtil.create(
+    "div",
+    `decidimGeo__customControl__${group ? "child" : "parent"}`,
+    control
+  );
+  const item = L.DomUtil.create("label", "", container);
 
-  var input = L.DomUtil.create("input");
+  const input = L.DomUtil.create("input", CONTROLLED_INPUT_CLASS, item);
   input.type = "checkbox";
   input.checked = false;
-  item.appendChild(input);
-
-  var labelElement = L.DomUtil.create("span");
-  labelElement.textContent += " " + label;
-  item.appendChild(labelElement);
-
-  var container = L.DomUtil.create("div", `decidimGeo__customControl__${level}`);
-  container.appendChild(item);
-
-  //prevent leaflet css override
-  var control = L.DomUtil.create("div");
-  control.appendChild(container);
-
   L.DomEvent.disableClickPropagation(input);
   input.addEventListener("change", changeEventHandler);
+
+  const labelElement = L.DomUtil.create("span", "", item);
+  labelElement.textContent += " " + label;
+
   return control;
 }
+
+export const displayNestedLayers = (leafletContainer, checked) => {
+  if (
+    leafletContainer.classList.contains(CONTROLLED_INPUT_CLASS) &&
+    leafletContainer.checked !== checked
+  ) {
+    leafletContainer.dispatchEvent(
+      new MouseEvent("click", {
+        view: window,
+        bubbles: false,
+        cancelable: false,
+      })
+    );
+    //leafletContainer.checked = checked;
+    //This leads layers to unsynchronize with the input state. 
+    // Bubbling the click seems to ensure leaflet events are correctly triggered.
+  }
+
+  if (leafletContainer.children) {
+    return [...leafletContainer.children].map(child =>
+      displayNestedLayers(child, checked)
+    );
+  } else {
+    return;
+  }
+};
