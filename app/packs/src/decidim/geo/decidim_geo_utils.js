@@ -1,6 +1,6 @@
-export function createMarker({ description, location, image, href }) {
+export function createMarker({ title, description, location, image, href }) {
   return L.marker(location).bindPopup(
-    `<h5>${description}</h5> <img src="${image}" width=40 height=40 /><a href="${href}">View</a>`
+    `<h6>${title}</h6> <p>${description}</p> <img src="${image}" width=40 height=40 /><a href="${href}">View</a>`
   );
 }
 

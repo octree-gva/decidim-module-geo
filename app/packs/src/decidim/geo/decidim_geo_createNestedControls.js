@@ -16,6 +16,7 @@ function createNestedControls(
     getSubGroupName = ({ name }) => name,
     getNodes = entity => [entity],
     formatMarkerDataReducers: {
+      title: titleReducer = ({ title }) => title,
       description: descriptionReducer = ({ description }) => description,
       location: locationReducer = ({ location }) => location,
       image: imageReducer = ({ image }) => image,
@@ -31,12 +32,19 @@ function createNestedControls(
     var nodes = getNodes(entity);
 
     nodes.forEach(inode => {
+      var title = titleReducer({ ...inode, entity });
       var description = descriptionReducer({ ...inode, entity });
       var location = locationReducer({ ...inode, entity });
       var image = imageReducer({ ...inode, entity });
       var href = hrefReducer({ ...inode, entity });
       if (location) {
-        var marker = createMarker({ description, location, image, href });
+        var marker = createMarker({
+          title,
+          description,
+          location,
+          image,
+          href,
+        });
 
         if (subGroupsMarkers[subGroup] && marker) {
           subGroupsMarkers[subGroup].push(marker);

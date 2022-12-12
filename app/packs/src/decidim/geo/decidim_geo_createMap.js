@@ -32,6 +32,7 @@ async function createMap() {
     getSubGroupName: ({ title: { translation } }) => translation,
     getNodes: utils.getParticipatoryProcessesNodes,
     formatMarkerDataReducers: {
+      title: ({ title: { translation } }) => translation,
       description: ({ description: { translation } }) => translation,
       location: ({ coordinates: { latitude, longitude } }) => {
         if (latitude && longitude) return [latitude, longitude];

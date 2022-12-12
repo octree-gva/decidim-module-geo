@@ -12,6 +12,9 @@ export const participatoryProcessesQuery = `{
         meetings {
           nodes {
             id
+            title {
+              translation(locale: "en")
+            }
             description {
               translation(locale: "en")
             }
