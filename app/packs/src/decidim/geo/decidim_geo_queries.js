@@ -1,6 +1,7 @@
 export const participatoryProcessesQuery = `{  
   participatoryProcesses {
-    id
+    slug
+    bannerImage
     title {
       translation(locale: "en")
     }
@@ -10,6 +11,7 @@ export const participatoryProcessesQuery = `{
       ... on Meetings {
         meetings {
           nodes {
+            id
             description {
               translation(locale: "en")
             }

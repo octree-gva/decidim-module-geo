@@ -1,11 +1,12 @@
-export function createMarker({ description, location, href }) {
+export function createMarker({ description, location, image, href }) {
   return L.marker(location).bindPopup(
-    `<h1>${description}</h1> <a href="${href}">View</a>`
+    `<h5>${description}</h5> <img src="${image}" width=40 height=40 /><a href="${href}">View</a>`
   );
 }
 
 export function getParticipatoryProcessesNodes(participatoryProcess) {
   var components = participatoryProcess.components;
+
   if (components && components.length > 0) {
     var meetingsComponent = components.find(
       ({ meetings }) => meetings && meetings.nodes.length > 0
@@ -93,7 +94,7 @@ export const displayNestedLayers = (leafletContainer, checked) => {
       })
     );
     //leafletContainer.checked = checked;
-    //This leads layers to unsynchronize with the input state. 
+    //This leads layers to unsynchronize with the input state.
     // Bubbling the click seems to ensure leaflet events are correctly triggered.
   }
 

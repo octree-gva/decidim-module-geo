@@ -36,7 +36,9 @@ async function createMap() {
       location: ({ coordinates: { latitude, longitude } }) => {
         if (latitude && longitude) return [latitude, longitude];
       },
-      href: () => "/test",
+      image: ({ entity }) => entity.bannerImage,
+      href: ({ id, entity }) =>
+        `/processes/${entity.slug}/f/${entity.components[0].id}/meetings/${id}`,
     },
   });
 
