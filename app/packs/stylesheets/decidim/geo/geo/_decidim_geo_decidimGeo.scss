@@ -1,10 +1,25 @@
-.decidimGeo__customControl__parent {
+@mixin decidimGeo__customControl {
     display: block;
     background: #fff;
     font-size: 16px;
     line-height: 20px;
-    padding: 4px 8px;
+    padding: 4px 8px 6px;
     border-radius: 18px;
     border: 1px solid grey;
     color: grey;
+
+    label {
+        input {
+            vertical-align: middle;
+        }
+    }
+  }
+
+.decidimGeo__customControl__parent {
+    @include decidimGeo__customControl;
+}
+
+.decidimGeo__customControl__child {
+    @include decidimGeo__customControl;
+    margin-left: 12px;
 }
