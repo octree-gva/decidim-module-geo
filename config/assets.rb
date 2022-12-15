@@ -6,4 +6,4 @@ Decidim::Webpacker.register_path("#{base_path}/app/packs")
 Decidim::Webpacker.register_entrypoints(
   decidim_geo: "#{base_path}/app/packs/entrypoints/decidim_geo.js",
 )
-Decidim::Webpacker.register_stylesheet_import("stylesheets/decidim/geo/geo")
+Decidim::Webpacker.register_stylesheet_import("stylesheets/decidim/geo/geo") 
