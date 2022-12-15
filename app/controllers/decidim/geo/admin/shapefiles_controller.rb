@@ -13,7 +13,6 @@ module Decidim
         end
 
         def new
-          byebug
           enforce_permission_to :new, :shapefile
           @form = Decidim::Geo::Admin::ShapefileForm.new
         end

@@ -5,7 +5,6 @@ module Decidim
     module Admin
       class Permissions < Decidim::DefaultPermissions
         def permissions
-          byebug
           return permission_action if permission_action.scope != :admin
 
           return permission_action unless user

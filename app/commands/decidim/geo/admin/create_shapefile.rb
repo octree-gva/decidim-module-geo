@@ -23,6 +23,7 @@ module Decidim
 
           transaction do
             create_shapefile
+            load_shapefile
           end
 
           broadcast(:ok, @shapefile)
@@ -39,6 +40,10 @@ module Decidim
             description: form.description,
             shapefile: form.shapefile
           )
+        end
+
+        def load_shapefile
+          Shp2pgsqlJob.perform_now(@shapefile)  
         end
 
       end
