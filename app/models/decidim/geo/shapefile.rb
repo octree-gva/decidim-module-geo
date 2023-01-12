@@ -6,7 +6,9 @@ module Decidim
     class Shapefile < Geo::ApplicationRecord
       #include Decidim::TranslatableResource
 
-      self.table_name = 'decidim_geo_shapefiles'
+      has_many :shapedatas
+
+      self.table_name = 'decidim_geo_shapefile'
       
       #translatable_fields :title, :description
 
@@ -14,6 +16,7 @@ module Decidim
 
       mount_uploader :shapefile, Decidim::Geo::ShapefileUploader
       validates_integrity_of :shapefile
+      
     end
   end
 end

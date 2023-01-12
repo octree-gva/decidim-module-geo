@@ -5,6 +5,7 @@ require "decidim/geo/engine"
 require "decidim/geo/admin_engine"
 require "decidim/geo/component"
 
+require 'rgeo/shapefile'
 require "decidim/geo/load_shp/app_load_shp"
 
 

@@ -43,7 +43,8 @@ module Decidim
         end
 
         def load_shapefile
-          Shp2pgsqlJob.perform_now(@shapefile)  
+          load_shapefile = LoadShp::AppLoadShp.new(@shapefile)
+          load_shapefile.run!
         end
 
       end
