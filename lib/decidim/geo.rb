@@ -2,6 +2,7 @@
 
 require "decidim/geo/admin"
 require "decidim/geo/engine"
+require "decidim/geo/api"
 require "decidim/geo/admin_engine"
 require "decidim/geo/component"
 

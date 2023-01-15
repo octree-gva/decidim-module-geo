@@ -33,6 +33,10 @@ module Decidim
         Cell::ViewModel.view_paths << File.expand_path("#{Decidim::Geo::Engine.root}/app/cells")
       end
 
+      initializer "decidim.graphql_api" do
+        Decidim::Api::QueryType.include Decidim::Geo::ShapefileQueryExtension
+      end
+
       initializer "decidim_geo.webpacker.assets_path" do
         Decidim.register_assets_path File.expand_path("#{Decidim::Geo::Engine.root}/app/packs")
       end

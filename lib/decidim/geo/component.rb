@@ -6,6 +6,8 @@ Decidim.register_component(:geo) do |component|
   component.engine = Decidim::Geo::Engine
   component.admin_engine = Decidim::Geo::AdminEngine
   component.icon = 'decidim/geo/icon.svg'
+  
+  component.query_type = 'Decidim::Geo::ShapefileType'
 
   component.permissions_class_name = "Decidim::Geo::Permissions"
 

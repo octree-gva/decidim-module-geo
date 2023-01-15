@@ -11,7 +11,6 @@ module Decidim
 
         def run!
           Dir.mktmpdir do |dir|
-            logger.debug "Extract shapefile in tmp dir '#{dir}'"
             extract_file(dir)
             shp_reader(dir)
           end
@@ -20,6 +19,7 @@ module Decidim
         private
 
           def extract_file(dir)
+            logger.debug "Extract shapefile in tmp dir '#{dir}'"
             Zip::File.open(@shapefile.shapefile.path) do |zip_file|
               zip_file.each do |entry|
                 logger.debug "Extracting #{entry.name}"
@@ -40,7 +40,6 @@ module Decidim
             RGeo::Shapefile::Reader.open(shp_file.first) do |file|
               logger.info "File contains #{file.num_records} records."
               file.each do |record|
-
                 shp_loader(record)
               end
             rescue Exception => e
