@@ -3,7 +3,6 @@ class CreateDecidimGeo < ActiveRecord::Migration[6.0]
     create_table :decidim_geo_shapefile do |t|
       t.string :title, null: false
       t.string :description, null: true
-      t.string :table_name, null: true
       t.string :shapefile, null: false
 
       t.timestamps
