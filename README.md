@@ -88,7 +88,7 @@ bundle
 
 And then
 ```bash
-bundle exec rake development_app RAILS_ENV=test
+bundle exec rake development_app
 ```
 
 Setup and run the decidim development server
