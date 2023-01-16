@@ -28,3 +28,13 @@ export const participatoryProcessesQuery = `{
     }
   }
 }`;
+
+export const shapefilesQuery = `{
+  shapefiles {
+    id
+    title
+    description
+    shapefile
+    createdAt
+  } 
+}`

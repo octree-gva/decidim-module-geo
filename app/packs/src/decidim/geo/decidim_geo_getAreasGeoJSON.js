@@ -2,9 +2,9 @@
 global.Buffer = global.Buffer || require("buffer").Buffer;
 const shp = require("shpjs");
 
-async function getAreasGeoJSON() {
+async function getAreasGeoJSON(url) {
   return await window
-    .fetch(`/uploads/shapefiles/shapefile.zip`)
+    .fetch(url)
     .then(response => response.arrayBuffer())
     .then(shp)
     .catch(alert);

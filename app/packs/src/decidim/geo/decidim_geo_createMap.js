@@ -43,11 +43,28 @@ async function createMap() {
     },
   });
 
-  const geojsonFeature = await getAreasGeoJSON();
-  const areasLayer = L.geoJSON(geojsonFeature);
+  const areasGeojsonFeature = await getAreasGeoJSON(
+    "`/uploads/shapefiles/shapefile.zip`"
+  );
+  const areasLayer = L.geoJSON(areasGeojsonFeature);
   createCustomLayerControl(map, {
     label: "areas",
     layer: areasLayer,
+  });
+
+  const {
+    data: { shapefiles },
+  } = await utils.getDecidimData(queries.shapefilesQuery);
+
+  shapefiles.forEach(async shapefileElement => {
+    const geojsonFeature = await getAreasGeoJSON(
+      shapefileElement.shapefile
+    );
+    const shapefileLayer = L.geoJSON(geojsonFeature);
+    createCustomLayerControl(map, {
+      label: shapefileElement.title,
+      layer: shapefileLayer,
+    });
   });
 }
 

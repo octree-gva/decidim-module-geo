@@ -88,12 +88,13 @@ bundle
 
 And then
 ```bash
-bundle exec rake development_app
+bundle exec rake development_app RAILS_ENV=test
 ```
 
 Setup and run the decidim development server
 ```
 cd development_app
+bin/rails decidim_geo:install:migrations
 bin/rails db:migrate
 bin/rails db:seed
 bin/rails s

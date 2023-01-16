@@ -28,7 +28,7 @@ task :prepare_tests do
   ENV["RAILS_ENV"] = "test"
   databaseYml = {
     "test" => {
-      "adapter" => "postgresql",
+      "adapter" => "postgis",
       "encoding" => "unicode",
       "host" => ENV.fetch("DATABASE_HOST", "localhost"),
       "port" => ENV.fetch("DATABASE_PORT", "5432").to_i,

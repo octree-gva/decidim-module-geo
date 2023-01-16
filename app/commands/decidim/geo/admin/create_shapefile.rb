@@ -23,7 +23,7 @@ module Decidim
 
           transaction do
             create_shapefile
-            load_shapefile
+            #load_shapefile
           end
 
           broadcast(:ok, @shapefile)
@@ -34,7 +34,6 @@ module Decidim
         attr_reader :form
 
         def create_shapefile
-          form.shapefile.original_filename = "shapefile.zip"
           @shapefile = Decidim::Geo::Shapefile.create!(
             title: form.title,
             description: form.description,
