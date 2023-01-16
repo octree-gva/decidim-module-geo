@@ -44,7 +44,7 @@ async function createMap() {
   });
 
   const areasGeojsonFeature = await getAreasGeoJSON(
-    "`/uploads/shapefiles/shapefile.zip`"
+    "/uploads/shapefiles/shapefile.zip"
   );
   const areasLayer = L.geoJSON(areasGeojsonFeature);
   createCustomLayerControl(map, {
@@ -57,9 +57,7 @@ async function createMap() {
   } = await utils.getDecidimData(queries.shapefilesQuery);
 
   shapefiles.forEach(async shapefileElement => {
-    const geojsonFeature = await getAreasGeoJSON(
-      shapefileElement.shapefile
-    );
+    const geojsonFeature = await getAreasGeoJSON(shapefileElement.shapefile);
     const shapefileLayer = L.geoJSON(geojsonFeature);
     createCustomLayerControl(map, {
       label: shapefileElement.title,
