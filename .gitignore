@@ -19,3 +19,4 @@ development_app
 
 # node_modules
 node_modules
+/.dump

@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 ruby RUBY_VERSION
 
-gem "decidim", "~> 0.26.3"
+gem "decidim", "~> 0.26"
 gem "decidim-geo", path: "."
 
 gem 'activerecord-postgis-adapter', '~> 6.0.0'
@@ -17,7 +17,7 @@ gem "uglifier", "~> 4.1"
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
 
-  gem "decidim-dev", "~> 0.26.3"
+  gem "decidim-dev", "~> 0.26"
 end
 
 

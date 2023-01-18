@@ -3,11 +3,13 @@ services:
     image: postgis/postgis:14-3.3-alpine
     volumes:
       - pg-data-test:/var/lib/postgresql/data
+      - ./.dump:/tmp/dump
     environment:
       - POSTGRES_PASSWORD=insecure-password
       - POSTGRES_USER=decidim
       - POSTGRES_DB=decidim_test
     ports:
       - 5432:5432
+    
 volumes:
   pg-data-test: {}

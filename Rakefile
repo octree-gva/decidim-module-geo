@@ -43,6 +43,34 @@ task :prepare_tests do
      system("bundle exec rails db:migrate")
    end
 end
+desc "Prepare for development"
+task :prepare_dev do
+  system("bundle exec rails generate doorkeeper:install")
+  system("bundle exec rails generate doorkeeper:migration")
+  # Remove previous existing db, and recreate one.
+  disable_docker_compose = ENV.fetch("DISABLED_DOCKER_COMPOSE", "false") == "true"
+  unless disable_docker_compose
+    system("sudo docker-compose down -v")
+    system("sudo docker-compose up -d --remove-orphans")
+  end
+  ENV["RAILS_ENV"] = "development"
+  databaseYml = {
+    "development" => {
+      "adapter" => "postgis",
+      "encoding" => "unicode",
+      "host" => ENV.fetch("DATABASE_HOST", "localhost"),
+      "port" => ENV.fetch("DATABASE_PORT", "5432").to_i,
+      "username" => ENV.fetch("DATABASE_USERNAME", "decidim"),
+      "password" => ENV.fetch("DATABASE_PASSWORD", "insecure-password"),
+      "database" => "decidim_test"
+    }
+  }
+  config_file = File.expand_path("development_app/config/database.yml", __dir__)
+  File.open(config_file, "w") { |f| YAML.dump(databaseYml, f) }
+  Dir.chdir("development_app") do
+     system("bundle exec rails db:migrate")
+   end
+end
 
 desc "Generates a dummy app for testing"
 task :test_app do
@@ -74,7 +102,10 @@ task :development_app do
       "#{base_app_name}_development_app",
       "--path",
       "..",
-      "--recreate_db",
+      "--skip_spring",
+      "--demo",
+      "--force_ssl",
+      "false",
       "--demo"
     )
   end
@@ -82,6 +113,5 @@ task :development_app do
   system("bin/rails generate doorkeeper:install")
   system("bin/rails generate doorkeeper:migration")
 
-  install_module("development_app")
-  seed_db("development_app")
+  Rake::Task["prepare_dev"].invoke
 end
