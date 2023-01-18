@@ -783,8 +783,8 @@ DEPENDENCIES
   activerecord-postgis-adapter (~> 6.0.0)
   bootsnap (~> 1.4)
   byebug (~> 11.0)
-  decidim (~> 0.26.3)
-  decidim-dev (~> 0.26.3)
+  decidim (~> 0.26)
+  decidim-dev (~> 0.26)
   decidim-geo!
   doorkeeper (~> 5.6)
   faker (~> 2.14)
