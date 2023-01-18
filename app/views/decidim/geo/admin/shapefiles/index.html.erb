@@ -1,7 +1,46 @@
-<div class="content">
-  <div class="card">
-    <h2 class="card-title card-divider">
-      Upload Shapefile
+<% content_for :sidebar_menu_nav do %>
+  <%= sidebar_menu(:admin_geo_menu).render %>
+<% end %>
+
+<div class="card with-overflow" id="shapefiles">
+  <div class="card-divider">
+    <h2 class="card-title">
+      <%= t("title", scope: "decidim.geo.admin.shapefiles") %>
+      <%= link_to t("actions.new_shapefile", scope: "decidim.geo.admin.shapefiles"),
+                  new_shapefile_path,
+                  class: "button tiny button--title" %>
     </h2>
   </div>
+
+  <div class="card-section">
+    <div class="table-scroll">
+      <table class="table-list">
+        <thead>
+          <tr>
+            <th><%= I18n.t("fields.title", scope: "decidim.geo.admin.shapefiles") %></th>
+            <th><%= I18n.t("fields.description", scope: "decidim.geo.admin.shapefiles") %></th>
+            <th><%= I18n.t("fields.file_name", scope: "decidim.geo.admin.shapefiles") %></th>
+            <th><%= I18n.t("fields.created_at", scope: "decidim.geo.admin.shapefiles") %></th>
+            <th><%= I18n.t("fields.actions", scope: "decidim.geo.admin.shapefiles") %></th>
+            <th><span class="action-space icon"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+        <% @shapefiles.each do |shapefile| %>
+          <tr>
+            <td><%= shapefile.title %><br></td>
+            <td><%= shapefile.description %><br></td>
+            <td><%= shapefile.shapefile.identifier %><br></td>
+            <td><%= shapefile.created_at %><br></td>
+            <td><span class="action-space icon"></span></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
+
+
+
+

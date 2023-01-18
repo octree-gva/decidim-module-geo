@@ -1,0 +1,67 @@
+@mixin decidimGeo__customControl {
+    display: block;
+    background: #fff;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 4px 8px 6px;
+    border-radius: 18px;
+    border: 1px solid grey;
+    color: grey;
+
+    label {
+        input {
+            vertical-align: middle;
+        }
+    }
+}
+
+@mixin decidimGeo__meetingDateItem {
+    text-align: center;
+    color: #726a70;
+    padding: 0.5em;
+    margin-right: -1px;
+    margin-top: -1px;
+    border-top: 1px solid #e8e8e8;
+}
+
+.decidimGeo__customControl__parent {
+    @include decidimGeo__customControl;
+}
+
+.decidimGeo__customControl__child {
+    @include decidimGeo__customControl;
+    margin-left: 12px;
+}
+
+.decidimGeo__popup__container {
+    position: relative;
+    width: calc(100% + 44px);
+    left: -20px;
+}
+
+.decidimGeo__popup__content {
+    padding: 0 0.75rem;
+}
+
+.decidimGeo__popup__icondata {
+    position: relative;
+    bottom: -13px;
+}
+
+.decidimGeo__popup__meetingIcon {
+    @include decidimGeo__meetingDateItem;
+    flex-basis: 60px;
+    padding-top: 16px;
+    border-right: 1px solid #e8e8e8;
+}
+
+.decidimGeo__popup__meetingPeriod {
+    @include decidimGeo__meetingDateItem;
+    flex-basis: 50%;
+    flex-grow: 1;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "leaflet": "1.9.2",
+    "shpjs": "4.0.4"
+  }
+}

@@ -39,8 +39,8 @@ If you are curious on how it started, [we've made some slide to present the proj
 
 ## How it works?
 
-Posgis can load Shapesfiles that can represents anything: neighbourghoods, cities, states, trees, public spaces.
-We use this module to map a shape to an application zone, to be able to geo-references all the participatory processes of the plateform. This way we can offer better consultation experience, and open new perspective for participation.
+Postgis can load Shapefiles that can represents anything: neighbourghoods, cities, states, trees, public spaces.
+We use this module to map a shape to an application zone, to be able to geo-references all the participatory processes of the platform. This way we can offer better consultation experience, and open new perspective for participation.
 
 <img
     src="https://github.com/octree-gva/meta/blob/main/decidim/static/geo/admin.png?raw=true"
@@ -94,6 +94,7 @@ bundle exec rake development_app
 Setup and run the decidim development server
 ```
 cd development_app
+bin/rails decidim_geo:install:migrations
 bin/rails db:migrate
 bin/rails db:seed
 bin/rails s
