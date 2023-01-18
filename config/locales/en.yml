@@ -1,6 +1,32 @@
 ---
 en:
   decidim:
+    geo: 
+      admin:
+        shapefiles:
+          title: Shapefiles
+          new:
+            title: Upload Shapefile
+            create: Create
+          actions:
+            new_shapefile: New Shapefile
+            new:
+              attachment_legend: Put your zip file here
+            create:
+              success: File uploaded
+              invalid: File upload failed
+          fields:
+            title: Name
+            url: URL
+            file_name: Filename
+            created_at: Created at
+            description: Description
+            actions: Actions
+          form:
+            attachment_legend: Upload shapefile compacted as a zip file
+            attachment_max_size: Max size - 10 MB
+      content_blocks:
+        name: Maps 
     components:
       geo:
         name: Geo
@@ -8,5 +34,6 @@ en:
           global:
             announcement: Announcement
           step:
-            announcement: Announcement   
+            announcement: Announcement
+      
 
