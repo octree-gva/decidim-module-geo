@@ -55,7 +55,7 @@ We use this module to map a shape to an application zone, to be able to geo-refe
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "decidim-geo"
+gem "decidim-geo", git: "https://github.com/octree-gva/decidim-module-geo", branch: "main"
 ```
 
 And then execute:
@@ -69,14 +69,14 @@ bundle exec rails db:migrate
 You will need a posgis database, at least version 14 to be able to do the migration.
 
 ## Testing
-```
+```bash
 bundle exec rake test_app
 ```
 
 ## Local development
 
 Run a postgres database
-```
+```bash
 docker-compose up -d
 cp .env.sample .env.local && source .env.local
 ```
@@ -92,7 +92,7 @@ bundle exec rake development_app
 ```
 
 Setup and run the decidim development server
-```
+```bash
 cd development_app
 bin/rails decidim_geo:install:migrations
 bin/rails db:migrate
