@@ -1,8 +1,13 @@
+let lang = "en"
+const $html = (document.getElementsByTagName("html") || [])[0];
+if($html)
+  lang = $html.attributes.lang.value;
+
 export const participatoryProcessesQuery = `{  
   participatoryProcesses {
     slug
     title {
-      translation(locale: "en")
+      translation(locale: "${lang}")
     }
     components(filter: {type: "Meetings"}) {
       id
@@ -12,10 +17,10 @@ export const participatoryProcessesQuery = `{
           nodes {
             id
             title {
-              translation(locale: "en")
+              translation(locale: "${lang}")
             }
             description {
-              translation(locale: "en")
+              translation(locale: "${lang}")
             }
             coordinates {
               latitude

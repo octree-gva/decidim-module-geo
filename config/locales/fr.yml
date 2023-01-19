@@ -1,0 +1,39 @@
+---
+fr:
+  decidim:
+    geo: 
+      admin:
+        shapefiles:
+          title: Shapefiles
+          new:
+            title: Upload Shapefile
+            create: Créer
+          actions:
+            new_shapefile: Nouveau Shapefile
+            new:
+              attachment_legend: Uploader votre fichier zip ici
+            create:
+              success: fichier uploadé
+              invalid: erreur, le fichier n'a pas pu être chargé
+          fields:
+            title: Nom
+            url: URL
+            file_name: Nom de fichier
+            created_at: Date de création
+            description: Description
+            actions: Actions
+          form:
+            attachment_legend: Uploader un shapefile archivé en format zip
+            attachment_max_size: Taille maximale - 10 MB
+      content_blocks:
+        name: Cartes 
+    components:
+      geo:
+        name: Geo
+        settings:
+          global:
+            announcement: Annonce
+          step:
+            announcement: Annonce
+      
+
