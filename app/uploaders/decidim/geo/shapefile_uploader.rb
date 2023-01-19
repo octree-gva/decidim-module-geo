@@ -6,6 +6,7 @@ module Decidim
         default_path = "uploads/shapefiles"
   
         return File.join(Decidim.base_uploads_path, default_path) if Decidim.base_uploads_path.present?
+  
         default_path
       end
 

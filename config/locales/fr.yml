@@ -26,7 +26,11 @@ fr:
             attachment_legend: Uploader un shapefile archivé en format zip
             attachment_max_size: Taille maximale - 10 MB
       content_blocks:
-        name: Cartes 
+        name: Carte
+        fields:
+          zoom: Zoom
+          lng: Longitude
+          lat: Latitude 
     components:
       geo:
         name: Geo

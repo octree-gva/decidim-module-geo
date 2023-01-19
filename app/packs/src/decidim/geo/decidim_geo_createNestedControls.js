@@ -1,12 +1,12 @@
 const {
   createLayerGroup,
+  createMarker,
   createControlInputElement,
   displayNestedLayers,
 } = require("./decidim_geo_utils");
 const {
   default: createCustomLayerControl,
 } = require("./decidim_geo_createCustomLayerControl.js");
-const { default: createMarker } = require("./decidim_geo_createMarker.js");
 
 function createNestedControls(
   map,
@@ -19,6 +19,7 @@ function createNestedControls(
       title: titleReducer = ({ title }) => title,
       description: descriptionReducer = ({ description }) => description,
       location: locationReducer = ({ location }) => location,
+      image: imageReducer = ({ image }) => image,
       href: hrefReducer = ({ href }) => href,
     },
   }
@@ -34,12 +35,14 @@ function createNestedControls(
       var title = titleReducer({ ...inode, entity });
       var description = descriptionReducer({ ...inode, entity });
       var location = locationReducer({ ...inode, entity });
+      var image = imageReducer({ ...inode, entity });
       var href = hrefReducer({ ...inode, entity });
       if (location) {
         var marker = createMarker({
           title,
           description,
           location,
+          image,
           href,
         });
 
