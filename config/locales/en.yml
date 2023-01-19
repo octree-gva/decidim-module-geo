@@ -26,7 +26,11 @@ en:
             attachment_legend: Upload shapefile compacted as a zip file
             attachment_max_size: Max size - 10 MB
       content_blocks:
-        name: Maps 
+        name: Geo Maps
+        fields:
+          zoom: Zoom
+          lng: Longitude
+          lat: Latitude 
     components:
       geo:
         name: Geo

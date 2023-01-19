@@ -17,15 +17,14 @@ module Decidim
         Decidim.content_blocks.register(:homepage, :geo_maps) do |content_block|
           content_block.cell = "decidim/geo/content_blocks/geo_maps"
           content_block.public_name_key = "decidim.geo.content_blocks.name"
+          content_block.settings_form_cell = "decidim/geo/content_blocks/geo_maps_settings_form"
 
-          content_block.images = [
-            {
-              name: :background_image,
-              uploader: "Decidim::HomepageImageUploader"
-            }
-          ]
+          content_block.settings do |settings|
+            settings.attribute :zoom, type: :integer, default: ""
+            settings.attribute :lng, type: :integer, default: ""
+            settings.attribute :lat, type: :integer, default: ""
+          end
 
-          # content_block.default!
         end
       end
 
@@ -34,7 +33,7 @@ module Decidim
       end
 
       initializer "decidim.graphql_api" do
-        Decidim::Api::QueryType.include Decidim::Geo::ShapefileQueryExtension
+        Decidim::Api::QueryType.include Decidim::Geo::GeoQueryExtension
       end
 
       initializer "decidim_geo.webpacker.assets_path" do
