@@ -27,7 +27,7 @@ async function createMap() {
     data: { participatoryProcesses },
   } = await utils.getDecidimData(queries.participatoryProcessesQuery);
   createNestedControls(map, {
-    label: "Démarches participativent", // TODO add in home content block?
+    label: "Démarches participatives", // TODO add in home content block?
     data: participatoryProcesses,
     getSubGroupName: ({ title: { translation } }) => translation,
     getNodes: utils.getParticipatoryProcessesNodes,
