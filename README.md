@@ -64,6 +64,7 @@ And then execute:
 bundle
 bundle exec rails decidim-geo:install:migrations
 bundle exec rails db:migrate
+
 ```
 
 You will need a posgis database, at least version 14 to be able to do the migration.
