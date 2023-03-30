@@ -44,7 +44,7 @@ async function createMap() {
   });
 
   const areasGeojsonFeature = await getAreasGeoJSON(
-    "/uploads/shapefiles/shapefile.zip"
+    "/uploads/shapefiles/suisse_quartiers.zip"
   );
   const areasLayer = L.geoJSON(areasGeojsonFeature);
   createCustomLayerControl(map, {

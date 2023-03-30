@@ -30,11 +30,20 @@ export const participatoryProcessesQuery = `{
 }`;
 
 export const shapefilesQuery = `{
-  shapefiles {
+  geoShapefiles {
     id
     title
     description
     shapefile
     createdAt
+    updatedAt
   } 
+}`
+
+export const shapedataQuery = `{
+  geoShapedata {
+    id
+    data
+    geom
+  }
 }`

@@ -91,10 +91,13 @@ And then
 bundle exec rake development_app
 ```
 
+HotFix: change the adapter from `postgres` to `postgis` in `development_app/config/database.yml`
+
 Setup and run the decidim development server
 ```
 cd development_app
 bin/rails decidim_geo:install:migrations
+bin/rails decidim_geo:webpacker:install
 bin/rails db:migrate
 bin/rails db:seed
 bin/rails s

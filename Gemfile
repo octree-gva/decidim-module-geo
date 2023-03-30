@@ -9,6 +9,7 @@ gem "decidim-geo", path: "."
 
 gem 'activerecord-postgis-adapter', '~> 6.0.0'
 gem 'rgeo-shapefile'
+gem 'rgeo-geojson'
 
 gem "puma", ">= 5.5.1"
 gem "bootsnap", "~> 1.4"

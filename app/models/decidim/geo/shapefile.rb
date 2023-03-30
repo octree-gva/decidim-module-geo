@@ -3,7 +3,7 @@
 module Decidim
   module Geo
     # The data store for a Proposal in the Decidim::Proposals component.
-    class Shapefile < Geo::ApplicationRecord
+    class Shapefile < ApplicationRecord
       #include Decidim::TranslatableResource
 
       has_many :shapedatas

@@ -8,7 +8,7 @@ module Decidim
 
       field :zoom, Integer, null: false
       field :lng, Integer, null: false
-      field :lat, Integer, null: true
+      field :lat, Integer, null: false
       
     end
   end

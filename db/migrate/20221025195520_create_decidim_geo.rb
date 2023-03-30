@@ -10,7 +10,7 @@ class CreateDecidimGeo < ActiveRecord::Migration[6.0]
 
     create_table :decidim_geo_shapefile_data do |t|
       t.belongs_to :shapefile, index: true
-      t.text :data
+      t.jsonb :data
       t.multi_polygon :geom
 
       t.timestamps
