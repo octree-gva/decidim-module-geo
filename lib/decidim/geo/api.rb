@@ -6,5 +6,6 @@ module Decidim
     autoload :GeoShapefileType, "decidim/api/geo_shapefile_type"
     autoload :GeoShapedataType, "decidim/api/geo_shapedata_type"
     autoload :GeoConfigType, "decidim/api/geo_config_type"
+    autoload :GeoScopeApiType, "decidim/api/geo_scope_api_type"
   end
 end

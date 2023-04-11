@@ -39,7 +39,6 @@ module Decidim
       initializer "decidim_geo.webpacker.assets_path" do
         Decidim.register_assets_path File.expand_path("#{Decidim::Geo::Engine.root}/app/packs")
       end
-
     end
   end
 end

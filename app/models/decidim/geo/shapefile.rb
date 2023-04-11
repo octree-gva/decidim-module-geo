@@ -6,10 +6,12 @@ module Decidim
     class Shapefile < ApplicationRecord
       #include Decidim::TranslatableResource
 
-      has_many :shapedatas
+      self.table_name = 'decidim_geo_shapefiles'
 
-      self.table_name = 'decidim_geo_shapefile'
-      
+      has_many :shapedatas, foreign_key: "decidim_geo_shapefiles_id"
+
+      belongs_to :scope_type, inverse_of: :shapefile, optional: true, foreign_key: "decidim_scope_types_id"
+
       #translatable_fields :title, :description
 
       validates :title, :description, :presence => true

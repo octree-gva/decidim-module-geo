@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     decidim-geo (0.26.3)
+      decidim-admin (= 0.26.3)
       decidim-core (= 0.26.3)
 
 GEM

@@ -1,0 +1,10 @@
+
+<div class="row column">
+  <%= form.translated :text_field, :name %>
+</div>
+<div class="row column">
+  <%= form.translated :text_field, :plural %>
+</div>
+<div class="row column">
+  <%= form.collection_select :shapefile, Decidim::Geo::Shapefile.all, :id, :title, :include_blank => true %>
+</div>
