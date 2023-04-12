@@ -49,6 +49,11 @@ We use this module to map a shape to an application zone, to be able to geo-refe
     src="https://github.com/octree-gva/meta/blob/main/decidim/static/geo/consult.png?raw=true"
     alt="Administration of the GEO space" />
 
+### Configuring the Geo Maps Content Block
+
+### Upload a Shapefile and using in Scopes
+
+### Using the APIs
 
 ## Installation
 
