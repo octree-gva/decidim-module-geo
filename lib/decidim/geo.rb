@@ -5,9 +5,9 @@ require "decidim/geo/engine"
 require "decidim/geo/api"
 require "decidim/geo/admin_engine"
 require "decidim/geo/component"
-
 require 'rgeo/shapefile'
 require "decidim/geo/load_shp/app_load_shp"
+require "decidim/geo/geo_json_convert/geo_json_convert"
 
 module Decidim
   # This namespace holds the logic of the `Geo` component. This component
