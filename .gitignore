@@ -13,7 +13,8 @@
 !.env.sample
 # default test application
 spec/decidim_dummy_app
-
+.DS_Store
+.dump
 # default development application
 development_app
 

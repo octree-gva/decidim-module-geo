@@ -36,9 +36,16 @@ module Decidim
         Decidim::Api::QueryType.include Decidim::Geo::GeoQueryExtension
       end
 
+      initializer "decidim_geo.overrides" do
+        unless RGeo::Geos.supported?
+          throw "GEOS is not available, but is required for correct interpretation of polygons in shapefiles"
+        end
+       # RGeo::Geos::CAPIMultiPolygonImpl.prepend(Decidim::Geo::GeoJsonConvert)
+      end
       initializer "decidim_geo.webpacker.assets_path" do
         Decidim.register_assets_path File.expand_path("#{Decidim::Geo::Engine.root}/app/packs")
       end
+
     end
   end
 end

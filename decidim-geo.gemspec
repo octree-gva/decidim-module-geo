@@ -20,4 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'decidim-admin', Decidim::Geo.version
   s.add_dependency 'decidim-core', Decidim::Geo.version
+  s.add_dependency 'ffi-geos', '~> 2.4'
+  s.add_dependency 'rgeo-shapefile', ">= 1.0"
+  s.add_dependency 'rgeo-geojson', ">= 1.0"
 end
