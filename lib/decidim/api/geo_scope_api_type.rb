@@ -14,7 +14,7 @@ module Decidim
       field :geom, GraphQL::Types::JSON, null: true
 
       def geom
-        object.shapedata.geom.as_geojson unless object.shapedata.nil?
+        RGeo::GeoJSON.encode(object.shapedata.geom) unless object.shapedata.nil?
       end
     end
   end

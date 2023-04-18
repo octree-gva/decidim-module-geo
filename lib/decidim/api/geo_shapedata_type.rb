@@ -11,7 +11,7 @@ module Decidim
       field :geom, GraphQL::Types::JSON, null: true
 
       def geom
-        object.geom.as_geojson
+        RGeo::GeoJSON.encode(object.geom)
       end
     end
   end

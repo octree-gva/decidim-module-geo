@@ -2,6 +2,7 @@
   "dependencies": {
     "buffer": "^6.0.3",
     "leaflet": "1.9.2",
-    "shpjs": "4.0.4"
+    "shpjs": "4.0.4",
+    "graphql": "16.6.0"
   }
 }

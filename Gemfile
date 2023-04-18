@@ -8,6 +8,7 @@ gem "decidim", "~> 0.26.3"
 gem "decidim-geo", path: "."
 
 gem 'activerecord-postgis-adapter', '~> 6.0.0'
+gem 'ffi-geos'
 gem 'rgeo-shapefile'
 gem 'rgeo-geojson'
 
