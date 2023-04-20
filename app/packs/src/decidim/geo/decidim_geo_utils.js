@@ -43,7 +43,6 @@ export async function getDecidimData(query) {
     })
     .then(async response => {
       const res = await response.json();
-      console.log(res)
       return res;
     })
     .catch(alert);

@@ -11,7 +11,13 @@ const {
 } = require("./decidim_geo_getAreasGeoJSON.js");
 
 async function createMap() {
-  const map = L.map("map", { center: [46.521297, 6.632541], zoom: 14 });
+  const {
+    data: {
+      geoConfig: { lat, lng, zoom },
+    },
+  } = await utils.getDecidimData(queries.homePageMapConfig);
+
+  const map = L.map("map", { center: [lat, lng], zoom });
   map.zoomControl.setPosition("topright");
 
   const osm = L.tileLayer(
@@ -57,6 +63,7 @@ async function createMap() {
   } = await utils.getDecidimData(queries.shapefilesQuery);
 
   shapefiles.forEach(async shapefileElement => {
+    console.log(shapefileElement);
     const geojsonFeature = await getAreasGeoJSON(shapefileElement.shapefile);
     const shapefileLayer = L.geoJSON(geojsonFeature);
     createCustomLayerControl(map, {

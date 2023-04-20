@@ -38,7 +38,7 @@ export const shapefilesQuery = `{
     createdAt
     updatedAt
   } 
-}`
+}`;
 
 export const shapedataQuery = `{
   geoShapedata {
@@ -46,4 +46,12 @@ export const shapedataQuery = `{
     data
     geom
   }
-}`
+}`;
+
+export const homePageMapConfig = `{
+  geoConfig { 
+    lat 
+    lng 
+    zoom 
+  }
+}`;
