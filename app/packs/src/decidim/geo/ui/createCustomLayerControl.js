@@ -1,4 +1,4 @@
-const { createControlInputElement } = require("./decidim_geo_utils");
+const { createControlInputElement } = require("./");
 
 function createCustomLayerControl(map, { label, layer, group }) {
   const CustomLayerControl = L.Control.extend({

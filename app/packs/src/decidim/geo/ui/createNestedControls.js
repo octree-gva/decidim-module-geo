@@ -2,11 +2,11 @@ const {
   createLayerGroup,
   createMarker,
   createControlInputElement,
-  displayNestedLayers,
-} = require("./decidim_geo_utils");
+  createCustomLayerControl,
+} = require("./index.js");
 const {
-  default: createCustomLayerControl,
-} = require("./decidim_geo_createCustomLayerControl.js");
+  displayNestedLayers,
+} = require("../actions");
 
 function createNestedControls(
   map,

@@ -1,4 +1,4 @@
-export const participatoryProcessesQuery = `{  
+export const participatoryProcesses = `{  
   participatoryProcesses {
     slug
     bannerImage
@@ -29,7 +29,7 @@ export const participatoryProcessesQuery = `{
   }
 }`;
 
-export const shapefilesQuery = `{
+export const geoShapefiles = `{
   geoShapefiles {
     id
     title
@@ -40,7 +40,7 @@ export const shapefilesQuery = `{
   } 
 }`;
 
-export const shapedataQuery = `{
+export const shapedata = `{
   geoShapedata {
     id
     data
@@ -48,7 +48,7 @@ export const shapedataQuery = `{
   }
 }`;
 
-export const homePageMapConfig = `{
+export const geoConfig = `{
   geoConfig { 
     lat 
     lng 
