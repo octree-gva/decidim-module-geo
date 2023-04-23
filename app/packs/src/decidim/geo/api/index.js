@@ -11,3 +11,5 @@ export { getGeoJSON };
 export const getParticipatoryProcesses = makeQuery("participatoryProcesses");
 export const getGeoShapefiles = makeQuery("geoShapefiles");
 export const getGeoConfig = makeQuery("geoConfig");
+export const getGeoShapeData = makeQuery("geoShapeData");
+export const getGeoScopes = makeQuery("geoScope");

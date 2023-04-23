@@ -55,3 +55,21 @@ export const geoConfig = `{
     zoom 
   }
 }`;
+
+export const geoShapedata = `{
+  geoShapedata {
+    id
+    data
+    geom
+  }
+}`;
+
+export const geoScope = `{
+  geoScope { 
+    id
+    name	{ 
+      translation(locale: "en") 
+    }
+    geom
+  }
+}`;
