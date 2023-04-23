@@ -20,7 +20,7 @@ async function main() {
             fillOpacity: 1,
             color: "#cccccc",
             opacity: 1,
-            weight: 5
+            weight: 5,
           });
           return circle
             .bindTooltip(label, {
@@ -28,7 +28,7 @@ async function main() {
               opacity: 1,
               permanent: true,
               direction: "top",
-              className: 'decidimGeo__scope__tooltip'
+              className: "decidimGeo__scope__tooltip",
             })
             .openTooltip()
             .addTo(map);
@@ -46,8 +46,7 @@ async function main() {
     }).addTo(map);
   });
 
-  createScopesDropdown()
-  
+  const scopesDropdown = createScopesDropdown(map);
 }
 
 main();

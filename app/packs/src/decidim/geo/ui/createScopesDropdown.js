@@ -17,6 +17,13 @@ async function createScopesDropdown(map) {
 
       const list = L.DomUtil.create("ul", "", menu);
 
+      scopes.forEach(scope => {
+        console.log(scope);
+        const menuItem = L.DomUtil.create("li", `${scope.name.translation}`, list);
+        menuItem.textContent += scope.name.translation;
+
+      });
+
       return menu;
     },
   });
