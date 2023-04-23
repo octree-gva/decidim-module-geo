@@ -1,53 +1,53 @@
-const {
-  getParticipatoryProcesses,
-  getGeoShapefiles,
-  getGeoJSON,
-} = require("./api");
-const { participatoryProcess } = require("./models");
-const {
-  initMap,
-  createNestedControls,
-  createCustomLayerControl,
-} = require("./ui");
+const { getGeoShapefiles, getGeoJSON } = require("./api");
+const { initMap, createScopesDropdown } = require("./ui");
+const polylabel = require("polylabel");
 
 async function main() {
   const map = await initMap();
 
-  createNestedControls(map, {
-    label: "processes",
-    data: await getParticipatoryProcesses(),
-    getSubGroupName: ({ title: { translation } }) => translation,
-    getNodes: participatoryProcess.getNodes,
-    formatMarkerDataReducers: {
-      title: ({ title: { translation } }) => translation,
-      description: ({ description: { translation } }) => translation,
-      location: ({ coordinates: { latitude, longitude } }) => {
-        if (latitude && longitude) return [latitude, longitude];
-      },
-      image: ({ entity }) => entity.bannerImage,
-      href: ({ id, entity }) =>
-        `/processes/${entity.slug}/f/${entity.components[0].id}/meetings/${id}`,
-    },
-  });
-
-  const areasGeojsonFeature = await getGeoJSON(
-    "/uploads/shapefiles/suisse_quartiers.zip"
-  );
-  const areasLayer = L.geoJSON(areasGeojsonFeature);
-  createCustomLayerControl(map, {
-    label: "areas",
-    layer: areasLayer,
-  });
-
   const shapefiles = await getGeoShapefiles();
   shapefiles.forEach(async shapefileElement => {
     const geojsonFeature = await getGeoJSON(shapefileElement.shapefile);
-    const shapefileLayer = L.geoJSON(geojsonFeature);
-    createCustomLayerControl(map, {
-      label: shapefileElement.title,
-      layer: shapefileLayer,
-    });
+
+    const shapefileLayer = L.geoJSON(geojsonFeature, {
+      onEachFeature: function (feature, layer) {
+        const label = String(feature.properties.NAME);
+        if (feature.geometry.type === "Polygon") {
+          const centroid = polylabel(feature.geometry.coordinates, 1.0);
+          const circle = new L.circleMarker([centroid[1], centroid[0]], {
+            radius: 6,
+            fillColor: "#000000",
+            fillOpacity: 1,
+            color: "#cccccc",
+            opacity: 1,
+            weight: 5
+          });
+          return circle
+            .bindTooltip(label, {
+              permanent: true,
+              opacity: 1,
+              permanent: true,
+              direction: "top",
+              className: 'decidimGeo__scope__tooltip'
+            })
+            .openTooltip()
+            .addTo(map);
+        }
+      },
+      style: feature => {
+        return {
+          fillColor: "#cccccc",
+          color: "#999999",
+          lineJoin: "miter",
+          dashArray: "5, 10",
+          dashOffset: "5",
+        };
+      },
+    }).addTo(map);
   });
+
+  createScopesDropdown()
+  
 }
 
 main();

@@ -6,9 +6,9 @@ const {
 } = require("./index.js");
 const {
   displayNestedLayers,
-} = require("../actions");
+} = require("../actions/index.js");
 
-function createNestedControls(
+function createEntityControls(
   map,
   {
     label,
@@ -89,4 +89,4 @@ function createNestedControls(
   childControls.forEach(control => map.addControl(control));
 }
 
-export default createNestedControls;
+export default createEntityControls;

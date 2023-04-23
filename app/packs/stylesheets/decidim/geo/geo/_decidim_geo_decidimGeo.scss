@@ -23,3 +23,18 @@
     @include decidimGeo__customControl;
     margin-left: 12px;
 }
+
+.decidimGeo__scopesDropdown {
+    display: block;
+    background: #fff;
+    padding: 12px;
+}
+
+.decidimGeo__scope__tooltip {
+    background-color: transparent !important;
+    border: transparent !important;
+    box-shadow: none !important;
+    font-weight: bold;
+}
+
+.leaflet-tooltip-top.decidimGeo__scope__tooltip::before {border-top-color: transparent;}

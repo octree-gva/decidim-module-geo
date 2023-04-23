@@ -8,5 +8,11 @@ export const {
 } = require("./createCustomLayerControl.js");
 export const { default: createLayerGroup } = require("./createLayerGroup.js");
 export const {
-  default: createNestedControls,
-} = require("./createNestedControls.js");
+  default: createEntityControls,
+} = require("./createEntityControls.js");
+export const {
+  default: createScopesDropdown,
+} = require("./createScopesDropdown.js");
+
+
+

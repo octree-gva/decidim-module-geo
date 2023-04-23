@@ -3,7 +3,7 @@ const { getGeoConfig } = require("../api");
 const initMap = async () => {
   const { lat, lng, zoom } = await getGeoConfig();
 
-  const map = L.map("map", { center: [lat, lng], zoom });
+  const map = L.map("map", { center: [46.519962, 6.633597], zoom });
   map.zoomControl.setPosition("topright");
 
   L.tileLayer(
