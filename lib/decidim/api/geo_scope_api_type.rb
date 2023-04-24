@@ -12,7 +12,7 @@ module Decidim
       field :parent, Decidim::Geo::GeoScopeApiType, "This scope's parent scope.", null: true
 
       field :geom, GraphQL::Types::JSON, null: true
-
+      
       def geom
         RGeo::GeoJSON.encode(object.shapedata.geom) unless object.shapedata.nil?
       end

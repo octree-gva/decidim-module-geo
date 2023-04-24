@@ -37,8 +37,9 @@ module Decidim
             logger.info "Shapefile exists ? #{shp_file}"
             raise "Shapefile doesn't exists" if shp_file.empty?
             
-            RGeo::Shapefile::Reader.open(shp_file.first) do |file|
+            RGeo::Shapefile::Reader.open(shp_file.first, srid: 2056) do |file|
               logger.info "File contains #{file.num_records} records."
+              
               file.each do |record|
                 shp_loader(record)
               end

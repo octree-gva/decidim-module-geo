@@ -27,6 +27,8 @@ module Decidim
           end
 
           broadcast(:ok, @shapefile)
+        rescue
+          broadcast(:invalid)
         end
 
         private
