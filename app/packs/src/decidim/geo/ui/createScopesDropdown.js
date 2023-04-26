@@ -1,4 +1,4 @@
-const { getGeoScopes } = require("../api");
+const { getGeoScopes, getParticipatoryProcesses } = require("../api");
 const polylabel = require("polylabel");
 
 const createClasses = (classname, modifiers) =>
@@ -36,6 +36,10 @@ const renderer = (prev, next, lensArray, render) => {
 
 async function createScopesDropdown(map) {
   const scopes = await getGeoScopes();
+  const initialState = {
+    parentScope: null,
+    isListOpened: false,
+  }
 
   const CustomLayerControl = L.Control.extend({
     options: {
@@ -43,11 +47,10 @@ async function createScopesDropdown(map) {
       position: "topleft",
     },
 
-    state: {
-      parentScope: null,
-      isListOpened: false,
-    },
+    state: {},
 
+    menu: null,
+    heading: null,
     title: null,
     list: null,
 
@@ -78,24 +81,63 @@ async function createScopesDropdown(map) {
         prev,
         next,
         makeLensArray("parentScope.name.translation"),
-        name => {
+        async name => {
           this.title.textContent = name;
+          const reset = L.DomUtil.create(
+            "button",
+            "decidimGeo__scopesDropdown__reset",
+            this.heading
+          );
+          reset.textContent = "reset";
+          reset.onclick = event => {
+            L.DomUtil.remove(this.heading);
+            L.DomUtil.remove(this.list);
+            L.DomUtil.remove(reset);
+            this.initMenuChildren();
+          };
+
+          L.DomUtil.empty(this.list);
+
+          const loadingItem = L.DomUtil.create(
+            "div",
+            "decidimGeo__scopesDropdown__loading",
+            this.list
+          );
+          loadingItem.textContent += "Loading";
+
+          const participatoryProcesses = await getParticipatoryProcesses();
+          const participatoryProcessesList = participatoryProcesses.map(
+            participatoryProcess => {
+              const listCard = L.DomUtil.create(
+                "li",
+                "decidimGeo__scopesDropdown__listCard"
+              );
+              listCard.textContent += participatoryProcess.title.translation;
+
+              return listCard;
+            }
+          );
+
+          L.DomUtil.empty(this.list);
+          participatoryProcessesList.forEach(element =>
+            this.list.appendChild(element)
+          );
         }
       );
       this.state = next;
     },
 
-    onAdd: function (map) {
-      const menu = L.DomUtil.create("div", "decidimGeo__scopesDropdown");
-      menu.ondblclick = function (event) {
-        event.stopPropagation();
-        return false;
-      };
+    initMenuChildren: function (scopeToMap) {
+      this.heading = L.DomUtil.create(
+        "div",
+        createClasses("decidimGeo__scopesDropdown__heading", ["closed"]),
+        this.menu
+      );
 
       this.title = L.DomUtil.create(
         "h6",
         createClasses("decidimGeo__scopesDropdown__title", ["closed"]),
-        menu
+        this.heading
       );
 
       this.title.textContent += "All scopes";
@@ -107,7 +149,7 @@ async function createScopesDropdown(map) {
       this.list = L.DomUtil.create(
         "ul",
         createClasses("decidimGeo__scopesDropdown__list", ["closed"]),
-        menu
+        this.menu
       );
 
       scopes.forEach(scope => {
@@ -120,9 +162,20 @@ async function createScopesDropdown(map) {
           this.setState({ parentScope: scope });
         };
 
-        const scopeName = scope.name.translation;
-        menuItem.textContent += scopeName;
+        menuItem.textContent += scope.name.translation;
 
+        if (scopeToMap) scopeToMap(scope);
+      });
+    },
+
+    onAdd: function (map) {
+      this.menu = L.DomUtil.create("div", "decidimGeo__scopesDropdown");
+      this.menu.ondblclick = function (event) {
+        event.stopPropagation();
+        return false;
+      };
+
+      this.initMenuChildren(scope => {
         L.geoJSON(scope.geom, {
           style: feature => {
             return {
@@ -135,7 +188,7 @@ async function createScopesDropdown(map) {
           },
         }).addTo(map);
 
-        const label = String(scopeName);
+        const label = String(scope.name.translation);
         if (scope.type === "Polygon") {
           const centroid = polylabel(scope.geom.coordinates, 1.0);
           const circle = new L.circleMarker([centroid[1], centroid[0]], {
@@ -159,7 +212,7 @@ async function createScopesDropdown(map) {
         }
       });
 
-      return menu;
+      return this.menu;
     },
   });
 
