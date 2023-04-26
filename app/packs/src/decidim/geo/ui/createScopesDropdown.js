@@ -39,7 +39,7 @@ async function createScopesDropdown(map) {
   const initialState = {
     parentScope: null,
     isListOpened: false,
-  }
+  };
 
   const CustomLayerControl = L.Control.extend({
     options: {
@@ -94,6 +94,7 @@ async function createScopesDropdown(map) {
             L.DomUtil.remove(this.list);
             L.DomUtil.remove(reset);
             this.initMenuChildren();
+            this.title.click();
           };
 
           L.DomUtil.empty(this.list);
@@ -128,6 +129,7 @@ async function createScopesDropdown(map) {
     },
 
     initMenuChildren: function (scopeToMap) {
+      this.state = initialState;
       this.heading = L.DomUtil.create(
         "div",
         createClasses("decidimGeo__scopesDropdown__heading", ["closed"]),
