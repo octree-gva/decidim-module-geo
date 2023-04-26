@@ -30,12 +30,36 @@
     padding: 12px;
 }
 
-.decidimGeo__scopesDropdown__list {
-    
+.decidimGeo__scopesDropdown__title {
+    cursor: pointer;
+
+    &:after { 
+        display: inline-block;
+        content: "\25BE"; 
+        transform: rotate(-180deg);
+        transition: 0.3s;
+    }
+
+    &--closed {
+
+        &:after { 
+            transform: rotate(0);
+        }
+    }
 }
 
-.decidimGeo__scopesDropdown__list--closed {
-    display: none;
+.decidimGeo__scopesDropdown__list {
+    height: auto;
+    overflow: auto;
+    margin-bottom: 0;
+    transition: 0.3s;
+
+    &--closed {
+        height: 0;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
 }
 
 .decidimGeo__scope__tooltip {

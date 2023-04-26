@@ -27,10 +27,6 @@ implementing BEM (https://getbem.com/introduction/) and remove !important rules*
     padding-block: 0;
 }
 
-.leaflet-left:nth-child(1) {
-    margin-top: 50px;
-}
-
 .leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar{
     border: 0 !important;
 }

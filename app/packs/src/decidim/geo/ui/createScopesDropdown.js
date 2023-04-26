@@ -1,6 +1,12 @@
 const { getGeoScopes } = require("../api");
 const polylabel = require("polylabel");
 
+const createClasses = (classname, modifiers) =>
+  [
+    classname,
+    ...modifiers.map(modifier => `${classname}--${modifier}`)
+  ].join(" ");
+
 async function createScopesDropdown(map) {
   const scopes = await getGeoScopes();
 
@@ -24,10 +30,13 @@ async function createScopesDropdown(map) {
     },
 
     onStateUpdate: function () {
-      this.state.isListOpened
-        ? (this.list.className = "decidimGeo__scopesDropdown__list")
-        : (this.list.className =
-            "decidimGeo__scopesDropdown__list decidimGeo__scopesDropdown__list--closed");
+      if (this.state.isListOpened) {
+        this.list.className = "decidimGeo__scopesDropdown__list"
+        this.title.className = "decidimGeo__scopesDropdown__title"
+      } else {
+        this.list.className = createClasses("decidimGeo__scopesDropdown__list", ['closed'])
+        this.title.className = createClasses("decidimGeo__scopesDropdown__title", ['closed'])
+      }
     },
 
     onAdd: function (map) {
@@ -37,7 +46,11 @@ async function createScopesDropdown(map) {
         return false;
       };
 
-      this.title = L.DomUtil.create("h5", "", menu);
+      this.title = L.DomUtil.create(
+        "h6",
+        createClasses("decidimGeo__scopesDropdown__title", ['closed']),
+        menu
+      );
 
       this.title.textContent += "All scopes";
       this.title.onclick = event => {
@@ -47,7 +60,7 @@ async function createScopesDropdown(map) {
 
       this.list = L.DomUtil.create(
         "ul",
-        "decidimGeo__scopesDropdown__list decidimGeo__scopesDropdown__list--closed",
+        createClasses("decidimGeo__scopesDropdown__list", ['closed']),
         menu
       );
 
