@@ -2,10 +2,37 @@ const { getGeoScopes } = require("../api");
 const polylabel = require("polylabel");
 
 const createClasses = (classname, modifiers) =>
-  [
-    classname,
-    ...modifiers.map(modifier => `${classname}--${modifier}`)
-  ].join(" ");
+  [classname, ...modifiers.map(modifier => `${classname}--${modifier}`)].join(
+    " "
+  );
+
+const makeLensArray = lens => lens.split(".");
+
+const getLensValue = (obj, lensArray) => {
+  if (!obj) {
+    return obj;
+  }
+  const [lens, ...rest] = lensArray;
+  const value = obj[lens];
+
+  if (lensArray.length > 1) {
+    return getLensValue(value, rest);
+  }
+  return value;
+};
+
+const renderer = (prev, next, lensArray, render) => {
+  const A = getLensValue(prev, lensArray);
+  const B = getLensValue(next, lensArray);
+
+  if (A !== B) {
+    if (typeof render === "function") {
+      return render(B);
+    }
+    return render[String(B)]();
+  }
+  return;
+};
 
 async function createScopesDropdown(map) {
   const scopes = await getGeoScopes();
@@ -25,18 +52,37 @@ async function createScopesDropdown(map) {
     list: null,
 
     setState: function (stateUpdate) {
-      this.state = { ...this.state, ...stateUpdate };
-      return this.onStateUpdate();
+      const prev = this.state;
+      const next = { ...prev, ...stateUpdate };
+      return this.onStateUpdate(prev, next);
     },
 
-    onStateUpdate: function () {
-      if (this.state.isListOpened) {
-        this.list.className = "decidimGeo__scopesDropdown__list"
-        this.title.className = "decidimGeo__scopesDropdown__title"
-      } else {
-        this.list.className = createClasses("decidimGeo__scopesDropdown__list", ['closed'])
-        this.title.className = createClasses("decidimGeo__scopesDropdown__title", ['closed'])
-      }
+    onStateUpdate: function (prev, next) {
+      renderer(prev, next, ["isListOpened"], {
+        true: () => {
+          this.list.className = "decidimGeo__scopesDropdown__list";
+          this.title.className = "decidimGeo__scopesDropdown__title";
+        },
+        false: () => {
+          this.list.className = createClasses(
+            "decidimGeo__scopesDropdown__list",
+            ["closed"]
+          );
+          this.title.className = createClasses(
+            "decidimGeo__scopesDropdown__title",
+            ["closed"]
+          );
+        },
+      });
+      renderer(
+        prev,
+        next,
+        makeLensArray("parentScope.name.translation"),
+        name => {
+          this.title.textContent = name;
+        }
+      );
+      this.state = next;
     },
 
     onAdd: function (map) {
@@ -48,7 +94,7 @@ async function createScopesDropdown(map) {
 
       this.title = L.DomUtil.create(
         "h6",
-        createClasses("decidimGeo__scopesDropdown__title", ['closed']),
+        createClasses("decidimGeo__scopesDropdown__title", ["closed"]),
         menu
       );
 
@@ -60,12 +106,19 @@ async function createScopesDropdown(map) {
 
       this.list = L.DomUtil.create(
         "ul",
-        createClasses("decidimGeo__scopesDropdown__list", ['closed']),
+        createClasses("decidimGeo__scopesDropdown__list", ["closed"]),
         menu
       );
 
       scopes.forEach(scope => {
-        const menuItem = L.DomUtil.create("li", "", this.list);
+        const menuItem = L.DomUtil.create(
+          "li",
+          "decidimGeo__scopesDropdown__listItem",
+          this.list
+        );
+        menuItem.onclick = event => {
+          this.setState({ parentScope: scope });
+        };
 
         const scopeName = scope.name.translation;
         menuItem.textContent += scopeName;

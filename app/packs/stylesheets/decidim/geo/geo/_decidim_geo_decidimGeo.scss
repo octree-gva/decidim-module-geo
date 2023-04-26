@@ -15,6 +15,15 @@
     }
   }
 
+  @mixin decidimGeo__clickableScope {
+    display: block;
+    font-size: 16px;
+    color: #0e0ecc;
+    cursor: pointer;
+  }
+
+  
+
 .decidimGeo__customControl__parent {
     @include decidimGeo__customControl;
 }
@@ -26,16 +35,20 @@
 
 .decidimGeo__scopesDropdown {
     display: block;
+    min-width: 200px;   
     background: #fff;
-    padding: 12px;
+    border-radius: 8px;
 }
 
 .decidimGeo__scopesDropdown__title {
-    cursor: pointer;
+    @include decidimGeo__clickableScope;
+    padding: 12px;
+    margin: 0;
 
     &:after { 
         display: inline-block;
         content: "\25BE"; 
+        color: #0c0c0c;
         transform: rotate(-180deg);
         transition: 0.3s;
     }
@@ -50,8 +63,11 @@
 
 .decidimGeo__scopesDropdown__list {
     height: auto;
+    border-top: #cccccc 1px solid;
     overflow: auto;
-    margin-bottom: 0;
+    margin: 0;
+    padding: 12px 12px 12px 24px;
+
     transition: 0.3s;
 
     &--closed {
@@ -60,6 +76,11 @@
         margin: 0;
         padding: 0;
     }
+}
+
+.decidimGeo__scopesDropdown__listItem {
+    @include decidimGeo__clickableScope;
+    margin: 0 4px;
 }
 
 .decidimGeo__scope__tooltip {

@@ -9,7 +9,6 @@ async function getGeoJSON(shapefileUrl) {
     .fetch(relativePath)
     .then(response => response.arrayBuffer())
     .then(shp)
-    .catch(alert);
 }
 
 export default getGeoJSON;

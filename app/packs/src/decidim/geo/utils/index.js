@@ -15,7 +15,6 @@ export async function getDecidimData(query) {
       const res = await response.json();
       return res;
     })
-    .catch(alert);
 
   if (collection) {
     return collection;
