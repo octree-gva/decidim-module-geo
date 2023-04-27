@@ -5,7 +5,7 @@ export const participatoryProcesses = `{
     title {
       translation(locale: "en")
     }
-    description {
+    shortDescription {
       translation(locale: "en")
     }
     components(filter: {type: "Meetings"}) {

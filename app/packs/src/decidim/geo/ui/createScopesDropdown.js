@@ -129,24 +129,24 @@ async function createScopesDropdown(map) {
               const infoType = L.DomUtil.create(
                 "div",
                 "decidimGeo__scopesDropdown__listCardType",
-                listCard
+                info
               );
               infoType.textContent += "process";
 
               const infoTitle = L.DomUtil.create(
                 "div",
                 "decidimGeo__scopesDropdown__listCardTitle",
-                listCard
+                info
               );
               infoTitle.textContent += participatoryProcess.title.translation;
 
               const infoDescription = L.DomUtil.create(
                 "div",
                 "decidimGeo__scopesDropdown__listCardDescription",
-                listCard
+                info
               );
               infoDescription.textContent +=
-                participatoryProcess.description.translation.replace(
+                participatoryProcess.shortDescription.translation.replace(
                   /<[^>]+>/g,
                   ""
                 );
@@ -156,7 +156,10 @@ async function createScopesDropdown(map) {
           );
 
           L.DomUtil.empty(this.list);
-          L.DomUtil.addClass(this.list, "decidimGeo__scopesDropdown__list--card")
+          L.DomUtil.addClass(
+            this.list,
+            "decidimGeo__scopesDropdown__list--card"
+          );
           participatoryProcessesList.forEach(element =>
             this.list.appendChild(element)
           );
