@@ -5,6 +5,9 @@ export const participatoryProcesses = `{
     title {
       translation(locale: "en")
     }
+    description {
+      translation(locale: "en")
+    }
     components(filter: {type: "Meetings"}) {
       id
       __typename
