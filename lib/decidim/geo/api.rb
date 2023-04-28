@@ -7,5 +7,7 @@ module Decidim
     autoload :GeoShapedataType, "decidim/api/geo_shapedata_type"
     autoload :GeoConfigType, "decidim/api/geo_config_type"
     autoload :GeoScopeApiType, "decidim/api/geo_scope_api_type"
+    autoload :HasScopeableInputFilter, "decidim/api/input_filters/has_scopeable_input_filter"
+    autoload :MeetingsInputFilter, "decidim/api/meetings_input_filter"
   end
 end

@@ -34,6 +34,8 @@ module Decidim
 
       initializer "decidim.graphql_api" do
         Decidim::Api::QueryType.include Decidim::Geo::GeoQueryExtension
+
+        Decidim::ParticipatoryProcesses::ParticipatoryProcessInputFilter.include Decidim::Geo::HasScopeableInputFilter
       end
 
       initializer "decidim_geo.overrides" do

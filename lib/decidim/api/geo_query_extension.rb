@@ -16,6 +16,8 @@ module Decidim
         type.field :geo_scope, [Decidim::Geo::GeoScopeApiType], description: "Return's scopes with shapedatas", null: true do
           argument :name, [String], required: false
         end
+
+        
       end
 
       def geo_shapefiles(title: nil)
