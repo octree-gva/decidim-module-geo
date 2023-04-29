@@ -98,7 +98,6 @@ async function createScopesDropdown(map) {
           };
 
           L.DomUtil.empty(this.list);
-
           const loadingItem = L.DomUtil.create(
             "div",
             "decidimGeo__scopesDropdown__loading",
@@ -106,7 +105,9 @@ async function createScopesDropdown(map) {
           );
           loadingItem.textContent += "Loading";
 
-          const participatoryProcesses = await getParticipatoryProcesses();
+          const participatoryProcesses = await getParticipatoryProcesses({
+            variables: { filter: { scopeId: next.parentScope.id } },
+          });
           const participatoryProcessesList = participatoryProcesses.map(
             participatoryProcess => {
               const listCard = L.DomUtil.create(

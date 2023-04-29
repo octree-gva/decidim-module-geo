@@ -1,6 +1,6 @@
 const { ROOT_URL }  = require('../constants');
 
-export async function getDecidimData(query) {
+export async function getDecidimData(query, params) {
   var collection = await window
     .fetch(`${ROOT_URL}/api`, {
       method: "POST",
@@ -9,6 +9,7 @@ export async function getDecidimData(query) {
       },
       body: JSON.stringify({
         query,
+        ...params
       }),
     })
     .then(async response => {
