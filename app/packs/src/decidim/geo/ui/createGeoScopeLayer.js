@@ -1,6 +1,6 @@
 const polylabel = require("polylabel");
 
-const createGeoScopeLayer = ({ geoScope, map }) => {
+const createGeoScopeLayer = ({ geoScope, map, onClick }) => {
   const layer = L.geoJSON(geoScope.geom, {
     style: {
       fillColor: "#cccccc",
@@ -10,6 +10,8 @@ const createGeoScopeLayer = ({ geoScope, map }) => {
       dashOffset: "5",
     },
   }).addTo(map);
+
+  layer.on("click", onClick);
 
   const label = String(geoScope.name.translation);
   if (geoScope.geom.type === "MultiPolygon") {
@@ -34,7 +36,7 @@ const createGeoScopeLayer = ({ geoScope, map }) => {
       .openTooltip()
       .addTo(map);
   }
-  
+
   return layer;
 };
 

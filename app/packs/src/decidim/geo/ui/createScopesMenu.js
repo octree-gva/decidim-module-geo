@@ -27,8 +27,8 @@ async function createScopesDropdown(map) {
     list: null,
 
     //Controlers
-    switchIsListOpened() {
-      this.isListOpened = !this.isListOpened;
+    switchIsListOpened(value) {
+      this.isListOpened = value;
 
       if (this.isListOpened) {
         this.list.className = "decidimGeo__scopesDropdown__list";
@@ -66,7 +66,7 @@ async function createScopesDropdown(map) {
 
       this.title.textContent += "All scopes";
       this.title.onclick = event => {
-        this.switchIsListOpened();
+        this.switchIsListOpened(!this.isListOpened);
       };
 
       this.list = L.DomUtil.create(
@@ -95,6 +95,7 @@ async function createScopesDropdown(map) {
           },
           menuActions: {
             reset: this.reset.bind(this),
+            switchIsListOpened: this.switchIsListOpened.bind(this),
           },
         });
         G.init();

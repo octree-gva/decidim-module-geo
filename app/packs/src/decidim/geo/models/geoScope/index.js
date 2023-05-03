@@ -15,6 +15,7 @@ export default class GeoScope {
 
   select() {
     this.isActive = true;
+    this.menuActions.switchIsListOpened(true);
 
     this.menuElements.title.textContent = this.data.name.translation;
     const reset = L.DomUtil.create(
@@ -36,10 +37,17 @@ export default class GeoScope {
     loadingItem.textContent += "Loading";
   }
 
+  unSelect() {
+    this.isActive = false;
+
+    this.layer.setStyle({ fillColor: "#cccccc", color: "#999999" });
+  }
+
   init() {
     this.layer = createGeoScopeLayer({
       geoScope: this.data,
       map: this.map,
+      onClick: this.select.bind(this),
     });
     this.menuItem = createGeoScopeMenuItem({
       label: this.data.name.translation,
