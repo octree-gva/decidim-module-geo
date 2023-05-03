@@ -15,7 +15,6 @@ export default class GeoScope {
   select() {
     this.isActive = true;
 
-    console.log(this.menuElements);
     this.menuElements.title.textContent = this.data.name.translation;
     const reset = L.DomUtil.create(
       "button",
@@ -24,6 +23,8 @@ export default class GeoScope {
     );
     reset.textContent = "reset";
     reset.onclick = reset;
+
+    this.layer.setStyle({ fillColor: "#2952A340", color: "#2952A3" });
 
     L.DomUtil.empty(this.menuElements.list);
     const loadingItem = L.DomUtil.create(

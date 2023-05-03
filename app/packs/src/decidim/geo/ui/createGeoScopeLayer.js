@@ -2,14 +2,12 @@ const polylabel = require("polylabel");
 
 const createGeoScopeLayer = ({ geoScope, map }) => {
   const layer = L.geoJSON(geoScope.geom, {
-    style: feature => {
-      return {
-        fillColor: "#cccccc",
-        color: "#999999",
-        lineJoin: "miter",
-        dashArray: "5, 10",
-        dashOffset: "5",
-      };
+    style: {
+      fillColor: "#cccccc",
+      color: "#999999",
+      lineJoin: "miter",
+      dashArray: "5, 10",
+      dashOffset: "5",
     },
   }).addTo(map);
 
@@ -36,6 +34,7 @@ const createGeoScopeLayer = ({ geoScope, map }) => {
       .openTooltip()
       .addTo(map);
   }
+  
   return layer;
 };
 
