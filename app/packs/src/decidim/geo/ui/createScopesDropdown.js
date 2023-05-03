@@ -1,4 +1,5 @@
 const { getGeoScopes, getParticipatoryProcesses } = require("../api");
+const PARTICIPATORY_PROCESS = require("../models/participatoryProcess");
 const polylabel = require("polylabel");
 
 const createClasses = (classname, modifiers) =>
@@ -152,6 +153,9 @@ async function createScopesDropdown(map) {
                   ""
                 );
 
+              const markers =
+                PARTICIPATORY_PROCESS.getMarkers(participatoryProcess);
+
               return listCard;
             }
           );
@@ -219,7 +223,7 @@ async function createScopesDropdown(map) {
       };
 
       this.initMenuChildren(scope => {
-        L.geoJSON(scope.geom, {
+        const layer = L.geoJSON(scope.geom, {
           style: feature => {
             return {
               fillColor: "#cccccc",
@@ -232,8 +236,8 @@ async function createScopesDropdown(map) {
         }).addTo(map);
 
         const label = String(scope.name.translation);
-        if (scope.type === "Polygon") {
-          const centroid = polylabel(scope.geom.coordinates, 1.0);
+        if (scope.geom.type === "MultiPolygon") {
+          let centroid = polylabel(scope.geom.coordinates[0], 1.0);
           const circle = new L.circleMarker([centroid[1], centroid[0]], {
             radius: 6,
             fillColor: "#000000",
@@ -253,6 +257,7 @@ async function createScopesDropdown(map) {
             .openTooltip()
             .addTo(map);
         }
+        return layer;
       });
 
       return this.menu;

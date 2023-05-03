@@ -8,6 +8,27 @@ export const participatoryProcesses = `
       }
       shortDescription {
         translation(locale: "en")
+      }  
+      components(filter: {type: "Meetings"}) {
+        id
+        __typename
+        ... on Meetings {
+          meetings {
+            nodes {
+              id
+              title {
+                translation(locale: "en")
+              }
+              shortDescription {
+                translation(locale: "en")
+              }
+              coordinates {
+                latitude
+                longitude
+              }
+            }
+          }
+        }
       }
     }
   }`;

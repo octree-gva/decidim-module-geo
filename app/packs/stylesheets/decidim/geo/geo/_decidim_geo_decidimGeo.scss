@@ -15,16 +15,19 @@
     }
   }
 
-  @mixin decidimGeo__clickableText {
+@mixin decidimGeo__clickableText {
     font-size: 13px;
     line-height: 16px;
     font-weight: bold;
     color: #2952A3;
-    ;
     cursor: pointer;
-  }
+}
 
-  
+@mixin decidimGeo__border {
+    border-radius: 4px;
+    overflow: auto;
+    box-shadow: 0px 2px 4px 0px #00000014;
+}
 
 .decidimGeo__customControl__parent {
     @include decidimGeo__customControl;
@@ -36,12 +39,10 @@
 }
 
 .decidimGeo__scopesDropdown {
+    @include decidimGeo__border;
     display: block;
     min-width: 280px;   
     background: #fff;
-    border-radius: 8px;
-    overflow: auto;
-    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
 .decidimGeo__scopesDropdown__heading {
@@ -108,13 +109,12 @@
 }
 
 .decidimGeo__scopesDropdown__listCard {
+    @include decidimGeo__border;
     display: block;
     background: #ffffff;
     max-width: 288px;
     overflow: hidden;
     margin: 12px 0;
-    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-    border-radius: 4px;
 }
 
 .decidimGeo__scopesDropdown__listCardImg{
