@@ -21,6 +21,7 @@ async function createScopesDropdown(map) {
     scopes: [],
 
     //View
+    menu: null,
     heading: null,
     title: null,
     list: null,
@@ -44,19 +45,22 @@ async function createScopesDropdown(map) {
       }
     },
 
-    onAdd(map) {
-      const menu = L.DomUtil.create("div", "decidimGeo__scopesDropdown");
-      L.DomEvent.disableClickPropagation(menu);
-
+    initMenuElements() {
       this.heading = L.DomUtil.create(
         "div",
-        createClasses("decidimGeo__scopesDropdown__heading", ["closed"]),
-        menu
+        createClasses(
+          "decidimGeo__scopesDropdown__heading",
+          this.isListOpened ? [] : ["closed"]
+        ),
+        this.menu
       );
 
       this.title = L.DomUtil.create(
         "h6",
-        createClasses("decidimGeo__scopesDropdown__title", ["closed"]),
+        createClasses(
+          "decidimGeo__scopesDropdown__title",
+          this.isListOpened ? [] : ["closed"]
+        ),
         this.heading
       );
 
@@ -67,9 +71,18 @@ async function createScopesDropdown(map) {
 
       this.list = L.DomUtil.create(
         "ul",
-        createClasses("decidimGeo__scopesDropdown__list", ["closed"]),
-        menu
+        createClasses(
+          "decidimGeo__scopesDropdown__list",
+          this.isListOpened ? [] : ["closed"]
+        ),
+        this.menu
       );
+    },
+
+    onAdd(map) {
+      this.menu = L.DomUtil.create("div", "decidimGeo__scopesDropdown");
+      L.DomEvent.disableClickPropagation(this.menu);
+      this.initMenuElements();
 
       scopes.forEach(geoScope => {
         const G = new GeoScope({
@@ -80,12 +93,32 @@ async function createScopesDropdown(map) {
             title: this.title,
             list: this.list,
           },
+          menuActions: {
+            reset: this.reset.bind(this),
+          },
         });
         G.init();
-        this.scopes.push(geoScope);
+
+        this.list.appendChild(G.menuItem);
+        this.scopes.push(G);
       });
 
-      return menu;
+      return this.menu;
+    },
+
+    reset() {
+      L.DomUtil.remove(this.heading);
+      L.DomUtil.remove(this.list);
+      this.initMenuElements();
+      this.scopes.forEach(geoScope => {
+        geoScope.menuElements = {
+          heading: this.heading,
+          title: this.title,
+          list: this.list,
+        };
+        geoScope.unSelect();
+        this.list.appendChild(geoScope.menuItem);
+      });
     },
   });
 

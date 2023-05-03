@@ -1,7 +1,7 @@
 const { createGeoScopeMenuItem, createGeoScopeLayer } = require("../../ui");
 
 export default class GeoScope {
-  constructor({ geoScope, map, menuElements }) {
+  constructor({ geoScope, map, menuElements, menuActions }) {
     //Model
     this.data = geoScope;
     this.isActive = false;
@@ -10,6 +10,7 @@ export default class GeoScope {
     //View
     this.map = map;
     this.menuElements = menuElements;
+    this.menuActions = menuActions;
   }
 
   select() {
@@ -22,7 +23,7 @@ export default class GeoScope {
       this.menuElements.heading
     );
     reset.textContent = "reset";
-    reset.onclick = reset;
+    reset.onclick = this.menuActions.reset;
 
     this.layer.setStyle({ fillColor: "#2952A340", color: "#2952A3" });
 
@@ -42,7 +43,6 @@ export default class GeoScope {
     });
     this.menuItem = createGeoScopeMenuItem({
       label: this.data.name.translation,
-      listElement: this.menuElements.list,
       onClick: this.select.bind(this),
     });
   }
