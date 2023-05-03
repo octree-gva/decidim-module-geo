@@ -1,3 +1,5 @@
+import GeoScope from "../models/geoScope";
+
 const { getGeoScopes, getParticipatoryProcesses } = require("../api");
 const PARTICIPATORY_PROCESS = require("../models/participatoryProcess");
 const polylabel = require("polylabel");
@@ -173,7 +175,7 @@ async function createScopesDropdown(map) {
       this.state = next;
     },
 
-    initMenuChildren: function (scopeToMap) {
+    initMenuChildren: function () {
       this.state = initialState;
       this.heading = L.DomUtil.create(
         "div",
@@ -200,18 +202,12 @@ async function createScopesDropdown(map) {
       );
 
       scopes.forEach(scope => {
-        const menuItem = L.DomUtil.create(
-          "li",
-          "decidimGeo__scopesDropdown__listItem",
-          this.list
-        );
-        menuItem.onclick = event => {
-          this.setState({ parentScope: scope });
-        };
-
-        menuItem.textContent += scope.name.translation;
-
-        if (scopeToMap) scopeToMap(scope);
+        const G = new GeoScope({
+          geoScope: scope,
+          map,
+          menuElements: { list: this.list },
+        });
+        G.init();
       });
     },
 
@@ -222,44 +218,7 @@ async function createScopesDropdown(map) {
         return false;
       };
 
-      this.initMenuChildren(scope => {
-        const layer = L.geoJSON(scope.geom, {
-          style: feature => {
-            return {
-              fillColor: "#cccccc",
-              color: "#999999",
-              lineJoin: "miter",
-              dashArray: "5, 10",
-              dashOffset: "5",
-            };
-          },
-        }).addTo(map);
-
-        const label = String(scope.name.translation);
-        if (scope.geom.type === "MultiPolygon") {
-          let centroid = polylabel(scope.geom.coordinates[0], 1.0);
-          const circle = new L.circleMarker([centroid[1], centroid[0]], {
-            radius: 6,
-            fillColor: "#000000",
-            fillOpacity: 1,
-            color: "#cccccc",
-            opacity: 1,
-            weight: 5,
-          });
-          return circle
-            .bindTooltip(label, {
-              permanent: true,
-              opacity: 1,
-              permanent: true,
-              direction: "top",
-              className: "decidimGeo__scope__tooltip",
-            })
-            .openTooltip()
-            .addTo(map);
-        }
-        return layer;
-      });
-
+      this.initMenuChildren();
       return this.menu;
     },
   });

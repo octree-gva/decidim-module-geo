@@ -1,11 +1,9 @@
-const { initMap, createScopesDropdown } = require("./ui");
-const { getGeoShapefiles, getGeoJSON } = require("./api");
-const polylabel = require("polylabel");
+const { initMap, createScopesMenu } = require("./ui");
 
 async function main() {
   const map = await initMap();
 
-  const scopesDropdown = await createScopesDropdown(map);
+  const scopesMenu = await createScopesMenu(map);
 }
 
 main();
