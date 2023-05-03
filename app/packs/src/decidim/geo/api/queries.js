@@ -19,7 +19,7 @@ export const participatoryProcesses = `
               title {
                 translation(locale: "en")
               }
-              shortDescription {
+              description {
                 translation(locale: "en")
               }
               coordinates {

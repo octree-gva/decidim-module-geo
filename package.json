@@ -2,6 +2,7 @@
   "dependencies": {
     "buffer": "^6.0.3",
     "graphql": "16.6.0",
+    "graphql-ws": "^5.12.1",
     "leaflet": "1.9.2",
     "polylabel": "^1.1.0",
     "shpjs": "4.0.4"

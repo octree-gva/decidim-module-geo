@@ -4,6 +4,7 @@ const { default: getGeoJSON } = require("./getGeoJSON.js");
 
 const makeQuery = queryName => async queryParams => {
   const response = await getDecidimData(queries[queryName], queryParams);
+  console.log(response);
   return response.data[queryName];
 };
 
