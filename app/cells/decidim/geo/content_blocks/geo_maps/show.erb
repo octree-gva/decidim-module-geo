@@ -12,5 +12,9 @@
   
 </style>
 
-<div id="map"></div>
+<div id="map" 
+  data-default_locale=<%= current_organization.default_locale %>
+  data-user_locale=<%= current_user.locale %> >
+</div>
+
 <%= javascript_pack_tag "decidim_geo" %>
