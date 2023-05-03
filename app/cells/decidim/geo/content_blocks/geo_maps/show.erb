@@ -13,8 +13,7 @@
 </style>
 
 <div id="map" 
-  data-default_locale=<%= current_organization.default_locale %>
-  data-user_locale=<%= current_user.locale %> >
+  data-config=<%= {default_locale: current_organization.default_locale, user_locale: (current_user.locale unless current_user.nil?)}.to_json %>>
 </div>
 
 <%= javascript_pack_tag "decidim_geo" %>
