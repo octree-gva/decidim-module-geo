@@ -15,7 +15,7 @@ const createParticipatoryProcessLayer = ({ participatoryProcess }) => {
           const marker = createMarker({
             title: node.title.translation,
             description: node.description.translation,
-            location: [46.527123, 6.624534],
+            location: [node.coordinates.latitude, node.coordinates.longitude],
             image: node.image,
             href: node.href,
           });
