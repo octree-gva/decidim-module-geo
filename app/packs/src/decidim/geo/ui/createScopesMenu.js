@@ -84,7 +84,7 @@ async function createScopesDropdown(map) {
       L.DomEvent.disableClickPropagation(this.menu);
       this.initMenuElements();
 
-      scopes.forEach(geoScope => {
+      scopes.forEach(async geoScope => {
         const G = new GeoScope({
           geoScope,
           map,
@@ -98,7 +98,7 @@ async function createScopesDropdown(map) {
             switchIsListOpened: this.switchIsListOpened.bind(this),
           },
         });
-        G.init();
+        await G.init();
 
         this.list.appendChild(G.menuItem);
         this.scopes.push(G);

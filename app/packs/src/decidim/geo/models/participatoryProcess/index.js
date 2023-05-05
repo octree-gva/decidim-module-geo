@@ -1,26 +1,31 @@
-const { createMarker } = require("../../ui");
+const {
+  createMarker,
+  createParticipatoryProcessMenuItem,
+  createParticipatoryProcessLayer,
+} = require("../../ui");
 
-export async function getMarkers(participatoryProcess) {
-  var components = participatoryProcess.components;
+export default class GeoParticipatoryProcess {
+  constructor({ participatoryProcess }) {
+    //Model
+    this.data = participatoryProcess;
 
-  if (components && components.length > 0) {
-    var meetingsComponent = components.find(
-      ({ meetings }) => meetings && meetings.nodes.length > 0
-    );
-
-    if (meetingsComponent) {
-      const markers = meetingsComponent.meetings.nodes.map(node => {
-        if (node.location) {
-          var marker = createMarker({
-            title: node.title.translation,
-            description: node.shortDescription.translation,
-            location: node.location,
-            image: node.image,
-            href: node.href,
-          });
-        }
-      });
-    }
   }
-  return [];
+
+  select() {
+    this.layer?.setStyle({ fillColor: "#2952A370", color: "#2952A3" });
+  }
+
+  unSelect() {
+    this.layer?.setStyle({ fillColor: "#000000", color: "#cccccc" });
+  }
+
+  init() {
+    this.layer = createParticipatoryProcessLayer({
+      participatoryProcess: this.data,
+    });
+    this.menuItem = createParticipatoryProcessMenuItem({
+      participatoryProcess: this.data,
+      onClick: this.select.bind(this),
+    });
+  }
 }

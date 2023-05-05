@@ -1,10 +1,12 @@
 const { createGeoScopeMenuItem, createGeoScopeLayer } = require("../../ui");
 const { getParticipatoryProcesses } = require("../../api");
+const { default: GeoParticipatoryProcess } = require("../participatoryProcess");
 
 export default class GeoScope {
   constructor({ geoScope, map, menuElements, menuActions }) {
     //Model
     this.data = geoScope;
+    this.participatoryProcessesList = [];
     this.isActive = false;
     this.isDisabled = false;
 
@@ -28,7 +30,7 @@ export default class GeoScope {
     reset.textContent = "reset";
     reset.onclick = this.menuActions.reset;
 
-    this.layer.setStyle({ fillColor: "#2952A340", color: "#2952A3" });
+    this.layer.setStyle({ fillColor: "#2952A370", color: "#2952A3" });
 
     L.DomUtil.empty(this.menuElements.list);
     const loadingItem = L.DomUtil.create(
@@ -38,65 +40,15 @@ export default class GeoScope {
     );
     loadingItem.textContent += "Loading";
 
-    const participatoryProcesses = await getParticipatoryProcesses({
-      variables: { filter: { scopeId: this.data.id } },
-    });
-    const participatoryProcessesList = participatoryProcesses.map(
-      participatoryProcess => {
-        const listCard = L.DomUtil.create(
-          "li",
-          "decidimGeo__scopesDropdown__listCard"
-        );
-        const image = L.DomUtil.create(
-          "img",
-          "decidimGeo__scopesDropdown__listCardImg",
-          listCard
-        );
-        image.src = participatoryProcess.bannerImage;
-
-        const info = L.DomUtil.create(
-          "div",
-          "decidimGeo__scopesDropdown__listCardInfo",
-          listCard
-        );
-
-        const infoType = L.DomUtil.create(
-          "div",
-          "decidimGeo__scopesDropdown__listCardType",
-          info
-        );
-        infoType.textContent += "process";
-
-        const infoTitle = L.DomUtil.create(
-          "div",
-          "decidimGeo__scopesDropdown__listCardTitle",
-          info
-        );
-        infoTitle.textContent += participatoryProcess.title.translation;
-
-        const infoDescription = L.DomUtil.create(
-          "div",
-          "decidimGeo__scopesDropdown__listCardDescription",
-          info
-        );
-        infoDescription.textContent +=
-          participatoryProcess.shortDescription.translation.replace(
-            /<[^>]+>/g,
-            ""
-          );
-
-        return listCard;
-      }
-    );
-
     L.DomUtil.empty(this.menuElements.list);
     L.DomUtil.addClass(
       this.menuElements.list,
       "decidimGeo__scopesDropdown__list--card"
     );
-    participatoryProcessesList.forEach(element =>
-      this.menuElements.list.appendChild(element)
-    );
+    this.participatoryProcessesList.forEach(geoParticipatoryProcess => {
+      geoParticipatoryProcess.layer?.addTo(map);
+      this.menuElements.list.appendChild(geoParticipatoryProcess.menuItem);
+    });
   }
 
   unSelect() {
@@ -105,7 +57,24 @@ export default class GeoScope {
     this.layer.setStyle({ fillColor: "#cccccc", color: "#999999" });
   }
 
-  init() {
+  async loadParticipatoryProcesses() {
+    const participatoryProcesses = await getParticipatoryProcesses({
+      variables: { filter: { scopeId: this.data.id } },
+    });
+    this.participatoryProcessesList = participatoryProcesses.map(
+      participatoryProcess => {
+        const geoParticipatoryProcess = new GeoParticipatoryProcess({
+          participatoryProcess,
+        });
+        geoParticipatoryProcess.init();
+        return geoParticipatoryProcess;
+      }
+    );
+    this.isDisabled = this.participatoryProcessesList.length === 0;
+  }
+
+  async init() {
+    await this.loadParticipatoryProcesses();
     this.layer = createGeoScopeLayer({
       geoScope: this.data,
       map: this.map,

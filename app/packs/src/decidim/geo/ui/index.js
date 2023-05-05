@@ -6,5 +6,11 @@ export const {
 export const {
   default: createGeoScopeMenuItem,
 } = require("./createGeoScopeMenuItem.js");
+export const {
+  default: createParticipatoryProcessLayer,
+} = require("./createParticipatoryProcessLayer.js");
+export const {
+  default: createParticipatoryProcessMenuItem,
+} = require("./createParticipatoryProcessMenuItem.js");
 
 export const { default: createScopesMenu } = require("./createScopesMenu.js");

@@ -25,7 +25,7 @@ const createGeoScopeLayer = ({ geoScope, map, onClick }) => {
       weight: 5,
     });
 
-    return circle
+    circle
       .bindTooltip(label, {
         permanent: true,
         opacity: 1,
