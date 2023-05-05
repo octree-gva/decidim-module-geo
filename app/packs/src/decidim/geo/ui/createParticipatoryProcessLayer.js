@@ -9,19 +9,21 @@ const createParticipatoryProcessLayer = ({ participatoryProcess }) => {
     );
 
     if (meetingsComponent) {
-      const markers = meetingsComponent.meetings.nodes.map(node => {
-        if (node.location) {
-          var marker = createMarker({
+      let markers = [];
+
+      meetingsComponent.meetings.nodes.forEach(node => {
+          const marker = createMarker({
             title: node.title.translation,
-            description: node.shortDescription.translation,
-            location: node.location,
+            description: node.description.translation,
+            location: [node.coordinates.latitude, node.coordinates.longitude],
             image: node.image,
             href: node.href,
           });
+          markers.push(marker);
         }
-      });
+      );
 
-      return L.layerGroup(markers);
+      if (markers.length > 0) return L.layerGroup(markers);
     }
   }
   return null;

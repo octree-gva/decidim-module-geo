@@ -1,5 +1,4 @@
 const {
-  createMarker,
   createParticipatoryProcessMenuItem,
   createParticipatoryProcessLayer,
 } = require("../../ui");

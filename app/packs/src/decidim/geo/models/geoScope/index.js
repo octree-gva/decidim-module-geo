@@ -46,7 +46,7 @@ export default class GeoScope {
       "decidimGeo__scopesDropdown__list--card"
     );
     this.participatoryProcessesList.forEach(geoParticipatoryProcess => {
-      geoParticipatoryProcess.layer?.addTo(map);
+      geoParticipatoryProcess.layer?.addTo(this.map);
       this.menuElements.list.appendChild(geoParticipatoryProcess.menuItem);
     });
   }
