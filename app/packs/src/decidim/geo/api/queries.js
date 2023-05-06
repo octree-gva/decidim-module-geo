@@ -1,3 +1,48 @@
+const NodesFragment = `
+    id
+    title {
+      translation(locale: "en")
+    }
+`
+
+const MeetingsFragment = `
+  meetings {
+    nodes {
+      ${NodesFragment}
+      description {
+        translation(locale: "en")
+      }
+      coordinates {
+        latitude
+        longitude
+      }
+    }
+  }
+`
+
+const DebatesFragment = `
+  debates {
+    nodes {
+      ${NodesFragment}
+      description {
+        translation(locale: "en")
+      }
+    }
+  }
+`
+
+const ProposalsFragment = `
+  proposals {
+    nodes {
+      ${NodesFragment}
+      coordinates {
+        latitude
+        longitude
+      }
+    }
+  }
+`
+
 export const participatoryProcesses = `
   query participatoryProcessesQuery ($filter: ParticipatoryProcessFilter) {
     participatoryProcesses(filter: $filter) { 
@@ -13,21 +58,13 @@ export const participatoryProcesses = `
         id
         __typename
         ... on Meetings {
-          meetings {
-            nodes {
-              id
-              title {
-                translation(locale: "en")
-              }
-              description {
-                translation(locale: "en")
-              }
-              coordinates {
-                latitude
-                longitude
-              }
-            }
-          }
+          ${MeetingsFragment}
+        }
+        ... on Debates {
+          ${DebatesFragment}
+        }
+        ... on Proposals {
+          ${ProposalsFragment}
         }
       }
     }

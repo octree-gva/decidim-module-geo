@@ -1,4 +1,4 @@
-const createMarker = ({ title, description, location, image, href }) => {
+const createMarker = ({ title, description, location, href }) => {
   return new L.circleMarker(location, {
     radius: 6,
     fillColor: "#000000",
