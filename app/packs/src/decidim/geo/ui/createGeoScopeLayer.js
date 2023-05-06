@@ -1,3 +1,5 @@
+import { createCustomMarker } from ".";
+
 const polylabel = require("polylabel");
 
 const createGeoScopeLayer = ({ geoScope, map, onClick }) => {
@@ -16,14 +18,7 @@ const createGeoScopeLayer = ({ geoScope, map, onClick }) => {
   const label = String(geoScope.name.translation);
   if (geoScope.geom.type === "MultiPolygon") {
     let centroid = polylabel(geoScope.geom.coordinates[0], 1.0);
-    const circle = new L.circleMarker([centroid[1], centroid[0]], {
-      radius: 6,
-      fillColor: "#000000",
-      fillOpacity: 1,
-      color: "#cccccc",
-      opacity: 1,
-      weight: 5,
-    });
+    const circle = createCustomMarker([centroid[1], centroid[0]]);
 
     circle
       .bindTooltip(label, {

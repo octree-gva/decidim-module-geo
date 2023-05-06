@@ -1,4 +1,5 @@
 export const { default: initMap } = require("./initMap.js");
+export const { default: createCustomMarker } = require("./createCustomMarker.js");
 export const { default: createMeetingMarker } = require("./createMeetingMarker.js");
 export const {
   default: createGeoScopeLayer,

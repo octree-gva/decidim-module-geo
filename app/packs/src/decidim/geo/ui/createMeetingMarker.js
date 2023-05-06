@@ -1,12 +1,7 @@
+import {createCustomMarker} from ".";
+
 const createMeetingMarker = ({ title, description, location, href }) => {
-  return new L.circleMarker(location, {
-    radius: 6,
-    fillColor: "#000000",
-    fillOpacity: 1,
-    color: "#cccccc",
-    opacity: 1,
-    weight: 5,
-  }).bindPopup(
+  return createCustomMarker(location).bindPopup(
     `<div class="decidimGeo__popup__container">
     <div class="decidimGeo__popup__content">
       <div class="card__header">
