@@ -2,10 +2,18 @@ const queries = require("./queries.js");
 const { getDecidimData } = require("../utils");
 const { default: getGeoJSON } = require("./getGeoJSON.js");
 
-const makeQuery = queryName => async queryParams => {
-  const response = await getDecidimData(queries[queryName], queryParams);
-  return response.data[queryName];
-};
+const makeQuery =
+  queryName =>
+  async (params = {}) => {
+    const variables = { ...(params.variables || {}), locale: "en" };
+    const queryParams = { ...params, variables };
+
+    console.log(queryParams);
+
+    const response = await getDecidimData(queries[queryName], queryParams);
+    console.log(response);
+    return response.data[queryName];
+  };
 
 export { getGeoJSON };
 export const getParticipatoryProcesses = makeQuery("participatoryProcesses");

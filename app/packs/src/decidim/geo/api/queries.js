@@ -1,8 +1,8 @@
 const NodesFragment = `
-    id
-    title {
-      translation(locale: "en")
-    }
+  id
+  title {
+    translation(locale: $locale)
+  }
 `
 
 const MeetingsFragment = `
@@ -10,7 +10,7 @@ const MeetingsFragment = `
     nodes {
       ${NodesFragment}
       description {
-        translation(locale: "en")
+        translation(locale: $locale)
       }
       coordinates {
         latitude
@@ -25,7 +25,7 @@ const DebatesFragment = `
     nodes {
       ${NodesFragment}
       description {
-        translation(locale: "en")
+        translation(locale: $locale)
       }
     }
   }
@@ -44,17 +44,17 @@ const ProposalsFragment = `
 `
 
 export const participatoryProcesses = `
-  query participatoryProcessesQuery ($filter: ParticipatoryProcessFilter) {
+  query participatoryProcessesQuery ($filter: ParticipatoryProcessFilter, $locale: String!) {
     participatoryProcesses(filter: $filter) { 
       slug
       bannerImage
       title {
-        translation(locale: "en")
+        translation(locale: $locale)
       }
       shortDescription {
-        translation(locale: "en")
+        translation(locale: $locale)
       }  
-      components(filter: {type: "Meetings"}) {
+      components {
         id
         __typename
         ... on Meetings {
@@ -105,12 +105,15 @@ export const geoShapedata = `{
   }
 }`;
 
-export const geoScope = `{
-  geoScope { 
-    id
-    name	{ 
-      translation(locale: "en") 
+export const geoScope = `
+  query geoScopeQuery ($locale: String!) {
+    geoScope { 
+      id
+      name	{ 
+        translation(locale: $locale) 
+      }
+      geom
     }
-    geom
   }
-}`;
+`;
+

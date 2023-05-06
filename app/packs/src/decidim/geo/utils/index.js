@@ -1,4 +1,4 @@
-const { ROOT_URL }  = require('../constants');
+const { ROOT_URL } = require("../constants");
 
 export async function getDecidimData(query, params) {
   var collection = await window
@@ -9,16 +9,23 @@ export async function getDecidimData(query, params) {
       },
       body: JSON.stringify({
         query,
-        ...params
+        ...params,
       }),
     })
     .then(async response => {
       const res = await response.json();
       return res;
-    })
+    });
 
   if (collection) {
     return collection;
   }
   return [];
+}
+
+export function getConfig() {
+  const mapElememt = document.getElementById("map");
+
+  const configString = mapElememt.getAttribute("data-config");
+  return JSON.parse(configString)
 }
