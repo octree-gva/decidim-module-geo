@@ -1,4 +1,4 @@
-const { createMarker } = require(".");
+const { createMeetingMarker } = require(".");
 
 const createParticipatoryProcessLayer = ({ participatoryProcess }) => {
   var components = participatoryProcess.components;
@@ -12,7 +12,7 @@ const createParticipatoryProcessLayer = ({ participatoryProcess }) => {
       let markers = [];
 
       meetingsComponent.meetings.nodes.forEach(node => {
-        const marker = createMarker({
+        const marker = createMeetingMarker({
           title: node.title.translation,
           description: node.description.translation,
           location: [node.coordinates.latitude, node.coordinates.longitude],

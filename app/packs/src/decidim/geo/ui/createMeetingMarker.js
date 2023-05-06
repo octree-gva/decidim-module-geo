@@ -1,4 +1,4 @@
-const createMarker = ({ title, description, location, href }) => {
+const createMeetingMarker = ({ title, description, location, href }) => {
   return new L.circleMarker(location, {
     radius: 6,
     fillColor: "#000000",
@@ -63,4 +63,4 @@ const createMarker = ({ title, description, location, href }) => {
   );
 };
 
-export default createMarker;
+export default createMeetingMarker;
