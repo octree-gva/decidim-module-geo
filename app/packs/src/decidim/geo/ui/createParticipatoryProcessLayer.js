@@ -12,16 +12,14 @@ const createParticipatoryProcessLayer = ({ participatoryProcess }) => {
       let markers = [];
 
       meetingsComponent.meetings.nodes.forEach(node => {
-          const marker = createMarker({
-            title: node.title.translation,
-            description: node.description.translation,
-            location: [node.coordinates.latitude, node.coordinates.longitude],
-            image: node.image,
-            href: node.href,
-          });
-          markers.push(marker);
-        }
-      );
+        const marker = createMarker({
+          title: node.title.translation,
+          description: node.description.translation,
+          location: [node.coordinates.latitude, node.coordinates.longitude],
+          href: `/processes/${participatoryProcess.slug}/f/${participatoryProcess.components[0].id}/meetings/${node.id}`,
+        });
+        markers.push(marker);
+      });
 
       if (markers.length > 0) return L.layerGroup(markers);
     }
