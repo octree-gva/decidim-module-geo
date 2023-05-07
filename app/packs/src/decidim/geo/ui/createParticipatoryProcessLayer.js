@@ -1,3 +1,5 @@
+const { createDebateMarker, createProposalMarker } = require(".");
+
 const { createMeetingMarker } = require(".");
 
 const createParticipatoryProcessLayer = ({ participatoryProcess }) => {
@@ -12,8 +14,7 @@ const createParticipatoryProcessLayer = ({ participatoryProcess }) => {
     if (meetingsComponent) {
       meetingsComponent.meetings.nodes.forEach(node => {
         const marker = createMeetingMarker({
-          title: node.title.translation,
-          description: node.description.translation,
+          node,
           location: [46.531342, 6.623329],
           href: `/processes/${participatoryProcess.slug}/f/${participatoryProcess.components[0].id}/meetings/${node.id}`,
         });
@@ -25,7 +26,13 @@ const createParticipatoryProcessLayer = ({ participatoryProcess }) => {
       );
 
       if (proposalsComponent) {
-        proposalsComponent.proposals.nodes.forEach(node => {});
+        proposalsComponent.proposals.nodes.forEach(node => {
+          const marker = createProposalMarker({
+            node,
+            location: [46.535642, 6.621129],
+          });
+          markers.push(marker);
+        });
       }
 
       var debatesComponent = components.find(
@@ -33,7 +40,13 @@ const createParticipatoryProcessLayer = ({ participatoryProcess }) => {
       );
 
       if (debatesComponent) {
-        debatesComponent.debates.nodes.forEach(node => {});
+        debatesComponent.debates.nodes.forEach(node => {
+          const marker = createDebateMarker({
+            node,
+            location: [46.535432, 6.621129],
+          });
+          markers.push(marker);
+        });
       }
     }
 

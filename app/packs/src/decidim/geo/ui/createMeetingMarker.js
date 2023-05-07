@@ -1,6 +1,9 @@
-import {createCustomMarker} from ".";
+import { createCustomMarker } from ".";
 
-const createMeetingMarker = ({ title, description, location, href }) => {
+const createMeetingMarker = ({ node, location, href }) => {
+  const title = node.title.translation;
+  const description = node.description.translation;
+
   return createCustomMarker(location).bindPopup(
     `<div class="decidimGeo__popup__container">
     <div class="decidimGeo__popup__content">
