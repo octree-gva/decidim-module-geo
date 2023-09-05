@@ -16,6 +16,11 @@ module Decidim
       def geom
         RGeo::GeoJSON.encode(object.shapedata.geom) unless object.shapedata.nil?
       end
+
+      def name
+        byebug
+        object.name
+      end
     end
   end
 end

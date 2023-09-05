@@ -12,6 +12,11 @@ module Decidim
       def execute_statement(sql)
         Shapedata.connection.exec_query(sql)
       end
+
+      def shapedata?
+        return false
+      end
+
     end
   end
 end

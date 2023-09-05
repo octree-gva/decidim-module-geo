@@ -2,12 +2,17 @@
 
 module Decidim
   module Geo
-    autoload :GeoQueryExtension, "decidim/api/geo_query_extension"
+    autoload :QueryExtension, "decidim/api/query_extension"
     autoload :GeoShapefileType, "decidim/api/geo_shapefile_type"
     autoload :GeoShapedataType, "decidim/api/geo_shapedata_type"
     autoload :GeoConfigType, "decidim/api/geo_config_type"
     autoload :GeoScopeApiType, "decidim/api/geo_scope_api_type"
     autoload :HasScopeableInputFilter, "decidim/api/input_filters/has_scopeable_input_filter"
+    autoload :HasTermableInputFilter, "decidim/api/input_filters/has_termable_input_filter"
+    autoload :GeoDatasourceInputFilter, "decidim/api/input_filters/geo_datasource_input_filter"
     autoload :MeetingsInputFilter, "decidim/api/meetings_input_filter"
+    autoload :GeoDatasourceType, "decidim/api/geo_datasource_type"
+    autoload :GeoDatasourcesType, "decidim/api/geo_datasources_type"
+    autoload :GeoCoordinatesType, "decidim/api/geo_coordinates_type"
   end
 end
