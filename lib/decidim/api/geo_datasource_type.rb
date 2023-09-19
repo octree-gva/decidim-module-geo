@@ -28,7 +28,6 @@ module Decidim
       end
 
       def description
-        byebug
         return object.body if object.class.method_defined?(:body)
         return object.description if object.class.method_defined?(:description)
       end

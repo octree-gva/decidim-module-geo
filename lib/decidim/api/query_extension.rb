@@ -46,16 +46,12 @@ module Decidim
       end
 
       def geo_datasource(**kwargs)
-        byebug
         search_resources(kwargs[:filter])
-        #filter_by_term(kwargs[:filter]) if kwargs[:filter].present?
-        #filter_by_type(kwargs[:filter].resource_type) if kwargs[:filter].resource_type.present?
       end
 
       private
 
       def search_resources(filter)
-        byebug
         if filter.nil?
           term, type, scope_id = nil
         else
@@ -67,14 +63,14 @@ module Decidim
         Decidim::Search.call(term, organization) do 
           on(:ok) do |search_results| 
             data = []
+            byebug
             search_results.each do |resource_type, results|
-              byebug
               type_name = resource_type.split("::").last.downcase
+              byebug
               if types.include?(type_name) && type.include?(type_name)
                 results[:results].to_a.each { |items| data.append(items) } unless results[:results].to_a.empty?
               end
             end
-            byebug
             return data
           end
         end
