@@ -63,10 +63,8 @@ module Decidim
         Decidim::Search.call(term, organization) do 
           on(:ok) do |search_results| 
             data = []
-            byebug
             search_results.each do |resource_type, results|
               type_name = resource_type.split("::").last.downcase
-              byebug
               if types.include?(type_name) && type.include?(type_name)
                 results[:results].to_a.each { |items| data.append(items) } unless results[:results].to_a.empty?
               end
