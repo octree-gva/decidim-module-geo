@@ -8,6 +8,7 @@ module Decidim
     include Decidim::Traceable
     include Decidim::Loggable
     include Decidim::TranslatableResource
+    include Decidim::Searchable
 
     translatable_fields :name
 
@@ -45,6 +46,11 @@ module Decidim
     validate :forbid_cycles
 
     after_create_commit :create_part_of
+
+    searchable_fields({ 
+                        A: :name },
+                        index_on_create: ->(scope) {},
+                        index_on_update: ->(scope) {})
 
     # Scope to return only the top level scopes.
     #

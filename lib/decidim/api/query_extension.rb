@@ -52,71 +52,51 @@ module Decidim
       private
 
       def search_resources(filter)
+
+        types = ['Decidim::Meetings::Meeting', 
+                'Decidim::Proposals::Proposal', 
+                'Decidim::Scope'].freeze
+
+        data = []
+        
         if filter.nil?
-          term, type, scope_id = nil
+          types.each do |type| 
+            filtered_query_for(class_name: type, term: nil, scope_id: nil).each {|resource_type_data| data.append(resource_type_data)}
+          end
         else
           filter.term.nil? ? term = nil : term = filter.term
-          filter.resource_type.nil? ? type = nil : type = filter.resource_type
+          filter.resource_type.nil? ? resource_types = nil : resource_types = filter.resource_type
           filter.scope_id.nil? ? scope_id = nil : scope_id = filter.scope_id
-        end
-        types = ['meeting', 'proposal', 'scope']
-        Decidim::Search.call(term, organization) do 
-          on(:ok) do |search_results| 
-            data = []
-            search_results.each do |resource_type, results|
-              type_name = resource_type.split("::").last.downcase
-              if types.include?(type_name) && type.include?(type_name)
-                results[:results].to_a.each { |items| data.append(items) } unless results[:results].to_a.empty?
-              end
-            end
-            return data
-          end
-        end
-      end
 
-      def filter_by_type(resource_type)
-        types = ['meetings', 'proposals', 'scopes']
-        data = []
-        if resource_type.present?
-          resource_type.map! { |type| type.downcase }
           types.each do |type| 
-            data_obj(type: type).each {|data_obj| data.append(data_obj)} if resource_type.include?(type)
+            filtered_query_for(class_name: type, term: term, scope_id: scope_id).each do |resource_type_data| 
+              resource_types.each do |resource_type|
+                data.append(resource_data(resource_type_data)) if (resource_type.present? && type.include?(resource_type.downcase.capitalize))
+              end
+            end 
           end
-        else
-          types.each do |type| 
-            data_obj(type: type).each {|data_obj| data.append(data_obj)}
-          end
-        end
+        end          
         data
       end
 
-      def data_obj(type: nil)
-        data = []
-        case type
-        when 'meetings'
-          meetings.each { |meeting| data.append(meeting) }
-        when "proposals"
-          proposals.each { |proposal| data.append(proposal) }
-        when 'scopes'
-          scopes.each { |scope| data.append(scope) }
-        end unless type.nil?
+      def filtered_query_for(class_name: nil, term: nil, scope_id: nil)
+        query = {organization: organization,
+          locale: I18n.locale,
+          resource_type: class_name,
+        }
 
-        return data unless data.empty?
+        query.update(decidim_scope_id: scope_id) unless scope_id.nil?
+
+        result_query = SearchableResource.where(query)
+  
+        result_query = result_query.order("datetime DESC")
+        result_query = result_query.global_search(I18n.transliterate(term)) unless term.nil?
+        result_query
       end
 
-      def meetings
-        Decidim::Meetings::Meeting.all
+      def resource_data(resource_type_data)
+        resource_type_data[:resource_type].split('::').inject(Object) {|o,c| o.const_get c}.find(resource_type_data[:resource_id])
       end
-
-      def proposals
-        Decidim::Proposals::Proposal.all
-      end
-
-      def scopes
-        Decidim::Scope.all
-      end
-
-      
 
       def organization_locale
         given_organization ||= try(:current_organization)
