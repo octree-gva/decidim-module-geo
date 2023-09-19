@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+require "rgeo"
 require "decidim/geo/admin"
 require "decidim/geo/engine"
 require "decidim/geo/api"

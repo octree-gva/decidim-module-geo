@@ -74,35 +74,28 @@ bundle exec rake test_app
 ```
 
 ## Local development
+The docker-compose in this repository will run a development_app, 
+binding the repository code in a module. 
 
-Run a postgres database
 ```
-docker-compose up -d
-cp .env.sample .env.local && source .env.local
-```
-
-Run if you haven't already:
-```bash
-bundle
+docker-compose build
+docker-compose up
+# Access your local environment [localhost:3000](http://localhost:3000)
 ```
 
-And then
-```bash
-bundle exec rake development_app
+This will run: 
+- webpacker
+- decidim with your module
+
+If you want to run a seed, exec this command: 
+```
+    docker-compose run --rm decidim-installer bundle exec rails db:seed
 ```
 
-HotFix: change the adapter from `postgres` to `postgis` in `development_app/config/database.yml`
-
-Setup and run the decidim development server
+If you want to debug something: 
 ```
-cd development_app
-bin/rails decidim_geo:install:migrations
-bin/rails decidim_geo:webpacker:install
-bin/rails db:migrate
-bin/rails db:seed
-bin/rails s
+    docker-compose run --entrypoint "" --rm decidim bash
 ```
-Access your local environment [localhost:3000](http://localhost:3000)
 
 ## Contributing
 
