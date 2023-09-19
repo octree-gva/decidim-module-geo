@@ -7,6 +7,7 @@
 /spec/reports/
 /tmp/
 /vendor
+.migrations/
 # rspec failure tracking
 .rspec-failures
 .env.*
