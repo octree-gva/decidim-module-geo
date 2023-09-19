@@ -24,7 +24,7 @@ services:
       - DATABASE_HOST=pg
       - DATABASE_NAME=decidim_geo
       - DATABASE_PORT=5432
-      - DATABASE_URL=postgresql://decidim:insecure-password@pg:5432/decidim_geo
+      - DATABASE_URL=postgis://decidim:insecure-password@pg:5432/decidim_geo
       - SECRET_KEY_BASE=insecure_password
       - DECIDIM_SYSTEM_PASSWORD=decidim123456
       - DECIDIM_SYSTEM_EMAIL=system@example.org
@@ -58,7 +58,7 @@ services:
       - DATABASE_HOST=pg
       - DATABASE_NAME=decidim_geo
       - DATABASE_PORT=5432
-      - DATABASE_URL=postgresql://decidim:insecure-password@pg:5432/decidim_geo
+      - DATABASE_URL=postgis://decidim:insecure-password@pg:5432/decidim_geo
       - SECRET_KEY_BASE=insecure_password
       - DECIDIM_SYSTEM_PASSWORD=decidim123456
       - DECIDIM_SYSTEM_EMAIL=system@example.org
