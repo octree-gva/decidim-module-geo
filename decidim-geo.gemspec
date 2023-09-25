@@ -25,4 +25,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'rgeo-shapefile', ">= 1.0"
   s.add_dependency 'rgeo-geojson', ">= 1.0"
   s.add_dependency 'activerecord-postgis-adapter', '>= 6.0'
+  s.add_dependency "deface", ">= 1.8.1"
 end
