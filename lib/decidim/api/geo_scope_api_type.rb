@@ -18,7 +18,6 @@ module Decidim
       end
 
       def name
-        byebug
         object.name
       end
     end

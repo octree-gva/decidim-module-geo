@@ -19,8 +19,25 @@ module Decidim
         end
 
         type.field :geo_datasource, Decidim::Geo::GeoDatasourceType.connection_type, null: true do
-          argument :filter, Decidim::Geo::GeoDatasourceInputFilter, "This argument let's you filter the results", required: false
+          argument :filters, [Decidim::Geo::GeoDatasourceInputFilter], "This argument let's you filter the results", required: false
         end
+      end
+
+      def geo_datasource(**kwargs)
+        data = []
+        if kwargs[:filters].present?
+          kwargs[:filters].each do |filters|
+            if filters[:scope_filter].present?
+              scope = search_by_scope(filters[:scope_filter])
+              data.append(scope.take) if scope.present?
+            elsif filters[:assembly_filter].present? 
+              assembly = search_by_assembly(filters[:assembly_filter])
+              data.append(assembly.take) if assembly.present?
+            end
+          end
+        end
+        data
+        #search_resources(kwargs[:filter])
       end
 
       def geo_shapefiles(title: nil)
@@ -45,11 +62,25 @@ module Decidim
         Decidim::Scope.all
       end
 
-      def geo_datasource(**kwargs)
-        search_resources(kwargs[:filter])
+      private
+
+      def geo_scopes_ids
+        return Decidim::Geo::Shapedata.where.not(decidim_scopes_id: nil).map { |shp| shp.decidim_scopes_id }
       end
 
-      private
+      def search_by_scope(filter)
+        scope = Decidim::Scope.where(id: filter.scope_id) if filter.scope_id.present?
+        if scope.present?
+          return scope if Decidim::Geo::Shapedata.where(decidim_scopes_id: scope.take.id).present?
+        end  
+      end
+
+      def search_by_assembly(filter)
+        assembly = Decidim::Assembly.where(id: filter.assembly_id) if filter.assembly_id.present?
+        if assembly.present? && assembly.take.scope.present?
+          return assembly if Decidim::Geo::Shapedata.where(decidim_scopes_id: assembly.take.scope.id).present?
+        end 
+      end
 
       def search_resources(filter)
 

@@ -4,6 +4,7 @@ module Decidim
   module Geo
     # Data fo the shapfiles uploaded
     class Shapedata < ApplicationRecord
+
       self.table_name = 'decidim_geo_shapefile_datas'
       validates :data, :presence => true
 
