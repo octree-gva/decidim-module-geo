@@ -110,13 +110,6 @@ module Decidim
         end  
       end
 
-      def assembly_comp(filter)
-        assembly = Decidim::Assembly.where(id: filter.assembly_id) if filter.assembly_id.present?
-        if assembly.present? && assembly.take.scope.present?
-          return search_components(assembly) if Decidim::Geo::Shapedata.where(decidim_scopes_id: assembly.take.scope.id).present?
-        end 
-      end
-
       def search_resources(filter)
 
         types = ['Decidim::Meetings::Meeting', 
