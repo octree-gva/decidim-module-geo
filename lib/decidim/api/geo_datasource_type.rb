@@ -7,6 +7,8 @@ module Decidim
 
       field :type, String, null: false
       field :id, ID, null: false
+      field :participatory_space_id, ID, null: true
+      field :participatory_space_type, String, null: true
       field :title, Decidim::Core::TranslatedFieldType, "The title for this title", null: true
       field :description, Decidim::Core::TranslatedFieldType, "The description for this description", null: true
       field :coordinates, Decidim::Geo::GeoCoordinatesType, "Physical coordinates for this object", null: true
@@ -20,6 +22,14 @@ module Decidim
 
       def id
         object.id 
+      end
+
+      def participatory_space_id
+        return object.component.participatory_space_id if object.class.method_defined?(:component) 
+      end
+
+      def participatory_space_type
+        return object.component.participatory_space_type if object.class.method_defined?(:component) 
       end
 
       def title

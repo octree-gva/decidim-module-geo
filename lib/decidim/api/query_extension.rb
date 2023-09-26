@@ -26,18 +26,24 @@ module Decidim
       def geo_datasource(**kwargs)
         data = []
         if kwargs[:filters].present?
-          kwargs[:filters].each do |filters|
-            if filters[:scope_filter].present?
-              scope = search_by_scope(filters[:scope_filter])
+          kwargs[:filters].each do |filter|
+            if filter[:scope_filter].present?
+              scope = search_by_scope(filter[:scope_filter])
               data.append(scope.take) if scope.present?
-            elsif filters[:assembly_filter].present? 
-              assembly = search_by_assembly(filters[:assembly_filter])
-              data.append(assembly.take) if assembly.present?
+            elsif filter[:assembly_filter].present? 
+              assembly = assembly_comp(filter[:assembly_filter])
+              assembly.each do |component|  
+                data.append(component) 
+              end if assembly.present?
+            elsif filter[:process_filter].present? 
+              process = process_comp(filter[:process_filter])
+              process.each do |component|  
+                data.append(component) 
+              end if process.present?
             end
           end
         end
         data
-        #search_resources(kwargs[:filter])
       end
 
       def geo_shapefiles(title: nil)
@@ -64,6 +70,35 @@ module Decidim
 
       private
 
+      def assembly_comp(filter)
+        assembly = Decidim::Assembly.where(id: filter.assembly_id) if filter.assembly_id.present?
+        if assembly.present? && assembly.take.scope.present?
+          return search_components(assembly) if Decidim::Geo::Shapedata.where(decidim_scopes_id: assembly.take.scope.id).present?
+        end 
+      end
+
+      def process_comp(filter)
+        process = Decidim::ParticipatoryProcess.where(id: filter.process_id) if filter.process_id.present?
+        if process.present? && process.take.scope.present?
+          return search_components(process) if Decidim::Geo::Shapedata.where(decidim_scopes_id: process.take.scope.id).present?
+        end 
+      end
+
+      def search_components(space)
+        data = []
+        comp_proposals = space.take.components.select { |component| component.manifest.name == :proposals }
+        comp_proposals.each do |comp_proposal|
+          Decidim::Proposals::Proposal.where(decidim_component_id: comp_proposal.id).each { |proposal| data.append(proposal)}
+        end if comp_proposals.present?
+
+        comp_meetings = space.take.components.select { |component| component.manifest.name == :meetings }
+        comp_meetings.each do |comp_meeting|
+          Decidim::Meetings::Meeting.where(decidim_component_id: comp_meeting.id).each { |meeting| data.append(meeting)}
+        end if comp_meetings.present?
+
+        data
+      end
+
       def geo_scopes_ids
         return Decidim::Geo::Shapedata.where.not(decidim_scopes_id: nil).map { |shp| shp.decidim_scopes_id }
       end
@@ -75,10 +110,10 @@ module Decidim
         end  
       end
 
-      def search_by_assembly(filter)
+      def assembly_comp(filter)
         assembly = Decidim::Assembly.where(id: filter.assembly_id) if filter.assembly_id.present?
         if assembly.present? && assembly.take.scope.present?
-          return assembly if Decidim::Geo::Shapedata.where(decidim_scopes_id: assembly.take.scope.id).present?
+          return search_components(assembly) if Decidim::Geo::Shapedata.where(decidim_scopes_id: assembly.take.scope.id).present?
         end 
       end
 
