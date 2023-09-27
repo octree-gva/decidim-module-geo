@@ -69,6 +69,7 @@ bundle exec rails db:migrate
 You will need a posgis database, at least version 14 to be able to do the migration.
 
 ## Testing
+
 ```
 bundle exec rake test_app
 ```
@@ -78,20 +79,26 @@ The docker-compose in this repository will run a development_app,
 binding the repository code in a module. 
 
 ```
+rm -rf .migrations/
+docker-compose down -v --remove-orphans
 docker-compose build
-docker-compose run --entrypoint "" --rm decidim-installer bash -c "cd $ROOT && mv ./tmp/db.bak.tar.gz .. && tar xfvz ./db.bak.tar.gz"
+docker-compose run --entrypoint "" --rm decidim-installer /home/decidim/app/bin/setup_development
 docker-compose up
-# Access your local environment [localhost:3000](http://localhost:3000)
+# Access your local environment [127.0.0.1:3000](http://127.0.0.1:3000)
+#
+# Your credentials
+# /system
+# email: `DECIDIM_SYSTEM_EMAIL` env . default: system@example.org
+# password: `DECIDIM_SYSTEM_PASSWORD` env. default: decidim123456
+# /admin
+# email: `DECIDIM_SYSTEM_EMAIL` env . default: system@example.org
+# password: `DECIDIM_SYSTEM_PASSWORD` env. default: decidim123456
 ```
 
 This will run: 
 - webpacker
 - decidim with your module
 
-If you want to run a seed, exec this command: 
-```
-    docker-compose run --rm decidim-installer bundle exec rails db:seed
-```
 
 If you want to debug something: 
 ```

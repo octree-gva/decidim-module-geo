@@ -22,6 +22,8 @@ ENV NODE_ENV=development \
 COPY . /home/decidim/decidim_module_geo
 # Add app configuration for working in dev.
 COPY ./.docker/config /home/decidim/app/config
+COPY ./.docker/bin /home/decidim/app/bin
+
 RUN bundle config set --global path "vendor" \
     && bundle config set --global without "" \
     && bundle config --global build.nokogiri --use-system-libraries \
@@ -30,8 +32,9 @@ RUN bundle config set --global path "vendor" \
     && apt-get upgrade -yq \
     && apt-get update -yq \
     && apt-get install -yq libgeos-dev 
-RUN npm install -D webpack-dev-server
+RUN npm install -D webpack-dev-server \
+  && cd /home/decidim/decidim_module_geo \
+  && npm i
 COPY --from=bundler /home/decidim/app/Gemfile /home/decidim/app/Gemfile
 COPY --from=bundler /home/decidim/app/Gemfile.lock /home/decidim/app/Gemfile.lock
 COPY --from=bundler /home/decidim/app/vendor /home/decidim/app/vendor
-RUN DATABASE_URL="assets" bundle exec rails decidim_geo:webpacker:upgrade

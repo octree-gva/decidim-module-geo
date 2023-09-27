@@ -1,0 +1,13 @@
+#! /bin/sh
+set -e
+
+cd $ROOT;
+mv ./tmp/db.bak.tar.gz . && tar xfvz ./db.bak.tar.gz;
+# Install migrations and webpackers
+bundle exec rails --tasks | grep -E 'rails [^ ]*:install:migrations' | awk -F ' ' '{ print "bundle exec rails " $2 ";" }' | bash
+bundle exec rails --tasks | grep -E 'rails [^ ]*:webpacker:install' | awk -F ' ' '{ print "bundle exec rails " $2 ";" }' | bash
+# Install deps
+npm i
+bundle exec rails db:migrate
+bundle exec rails runner bin/setup_development.rb
+bundle exec bootsnap precompile --gemfile app/ lib/
