@@ -44,19 +44,6 @@ module Decidim
                         active: is_active_link?(decidim_admin_geo.shapefiles_path, :inclusive),
                         if: defined?(current_user) && current_user&.read_attribute("admin")
 
-          menu.add_item :configurations,
-                        I18n.t("menu.geo", scope: "decidim.admin", default: "Configurations"),
-                        decidim_admin_geo.shapefiles_path,
-                        position: 1,
-                        active: is_active_link?(decidim_admin_geo.shapefiles_path, :inclusive),
-                        if: defined?(current_user) && current_user&.read_attribute("admin")
-          
-          menu.add_item :application_zone,
-                        I18n.t("menu.geo", scope: "decidim.admin", default: "Application Zones"),
-                        decidim_admin_geo.shapefiles_path,
-                        position: 1,
-                        active: is_active_link?(decidim_admin_geo.shapefiles_path, :inclusive),
-                        if: defined?(current_user) && current_user&.read_attribute("admin")
         end
       end
 

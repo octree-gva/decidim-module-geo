@@ -11,6 +11,7 @@ module Decidim
     autoload :GeoDatasourceInputFilter, "decidim/api/input_filters/geo_datasource_input_filter"
     autoload :ScopeInputFilter, "decidim/api/input_filters/scope_input_filter"
     autoload :AssemblyInputFilter, "decidim/api/input_filters/assembly_input_filter"
+    autoload :ProcessInputFilter, "decidim/api/input_filters/process_input_filter"
     autoload :TermInputFilter, "decidim/api/input_filters/term_input_filter"
     autoload :MeetingsInputFilter, "decidim/api/meetings_input_filter"
     autoload :GeoDatasourceType, "decidim/api/geo_datasource_type"
