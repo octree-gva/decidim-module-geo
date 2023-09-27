@@ -10,7 +10,7 @@ module Decidim
       argument :term, type: String, description: "List results by term", required: false
       argument :with_scope_state, type: String, description: "List results by with_scope_state", required: false
       argument :scope_ids, type: [ID], description: "List results by scope_ids", required: false
-      argument :type, type: String, description: "List results by type", required: false
+      argument :resource_type, type: String, description: "List results by type", required: false
     end
   end
 end

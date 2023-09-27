@@ -27,7 +27,12 @@ module Decidim
         data = []
         if kwargs[:filters].present?
           kwargs[:filters].each do |filter|
-            if filter[:scope_filter].present?
+            if filter[:term_filter].present?
+              term = search_by_term(filter[:term_filter])
+              term.each do |resource|
+                data.append(resource) 
+              end if term.present?
+            elsif filter[:scope_filter].present?
               scope = search_by_scope(filter[:scope_filter])
               data.append(scope.take) if scope.present?
             elsif filter[:assembly_filter].present? 
@@ -88,53 +93,40 @@ module Decidim
         data = []
         comp_proposals = space.take.components.select { |component| component.manifest.name == :proposals }
         comp_proposals.each do |comp_proposal|
-          Decidim::Proposals::Proposal.where(decidim_component_id: comp_proposal.id).each { |proposal| data.append(proposal)}
+          Decidim::Proposals::Proposal.where(decidim_component_id: comp_proposal.id).each do |proposal| 
+            data.append(proposal) if proposal.class.method_defined?(:latitude) && proposal.latitude.present?
+          end
         end if comp_proposals.present?
 
         comp_meetings = space.take.components.select { |component| component.manifest.name == :meetings }
         comp_meetings.each do |comp_meeting|
-          Decidim::Meetings::Meeting.where(decidim_component_id: comp_meeting.id).each { |meeting| data.append(meeting)}
+          Decidim::Meetings::Meeting.where(decidim_component_id: comp_meeting.id).each do |meeting| 
+            data.append(meeting) if meeting.class.method_defined?(:latitude) && meeting.latitude.present?
+          end
         end if comp_meetings.present?
 
         data
       end
 
-      def geo_scopes_ids
-        return Decidim::Geo::Shapedata.where.not(decidim_scopes_id: nil).map { |shp| shp.decidim_scopes_id }
-      end
-
-      def search_by_scope(filter)
-        scope = Decidim::Scope.where(id: filter.scope_id) if filter.scope_id.present?
-        if scope.present?
-          return scope if Decidim::Geo::Shapedata.where(decidim_scopes_id: scope.take.id).present?
-        end  
-      end
-
-      def search_resources(filter)
-
-        types = ['Decidim::Meetings::Meeting', 
-                'Decidim::Proposals::Proposal', 
-                'Decidim::Scope'].freeze
-
+      def search_by_term(filter)
         data = []
-        
-        if filter.nil?
-          types.each do |type| 
-            filtered_query_for(class_name: type, term: nil, scope_id: nil).each {|resource_type_data| data.append(resource_type_data)}
-          end
+        if filter[:resource_type].present?
+          resources = Decidim::Searchable.searchable_resources.select {|resource_type| resource_type == filter[:resource_type] }
         else
-          filter.term.nil? ? term = nil : term = filter.term
-          filter.resource_type.nil? ? resource_types = nil : resource_types = filter.resource_type
-          filter.scope_id.nil? ? scope_id = nil : scope_id = filter.scope_id
-
-          types.each do |type| 
-            filtered_query_for(class_name: type, term: term, scope_id: scope_id).each do |resource_type_data| 
-              resource_types.each do |resource_type|
-                data.append(resource_data(resource_type_data)) if (resource_type.present? && type.include?(resource_type.downcase.capitalize))
+          resources = Decidim::Searchable.searchable_resources
+        end
+        resources.inject({}) do |results_by_type, (class_name, klass)|
+          result_ids = filtered_query_for(class_name: class_name, term: filter[:term], scope_id: filter[:scope_ids]).pluck(:resource_id)
+          klass.find(result_ids).each do |result_data| 
+            if result_data.class.method_defined?(:scope) && result_data.scope.present?
+              if result_data.class.method_defined?(:component)
+                data.append(result_data) if result_data.class.method_defined?(:latitude) && result_data.latitude.present?
+              else
+                data.append(result_data) if Decidim::Geo::Shapedata.where(decidim_scopes_id: result_data.scope.id).present?
               end
-            end 
+            end
           end
-        end          
+        end
         data
       end
 
@@ -149,8 +141,19 @@ module Decidim
         result_query = SearchableResource.where(query)
   
         result_query = result_query.order("datetime DESC")
-        result_query = result_query.global_search(I18n.transliterate(term)) unless term.nil?
+        result_query = result_query.global_search(I18n.transliterate(term)) if term.present?
         result_query
+      end
+
+      def search_by_scope(filter)
+        scope = Decidim::Scope.where(id: filter.scope_id) if filter.scope_id.present?
+        if scope.present?
+          return scope if Decidim::Geo::Shapedata.where(decidim_scopes_id: scope.take.id).present?
+        end  
+      end
+
+      def geo_scopes_ids
+        return Decidim::Geo::Shapedata.where.not(decidim_scopes_id: nil).map { |shp| shp.decidim_scopes_id }
       end
 
       def resource_data(resource_type_data)

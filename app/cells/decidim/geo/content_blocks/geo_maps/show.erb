@@ -8,12 +8,11 @@
     width: 100%;
     max-width: 100%;
     max-height: 100%;
-  }
-  
+  }  
 </style>
 
 <div id="map" 
   data-config=<%= {default_locale: current_organization.default_locale, user_locale: (current_user.locale unless current_user.nil?)}.to_json %>>
 </div>
-<%= insert_map("HomePage", filters: [])
+
 <%= javascript_pack_tag "decidim_geo" %>
