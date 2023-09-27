@@ -79,6 +79,7 @@ binding the repository code in a module.
 
 ```
 docker-compose build
+docker-compose run --entrypoint "" --rm decidim-installer bash -c "cd $ROOT && mv ./tmp/db.bak.tar.gz .. && tar xfvz ./db.bak.tar.gz"
 docker-compose up
 # Access your local environment [localhost:3000](http://localhost:3000)
 ```
