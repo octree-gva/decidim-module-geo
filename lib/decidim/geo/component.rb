@@ -18,9 +18,5 @@ Decidim.register_component(:geo) do |component|
   component.settings(:step) do |settings|
     settings.attribute :announcement, type: :text, translated: true, editor: true
   end
-
-  component.register_resource(:shapedata) do |resource|
-    resource.model_class_name = "Decidim::Geo::Shapedata"
-    resource.searchable = true
-  end
+  
 end
