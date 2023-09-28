@@ -2,7 +2,7 @@ version: '3'
 services:
   decidim-app:
     container_name: decidim-app
-    build: .
+    image: git.octree.ch:4567/decidim/decidim-module-geo/decidim-geo-0.26
     command: sh -c "bundle exec rails server -b 0.0.0.0"
     tty: true
     stdin_open: true
