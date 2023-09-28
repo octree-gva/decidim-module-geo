@@ -93,6 +93,25 @@ task :test_app do
   Rake::Task["prepare_tests"].invoke
 end
 
+desc "Prepare for development"
+task :prepare_dev do
+  # Remove previous existing db, and recreate one.
+  ENV["RAILS_ENV"] = "development"
+  databaseYml = {
+    "development" => {
+      "adapter" => "postgis",
+      "encoding" => "unicode",
+      "host" => ENV.fetch("DATABASE_HOST", "localhost"),
+      "port" => ENV.fetch("DATABASE_PORT", "5432").to_i,
+      "username" => ENV.fetch("DATABASE_USERNAME", "decidim"),
+      "password" => ENV.fetch("DATABASE_PASSWORD", "insecure-password"),
+      "database" => "#{base_app_name}_development_app_development",
+    }
+  }
+  config_file = File.expand_path("development_app/config/database.yml", __dir__)
+  File.open(config_file, "w") { |f| YAML.dump(databaseYml, f) }
+end
+
 desc "Generates a development app"
 task :development_app do
   Bundler.with_original_env do
@@ -113,5 +132,7 @@ task :development_app do
   system("bin/rails generate doorkeeper:install")
   system("bin/rails generate doorkeeper:migration")
 
+  install_module("development_app")
   Rake::Task["prepare_dev"].invoke
+  seed_db("development_app")
 end

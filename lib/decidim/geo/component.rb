@@ -18,4 +18,5 @@ Decidim.register_component(:geo) do |component|
   component.settings(:step) do |settings|
     settings.attribute :announcement, type: :text, translated: true, editor: true
   end
+  
 end

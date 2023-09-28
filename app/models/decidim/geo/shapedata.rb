@@ -2,15 +2,22 @@
 
 module Decidim
   module Geo
-    # The data store for a Proposal in the Decidim::Proposals component.
-    class Shapedata < Geo::ApplicationRecord
+    # Data fo the shapfiles uploaded
+    class Shapedata < ApplicationRecord
 
-      self.table_name = 'decidim_geo_shapefile_data'
-      
+      self.table_name = 'decidim_geo_shapefile_datas'
       validates :data, :presence => true
 
-      serialize :data, Hash
-      
+      belongs_to :scope, inverse_of: :shapedata, optional: true, foreign_key: "decidim_scopes_id"
+
+      def execute_statement(sql)
+        Shapedata.connection.exec_query(sql)
+      end
+
+      def shapedata?
+        return false
+      end
+
     end
   end
 end

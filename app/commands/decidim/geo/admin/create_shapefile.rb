@@ -23,10 +23,12 @@ module Decidim
 
           transaction do
             create_shapefile
-            #load_shapefile
+            load_shapefile
           end
 
           broadcast(:ok, @shapefile)
+        rescue
+          broadcast(:invalid)
         end
 
         private

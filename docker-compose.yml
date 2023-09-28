@@ -1,15 +1,48 @@
+version: '3'
 services:
-  local_postgres:
+  decidim-app:
+    container_name: decidim-app
+    build: .
+    command: sh -c "bundle exec rails server -b 0.0.0.0"
+    tty: true
+    stdin_open: true
+    environment:
+      - RAILS_ENV=development
+      - RAILS_SERVE_STATIC_FILES=true
+      - DATABASE_URL=postgis://decidim:insecure-password@pg:5432/decidim
+      - DATABASE_USERNAME=decidim
+      - DATABASE_PASSWORD=insecure-password
+      - DATABASE_HOST=pg
+      - DATABASE_PORT=5432
+      - DATABASE_ADAPTER=posgis
+      - SECRET_KEY_BASE=pleaseChangeMe
+      - DECIDIM_SYSTEM_PASSWORD=decidim123456
+      - DECIDIM_SYSTEM_EMAIL=system@example.org
+      - WEBPACK_DEV_SERVER=localhost
+    depends_on:
+      - pg
+    ports:
+      - 3000:3000
+      - 3035:3035
+    volumes:
+      - .:/home/decidim/decidim_module_geo
+      - ./.migrations:/home/decidim/app/db/migrate
+      - bundle:/home/decidim/app/vendor
+      - public:/home/decidim/app/public
+      - tmp:/home/decidim/app/tmp
+
+  pg:
     image: postgis/postgis:14-3.3-alpine
     volumes:
-      - pg-data-test:/var/lib/postgresql/data
-      - ./.dump:/tmp/dump
+      - pg_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=insecure-password
       - POSTGRES_USER=decidim
-      - POSTGRES_DB=decidim_test
-    ports:
-      - 5432:5432
-    
+      - POSTGRES_DB=decidim
+
 volumes:
-  pg-data-test: {}
+  bundle: {}
+  migration: {}
+  pg_data: {}
+  public: {}
+  tmp: {}

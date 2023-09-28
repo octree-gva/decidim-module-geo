@@ -1,10 +1,13 @@
 # frozen_string_literal: true
-
+require "rgeo"
 require "decidim/geo/admin"
 require "decidim/geo/engine"
 require "decidim/geo/api"
 require "decidim/geo/admin_engine"
 require "decidim/geo/component"
+require 'rgeo/shapefile'
+require "decidim/geo/load_shp/app_load_shp"
+# require "decidim/geo/geo_json_convert/geo_json_convert"
 
 require 'rgeo/shapefile'
 require "decidim/geo/load_shp/app_load_shp"
