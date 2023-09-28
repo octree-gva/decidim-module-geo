@@ -116,7 +116,7 @@ module Decidim
           resources = Decidim::Searchable.searchable_resources
         end
         resources.inject({}) do |results_by_type, (class_name, klass)|
-          result_ids = filtered_query_for(class_name: class_name, term: filter[:term], scope_id: filter[:scope_ids]).pluck(:resource_id)
+          result_ids = filtered_query_for(class_name, filter).pluck(:resource_id)
           klass.find(result_ids).each do |result_data| 
             if result_data.class.method_defined?(:scope) && result_data.scope.present?
               if result_data.class.method_defined?(:component)
@@ -130,19 +130,44 @@ module Decidim
         data
       end
 
-      def filtered_query_for(class_name: nil, term: nil, scope_id: nil)
+      def filtered_query_for(class_name, filter)
         query = {organization: organization,
           locale: I18n.locale,
           resource_type: class_name,
         }
 
-        query.update(decidim_scope_id: scope_id) unless scope_id.nil?
+        query.update(decidim_scope_id: filter[:scope_id]) unless filter[:scope_id].nil?
 
         result_query = SearchableResource.where(query)
+
+        state_filter(filter).map do |attribute_name, value|
+          result_query = result_query.where(attribute_name => value)
+        end if filter[:space_state].present?
   
         result_query = result_query.order("datetime DESC")
-        result_query = result_query.global_search(I18n.transliterate(term)) if term.present?
+        result_query = result_query.global_search(I18n.transliterate(filter[:term])) if filter[:term].present?
         result_query
+      end
+
+      def state_filter(filter)
+        {decidim_scope_id: filter[:scope_ids]}.merge(decidim_participatory_space: spaces_to_filter(filter)).compact
+      end
+  
+      def spaces_to_filter(filter)  
+        Decidim.participatory_space_manifests.flat_map do |manifest|
+          public_spaces = manifest.participatory_spaces.call(organization).public_spaces
+          spaces = case filter[:space_state]
+                   when "active"
+                     public_spaces.active_spaces
+                   when "future"
+                     public_spaces.future_spaces
+                   when "past"
+                     public_spaces.past_spaces
+                   else
+                     public_spaces
+                   end
+          spaces.select(:id).to_a
+        end
       end
 
       def search_by_scope(filter)
