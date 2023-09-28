@@ -27,14 +27,17 @@ module Decidim
         data = []
         if kwargs[:filters].present?
           kwargs[:filters].each do |filter|
+            byebug
             if filter[:term_filter].present?
-              term = search_by_term(filter[:term_filter])
+              term = search_resources(filter[:term_filter])
               term.each do |resource|
                 data.append(resource) 
               end if term.present?
             elsif filter[:scope_filter].present?
               scope = search_by_scope(filter[:scope_filter])
-              data.append(scope.take) if scope.present?
+              scope.each do |resource|  
+                data.append(resource) 
+              end if scope.present?
             elsif filter[:assembly_filter].present? 
               assembly = assembly_comp(filter[:assembly_filter])
               assembly.each do |component|  
@@ -45,6 +48,11 @@ module Decidim
               process.each do |component|  
                 data.append(component) 
               end if process.present?
+            elsif filter[:resource_type_filter].present?
+              resource_type = search_resources(filter[:resource_type_filter])
+              resource_type.each do |resource|
+                data.append(resource)
+              end if resource_type.present?
             end
           end
         end
@@ -108,10 +116,12 @@ module Decidim
         data
       end
 
-      def search_by_term(filter)
+      def search_resources(filter)
+        byebug
         data = []
         if filter[:resource_type].present?
-          resources = Decidim::Searchable.searchable_resources.select {|resource_type| resource_type == filter[:resource_type] }
+          filter[:resource_type].class == Array ? resource_type_name = filter[:resource_type].first : resource_type_name = filter[:resource_type]
+          resources = Decidim::Searchable.searchable_resources.select {|resource_type| resource_type == resource_type_name }
         else
           resources = Decidim::Searchable.searchable_resources
         end
@@ -136,7 +146,11 @@ module Decidim
           resource_type: class_name,
         }
 
-        query.update(decidim_scope_id: filter[:scope_id]) unless filter[:scope_id].nil?
+        query.update(decidim_scope_id: filter[:scope_id]) if filter[:scope_id].present?
+
+        query.update(id: filter[:resource_id]) if filter[:resource_id].present?
+
+        byebug
 
         result_query = SearchableResource.where(query)
 
@@ -172,9 +186,7 @@ module Decidim
 
       def search_by_scope(filter)
         scope = Decidim::Scope.where(id: filter.scope_id) if filter.scope_id.present?
-        if scope.present?
-          return scope if Decidim::Geo::Shapedata.where(decidim_scopes_id: scope.take.id).present?
-        end  
+        search_resources(filter) if scope.present?
       end
 
       def geo_scopes_ids
