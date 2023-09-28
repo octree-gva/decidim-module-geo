@@ -2,6 +2,7 @@
 set -e
 
 cd $ROOT;
+bundle check || bundle install
 mv ./tmp/db.bak.tar.gz . && tar xfvz ./db.bak.tar.gz;
 # Install migrations and webpackers
 bundle exec rails --tasks | grep -E 'rails [^ ]*:install:migrations' | awk -F ' ' '{ print "bundle exec rails " $2 ";" }' | bash
@@ -9,5 +10,24 @@ bundle exec rails --tasks | grep -E 'rails [^ ]*:webpacker:install' | awk -F ' '
 # Install deps
 npm i
 bundle exec rails db:migrate
-bundle exec rails runner bin/setup_development.rb
+bundle exec rails runner "./bin/setup_development.rb"
 bundle exec bootsnap precompile --gemfile app/ lib/
+
+echo ""
+echo ""
+echo "    ____  ____________________  ______  ___      ________________  "
+echo "   / __ \/ ____/ ____/  _/ __ \/  _/  |/  /     / ____/ ____/ __ \ "
+echo "  / / / / __/ / /    / // / / // // /|_/ /_____/ / __/ __/ / / / / "
+echo " / /_/ / /___/ /____/ // /_/ // // /  / /_____/ /_/ / /___/ /_/ /  "
+echo "/_____/_____/\____/___/_____/___/_/  /_/      \____/_____/\____/   "
+echo "                         READY                                     "
+echo " ========================= | ==================================  "
+echo " URL                       | http://127.0.0.1                    "
+echo " ROOT                      | $ROOT                               "
+echo " /system email             | $DECIDIM_SYSTEM_EMAIL               "
+echo " /system pass              | $DECIDIM_SYSTEM_PASSWORD            "
+echo " /admin email              | $DECIDIM_SYSTEM_EMAIL               "
+echo " /admin pass               | $DECIDIM_SYSTEM_PASSWORD            "
+echo " ========================= | ==================================  "
+echo ""
+echo ""

@@ -75,15 +75,14 @@ bundle exec rake test_app
 ```
 
 ## Local development
-The docker-compose in this repository will run a development_app, 
-binding the repository code in a module. 
-
+Run the following script to have a working local development with an empty organization:
 ```
 rm -rf .migrations/
 docker-compose down -v --remove-orphans
 docker-compose build
-docker-compose run --entrypoint "" --rm decidim-installer /home/decidim/app/bin/setup_development
+docker-compose run --entrypoint "" --rm decidim-app /home/decidim/app/bin/setup_development
 docker-compose up
+
 # Access your local environment [127.0.0.1:3000](http://127.0.0.1:3000)
 #
 # Your credentials
@@ -96,14 +95,43 @@ docker-compose up
 ```
 
 This will run: 
-- webpacker
-- decidim with your module
+- decidim with decidim-geo installed
 
+After this first run, you can run
+- `docker exec decidim-app bin/webpack-dev-server`
+- `docker-compose down` to stop the containers
+- `docker-compose up` to start the containers.
 
-If you want to debug something: 
+### Debugging
+To debug something on the container:
+1. Ensure `decidim-app` is running
+```bash
+    docker ps --all
+#   CONTAINER ID   IMAGE                           COMMAND                  CREATED        STATUS        PORTS                                            NAMES
+#   f16bd5314386   decidim-geo-development-app     "docker-entrypoint s…"   13 hours ago   Up 13 hours   0.0.0.0:3000->3000/tcp, 0.0.0.0:3035->3035/tcp   decidim-app <-------- THIS ONE
+#   b56adf6404d8   decidim-geo-development-app     "bin/webpack-dev-ser…"   54 seconds ago   Up 46 seconds   0.0.0.0:3035->3035/tcp   decidim-webpacker                                       decidim-installer
+#   bc1e912c3d8a   postgis/postgis:14-3.3-alpine   "docker-entrypoint.s…"   13 hours ago   Up 13 hours   0.0.0.0:5432->5432/tcp                           decidim-module-geo-pg-1
 ```
-    docker-compose run --entrypoint "" --rm decidim bash
-```
+
+2. Run `docker exec -it decidim-app bash`
+3. Run
+    - `tail -f $ROOT/log/development.log` to **access logs**
+    - `bundle exec rails restart` to **restart rails server AND keeps webpacker running**
+    - `cd $ROOT` to access the `development_app`
+    - `cd $ROOT/../decidim_module_geo` to access the module directory
+
+### FAQ
+
+**I can't see logs on the `decidim-app`?**
+`decidim-app` runs here in development `webpacker-dev-server` AND a puma server, on the same container. 
+Thus, we just run both, and only one will be displayed on STDOUT. To see puma log: `docker exec decidim-app tail -f /home/app/decidim/log/development.log`
+
+**It takes for ever to pull the image?**
+Try to pull from docker hub before doing your install script. `docker pull hfroger/decidim:0.26.8-dev` can help. 
+
+**Why must I access to `127.0.0.1` and not `localhost`?**
+`webpack-dev-server` run a websocket server on port 3535, and the rails server needs to connect to it. 
+`localhost` won't make the trick, and you need to use a "real" ip, like `127.0.0.1`.  [More info](https://stackoverflow.com/a/54102318)
 
 ## Contributing
 

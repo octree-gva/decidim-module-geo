@@ -1,74 +1,25 @@
-# Needs `docker-compose -v` > 2.15
-#
-# ## Usage
-# docker-compose build
-# docker-compose up
-#
-# => access http://localhost:3000 and use your system credentials
-# to create an organization. 
-#
-# See `DECIDIM_SYSTEM_PASSWORD` and `DECIDIM_SYSTEM_EMAIL` env
-version: "3"
+version: '3'
 services:
-  decidim-installer:
-    container_name: "decidim-installer"
-    image: decidim-geo-development-app
-    entrypoint: sh -c "bundle && bundle exec rails decidim_geo:install:migrations && npm i && bundle exec rails db:migrate"
-    command: ""
-    environment:
-      - RAILS_ENV=development
-      - NODE_ENV=development
-      - RAILS_SERVE_STATIC_FILES=true
-      - DATABASE_USERNAME=decidim
-      - DATABASE_PASSWORD=insecure-password
-      - DATABASE_HOST=pg
-      - DATABASE_NAME=decidim_geo
-      - DATABASE_PORT=5432
-      - DATABASE_URL=postgis://decidim:insecure-password@pg:5432/decidim_geo
-      - SECRET_KEY_BASE=insecure_password
-      - DECIDIM_SYSTEM_PASSWORD=decidim123456
-      - DECIDIM_SYSTEM_EMAIL=system@example.org
-      - WEBPACK_DEV_SERVER=localhost
-      - BUNDLE_WITHOUT=""
-      - LISTEN_GEM_DEBUGGING=debug
-    depends_on:
-      - pg
-    links:
-      - pg
-    volumes:
-      - .:/home/decidim/decidim_module_geo
-      - ./.migrations:/home/decidim/app/db/migrate
-      - app:/home/decidim/app/vendor
-
-  decidim:
+  decidim-app:
     container_name: decidim-app
-    image: decidim-geo-development-app
-    build:
-      context: .
-      network: host
-    command: sh -c "bundle exec rails server -b 0.0.0.0 -d && bin/webpack-dev-server"
+    build: .
+    command: sh -c "bundle exec rails server -b 0.0.0.0"
     tty: true
     stdin_open: true
     environment:
       - RAILS_ENV=development
-      - NODE_ENV=development
       - RAILS_SERVE_STATIC_FILES=true
+      - DATABASE_URL=postgis://decidim:insecure-password@pg:5432/decidim
       - DATABASE_USERNAME=decidim
       - DATABASE_PASSWORD=insecure-password
       - DATABASE_HOST=pg
-      - DATABASE_NAME=decidim_geo
       - DATABASE_PORT=5432
-      - DATABASE_URL=postgis://decidim:insecure-password@pg:5432/decidim_geo
-      - SECRET_KEY_BASE=insecure_password
+      - DATABASE_ADAPTER=posgis
+      - SECRET_KEY_BASE=pleaseChangeMe
       - DECIDIM_SYSTEM_PASSWORD=decidim123456
       - DECIDIM_SYSTEM_EMAIL=system@example.org
       - WEBPACK_DEV_SERVER=localhost
-      - BUNDLE_WITHOUT=""
-      - LISTEN_GEM_DEBUGGING=debug
     depends_on:
-      - pg
-      - decidim-installer
-    links:
       - pg
     ports:
       - 3000:3000
@@ -76,19 +27,22 @@ services:
     volumes:
       - .:/home/decidim/decidim_module_geo
       - ./.migrations:/home/decidim/app/db/migrate
-      - app:/home/decidim/app/vendor
+      - bundle:/home/decidim/app/vendor
+      - public:/home/decidim/app/public
+      - tmp:/home/decidim/app/tmp
 
   pg:
     image: postgis/postgis:14-3.3-alpine
     volumes:
-      - pg-data-test:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=insecure-password
       - POSTGRES_USER=decidim
-      - POSTGRES_DB=decidim_geo
-    ports:
-      - 5432:5432
- 
+      - POSTGRES_DB=decidim
+
 volumes:
-  pg-data-test:
-  app: 
+  bundle: {}
+  migration: {}
+  pg_data: {}
+  public: {}
+  tmp: {}
