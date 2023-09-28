@@ -27,7 +27,6 @@ module Decidim
         data = []
         if kwargs[:filters].present?
           kwargs[:filters].each do |filter|
-            byebug
             if filter[:term_filter].present?
               term = search_resources(filter[:term_filter])
               term.each do |resource|
@@ -117,7 +116,6 @@ module Decidim
       end
 
       def search_resources(filter)
-        byebug
         data = []
         if filter[:resource_type].present?
           filter[:resource_type].class == Array ? resource_type_name = filter[:resource_type].first : resource_type_name = filter[:resource_type]
@@ -149,8 +147,6 @@ module Decidim
         query.update(decidim_scope_id: filter[:scope_id]) if filter[:scope_id].present?
 
         query.update(id: filter[:resource_id]) if filter[:resource_id].present?
-
-        byebug
 
         result_query = SearchableResource.where(query)
 
