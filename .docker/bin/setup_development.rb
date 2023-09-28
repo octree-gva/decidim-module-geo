@@ -1,10 +1,10 @@
-
+raise "Can not create organization, already exists one" if Decidim::Organization.count > 0
 # Create an organization for localhost
 organization = ::Decidim::Organization.create!(
-    host: "localhost",
+    host: "127.0.0.1",
     name: "Decidim GEO",
-    default_locale: :fr,
-    available_locales: [:en, :fr],
+    default_locale: "fr",
+    available_locales: ["en", "fr"],
     reference_prefix: "GEO",
     available_authorizations: [],
     users_registration_mode: :enabled,

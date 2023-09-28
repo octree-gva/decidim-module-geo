@@ -13,12 +13,12 @@ module Decidim
 
         private
 
-          def insert_map(id, **data)
+          def insert_map
+            id = @options[:id] || "HomePage"
             config = {
               id: "#{id}", 
               locale: current_locale,
               selected_component: current_component || nil,
-              **data
             }.with_indifferent_access
             config[:filters] = [] unless config[:filters].present?
 
@@ -40,7 +40,7 @@ module Decidim
           end
 
           def current_component
-            model.component
+            request.env["decidim.current_component"] || ""
           end  
       end
     end
