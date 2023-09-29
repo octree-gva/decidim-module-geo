@@ -7,6 +7,7 @@ module Decidim
 
       field :type, String, null: false
       field :id, ID, null: false
+      field :component_id, ID, null: true
       field :participatory_space_id, ID, null: true
       field :participatory_space_type, String, null: true
       field :title, Decidim::Core::TranslatedFieldType, "The title for this title", null: true
@@ -22,6 +23,10 @@ module Decidim
 
       def id
         object.id 
+      end
+
+      def component_id
+        object.component.id if object.class.method_defined?(:component) 
       end
 
       def participatory_space_id
