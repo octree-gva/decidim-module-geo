@@ -12,7 +12,7 @@ module Decidim
       argument :scope_filter, Decidim::Geo::ScopeInputFilter, description: "List results by Scope", required: false
       argument :term_filter, Decidim::Geo::TermInputFilter, description: "List results by Term", required: false
       argument :resource_type_filter, Decidim::Geo::ResourceTypeInputFilter, description: "List results by Resource Type", required: false
-
+      argument :process_group_filter, Decidim::Geo::ProcessGroupInputFilter, description: "List results by ProcessGroup", required: false
     end
   end
 end

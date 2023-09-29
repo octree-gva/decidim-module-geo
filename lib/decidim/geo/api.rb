@@ -12,6 +12,7 @@ module Decidim
     autoload :ScopeInputFilter, "decidim/api/input_filters/scope_input_filter"
     autoload :AssemblyInputFilter, "decidim/api/input_filters/assembly_input_filter"
     autoload :ProcessInputFilter, "decidim/api/input_filters/process_input_filter"
+    autoload :ProcessGroupInputFilter, "decidim/api/input_filters/process_group_input_filter"
     autoload :TermInputFilter, "decidim/api/input_filters/term_input_filter"
     autoload :ResourceTypeInputFilter, "decidim/api/input_filters/resource_type_input_filter"
     autoload :MeetingsInputFilter, "decidim/api/meetings_input_filter"

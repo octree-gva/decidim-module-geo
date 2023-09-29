@@ -38,12 +38,12 @@ module Decidim
                 data.append(resource) 
               end if scope.present?
             elsif filter[:assembly_filter].present? 
-              assembly = assembly_comp(filter[:assembly_filter])
+              assembly = components(filter[:assembly_filter].assembly_id, Decidim::Assembly)
               assembly.each do |component|  
                 data.append(component) 
               end if assembly.present?
             elsif filter[:process_filter].present? 
-              process = process_comp(filter[:process_filter])
+              process = components(filter[:process_filter].process_id, Decidim::ParticipatoryProcess)
               process.each do |component|  
                 data.append(component) 
               end if process.present?
@@ -52,6 +52,14 @@ module Decidim
               resource_type.each do |resource|
                 data.append(resource)
               end if resource_type.present?
+            elsif filter[:process_group_filter].present?
+              process_ids = Decidim::ParticipatoryProcessGroup.find(filter[:process_group_filter].process_group_id).participatory_processes.map { |process| process.id }
+              process_ids.each do |process_id|
+                process = process_components(process_id)
+                process.each do |component|  
+                  data.append(component) 
+                end if process.present?
+              end
             end
           end
         end
@@ -82,17 +90,10 @@ module Decidim
 
       private
 
-      def assembly_comp(filter)
-        assembly = Decidim::Assembly.where(id: filter.assembly_id) if filter.assembly_id.present?
-        if assembly.present? && assembly.take.scope.present?
-          return search_components(assembly) if Decidim::Geo::Shapedata.where(decidim_scopes_id: assembly.take.scope.id).present?
-        end 
-      end
-
-      def process_comp(filter)
-        process = Decidim::ParticipatoryProcess.where(id: filter.process_id) if filter.process_id.present?
-        if process.present? && process.take.scope.present?
-          return search_components(process) if Decidim::Geo::Shapedata.where(decidim_scopes_id: process.take.scope.id).present?
+      def components(space_id, klass)
+        space = klass.where(id: space_id) if space_id.present?
+        if space.present? && space.take.scope.present?
+          return search_components(space) if Decidim::Geo::Shapedata.where(decidim_scopes_id: space.take.scope.id).present?
         end 
       end
 
