@@ -1,70 +1,29 @@
-const NodesFragment = `
-  id
-  title {
-    translation(locale: $locale)
-  }
-`
-
-const MeetingsFragment = `
-  meetings {
-    nodes {
-      ${NodesFragment}
-      description {
-        translation(locale: $locale)
+export const geoDatasource = `
+  query geoDatasourceQuery ($locale: String!, $filters: [GeoDatasourceFilter!]) {
+    geoDatasource(filters: $filters){
+      pageInfo {
+        hasPreviousPage
+        startCursor
+        endCursor
+        hasNextPage
       }
-      coordinates {
-        latitude
-        longitude
-      }
-    }
-  }
-`
-
-const DebatesFragment = `
-  debates {
-    nodes {
-      ${NodesFragment}
-      description {
-        translation(locale: $locale)
-      }
-    }
-  }
-`
-
-const ProposalsFragment = `
-  proposals {
-    nodes {
-      ${NodesFragment}
-      coordinates {
-        latitude
-        longitude
-      }
-    }
-  }
-`
-
-export const participatoryProcesses = `
-  query participatoryProcessesQuery ($filter: ParticipatoryProcessFilter, $locale: String!) {
-    participatoryProcesses(filter: $filter) { 
-      slug
-      bannerImage
-      title {
-        translation(locale: $locale)
-      }
-      shortDescription {
-        translation(locale: $locale)
-      }  
-      components {
+      nodes {
         id
-        __typename
-        ... on Meetings {
-          ${MeetingsFragment}
+        participatorySpaceId
+        participatorySpaceType
+        type
+        title{
+          translation(locale: $locale)
         }
-        ... on Debates {
-          ${DebatesFragment}
+        shortDescription {
+          translation(locale: $locale)
         }
-        ... on Proposals {
-          ${ProposalsFragment}
+        description {
+          translation(locale: $locale)
+        }
+        coordinates{
+          latitude
+          longitude
         }
       }
     }
@@ -91,9 +50,10 @@ export const shapedata = `{
 
 export const geoConfig = `{
   geoConfig { 
-    lat 
-    lng 
+    latitude 
+    longitude 
     zoom 
+    tile
   }
 }`;
 
@@ -116,4 +76,3 @@ export const geoScope = `
     }
   }
 `;
-

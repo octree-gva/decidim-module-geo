@@ -4,12 +4,12 @@ module Decidim
   module Geo
     class GeoConfigType < Decidim::Api::Types::BaseObject
 
-      description "A geo content block config"
+      description "A geo admin config"
 
-      field :zoom, Integer, null: false
-      field :lng, Integer, null: false
-      field :lat, Integer, null: false
-      
+      field :zoom, Float, null: false
+      field :longitude, Float, null: false
+      field :latitude, Float, null: false
+      field :tile, String, null: true
     end
   end
 end

@@ -2,9 +2,14 @@
 
 source "https://rubygems.org"
 
+RUBY_VERSION = ">= 2.7.5"
+
 ruby RUBY_VERSION
 
-gem "decidim", "~> 0.26"
+DECIDIM_VERSION = "~> 0.26.8"
+
+gem "decidim", DECIDIM_VERSION
+
 gem "decidim-geo", path: "."
 
 gem 'activerecord-postgis-adapter', '~> 6.0.0'

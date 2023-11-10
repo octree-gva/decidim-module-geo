@@ -1,0 +1,16 @@
+version: '3'
+services:
+  pg:
+    image: postgis/postgis:14-3.4-alpine
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=insecure-password
+      - POSTGRES_USER=decidim
+      - POSTGRES_DB=decidim_geo
+    ports:
+      - 5432:5432
+
+volumes:
+  pg_data: {}
+  

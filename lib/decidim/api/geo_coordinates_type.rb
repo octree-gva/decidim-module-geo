@@ -8,7 +8,6 @@ module Decidim
 
       field :latitude, GraphQL::Types::Float, "Latitude of this coordinate", null: true
       field :longitude, GraphQL::Types::Float, "Longitude of this coordinate", null: true
-      field :geom, GraphQL::Types::JSON, "Shapedata for this object", null: true
 
       def latitude
         object[0]
@@ -16,10 +15,6 @@ module Decidim
 
       def longitude
         object[1]
-      end
-
-      def geom
-        object[2]
       end
 
     end

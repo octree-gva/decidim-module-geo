@@ -26,4 +26,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'rgeo-geojson', ">= 1.0"
   s.add_dependency 'activerecord-postgis-adapter', '>= 6.0'
   s.add_dependency "deface", ">= 1.8.1"
+
+  s.add_development_dependency "decidim-dev", Decidim::Geo.decidim_version
 end

@@ -3,14 +3,16 @@
 module Decidim
   module Admin
     # A command with all the business logic when updating a scope type.
-    class UpdateScopeType < Rectify::Command
+    class UpdateScopeType < Decidim::Geo::Command
       # Public: Initializes the command.
       #
       # scope_type - The ScopeType to update
       # form - A form object with the params.
-      def initialize(scope_type, form)
+      # current_user - nil for compatibility with 0.26
+      def initialize(scope_type, form, user = nil)
         @scope_type = scope_type
         @form = form
+        @user = user
       end
 
       # Executes the command. Broadcasts these events:
@@ -34,6 +36,15 @@ module Decidim
         @scope_type.shapefile = shapefile
         @scope_type.save!
         @scope_type.update!(attributes)
+        traceability_update
+      end
+
+      def traceability_update
+        Decidim.traceability.update!(
+          @scope_type,
+          @user,
+          attributes
+        )
       end
 
       def shapefile

@@ -1,0 +1,7 @@
+<!-- insert_after '.process-header' -->
+<%= cell("decidim/geo/content_blocks/geo_maps", current_participatory_space, 
+    id: "Assembly",
+    filters: [
+        { assemblyFilter: { assemblyId: current_participatory_space.id } }
+    ]
+) %>
