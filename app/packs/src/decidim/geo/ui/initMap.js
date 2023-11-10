@@ -1,19 +1,23 @@
 const { getGeoConfig } = require("../api");
 
-const initMap = async () => {
-  const { lat, lng, zoom } = await getGeoConfig();
+const initMap = async config => {
+  const {
+    mapID,
+    map_config: { lat, lng, zoom, tile_layer },
+  } = config;
 
-  const map = L.map("map", { center: [46.519962, 6.633597], zoom });
+  const map = L.map(mapID, {
+    center: [lat, lng],
+    zoom,
+    scrollWheelZoom: false,
+  });
   map.zoomControl.setPosition("topright");
 
-  L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    {
-      maxZoom: 19,
-      attribution:
-        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }
-  ).addTo(map);
+  L.tileLayer(tile_layer, {
+    maxZoom: 19,
+    attribution:
+      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(map);
 
   return map;
 };

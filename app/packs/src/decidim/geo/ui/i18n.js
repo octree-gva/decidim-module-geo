@@ -1,0 +1,1 @@
+export default Decidim.config.get("messages")["geo"]

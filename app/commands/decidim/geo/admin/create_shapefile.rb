@@ -4,7 +4,7 @@ module Decidim
   module Geo
     module Admin
     # A command with all the business logic when a user creates a new proposal.
-      class CreateShapefile < Rectify::Command
+      class CreateShapefile < Decidim::Geo::Command
         # Public: Initializes the command.
         #
         # form - A form object with the params.

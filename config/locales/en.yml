@@ -1,8 +1,36 @@
 ---
 en:
   decidim:
+    assemblies:
+      admin:
+        assemblies:
+          form:
+            address: Address
+            address_help: If the Assembly has a fisical address, fill this field with its address. 
+    participatory_processes:
+      admin:
+        participatory_processes:
+          form:
+            geocoding: Address
+            address_help: If the Process has a fisical address, fill this field with its address.
     geo: 
       admin:
+        geo_configs: 
+          title: Configurations
+          index: 
+            title: Configurations
+            save: Save
+          edit:
+            title: Configurations
+            save: Save
+          fields:
+            zoom: Zoom
+            longitude: Longitude
+            latitude: Latitude
+            tile: Tile 
+          actions:
+            update:
+              success: Configurations Updated
         shapefiles:
           title: Shapefiles
           new:

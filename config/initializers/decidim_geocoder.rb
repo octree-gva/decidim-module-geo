@@ -6,7 +6,7 @@ Decidim.configure do |config|
     api_key: Rails.application.secrets.maps[:api_key],
     dynamic: {
       tile_layer: {
-        url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
         api_key: false,
         attribution: %(
           <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap</a> contributors

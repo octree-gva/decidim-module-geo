@@ -15,20 +15,19 @@ default: &default
 development:
   <<: *default
   compile: true
-  cache: true
   dev_server:
     bonjour: true
     https: false
     port: 3035
-    public: localhost:3035
-    host: localhost
+    public: 127.0.0.1:3035
+    host: 127.0.0.1
     hmr: true
     hot: "only"
     live_reload: false
     inline: true
     compress: true
     allowed_hosts: "all"
-    use_local_ip: true
+    use_local_ip: false
     disable_host_check: true
     client:
       logging: 'log'
@@ -40,9 +39,6 @@ development:
     webSocketServer: 'sockjs'
     headers:
       'Access-Control-Allow-Origin': '*'
-      'Content-Security-Policy': "script-src 'self' 'unsafe-eval'; connect-src 'self' ws://localhost:3035 http://localhost:3035"
-      'X-Content-Security-Policy': "script-src 'self' 'unsafe-eval'; connect-src 'self' ws://localhost:3035 http://localhost:3035"
-      'X-WebKit-CSP': "script-src 'self' 'unsafe-eval'; connect-src 'self' ws://localhost:3035 http://localhost:3035"
     static:
       watch:
         ignored: '**/node_modules/**'

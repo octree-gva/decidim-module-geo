@@ -78,10 +78,7 @@ bundle exec rake test_app
 ## Local development
 Run the following script to have a working local development with an empty organization:
 ```
-rm -rf .migrations/
 docker-compose down -v --remove-orphans
-docker-compose build
-docker-compose run --entrypoint "" --rm decidim-app /home/decidim/app/bin/setup_development
 docker-compose up
 
 # Access your local environment [127.0.0.1:3000](http://127.0.0.1:3000)
@@ -99,7 +96,6 @@ This will run:
 - decidim with decidim-geo installed
 
 After this first run, you can run
-- `docker exec decidim-app bin/webpack-dev-server`
 - `docker-compose down` to stop the containers
 - `docker-compose up` to start the containers.
 

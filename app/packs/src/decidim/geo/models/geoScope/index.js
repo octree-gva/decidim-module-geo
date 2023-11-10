@@ -1,14 +1,15 @@
 const { createGeoScopeMenuItem, createGeoScopeLayer } = require("../../ui");
-const { getParticipatoryProcesses } = require("../../api");
-const { default: GeoParticipatoryProcess } = require("../participatoryProcess");
+const { getGeoDatasource } = require("../../api");
+const { default: GeoDatasourceNode } = require("../geoDatasourceNode");
+
+const polylabel = require("polylabel");
 
 export default class GeoScope {
   constructor({ geoScope, map, menuElements, menuActions }) {
     //Model
     this.data = geoScope;
-    this.participatoryProcessesList = [];
+    this.nodes = [];
     this.isActive = false;
-    this.isDisabled = false;
 
     //View
     this.map = map;
@@ -17,6 +18,11 @@ export default class GeoScope {
   }
 
   async select() {
+    console.log("select", {
+      data: this.data,
+      nodes: this.nodes,
+      centroid: this.centroid,
+    });
     this.isActive = true;
     this.menuActions.reset();
     this.menuActions.switchIsListOpened(true);
@@ -45,44 +51,61 @@ export default class GeoScope {
       this.menuElements.list,
       "decidimGeo__scopesDropdown__list--card"
     );
-    this.participatoryProcessesList.forEach(geoParticipatoryProcess => {
-      geoParticipatoryProcess.layer?.addTo(this.map);
-      this.menuElements.list.appendChild(geoParticipatoryProcess.menuItem);
+    if (this.centroid) {
+      this.map.panTo([this.centroid[1], this.centroid[0]]);
+    }
+    this.nodes.forEach(node => {
+      this.menuElements.list.appendChild(node.menuItem);
     });
+    this.nodesLayer?.addTo(this.map);
+    this.nodesLayer?.setStyle({ fillColor: "#2952A370", color: "#2952A3" });
   }
 
   unSelect() {
     this.isActive = false;
-
+    this.nodes.forEach(node => {
+      this.map.removeLayer(this.nodesLayer);
+    });
     this.layer.setStyle({ fillColor: "#cccccc", color: "#999999" });
   }
 
-  async loadParticipatoryProcesses() {
-    const participatoryProcesses = await getParticipatoryProcesses({
-      variables: { filter: { scopeId: this.data.id } },
+  async loadGeoDatasource() {
+    const response = await getGeoDatasource({
+      variables: { filters: [{ scopeFilter: { scopeId: this.data.id } }] },
     });
-    this.participatoryProcessesList = participatoryProcesses.map(
-      participatoryProcess => {
-        const geoParticipatoryProcess = new GeoParticipatoryProcess({
-          participatoryProcess,
+    const nodesMarkers = [];
+    response.nodes.map(node => {
+      if (node.coordinates) {
+        const interactiveNode = new GeoDatasourceNode({
+          node,
+          map
         });
-        geoParticipatoryProcess.init();
-        return geoParticipatoryProcess;
+        interactiveNode.init();
+        this.nodes.push(interactiveNode);
+        nodesMarkers.push(interactiveNode.marker);
+      } else {
+        console.log("Coordinates expected for ", node);
       }
-    );
-    this.isDisabled = this.participatoryProcessesList.length === 0;
+    });
+    this.nodesLayer = L.layerGroup(nodesMarkers);
   }
 
   async init() {
-    await this.loadParticipatoryProcesses();
-    this.layer = createGeoScopeLayer({
-      geoScope: this.data,
-      map: this.map,
-      onClick: this.select.bind(this),
-    });
-    this.menuItem = createGeoScopeMenuItem({
-      label: this.data.name.translation,
-      onClick: this.select.bind(this),
-    });
+    await this.loadGeoDatasource();
+    if (this.data.geom?.type === "MultiPolygon") {
+      this.centroid = polylabel(this.data.geom.coordinates[0], 1.0);
+    }
+    if (this.nodes.length > 0) {
+      this.layer = createGeoScopeLayer({
+        geoScope: this.data,
+        map: this.map,
+        centroid: this.centroid,
+        onClick: this.select.bind(this),
+      });
+      this.menuItem = createGeoScopeMenuItem({
+        label: this.data.name.translation,
+        onClick: this.select.bind(this),
+      });
+    }
   }
 }

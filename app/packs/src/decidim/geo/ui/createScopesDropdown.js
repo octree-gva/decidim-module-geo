@@ -1,7 +1,7 @@
 import GeoScope from "../models/geoScope";
 
-const { getGeoScopes, getParticipatoryProcesses } = require("../api");
-const PARTICIPATORY_PROCESS = require("../models/participatoryProcess");
+const { getGeoScopes, getGeoDatasource } = require("../api");
+const GeoDatasource = require("../models/geoDatasource");
 const polylabel = require("polylabel");
 
 const createClasses = (classname, modifiers) =>
@@ -108,68 +108,58 @@ async function createScopesDropdown(map) {
           );
           loadingItem.textContent += "Loading";
 
-          const participatoryProcesses = await getParticipatoryProcesses({
-            variables: { filter: { scopeId: next.parentScope.id } },
+          const geoDatasource = await getGeoDatasource({
+            variables: {
+              filters: [{ scopeFilter: { scopeId: next.parentScope.id } }],
+            },
           });
-          const participatoryProcessesList = participatoryProcesses.map(
-            participatoryProcess => {
-              const listCard = L.DomUtil.create(
-                "li",
-                "decidimGeo__scopesDropdown__listCard"
-              );
-              const image = L.DomUtil.create(
-                "img",
-                "decidimGeo__scopesDropdown__listCardImg",
-                listCard
-              );
-              image.src = participatoryProcess.bannerImage;
+          const nodesList = geoDatasource.nodes.map(node => {
+            const listCard = L.DomUtil.create(
+              "li",
+              "decidimGeo__scopesDropdown__listCard"
+            );
+            const image = L.DomUtil.create(
+              "img",
+              "decidimGeo__scopesDropdown__listCardImg",
+              listCard
+            );
+            image.src = node.bannerImage;
 
-              const info = L.DomUtil.create(
-                "div",
-                "decidimGeo__scopesDropdown__listCardInfo",
-                listCard
+            const info = L.DomUtil.create(
+              "div",
+              "decidimGeo__scopesDropdown__listCardInfo",
+              listCard
+            );
+
+            const infoTitle = L.DomUtil.create(
+              "div",
+              "decidimGeo__scopesDropdown__listCardTitle",
+              info
+            );
+            infoTitle.textContent += node.title.translation;
+
+            const infoDescription = L.DomUtil.create(
+              "div",
+              "decidimGeo__scopesDropdown__listCardDescription",
+              info
+            );
+            infoDescription.textContent +=
+              node.shortDescription.translation.replace(
+                /<[^>]+>/g,
+                ""
               );
 
-              const infoType = L.DomUtil.create(
-                "div",
-                "decidimGeo__scopesDropdown__listCardType",
-                info
-              );
-              infoType.textContent += "process";
+            const marker = GeoDatasource.getMarker(node);
 
-              const infoTitle = L.DomUtil.create(
-                "div",
-                "decidimGeo__scopesDropdown__listCardTitle",
-                info
-              );
-              infoTitle.textContent += participatoryProcess.title.translation;
-
-              const infoDescription = L.DomUtil.create(
-                "div",
-                "decidimGeo__scopesDropdown__listCardDescription",
-                info
-              );
-              infoDescription.textContent +=
-                participatoryProcess.shortDescription.translation.replace(
-                  /<[^>]+>/g,
-                  ""
-                );
-
-              const markers =
-                PARTICIPATORY_PROCESS.getMarkers(participatoryProcess);
-
-              return listCard;
-            }
-          );
+            return listCard;
+          });
 
           L.DomUtil.empty(this.list);
           L.DomUtil.addClass(
             this.list,
             "decidimGeo__scopesDropdown__list--card"
           );
-          participatoryProcessesList.forEach(element =>
-            this.list.appendChild(element)
-          );
+          nodesList.forEach(element => this.list.appendChild(element));
         }
       );
       this.state = next;

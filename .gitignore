@@ -4,6 +4,7 @@
 /coverage/
 /doc/
 /pkg/
+node_modules
 /spec/reports/
 /tmp/
 /vendor

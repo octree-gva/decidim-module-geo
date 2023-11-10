@@ -3,46 +3,55 @@ services:
   decidim-app:
     container_name: decidim-app
     image: git.octree.ch:4567/decidim/decidim-module-geo/decidim-geo-0.26
-    command: sh -c "bundle exec rails server -b 0.0.0.0"
-    tty: true
-    stdin_open: true
+    user: "root"
     environment:
       - RAILS_ENV=development
+      - NODE_ENV=development
       - RAILS_SERVE_STATIC_FILES=true
       - DATABASE_URL=postgis://decidim:insecure-password@pg:5432/decidim
-      - DATABASE_USERNAME=decidim
-      - DATABASE_PASSWORD=insecure-password
-      - DATABASE_HOST=pg
-      - DATABASE_PORT=5432
-      - DATABASE_ADAPTER=posgis
       - SECRET_KEY_BASE=pleaseChangeMe
       - DECIDIM_SYSTEM_PASSWORD=decidim123456
       - DECIDIM_SYSTEM_EMAIL=system@example.org
-      - WEBPACK_DEV_SERVER=localhost
+      - WEB_CONCURRENCY=0
+      - RAILS_MAX_THREADS=2
+      - RAILS_MIN_THREADS=1
     depends_on:
+      - pg
+    links:
       - pg
     ports:
       - 3000:3000
       - 3035:3035
     volumes:
-      - .:/home/decidim/decidim_module_geo
-      - ./.migrations:/home/decidim/app/db/migrate
+      - .:/home/decidim/decidim_module_geo:delegated
+      - ./.migrations:/home/decidim/app/db/migrate:delegated
+      - node_modules:/home/decidim/app/node_modules
       - bundle:/home/decidim/app/vendor
       - public:/home/decidim/app/public
       - tmp:/home/decidim/app/tmp
-
+    networks:
+      - private
+      - default
   pg:
-    image: postgis/postgis:14-3.3-alpine
+    image: postgis/postgis:14-3.4-alpine
+    restart: always
     volumes:
       - pg_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=insecure-password
       - POSTGRES_USER=decidim
       - POSTGRES_DB=decidim
-
+    networks:
+      - private
+    ports:
+      - 5432:5432
 volumes:
   bundle: {}
   migration: {}
   pg_data: {}
   public: {}
+  node_modules: {}
   tmp: {}
+networks:
+  private:
+    internal: true

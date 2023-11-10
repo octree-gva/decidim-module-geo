@@ -1,0 +1,64 @@
+#! /bin/sh
+cd $ROOT;
+echo <<EOF
+    root_dir = ENV.fetch("ROOT", "/home/app/decidim")
+    Dir.chdir(root_dir) do 
+        migration_directory = File.join(root_dir, "db", "migrate")
+        installed_modules = Dir["#{migration_directory}/*.rb"].map {|filename| filename.split(".")[-2]}.uniq
+        tasks_list = `bundle exec rails --tasks`.split("\n").map {|t| t.split(" ")[1]}
+        ["webpacker:install", "install:migrations"].each do |task_suffix|
+            availables_tasks = tasks_list.select {|t| t.match?(/[^ ]*:#{task_suffix}/)}
+            done = installed_modules.map {|m| "#{m}:#{task_suffix}" }
+            to_do =  availables_tasks.select {|task|  !done.include? task}
+            puts "#{task_suffix}: #{to_do.count} script to run."
+            to_do.each do |script| 
+            puts "RUN bundle exec rails #{script}"
+            puts "==="
+            raise "ERR. Fail to run #{script}" unless system("bundle", "exec", "rails", script) 
+            puts "OK. #{script} done."
+            end
+        end
+    end
+    
+    organization = Decidim::Organization.first
+    unless organization
+        organization = ::Decidim::Organization.create!(
+            host: "127.0.0.1",
+            name: "Decidim GEO",
+            default_locale: "fr",
+            available_locales: ["en", "fr"],
+            reference_prefix: "GEO",
+            available_authorizations: [],
+            users_registration_mode: :enabled,
+            tos_version: Time.current,
+            badges_enabled: true,
+            user_groups_enabled: true,
+            send_welcome_notification: true,
+            file_upload_settings: ::Decidim::OrganizationSettings.default(:upload)
+        )
+
+        ::Decidim::System::CreateDefaultPages.call(organization)
+        ::Decidim::System::PopulateHelp.call(organization)
+        ::Decidim::System::CreateDefaultContentBlocks.call(organization)
+
+        # Create an admin user with the same system admin creds
+        organization = Decidim::Organization.first
+        ::Decidim::User.create!(
+            email: ENV.fetch("DECIDIM_SYSTEM_EMAIL"),
+            name: "Admin User",
+            nickname: "admin",
+            password: ENV.fetch("DECIDIM_SYSTEM_PASSWORD"),
+            password_confirmation:  ENV.fetch("DECIDIM_SYSTEM_PASSWORD"),
+            organization: organization,
+            confirmed_at: Time.current,
+            locale: organization.default_locale,
+            admin: true,
+            tos_agreement: true,
+            personal_url: "",
+            about: "",
+            accepted_tos_version: organization.tos_version,
+            admin_terms_accepted_at: Time.current
+        )
+    end
+EOF > check_install.rb
+bundle exec rails runner "load 'check_install.rb"

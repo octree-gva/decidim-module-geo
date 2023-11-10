@@ -18,7 +18,7 @@ module Decidim
       end
 
       def geo_config
-        Decidim::ContentBlock.where(manifest_name: 'geo_maps').take.settings
+        Decidim::Geo::GeoConfig.geo_config_default
       end
     end
   end

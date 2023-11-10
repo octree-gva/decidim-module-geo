@@ -82,11 +82,12 @@ async function createScopesDropdown(map) {
     onAdd(map) {
       this.menu = L.DomUtil.create("div", "decidimGeo__scopesDropdown");
       L.DomEvent.disableClickPropagation(this.menu);
+      L.DomEvent.disableScrollPropagation(this.menu);
       this.initMenuElements();
 
-      scopes.forEach(async geoScope => {
-        const G = new GeoScope({
-          geoScope,
+      scopes.forEach(async scope => {
+        const geoScope = new GeoScope({
+          geoScope: scope,
           map,
           menuElements: {
             heading: this.heading,
@@ -98,10 +99,9 @@ async function createScopesDropdown(map) {
             switchIsListOpened: this.switchIsListOpened.bind(this),
           },
         });
-        await G.init();
-
-        this.list.appendChild(G.menuItem);
-        this.scopes.push(G);
+        await geoScope.init();
+        this.menu.appendChild(geoScope.menuItem);
+        this.scopes.push(geoScope);
       });
 
       return this.menu;

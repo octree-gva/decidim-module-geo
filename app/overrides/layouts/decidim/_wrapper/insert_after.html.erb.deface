@@ -1,0 +1,2 @@
+<!-- insert_after '.show-for-medium > .navbar' -->
+<%= cell("decidim/geo/geo_collection_map", nil) %>
