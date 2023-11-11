@@ -5,11 +5,12 @@ const { default: GeoDatasourceNode } = require("../geoDatasourceNode");
 const polylabel = require("polylabel");
 
 export default class GeoScope {
-  constructor({ geoScope, map, menuElements, menuActions }) {
+  constructor({ geoScope, map, menuElements, menuActions, mapConfig }) {
     //Model
     this.data = geoScope;
     this.nodes = [];
     this.isActive = false;
+    this.mapConfig = mapConfig || {}
 
     //View
     this.map = map;
@@ -18,11 +19,6 @@ export default class GeoScope {
   }
 
   async select() {
-    console.log("select", {
-      data: this.data,
-      nodes: this.nodes,
-      centroid: this.centroid,
-    });
     this.isActive = true;
     this.menuActions.reset();
     this.menuActions.switchIsListOpened(true);
@@ -75,16 +71,17 @@ export default class GeoScope {
     });
     const nodesMarkers = [];
     response.nodes.map(node => {
-      if (node.coordinates) {
+      if (node?.coordinates?.latitude && node?.coordinates?.longitude) {
         const interactiveNode = new GeoDatasourceNode({
           node,
-          map
+          map: this.map,
+          mapConfig
         });
         interactiveNode.init();
         this.nodes.push(interactiveNode);
         nodesMarkers.push(interactiveNode.marker);
       } else {
-        console.log("Coordinates expected for ", node);
+        console.log("Coordinates not found for ", node);
       }
     });
     this.nodesLayer = L.layerGroup(nodesMarkers);

@@ -31,6 +31,9 @@ fr:
           zoom: Zoom
           lng: Longitude
           lat: Latitude 
+      scopes:
+        all: "All Scopes"
+
     components:
       geo:
         name: Geo

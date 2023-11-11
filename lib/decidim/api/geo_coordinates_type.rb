@@ -10,11 +10,11 @@ module Decidim
       field :longitude, GraphQL::Types::Float, "Longitude of this coordinate", null: true
 
       def latitude
-        object[0]
+        object[:latitude]
       end
 
       def longitude
-        object[1]
+        object[:longitude]
       end
 
     end

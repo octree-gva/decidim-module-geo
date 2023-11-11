@@ -3,7 +3,7 @@
 module Decidim
     module Geo
         class GeoCollectionMapCell < Decidim::ViewModel
-          #delegate :current_user, to: :controller
+          delegate :current_user, to: :controller
           include Decidim::SanitizeHelper
   
           def show
@@ -40,7 +40,8 @@ module Decidim
             end.select {|v| !v.nil?}
             {
               id: "Search",
-              filters: filters
+              filters: filters,
+              scopes: []
             }
           end
 
@@ -49,12 +50,22 @@ module Decidim
             when "decidim/assemblies/assemblies:index"
                 {
                     id: "Assemblies",
-                    filters: []
+                    filters: [],
+                    scopes: Decidim::Assembly.visible_for(
+                      current_user
+                    ).where(
+                      parent_id: nil
+                    ).map { |a| a.scopes.map{ |s| s.id} }.flatten.uniq
                 }
             when "decidim/participatory_processes/participatory_processes:index"
                 {
                     id: "Processes",
-                    filters: []
+                    filters: [],
+                    scopes: Decidim::ParticipatoryProcess.visible_for(
+                      current_user
+                    ).where(
+                      decidim_participatory_process_group_id: nil
+                    ).map { |a| a.scopes.map{ |s| s.id} }.flatten.uniq
                 }
             else
               {}

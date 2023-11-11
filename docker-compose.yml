@@ -2,7 +2,12 @@ version: '3'
 services:
   decidim-app:
     container_name: decidim-app
-    image: git.octree.ch:4567/decidim/decidim-module-geo/decidim-geo-0.26
+    build: 
+      dockerfile_inline: |
+        FROM git.octree.ch:4567/decidim/decidim-module-geo/decidim-geo-0.26
+        COPY ./.docker/config /home/decidim/app/config
+        COPY ./.docker/ecosystem.config.js /home/decidim/app/ecosystem.config.js
+        COPY ./.docker/11_check_installation /usr/local/share/docker-entrypoint.d/11_check_installation
     user: "root"
     environment:
       - RAILS_ENV=development
@@ -16,6 +21,9 @@ services:
       - RAILS_MAX_THREADS=2
       - RAILS_MIN_THREADS=1
     depends_on:
+      pg:
+        condition: service_healthy
+    links:
       - pg
     links:
       - pg
@@ -45,6 +53,10 @@ services:
       - private
     ports:
       - 5432:5432
+    healthcheck:
+      test: pg_isready -U decidim -h 127.0.0.1
+      interval: 5s
+
 volumes:
   bundle: {}
   migration: {}

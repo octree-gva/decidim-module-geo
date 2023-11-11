@@ -4,17 +4,28 @@ import "src/decidim/map/icon"
 const { initMap, createScopesMenu, createGeoDatasourceLayer } = require("./ui");
 const { CONFIG } = require("./constants");
 
-async function main() {
-  const map = await initMap(CONFIG);
-
-  if (CONFIG.id === "HomePage") {
-    const scopesMenu = await createScopesMenu(map);
-  } else {
+async function main() {   
+  let map = undefined;
+  try{
+    map = await initMap(CONFIG);
     const geoDatasourceLayer = await createGeoDatasourceLayer({
-      filters: CONFIG.filters,
+      mapConfig: CONFIG,
+      map
     });
-    geoDatasourceLayer.addTo(map);
+      const scopesMenu = await createScopesMenu(map, CONFIG);
+
+      geoDatasourceLayer.addTo(map);
+  }catch(e) {
+    console.error(e);
+    // If there is anything that happens, 
+    // we don't want to see the map.
+    if(map?.remove){
+      map.off()
+      map.remove();
+    }
+    document.getElementById(CONFIG.mapID)?.remove();
   }
+  
 }
 
 main();

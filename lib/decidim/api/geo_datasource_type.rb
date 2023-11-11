@@ -60,7 +60,7 @@ module Decidim
       end
 
       def coordinates
-        [latitude, longitude] if has_coordinates?
+        {latitude: latitude, longitude: longitude} if has_coordinates?
       end
 
       def start_time

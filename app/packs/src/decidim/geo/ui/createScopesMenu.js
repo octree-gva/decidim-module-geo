@@ -1,4 +1,5 @@
 import GeoScope from "../models/geoScope";
+import i18n from "./i18n";
 
 const { getGeoScopes } = require("../api");
 
@@ -7,8 +8,10 @@ const createClasses = (classname, modifiers) =>
     " "
   );
 
-async function createScopesDropdown(map) {
-  const scopes = await getGeoScopes();
+async function createScopesDropdown(map, config) {
+  const {scopes: highlightedScopes = []} = config
+  if(highlightedScopes) return null; // there is no switch to do
+  const scopes = await getGeoScopes({variables: {id: highlightedScopes}});
 
   const CustomLayerControl = L.Control.extend({
     options: {
@@ -18,7 +21,7 @@ async function createScopesDropdown(map) {
 
     //Model
     isListOpened: false,
-    scopes: [],
+    scopes: scopes,
 
     //View
     menu: null,
@@ -64,8 +67,8 @@ async function createScopesDropdown(map) {
         this.heading
       );
 
-      this.title.textContent += "All scopes";
-      this.title.onclick = event => {
+      this.title.textContent += i18n["scopes.all"];
+      this.title.onclick = () => {
         this.switchIsListOpened(!this.isListOpened);
       };
 
@@ -88,6 +91,7 @@ async function createScopesDropdown(map) {
       scopes.forEach(async scope => {
         const geoScope = new GeoScope({
           geoScope: scope,
+          mapConfig: config,
           map,
           menuElements: {
             heading: this.heading,

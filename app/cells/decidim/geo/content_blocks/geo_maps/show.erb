@@ -11,12 +11,23 @@
 </style>
 
 <script type="text/javascript">
-  Decidim.config.config.messages.geo = <%= i18n_type %>
+<%
+supported_models = [
+  Decidim::Meetings::Meeting, 
+  Decidim::Proposals::Proposal, 
+  Decidim::ParticipatoryProcess, 
+  Decidim::Assembly
+]
+geo_i18n = Hash.new(supported_models.map { |klass| [klass.name, klass.model_name.human] })
+geo_i18n = {
+  **geo_i18n,
+  "scopes.all":  t('decidim.geo.scopes.all')
+}
+%>
+  Decidim.config.config.messages.geo = <%= geo_i18n.to_json %>
 </script>
 
-<% unless is_searches? %> 
-  <%= insert_map %>
-<% end %>
+<%= insert_map %>
 
 <%= javascript_pack_tag "decidim_geo" %>
 

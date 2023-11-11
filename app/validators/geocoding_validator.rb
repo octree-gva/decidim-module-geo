@@ -5,7 +5,7 @@
 class GeocodingValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
 
-    record.respond_to?(:component) ? component = record.component : component = record
+    component = record.respond_to?(:component) ? record.component : record
     
     if Decidim::Map.available?(:geocoding)
       geocoder = geocoder_for(component.organization)

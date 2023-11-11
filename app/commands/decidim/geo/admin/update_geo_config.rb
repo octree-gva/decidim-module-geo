@@ -31,12 +31,7 @@ module Decidim
         attr_reader :form
 
         def update_geo_config
-          Decidim.traceability.update!(
-            @geo_config,
-            form.current_user,
-            attributes
-          )
-          @geo_config.save!
+          @geo_config.update(attributes)
         end
 
         def create_geo_config

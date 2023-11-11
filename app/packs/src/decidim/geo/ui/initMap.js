@@ -1,11 +1,8 @@
-const { getGeoConfig } = require("../api");
-
 const initMap = async config => {
   const {
     mapID,
     map_config: { lat, lng, zoom, tile_layer },
   } = config;
-
   const map = L.map(mapID, {
     center: [lat, lng],
     zoom,

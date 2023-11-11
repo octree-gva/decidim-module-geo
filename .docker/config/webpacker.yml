@@ -20,12 +20,11 @@ development:
     https: false
     port: 3035
     public: 127.0.0.1:3035
-    host: 127.0.0.1
-    hmr: true
-    hot: "only"
-    live_reload: false
+    host: 0.0.0.0
+    hmr: false
+    live_reload: true
     inline: true
-    compress: true
+    compress: false
     allowed_hosts: "all"
     use_local_ip: false
     disable_host_check: true
@@ -41,7 +40,7 @@ development:
       'Access-Control-Allow-Origin': '*'
     static:
       watch:
-        ignored: '**/node_modules/**'
+        ignored: '**/node_modules/**,**/app/packs/**,**/tmp/**'
 
 test:
   <<: *default
