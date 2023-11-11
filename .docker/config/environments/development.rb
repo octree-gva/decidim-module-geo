@@ -7,6 +7,8 @@ Rails.application.configure do
     config.cache_classes = false
     
     config.hosts << ENV.fetch("NGROK_HOST", "") if ENV.fetch("NGROK_HOST", "").present?
+    config.web_console.permissions = '0.0.0.0/0'
+
     # Do not eager load code on boot.
     config.eager_load = false
   

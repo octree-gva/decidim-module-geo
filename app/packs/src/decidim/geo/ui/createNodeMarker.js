@@ -5,8 +5,8 @@ const createNodeMarker = node => {
   const shortDescription = node.shortDescription?.translation;
   const description = node.description.translation;
   const location = [node.coordinates.latitude, node.coordinates.longitude];
-
-  return createCustomMarker(location).bindPopup(
+  const customNodeMarker = createCustomMarker(location)
+  customNodeMarker.bindPopup(
     `<div class="decidimGeo__popup__container">
     <div class="decidimGeo__popup__content">
       <div class="card__header">
@@ -25,6 +25,7 @@ const createNodeMarker = node => {
   </div>
 </div>`
   );
+  return customNodeMarker
 };
 
 export default createNodeMarker;

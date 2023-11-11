@@ -62,7 +62,7 @@ And then execute:
 
 ```bash
 bundle
-bundle exec rails decidim-geo:install:migrations
+bundle exec rails decidim_geo:install:migrations
 bundle exec rails db:migrate
 
 ```

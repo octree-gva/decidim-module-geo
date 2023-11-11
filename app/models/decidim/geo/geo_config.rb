@@ -13,7 +13,7 @@ module Decidim
         Decidim::Geo::GeoConfig
           .first_or_create(latitude: 0, 
                            longitude: 0,
-                           zoom: 3,
+                           zoom: 13,
                            tile: tile_layer_default)
       end
 
