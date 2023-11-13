@@ -92,7 +92,6 @@ module Decidim
       def resource_type_datasource(resource_type_filter, locale)
         resource_type = resource_type_filter.resource_type
         resource_id = resource_type_filter.resource_id
-        
         search_resources(type: resource_type, id: resource_id, locale: locale)
       end
 
@@ -146,7 +145,7 @@ module Decidim
             scope_ids: scope_ids, 
             space_state: space_state, 
             locale: locale,
-            spaces: spaces
+            spaces: spaces  
             ).select("resource_id").pluck(:resource_id)
           klass_name.constantize.where(id: result_ids).select { |result_data| has_address?(result_data) }
         end
