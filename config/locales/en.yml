@@ -52,6 +52,7 @@ en:
             actions: Actions
           form:
             attachment_legend: Upload shapefile compacted as a zip file
+            attachment_format: Shapefile has to be in WGS84 Datum
             attachment_max_size: Max size - 10 MB
       content_blocks:
         name: Geo Maps

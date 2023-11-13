@@ -85,7 +85,7 @@ module Decidim
         participatory_space(assembly_filter.assembly_id, Decidim::Assembly, locale)
       end
 
-      def process_datasource(process_filter)
+      def process_datasource(process_filter, locale)
         participatory_space(process_filter.process_id, Decidim::ParticipatoryProcess, locale)
       end
 
@@ -96,16 +96,15 @@ module Decidim
       end
 
       def process_group_datasource(process_group_filter, locale)
+
         data = []
 
-        process_group = Decidim::ParticipatoryProcessGroup.find(process_group_filter.process_group_id) 
-          rescue ActiveRecord::RecordNotFound
-            nil
+        process_group = Decidim::ParticipatoryProcessGroup.find(process_group_filter.process_group_id)
         
         if process_group.present?
           process_ids = process_group.participatory_processes.map { |process| process.id }
           process_ids.each do |process_id|
-            data.push(*participatory_space(process_id, Decidim::ParticipatoryProcess)) 
+            data.push(*participatory_space(process_id, Decidim::ParticipatoryProcess, locale)) 
           end
         end
 
