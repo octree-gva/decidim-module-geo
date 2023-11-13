@@ -140,6 +140,7 @@ module Decidim
         end
 
         def geocoding_enabled?
+          byebug
           Decidim::Map.available?(:geocoding)
         end
  

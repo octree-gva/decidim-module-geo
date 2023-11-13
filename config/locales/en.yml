@@ -58,7 +58,9 @@ en:
         fields:
           zoom: Zoom
           lng: Longitude
-          lat: Latitude 
+          lat: Latitude
+      scopes:
+        all: "All Scopes"
     components:
       geo:
         name: Geo
