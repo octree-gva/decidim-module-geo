@@ -4,7 +4,14 @@ module Decidim
     module QueryExtension
 
       def self.included(type)
-        def supported_geo_components; ["Decidim::Meetings::Meeting", "Decidim::Proposals::Proposal"] end
+        def supported_geo_components 
+          [ 
+            "Decidim::Meetings::Meeting", 
+            "Decidim::Proposals::Proposal", 
+            "Decidim::Assembly",
+            "Decidim::ParticipatoryProcess"
+          ].freeze 
+        end
 
         type.field :geo_shapefiles, [Decidim::Geo::GeoShapefileType], description: "Return's information about the shapefiles", null: true do
           argument :title, [String], required: false
@@ -156,6 +163,11 @@ module Decidim
         resource.respond_to?(:address) && resource.address.present?
       end
 
+      def has_geo_scope?(resource)
+        if resource.respond_to?(:scope)
+          Decidim::Geo::Shapedata.exists?(decidim_scopes_id: resource.scope.id) if resource.scope.present?
+        end
+      end
 
       def filtered_query_for(class_name: nil, id: nil, term: nil, scope_ids: nil, space_state: nil, locale: nil, spaces: nil)
         query = {organization: organization,
