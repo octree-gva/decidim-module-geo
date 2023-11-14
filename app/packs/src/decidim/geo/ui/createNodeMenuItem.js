@@ -1,4 +1,4 @@
-import i18n from "./i18n"
+import i18n from "./i18nGeoType"
 
 const createNodeMenuItem = ({ node, onClick }) => {
   const listCard = L.DomUtil.create(
@@ -45,7 +45,6 @@ const createNodeMenuItem = ({ node, onClick }) => {
     infoDescription.textContent +=
       node.shortDescription.translation.replace(/<[^>]+>/g, "");
   }
-
   return listCard;
 };
 
