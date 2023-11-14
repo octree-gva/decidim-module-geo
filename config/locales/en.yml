@@ -6,13 +6,17 @@ en:
         assemblies:
           form:
             address: Address
-            address_help: If the Assembly has a fisical address, fill this field with its address. 
+            address_help: If the Assembly has a fisical address, fill this field with its address.
+      show:
+        address: Address
     participatory_processes:
       admin:
         participatory_processes:
           form:
             geocoding: Address
             address_help: If the Process has a fisical address, fill this field with its address.
+      show:
+        address: Address
     geo: 
       admin:
         geo_configs: 
