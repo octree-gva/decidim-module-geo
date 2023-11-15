@@ -85,7 +85,7 @@ task :prepare_dev do
       "port" => ENV.fetch("DATABASE_PORT", "5432").to_i,
       "username" => ENV.fetch("DATABASE_USERNAME", "decidim"),
       "password" => ENV.fetch("DATABASE_PASSWORD", "insecure-password"),
-      "database" => "#{base_app_name}_#{Decidim.version}_development",
+      "database" => "#{base_app_name}_development",
     }
   }
   config_file = File.expand_path("development_app/config/database.yml", __dir__)
@@ -102,7 +102,7 @@ task :development_app do
     generate_decidim_app(
       "development_app",
       "--app_name",
-      "#{base_app_name}_#{Decidim.version}",
+      "#{base_app_name}",
       "recreate_db",
       "--path",
       "..",
