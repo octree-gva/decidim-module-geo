@@ -10,6 +10,10 @@
   }  
 </style>
 
+<%= insert_map %>
+
+<%= javascript_pack_tag "decidim_geo" %>
+
 <script type="text/javascript">
 <%
 supported_models = [
@@ -24,10 +28,7 @@ geo_i18n = {
   "scopes.all":  t('decidim.geo.scopes.all')
 }
 %>
-  Decidim.config.config.messages.geo = <%= geo_i18n.to_json %>
+  console.log("geo_maps")
+  console.log(window.Decidim)
+  window.Decidim.config.config.messages.geo = <%= geo_i18n.to_json %>
 </script>
-
-<%= insert_map %>
-
-<%= javascript_pack_tag "decidim_geo" %>
-

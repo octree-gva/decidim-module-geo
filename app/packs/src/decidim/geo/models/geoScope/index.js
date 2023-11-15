@@ -5,7 +5,7 @@ const { default: GeoDatasourceNode } = require("../geoDatasourceNode");
 const polylabel = require("polylabel");
 
 export default class GeoScope {
-  constructor({ geoScope, map, menuElements, menuActions, mapConfig }) {
+  constructor({ geoScope, mapConfig, map, menuElements, menuActions }) {
     //Model
     this.data = geoScope;
     this.nodes = [];

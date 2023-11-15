@@ -6,16 +6,19 @@ const { CONFIG } = require("./constants");
 
 async function main() {   
   let map = undefined;
-  try{
+  try {
     map = await initMap(CONFIG);
     const geoDatasourceLayer = await createGeoDatasourceLayer({
       mapConfig: CONFIG,
       map
     });
-      const scopesMenu = await createScopesMenu(map, CONFIG);
+    
+    const scopesMenu = await createScopesMenu(map, CONFIG);
+    console.log('scopesMenu')
+    console.log(scopesMenu)
 
-      geoDatasourceLayer.addTo(map);
-  }catch(e) {
+    geoDatasourceLayer.addTo(map);
+  } catch(e) {
     console.error(e);
     // If there is anything that happens, 
     // we don't want to see the map.

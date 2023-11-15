@@ -1,4 +1,4 @@
-import i18n from "./i18nGeoType"
+import i18n from "./i18n"
 
 const createNodeMenuItem = ({ node, onClick }) => {
   const listCard = L.DomUtil.create(
