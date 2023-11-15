@@ -30,7 +30,7 @@ export default class GeoDatasourceNode {
       const onMarkerClick = this.select.bind(this);
       const onPopupClosed = this.unSelect.bind(this);
       
-      this.marker = createNodeMarker(this.data);
+      this.marker = createNodeMarker(this.data, this.mapConfig);
       this.marker.on("click", onMarkerClick);
       this.marker.getPopup().on('remove', onPopupClosed)
       this.menuItem = createNodeMenuItem({

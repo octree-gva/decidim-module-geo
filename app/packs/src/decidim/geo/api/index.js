@@ -9,6 +9,7 @@ const makeQuery =
     const variables = { ...(params.variables || {}), locale: CONFIG.locale };
     const queryParams = { ...params, variables };
     const response = await getDecidimData(queries[queryName], queryParams);
+    console.log(queries[queryName])
     return response.data[queryName];
   };
 

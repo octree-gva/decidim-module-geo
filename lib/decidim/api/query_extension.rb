@@ -4,7 +4,14 @@ module Decidim
     module QueryExtension
 
       def self.included(type)
-        def supported_geo_components; ["Decidim::Meetings::Meeting", "Decidim::Proposals::Proposal"] end
+        def supported_geo_components 
+          [ 
+            "Decidim::Meetings::Meeting", 
+            "Decidim::Proposals::Proposal", 
+            "Decidim::Assembly",
+            "Decidim::ParticipatoryProcess"
+          ].freeze 
+        end
 
         type.field :geo_shapefiles, [Decidim::Geo::GeoShapefileType], description: "Return's information about the shapefiles", null: true do
           argument :title, [String], required: false
@@ -85,7 +92,7 @@ module Decidim
         participatory_space(assembly_filter.assembly_id, Decidim::Assembly, locale)
       end
 
-      def process_datasource(process_filter)
+      def process_datasource(process_filter, locale)
         participatory_space(process_filter.process_id, Decidim::ParticipatoryProcess, locale)
       end
 
@@ -96,16 +103,15 @@ module Decidim
       end
 
       def process_group_datasource(process_group_filter, locale)
+
         data = []
 
-        process_group = Decidim::ParticipatoryProcessGroup.find(process_group_filter.process_group_id) 
-          rescue ActiveRecord::RecordNotFound
-            nil
+        process_group = Decidim::ParticipatoryProcessGroup.find(process_group_filter.process_group_id)
         
         if process_group.present?
           process_ids = process_group.participatory_processes.map { |process| process.id }
           process_ids.each do |process_id|
-            data.push(*participatory_space(process_id, Decidim::ParticipatoryProcess)) 
+            data.push(*participatory_space(process_id, Decidim::ParticipatoryProcess, locale)) 
           end
         end
 
@@ -157,6 +163,11 @@ module Decidim
         resource.respond_to?(:address) && resource.address.present?
       end
 
+      def has_geo_scope?(resource)
+        if resource.respond_to?(:scope)
+          Decidim::Geo::Shapedata.exists?(decidim_scopes_id: resource.scope.id) if resource.scope.present?
+        end
+      end
 
       def filtered_query_for(class_name: nil, id: nil, term: nil, scope_ids: nil, space_state: nil, locale: nil, spaces: nil)
         query = {organization: organization,

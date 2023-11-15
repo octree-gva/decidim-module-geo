@@ -12,7 +12,6 @@ class GeocodingValidator < ActiveModel::EachValidator
       coordinates = geocoder.coordinates(value)
 
       if coordinates.present?
-        byebug
         record.latitude = coordinates.first
         record.longitude = coordinates.last
       else

@@ -9,9 +9,14 @@ const createClasses = (classname, modifiers) =>
   );
 
 async function createScopesDropdown(map, config) {
-  const {scopes: highlightedScopes = []} = config
-  if(highlightedScopes) return null; // there is no switch to do
-  const scopes = await getGeoScopes({variables: {id: highlightedScopes}});
+  console.log('createScopesDropdown');
+  console.log(config);
+  //const {scopes: highlighted_scopes = []} = config
+  console.log(config.highlighted_scopes);
+  if (!config.highlighted_scopes) return null; // there is no switch to do
+  const scopes = await getGeoScopes({variables: {id: config.highlighted_scopes}});
+  console.log('scopes');
+  console.log(scopes);
 
   const CustomLayerControl = L.Control.extend({
     options: {
@@ -104,6 +109,8 @@ async function createScopesDropdown(map, config) {
           },
         });
         await geoScope.init();
+        console.log('geoScope')
+        console.log(geoScope)
         this.menu.appendChild(geoScope.menuItem);
         this.scopes.push(geoScope);
       });

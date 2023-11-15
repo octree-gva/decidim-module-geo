@@ -18,14 +18,15 @@ module Decidim
             config = {
               id: "#{id}", 
               locale: current_locale,
+              component: controller.controller_name,
               selected_component: current_component || nil,
               filters: @options[:filters] || [],
               highlighted_scopes: @options[:scopes] || [],
               map_config: {
-                lat: geo_config_default.latitude,
-                lng: geo_config_default.longitude,
-                tile_layer: geo_config_default.tile,
-                zoom: geo_config_default.zoom
+                lat: geo_config[:latitude],
+                lng: geo_config[:longitude],
+                tile_layer: geo_config[:tile],
+                zoom: geo_config[:zoom]
               }
             }.with_indifferent_access
 
@@ -54,6 +55,15 @@ module Decidim
           def current_component?
             request.env["decidim.current_component"].present?
           end  
+
+          def geo_config
+            { 
+              latitude: model.try(:latitude).nil? ? geo_config_default.latitude : model.latitude, 
+              longitude: model.try(:longitude).nil? ? geo_config_default.longitude: model.longitude,
+              tile: Decidim::Geo::GeoConfig.geo_config_default.tile,
+              zoom: Decidim::Geo::GeoConfig.geo_config_default.zoom
+            }.to_h 
+          end
 
           def geo_config_default
             Decidim::Geo::GeoConfig.geo_config_default

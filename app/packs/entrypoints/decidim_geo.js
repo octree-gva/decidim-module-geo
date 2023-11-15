@@ -1,1 +1,1 @@
-import  "src/decidim/geo/index.js";
+import "src/decidim/geo/index.js";
