@@ -1,12 +1,11 @@
 
-FROM hfroger/decidim:0.26.8-dev as bundler
+FROM hfroger/decidim:0.27-dev as bundler
 COPY . /home/decidim/decidim_module_geo
 RUN cd /home/decidim/app \
-    && bundle config set --global path "vendor" \
-    && bundle config set --global without "" \
-    && bundle config --global build.nokogiri --use-system-libraries \
-    && bundle config --global build.charlock_holmes --with-icu-dir=/usr/include \
-    && bundle config --global path "$BUNDLE_PATH" \
+    && bundle config set path "vendor" \
+    && bundle config set without "" \
+    && bundle config build.nokogiri --use-system-libraries \
+    && bundle config build.charlock_holmes --with-icu-dir=/usr/include \
     # Remove spring from deps, that can have some issues with rgeo
     && echo "$(cat Gemfile | awk '!/spring/')" > Gemfile \
     # Add decidim-geo gem with a local path (bounded as volume)
@@ -14,7 +13,7 @@ RUN cd /home/decidim/app \
     && echo "gem \"deface\",  \">= 1.8.1\"" >> Gemfile \
     && bundle
     
-FROM hfroger/decidim:0.26.8-dev
+FROM hfroger/decidim:0.27-dev
 ENV NODE_ENV=development \
     RAILS_ENV=development \
     BUNDLE_WITHOUT=""
@@ -26,11 +25,10 @@ COPY ./.docker/config /home/decidim/app/config
 COPY ./.docker/ecosystem.config.js /home/decidim/app/ecosystem.config.js
 COPY ./.docker/ecosystem.config.js /usr/local/share/docker-entrypoint.d/ecosystem.config.js
 
-RUN bundle config set --global path "vendor" \
-    && bundle config set --global without "" \
-    && bundle config --global build.nokogiri --use-system-libraries \
-    && bundle config --global build.charlock_holmes --with-icu-dir=/usr/include \
-    && bundle config --global path "$BUNDLE_PATH"  \
+RUN bundle config set path "vendor" \
+    && bundle config set without "" \
+    && bundle config build.nokogiri --use-system-libraries \
+    && bundle config build.charlock_holmes --with-icu-dir=/usr/include \
     && apt-get upgrade -yq \
     && apt-get update -yq \
     && apt-get install -yq libgeos-dev \
@@ -50,4 +48,4 @@ COPY --from=bundler /home/decidim/app/vendor /home/decidim/app/vendor
 
 EXPOSE 3000
 EXPOSE 3035
-CMD ["pm2-runtime", "start", "ecosystem.config.js"]
+CMD ["sleep", "infinity"]

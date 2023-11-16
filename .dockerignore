@@ -23,6 +23,7 @@ development_app
 
 # node_modules
 node_modules
+vendor
 /.dump
 Dockerfile
 docker-compose.yml
