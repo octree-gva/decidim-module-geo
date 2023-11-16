@@ -19,6 +19,7 @@ export default class GeoScope {
   }
 
   async select() {
+    console.log('select')
     this.isActive = true;
     this.menuActions.reset();
     this.menuActions.switchIsListOpened(true);
@@ -57,11 +58,12 @@ export default class GeoScope {
     this.nodesLayer?.setStyle({ fillColor: "#2952A370", color: "#2952A3" });
   }
 
-  unSelect() {
+  async unSelect() {
+    console.log('unSelect')
     this.isActive = false;
-    this.nodes.forEach(node => {
-      this.map.removeLayer(this.nodesLayer);
-    });
+    //this.data.forEach(data => {
+      //this.map.removeLayer(this.nodesLayer);
+    //});
     this.layer.setStyle({ fillColor: "#cccccc", color: "#999999" });
   }
 
@@ -75,7 +77,7 @@ export default class GeoScope {
         const interactiveNode = new GeoDatasourceNode({
           node,
           map: this.map,
-          mapConfig
+          mapConfig: this.mapConfig
         });
         interactiveNode.init();
         this.nodes.push(interactiveNode);
@@ -89,20 +91,23 @@ export default class GeoScope {
 
   async init() {
     await this.loadGeoDatasource();
+
+    const onLayerClick = this.select.bind(this);
+    //const onPopupClosed = this.unSelect.bind(this);
+
     if (this.data.geom?.type === "MultiPolygon") {
       this.centroid = polylabel(this.data.geom.coordinates[0], 1.0);
-    }
-    if (this.nodes.length > 0) {
-      this.layer = createGeoScopeLayer({
-        geoScope: this.data,
-        map: this.map,
-        centroid: this.centroid,
-        onClick: this.select.bind(this),
-      });
-      this.menuItem = createGeoScopeMenuItem({
-        label: this.data.name.translation,
-        onClick: this.select.bind(this),
-      });
-    }
+    }   
+    this.layer = createGeoScopeLayer({
+      geoScope: this.data,
+      map: this.map,
+      centroid: this.centroid,
+      onClick: onLayerClick,
+    });
+    this.layer.bringToBack();
+    this.menuItem = createGeoScopeMenuItem({
+      label: this.data.name.translation,
+      onClick: this.select.bind(this),
+    });
   }
 }

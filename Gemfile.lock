@@ -517,7 +517,7 @@ GEM
     msgpack (1.7.2)
     multi_xml (0.6.0)
     mustache (1.1.1)
-    net-imap (0.4.4)
+    net-imap (0.4.5)
       date
       net-protocol
     net-pop (0.1.2)
@@ -746,7 +746,7 @@ GEM
       version_gem (~> 1.1, >= 1.1.1)
     social-share-button (1.2.4)
       coffee-rails
-    spring (4.1.1)
+    spring (4.1.2)
     spring-watcher-listen (2.1.0)
       listen (>= 2.7, < 4.0)
       spring (>= 4)

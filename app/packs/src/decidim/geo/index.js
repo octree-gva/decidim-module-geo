@@ -8,16 +8,19 @@ async function main() {
   let map = undefined;
   try {
     map = await initMap(CONFIG);
+
+    // inserts the shapes from scopes associated with shapedata
+    // as layers
+    const scopesMenu = await createScopesMenu(map, CONFIG);
+
+    // inserts the resources with lat and log like,
+    // meetings, proposals, processes and assemblies as circleMarkers
     const geoDatasourceLayer = await createGeoDatasourceLayer({
       mapConfig: CONFIG,
       map
     });
-    
-    const scopesMenu = await createScopesMenu(map, CONFIG);
-    console.log('scopesMenu')
-    console.log(scopesMenu)
+    if (geoDatasourceLayer) { geoDatasourceLayer.addTo(map) }
 
-    geoDatasourceLayer.addTo(map);
   } catch(e) {
     console.error(e);
     // If there is anything that happens, 

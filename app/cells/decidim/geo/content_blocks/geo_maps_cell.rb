@@ -39,8 +39,23 @@ module Decidim
                 "decidimgeo__map", 
                 "decidimgeo__map--#{id.underscore}"
               ],
-              "data-config" => config.to_json
+              "data-config" => config.to_json,
+              "geo_i18n" => geo_i18n.to_json
             )
+          end
+
+          def geo_i18n
+            supported_models = [
+              Decidim::Meetings::Meeting, 
+              Decidim::Proposals::Proposal, 
+              Decidim::ParticipatoryProcess, 
+              Decidim::Assembly
+            ]
+            geo_i18n = supported_models.map { |klass| [klass.name, klass.model_name.human] }.to_h
+            geo_i18n = {
+              **geo_i18n,
+              "scopes.all":  t('decidim.geo.scopes.all')
+            }
           end
 
 
