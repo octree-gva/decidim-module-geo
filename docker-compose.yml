@@ -7,7 +7,7 @@ services:
         FROM git.octree.ch:4567/decidim/decidim-module-geo/decidim-geo-0.26
         COPY ./.docker/config /home/decidim/app/config
         COPY ./.docker/ecosystem.config.js /home/decidim/app/ecosystem.config.js
-        COPY ./.docker/11_check_installation /usr/local/share/docker-entrypoint.d/11_check_installation
+        COPY ./.docker/36_check_installation /usr/local/share/docker-entrypoint.d/36_check_installation
     user: "root"
     environment:
       - RAILS_ENV=development
@@ -23,8 +23,6 @@ services:
     depends_on:
       pg:
         condition: service_healthy
-    links:
-      - pg
     links:
       - pg
     ports:
