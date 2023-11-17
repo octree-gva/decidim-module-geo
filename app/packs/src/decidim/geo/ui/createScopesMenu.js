@@ -35,17 +35,20 @@ async function createScopesDropdown(map, config) {
     //Controlers
     switchIsListOpened(value) {
       this.isListOpened = value;
+      console.log
+
+      console.log(this.list)
 
       if (this.isListOpened) {
         this.list.className = "decidimGeo__scopesDropdown__list";
         this.title.className = "decidimGeo__scopesDropdown__title";
       } else {
-        this.list.className = createClasses(
-          "decidimGeo__scopesDropdown__list",
-          ["closed"]
-        );
         this.title.className = createClasses(
           "decidimGeo__scopesDropdown__title",
+          ["closed"]
+        );
+        this.list.className = createClasses(
+          "decidimGeo__scopesDropdown__list",
           ["closed"]
         );
       }
@@ -83,6 +86,7 @@ async function createScopesDropdown(map, config) {
         ),
         this.menu
       );
+      console.log(this.list)
     },
 
     onAdd(map) {
@@ -91,7 +95,10 @@ async function createScopesDropdown(map, config) {
       L.DomEvent.disableScrollPropagation(this.menu);
       this.initMenuElements();
 
-      scopes.forEach(async scope => {
+      console.log('onAdd')
+      console.log(this.scopes)
+      
+      this.scopes.forEach(async scope => {
         const geoScope = new GeoScope({
           geoScope: scope,
           mapConfig: config,
@@ -107,7 +114,7 @@ async function createScopesDropdown(map, config) {
           },
         });
         await geoScope.init();
-        this.menu.appendChild(geoScope.menuItem);
+        this.list.appendChild(geoScope.menuItem);
         this.scopes.push(geoScope);
       });
 
@@ -118,15 +125,19 @@ async function createScopesDropdown(map, config) {
       L.DomUtil.remove(this.heading);
       L.DomUtil.remove(this.list);
       this.initMenuElements();
-      this.scopes.forEach(geoScope => {
+
+      console.log('reset')
+      const geoScopes = Object.values(this.scopes).filter(valor => valor instanceof GeoScope);
+      geoScopes.forEach (geoScope => {
+        console.log(geoScope)
         geoScope.menuElements = {
           heading: this.heading,
           title: this.title,
           list: this.list,
-        };
-        //geoScope.unSelect();
-        //this.list.appendChild(geoScope.menuItem);
-      });
+        };  
+        this.list.appendChild(geoScope.menuItem);
+        this.scopes.push(geoScope);
+      });      
     },
   });
 

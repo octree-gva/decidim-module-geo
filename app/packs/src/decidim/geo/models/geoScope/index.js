@@ -18,10 +18,10 @@ export default class GeoScope {
     this.menuActions = menuActions;
   }
 
-  async select() {
+  select() {
     console.log('select')
     this.isActive = true;
-    this.menuActions.reset();
+    //this.menuActions.reset();
     this.menuActions.switchIsListOpened(true);
 
     this.menuElements.title.textContent = this.data.name.translation;
@@ -54,16 +54,19 @@ export default class GeoScope {
     this.nodes.forEach(node => {
       this.menuElements.list.appendChild(node.menuItem);
     });
+    
     this.nodesLayer?.addTo(this.map);
-    this.nodesLayer?.setStyle({ fillColor: "#2952A370", color: "#2952A3" });
+    //this.nodesLayer?.setStyle({ fillColor: "#2952A370", color: "#2952A3" });
+    console.log(this.nodesLayer)
   }
 
-  async unSelect() {
+  unSelect() {
     console.log('unSelect')
     this.isActive = false;
-    //this.data.forEach(data => {
-      //this.map.removeLayer(this.nodesLayer);
-    //});
+    console.log(this.data)
+    this.data.forEach(data => {
+      this.map.removeLayer(this.nodesLayer);
+    });
     this.layer.setStyle({ fillColor: "#cccccc", color: "#999999" });
   }
 
@@ -93,7 +96,7 @@ export default class GeoScope {
     await this.loadGeoDatasource();
 
     const onLayerClick = this.select.bind(this);
-    //const onPopupClosed = this.unSelect.bind(this);
+    const onPopupClosed = this.unSelect.bind(this);
 
     if (this.data.geom?.type === "MultiPolygon") {
       this.centroid = polylabel(this.data.geom.coordinates[0], 1.0);

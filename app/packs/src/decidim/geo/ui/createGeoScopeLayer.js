@@ -1,6 +1,7 @@
 import { createCustomMarker } from ".";
 
 const createGeoScopeLayer = ({ geoScope, map, onClick, centroid }) => {
+  console.log(geoScope)
   const layer = L.geoJSON(geoScope.geom, {
     style: {
       fillColor: "#cccccc",
