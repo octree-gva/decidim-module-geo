@@ -10,9 +10,7 @@ const createClasses = (classname, modifiers) =>
 
 async function createScopesDropdown(map, config) {
   console.log('createScopesDropdown');
-  console.log(config);
   //const {scopes: highlighted_scopes = []} = config
-  console.log(config.highlighted_scopes);
   // if (!config.highlighted_scopes) return null; // there is no switch to do
   const scopes = await getGeoScopes({variables: {id: config.highlighted_scopes}});
 
@@ -35,10 +33,6 @@ async function createScopesDropdown(map, config) {
     //Controlers
     switchIsListOpened(value) {
       this.isListOpened = value;
-      console.log
-
-      console.log(this.list)
-
       if (this.isListOpened) {
         this.list.className = "decidimGeo__scopesDropdown__list";
         this.title.className = "decidimGeo__scopesDropdown__title";
@@ -86,7 +80,6 @@ async function createScopesDropdown(map, config) {
         ),
         this.menu
       );
-      console.log(this.list)
     },
 
     onAdd(map) {
@@ -95,9 +88,6 @@ async function createScopesDropdown(map, config) {
       L.DomEvent.disableScrollPropagation(this.menu);
       this.initMenuElements();
 
-      console.log('onAdd')
-      console.log(this.scopes)
-      
       this.scopes.forEach(async scope => {
         const geoScope = new GeoScope({
           geoScope: scope,
@@ -126,10 +116,8 @@ async function createScopesDropdown(map, config) {
       L.DomUtil.remove(this.list);
       this.initMenuElements();
 
-      console.log('reset')
       const geoScopes = Object.values(this.scopes).filter(valor => valor instanceof GeoScope);
       geoScopes.forEach (geoScope => {
-        console.log(geoScope)
         geoScope.menuElements = {
           heading: this.heading,
           title: this.title,

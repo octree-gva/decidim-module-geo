@@ -2,7 +2,6 @@ const { getGeoDatasource } = require("../api");
 const { default: GeoDatasourceNode } = require("../models/geoDatasourceNode");
 
 const createGeoDatasourceLayer = async ({ map, mapConfig}) => {
-  console.log("createGeoDatasourceLayer")
   const response = await getGeoDatasource({
     variables: { filters: mapConfig.filters, locale: mapConfig.locale },
   });

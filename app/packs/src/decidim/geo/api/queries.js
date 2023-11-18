@@ -11,6 +11,7 @@ export const geoDatasource = `
         id
         participatorySpaceId
         participatorySpaceType
+        componentId
         type
         title{
           translation(locale: $locale)

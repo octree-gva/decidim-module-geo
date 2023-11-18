@@ -8,18 +8,15 @@ export default class GeoDatasourceNode {
     this.mapConfig = mapConfig;
   }
 
-  persistMarkersColors() {
-    if (
-      (this.data.type === "Decidim::Meetings::Meeting" && this.mapConfig.component === 'meetings') ||
-      (this.data.type === "Decidim::Proposals::Proposal" && this.mapConfig.component === 'proposals')
-    ) {
+  componentMarkersColors() {
+    if (this.data.componentId == this.mapConfig.selected_component) {
       this.marker.setStyle({ fillColor: '#2952A370', color: '#2952A3' });
     } 
   }
 
   unSelect() {
     this.marker?.setStyle({ fillColor: "#000000", color: "#cccccc" });
-    this.persistMarkersColors()
+    this.componentMarkersColors()
   }
 
   select() {
@@ -43,7 +40,7 @@ export default class GeoDatasourceNode {
       this.marker = createNodeMarker(this.data);
       this.marker.on("click", onMarkerClick);
       this.marker.getPopup().on('remove', onPopupClosed)
-      this.persistMarkersColors()
+      this.componentMarkersColors()
       this.marker.bringToFront();
       this.menuItem = createNodeMenuItem({
         node: this.data,

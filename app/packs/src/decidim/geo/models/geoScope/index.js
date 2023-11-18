@@ -19,7 +19,6 @@ export default class GeoScope {
   }
 
   select() {
-    console.log('select')
     this.isActive = true;
     //this.menuActions.reset();
     this.menuActions.switchIsListOpened(true);
@@ -57,13 +56,10 @@ export default class GeoScope {
     
     this.nodesLayer?.addTo(this.map);
     //this.nodesLayer?.setStyle({ fillColor: "#2952A370", color: "#2952A3" });
-    console.log(this.nodesLayer)
   }
 
   unSelect() {
-    console.log('unSelect')
     this.isActive = false;
-    console.log(this.data)
     this.data.forEach(data => {
       this.map.removeLayer(this.nodesLayer);
     });
