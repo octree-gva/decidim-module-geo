@@ -4,7 +4,7 @@ const { default: GeoDatasourceNode } = require("../geoDatasourceNode");
 
 const polylabel = require("polylabel");
 
-let oldLayer = null;
+let previousLayer = null;
 
 export default class GeoScope {
   constructor({ geoScope, mapConfig, map, menuElements, menuActions }) {
@@ -27,15 +27,16 @@ export default class GeoScope {
     this.isActive = true;
     //this.menuActions.reset();
 
-    if (oldLayer) {
-      if (oldLayer !== this.layer) {
-        oldLayer.setStyle({fillColor: "#cccccc", color: "#999999"})
+    if (previousLayer) {
+      if (previousLayer !== this.layer) {
+        previousLayer.setStyle({fillColor: "#cccccc", color: "#999999"})
         this.menuItem = createGeoScopeMenuItem({
           label: this.data.name.translation,
           onClick: this.select.bind(this),
         });
-        this.menuActions.reset();
+        
       }
+      this.menuActions.reset();
     }
 
     this.menuActions.switchIsListOpened(true);
@@ -70,7 +71,7 @@ export default class GeoScope {
     this.nodes.forEach(node => {
       this.menuElements.list.appendChild(node.menuItem);
     });
-    oldLayer = this.layer
+    previousLayer = this.layer
     this.nodesLayer?.addTo(this.map);
     //this.nodesLayer?.setStyle({ fillColor: "#2952A370", color: "#2952A3" });
   }
