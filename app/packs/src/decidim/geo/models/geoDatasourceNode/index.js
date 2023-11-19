@@ -1,4 +1,4 @@
-const { createNodeMenuItem, createNodeMarker } = require("../../ui");
+const { createNodeMenuItem, createNodeMarker, createGeoScopeLayer } = require("../../ui");
 let previousSelected = undefined;
 export default class GeoDatasourceNode {
   constructor({ node, map, mapConfig }) {
@@ -11,6 +11,14 @@ export default class GeoDatasourceNode {
   componentMarkersColors() {
     if (this.data.componentId == this.mapConfig.selected_component) {
       this.marker.setStyle({ fillColor: '#2952A370', color: '#2952A3' });
+      this.map.eachLayer( layer =>{
+        if (layer.feature) {
+          if (layer.feature.geometry.properties.id === this.data.scope.id) {
+            layer.setStyle({ fillColor: "#2952A370", color: "#2952A3" }) 
+            this.map.panTo(layer.getCenter())
+          }
+        }
+      });
     } 
   }
 

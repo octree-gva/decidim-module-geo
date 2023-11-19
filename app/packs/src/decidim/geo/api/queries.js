@@ -26,6 +26,12 @@ export const geoDatasource = `
           latitude
           longitude
         }
+        scope {
+          id
+          name {
+            translation(locale: "en")
+          }
+        }
       }
     }
   }`;
