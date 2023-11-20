@@ -55,3 +55,36 @@ export function getGeoI18n() {
   console.log(geo_i18nHash);
   return { ...JSON.parse(geo_i18nHash), mapID: mapElement.id };
 }
+
+function paginateGraphQLObject(object, itemsPerPage, currentPage) {
+  if (!object || !object.data || !object.data.geoDatasource) {
+    console.log("Invalid GraphQL object.");
+    return;
+  }
+
+  const nodes = object.data.geoDatasource.nodes;
+  const totalNodes = nodes.length;
+
+  // Calculate start and end index for the current page
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+
+  // Extract nodes for the current page
+  const nodesForPage = nodes.slice(start, end);
+
+  // Check if there are more pages
+  const hasNextPage = end < totalNodes;
+
+  // Build the paginated response object
+  const paginatedObject = {
+    pageInfo: {
+      hasNextPage: hasNextPage,
+      hasPreviousPage: currentPage > 1,
+      startCursor: start.toString(),
+      endCursor: (end - 1).toString(),
+    },
+    nodes: nodesForPage,
+  };
+
+  return paginatedObject;
+}

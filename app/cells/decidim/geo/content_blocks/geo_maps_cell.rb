@@ -18,7 +18,7 @@ module Decidim
             config = {
               id: "#{id}", 
               locale: current_locale,
-              component: controller.controller_name,
+              space_id: space_id || nil,
               selected_component: current_component || nil,
               filters: @options[:filters] || [],
               highlighted_scopes: @options[:scopes] || [],
@@ -42,6 +42,10 @@ module Decidim
               "data-config" => config.to_json,
               "geo_i18n" => geo_i18n.to_json
             )
+          end
+
+          def space_id
+            @model.decidim_scope_id if @model.respond_to?(:decidim_scope_id)
           end
 
           def geo_i18n

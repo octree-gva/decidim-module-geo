@@ -22,6 +22,13 @@ export default class GeoScope {
     this.menuActions = menuActions;
   }
 
+  geoScopeLayerColors() {
+    if (this.data.id === this.mapConfig.space_id) {
+      this.layer.setStyle({ fillColor: '#2952A370', color: '#2952A3' });
+      this.map.panTo(this.layer.getCenter())
+    } 
+  }
+
   select() {
     this.isActive = true;
 
@@ -40,6 +47,8 @@ export default class GeoScope {
     this.menuActions.switchIsListOpened(true);
 
     this.menuElements.title.textContent = this.data.name.translation;
+
+    //reset
     const reset = L.DomUtil.create(
       "button",
       "decidimGeo__scopesDropdown__reset",
@@ -47,6 +56,24 @@ export default class GeoScope {
     );
     reset.textContent = "reset";
     reset.onclick = this.menuActions.reset;
+
+    // next
+    const next = L.DomUtil.create(
+      "button",
+      "decidimGeo__scopesDropdown__reset",
+      this.menuElements.heading
+    );
+    next.textContent = "next";
+    next.onclick = this.menuActions.next;
+
+    // prev
+    const prev = L.DomUtil.create(
+      "button",
+      "decidimGeo__scopesDropdown__reset",
+      this.menuElements.heading
+    );
+    prev.textContent = "prev";
+    prev.onclick = this.menuActions.prev;
 
     this.layer.setStyle({ fillColor: "#2952A370", color: "#2952A3" });
 
@@ -117,6 +144,7 @@ export default class GeoScope {
       onClick: onLayerClick,
     });
     this.layer.bringToBack();
+    this.geoScopeLayerColors();
     this.menuItem = createGeoScopeMenuItem({
       label: this.data.name.translation,
       onClick: this.select.bind(this),
