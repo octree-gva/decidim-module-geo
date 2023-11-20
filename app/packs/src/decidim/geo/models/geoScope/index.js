@@ -57,24 +57,6 @@ export default class GeoScope {
     reset.textContent = "reset";
     reset.onclick = this.menuActions.reset;
 
-    // next
-    const next = L.DomUtil.create(
-      "button",
-      "decidimGeo__scopesDropdown__reset",
-      this.menuElements.heading
-    );
-    next.textContent = "next";
-    next.onclick = this.menuActions.next;
-
-    // prev
-    const prev = L.DomUtil.create(
-      "button",
-      "decidimGeo__scopesDropdown__reset",
-      this.menuElements.heading
-    );
-    prev.textContent = "prev";
-    prev.onclick = this.menuActions.prev;
-
     this.layer.setStyle({ fillColor: "#2952A370", color: "#2952A3" });
 
     L.DomUtil.empty(this.menuElements.list);
