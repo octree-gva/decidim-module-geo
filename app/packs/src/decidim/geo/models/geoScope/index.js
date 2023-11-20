@@ -23,9 +23,7 @@ export default class GeoScope {
   }
 
   select() {
-    console.log('select')
     this.isActive = true;
-    //this.menuActions.reset();
 
     if (previousLayer) {
       if (previousLayer !== this.layer) {
@@ -68,12 +66,12 @@ export default class GeoScope {
     if (this.centroid) {
       this.map.panTo([this.centroid[1], this.centroid[0]]);
     }
+
     this.nodes.forEach(node => {
       this.menuElements.list.appendChild(node.menuItem);
     });
     previousLayer = this.layer
     this.nodesLayer?.addTo(this.map);
-    //this.nodesLayer?.setStyle({ fillColor: "#2952A370", color: "#2952A3" });
   }
 
   unSelect() {
@@ -90,18 +88,16 @@ export default class GeoScope {
     });
     const nodesMarkers = [];
     response.nodes.map(node => {
-      if (node?.coordinates?.latitude && node?.coordinates?.longitude) {
-        const interactiveNode = new GeoDatasourceNode({
-          node,
-          map: this.map,
-          mapConfig: this.mapConfig
-        });
-        interactiveNode.init();
-        this.nodes.push(interactiveNode);
+      const interactiveNode = new GeoDatasourceNode({
+        node,
+        map: this.map,
+        mapConfig: this.mapConfig
+      });
+      interactiveNode.init();
+      this.nodes.push(interactiveNode);
+      if (interactiveNode.marker) {
         nodesMarkers.push(interactiveNode.marker);
-      } else {
-        console.log("Coordinates not found for ", node);
-      }
+      } 
     });
     this.nodesLayer = L.layerGroup(nodesMarkers);
   }

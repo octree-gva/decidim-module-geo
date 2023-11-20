@@ -22,7 +22,7 @@ const createNodeMarker = (node) => {
           </div>
         </div>
       </div>
-    </div>`
+   </div>`
   );
   return customNodeMarker
 };

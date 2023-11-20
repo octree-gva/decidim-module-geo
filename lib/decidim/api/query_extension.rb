@@ -9,7 +9,8 @@ module Decidim
             "Decidim::Meetings::Meeting", 
             "Decidim::Proposals::Proposal", 
             "Decidim::Assembly",
-            "Decidim::ParticipatoryProcess"
+            "Decidim::ParticipatoryProcess",
+            "Decidim::Debates::Debate"
           ].freeze 
         end
 
@@ -153,7 +154,7 @@ module Decidim
             locale: locale,
             spaces: spaces  
             ).select("resource_id").pluck(:resource_id)
-          klass_name.constantize.where(id: result_ids).select { |result_data| has_address?(result_data) }
+          klass_name.constantize.where(id: result_ids).select { |result_data| has_address?(result_data) || has_geo_scope?(result_data)}
         end
       
         data

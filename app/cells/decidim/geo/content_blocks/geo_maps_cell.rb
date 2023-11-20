@@ -49,7 +49,8 @@ module Decidim
               Decidim::Meetings::Meeting, 
               Decidim::Proposals::Proposal, 
               Decidim::ParticipatoryProcess, 
-              Decidim::Assembly
+              Decidim::Assembly, 
+              Decidim::Debates::Debate              
             ]
             geo_i18n = supported_models.map { |klass| [klass.name, klass.model_name.human] }.to_h
             geo_i18n = {
