@@ -23,7 +23,7 @@ export default class GeoScope {
   }
 
   geoScopeLayerColors() {
-    if (this.data.id === this.mapConfig.space_id) {
+    if (this.data.id == this.mapConfig.space_id) {
       this.layer.setStyle({ fillColor: '#2952A370', color: '#2952A3' });
       this.map.panTo(this.layer.getCenter())
     } 
