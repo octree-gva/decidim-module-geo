@@ -102,7 +102,7 @@
 .decidimGeo__sidebar__list {
   min-width: 280px;
   height: auto;
-  max-height: 80vh;
+  max-height: 400px;
   border-top: #cccccc 1px solid;
   overflow: auto;
   list-style: none;
@@ -123,7 +123,7 @@
 .decidimGeo__scopesDropdown__listItem {
   @include decidimGeo__clickableText;
   display: block;
-  margin: 6px 8px;
+  margin: 8px;
   padding-left: 16px;
   padding-right: 16px;
 }
