@@ -164,6 +164,9 @@ async function createScopesDropdown(map, config) {
             controller.activeScope = scope;
             if(source === "marker")
               controller.toggleShow()
+            else
+              controller.isOpen = false;
+            
             controller.repaint();
             triggerEvent("selectScope", scope);
           },
