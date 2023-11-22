@@ -7,7 +7,7 @@ module Decidim
       graphql_name "ScopeFilter"
       description "A type used for filtering geo datasources by scope"
 
-      argument :scope_id, type: ID, description: "List results by scope_id", required: false
+      argument :scope_id, type: ID, description: "List results by scope_id", required: true
     end
   end
 end

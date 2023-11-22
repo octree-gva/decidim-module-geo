@@ -4,121 +4,128 @@ const { default: GeoDatasourceNode } = require("../geoDatasourceNode");
 
 const polylabel = require("polylabel");
 
-let previousLayer = null;
+let previousScope = null;
 
 export default class GeoScope {
-  constructor({ geoScope, mapConfig, map, menuElements, menuActions }) {
+  constructor({ geoScope, mapConfig, map, menuElements, selectScope, selectAllScopes }) {
     //Model
     this.data = geoScope;
+    this.loading = true;
     this.nodes = [];
-    this.isActive = false;
     this.mapConfig = mapConfig || {}
     this.oldLayer = null;
-
 
     //View
     this.map = map;
     this.menuElements = menuElements;
-    this.menuActions = menuActions;
+    this.selectScope = selectScope;
+    this.selectAllScopes = selectAllScopes;
+    this.nodesLayer = L.layerGroup()
   }
 
-  geoScopeLayerColors() {
-    if (this.data.id == this.mapConfig.space_id) {
-      this.layer.setStyle({ fillColor: '#2952A370', color: '#2952A3' });
-      this.map.panTo(this.layer.getCenter())
-    } 
+  get activeState() {
+    return { fillColor: '#2952A370', color: '#2952A3' }
   }
 
-  select() {
-    this.isActive = true;
+  isEmpty() {
+    return this.nodes.length === 0;
+  }
 
-    if (previousLayer) {
-      if (previousLayer !== this.layer) {
-        previousLayer.setStyle({fillColor: "#cccccc", color: "#999999"})
-        this.menuItem = createGeoScopeMenuItem({
-          label: this.data.name.translation,
-          onClick: this.select.bind(this),
-        });
-        
+  isLoading() {
+    return this.loading;
+  }
+
+  get staledState() {
+    return { fillColor: '#cccccc', color: '#999999' }
+  }
+
+  redefineResetBtn() {
+    this.menuElements.resetBtn.onclick = () => {
+      this.unSelect();
+      this.selectAllScopes()
+    };
+  }
+
+  select(source="marker") {
+    if(previousScope === this)
+    return;
+    // If the source of click is not the shape
+    // in the map, we do only a pan to. 
+    // This is a discorvery mode.
+    if(source === "marker"){
+      if (this.centroid) {
+        this.map.panTo([this.centroid[1], this.centroid[0]]);
       }
-      this.menuActions.reset();
+      return
     }
-
-    this.menuActions.switchIsListOpened(true);
-
-    this.menuElements.title.textContent = this.data.name.translation;
-
-    //reset
-    const reset = L.DomUtil.create(
-      "button",
-      "decidimGeo__scopesDropdown__reset",
-      this.menuElements.heading
-    );
-    reset.textContent = "reset";
-    reset.onclick = this.menuActions.reset;
-
-    this.layer.setStyle({ fillColor: "#2952A370", color: "#2952A3" });
-
-    L.DomUtil.empty(this.menuElements.list);
-    const loadingItem = L.DomUtil.create(
-      "div",
-      "decidimGeo__scopesDropdown__loading",
-      this.menuElements.list
-    );
-    loadingItem.textContent += "Loading";
-
-    L.DomUtil.empty(this.menuElements.list);
-    L.DomUtil.addClass(
-      this.menuElements.list,
-      "decidimGeo__scopesDropdown__list--card"
-    );
+    if(previousScope) previousScope.unSelect();
+    previousScope = this
+    this.selectScope(this, source);
+    this.redefineResetBtn()
     if (this.centroid) {
       this.map.panTo([this.centroid[1], this.centroid[0]]);
     }
+    this.repaint();
+  }
 
-    this.nodes.forEach(node => {
-      this.menuElements.list.appendChild(node.menuItem);
-    });
-    previousLayer = this.layer
-    this.nodesLayer?.addTo(this.map);
+  /**
+   * If the current marker is selected (active)
+   * @returns boolean 
+   */
+  isActive() {
+    return previousScope === this;
+  }
+
+  repaint() {
+    if(this.isActive()) {
+      this.layer.setStyle(this.activeState);
+    }else{
+      this.layer.setStyle(this.staledState);
+    }
   }
 
   unSelect() {
-    this.isActive = false;
-    this.data.forEach(data => {
-      this.map.removeLayer(this.nodesLayer);
-    });
-    this.layer.setStyle({ fillColor: "#cccccc", color: "#999999" });
+    previousScope = null;
+    this.repaint();
+  }
+
+  get name() {
+    return this.data.name.translation;
   }
 
   async loadGeoDatasource() {
     const response = await getGeoDatasource({
       variables: { filters: [{ scopeFilter: { scopeId: this.data.id } }] },
     });
-    const nodesMarkers = [];
-    response.nodes.map(node => {
+    this.nodes = response.nodes.map(node => {
       const interactiveNode = new GeoDatasourceNode({
         node,
         map: this.map,
-        mapConfig: this.mapConfig
+        mapConfig: this.mapConfig,
+        onClick: this.select.bind(this)
       });
-      interactiveNode.init();
-      this.nodes.push(interactiveNode);
-      if (interactiveNode.marker) {
-        nodesMarkers.push(interactiveNode.marker);
-      } 
-    });
-    this.nodesLayer = L.layerGroup(nodesMarkers);
+      if(interactiveNode.init()){
+        interactiveNode.marker.addTo(this.nodesLayer)
+        return interactiveNode
+      }
+      return undefined;
+    }).filter(Boolean);
   }
 
   async init() {
+    this.loading = true;
     await this.loadGeoDatasource();
+    this.loading = false;
 
-    const onLayerClick = this.select.bind(this);
-
+    if(this.isEmpty()){
+      return;
+    }
+   const onLayerClick = () => {
+    this.select("layer")
+   }
     if (this.data.geom?.type === "MultiPolygon") {
       this.centroid = polylabel(this.data.geom.coordinates[0], 1.0);
-    }   
+    }
     this.layer = createGeoScopeLayer({
       geoScope: this.data,
       map: this.map,
@@ -126,10 +133,16 @@ export default class GeoScope {
       onClick: onLayerClick,
     });
     this.layer.bringToBack();
-    this.geoScopeLayerColors();
+    this.layer.addTo(this.map);
     this.menuItem = createGeoScopeMenuItem({
-      label: this.data.name.translation,
-      onClick: this.select.bind(this),
+      label: this.name,
+      onClick: () => {
+        this.select("layer");
+      }
     });
+    this.repaint();
+    this.nodesLayer?.addTo(this.map);
+
+    return this;
   }
 }

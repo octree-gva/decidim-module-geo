@@ -1,45 +1,51 @@
+import MenuItemStore from "../models/menuItemStore";
 import i18n from "./i18n"
 
+const createDom = (tag, classes, container = undefined) => L.DomUtil.create(
+  tag,
+  classes,
+  container
+);
 const createNodeMenuItem = ({ node, onClick }) => {
-  const listCard = L.DomUtil.create(
+  const listCard = createDom(
     "li",
-    "decidimGeo__scopesDropdown__listCard"
+    "decidimGeo__sidebar__listCard"
   );
   listCard.onclick = onClick;
-
+  MenuItemStore.addMenuItem(listCard)
   if (node.bannerImage) {
-    const image = L.DomUtil.create(
+    const image = createDom(
       "img",
-      "decidimGeo__scopesDropdown__listCardImg",
+      "decidimGeo__sidebar__listCardImg",
       listCard
     );
     image.src = node.bannerImage;
   }
 
-  const info = L.DomUtil.create(
+  const info = createDom(
     "div",
-    "decidimGeo__scopesDropdown__listCardInfo",
+    "decidimGeo__sidebar__listCardInfo",
     listCard
   );
 
-  const infoType = L.DomUtil.create(
+  const infoType = createDom(
     "div",
-    "decidimGeo__scopesDropdown__listCardType",
+    "decidimGeo__sidebar__listCardType",
     info
   );
   infoType.textContent += i18n[node.type];
 
-  const infoTitle = L.DomUtil.create(
+  const infoTitle = createDom(
     "div",
-    "decidimGeo__scopesDropdown__listCardTitle",
+    "decidimGeo__sidebar__listCardTitle",
     info
   );
   infoTitle.textContent += node.title.translation;
 
   if (node.shortDescription) {
-    const infoDescription = L.DomUtil.create(
+    const infoDescription = createDom(
       "div",
-      "decidimGeo__scopesDropdown__listCardDescription",
+      "decidimGeo__sidebar__listCardDescription",
       info
     );
     infoDescription.textContent +=

@@ -2,6 +2,7 @@ version: '3'
 services:
   decidim-app:
     container_name: decidim-app
+    entrypoint: ""
     build: 
       dockerfile_inline: |
         FROM git.octree.ch:4567/decidim/decidim-module-geo/decidim-geo-0.26
@@ -29,7 +30,7 @@ services:
       - 3000:3000
       - 3035:3035
     volumes:
-      - .:/home/decidim/decidim_module_geo:delegated
+      - .:/home/decidim/decidim_module_geo
       - ./.migrations:/home/decidim/app/db/migrate:delegated
       - node_modules:/home/decidim/app/node_modules
       - bundle:/home/decidim/app/vendor

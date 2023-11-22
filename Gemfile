@@ -24,7 +24,6 @@ gem "deface", ">= 1.8.1"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
-
   gem "decidim-dev", DECIDIM_VERSION
 end
 

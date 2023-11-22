@@ -4,7 +4,6 @@ const createGeoScopeMenuItem = ({ label, onClick }) => {
     "decidimGeo__scopesDropdown__listItem"
   );
   menuItem.onclick = onClick;
-
   menuItem.textContent += label;
   return menuItem;
 };

@@ -76,28 +76,39 @@ bundle exec rake test_app
 ```
 
 ## Local development
-Run the following script to have a working local development with an empty organization:
+First, you need to run an empty database with a decidim dev container which runs nothing.
 ```
 docker-compose down -v --remove-orphans
-docker-compose up
+docker-compose up -d
+```
+Once created, you access the decidim container
+```
+# Get the id of the decidim dev container
+docker ps --format {{.ID}} --filter=label=org.label-schema.name=dec
+idim
+# f16bd5314386
+docker exec -it f16bd5314386 bash
+```
+You are now in bash, run manually `docker-entrypoint`.
+```
+# Will check your environment and do migrations if needed
+docker-entrypoint
+```
+You are now ready to use your container in the way you want for development:
 
-# Access your local environment [127.0.0.1:3000](http://127.0.0.1:3000)
-#
-# Your credentials
-# /system
-# email: `DECIDIM_SYSTEM_EMAIL` env . default: system@example.org
-# password: `DECIDIM_SYSTEM_PASSWORD` env. default: decidim123456
-# /admin
-# email: `DECIDIM_SYSTEM_EMAIL` env . default: system@example.org
-# password: `DECIDIM_SYSTEM_PASSWORD` env. default: decidim123456
+* Run a rails server: `bundle exec rails s -b 0.0.0.0`
+* Have live-reload on your assets: `bin/webpack-dev-server`
+* Execute tasks, like `bundle exec rails g migration AddSomeColumn`
+* etc.
+```
+bundle exec rails s -b 0.0.0.0 # rails server
+bin/webpack-dev-server
+etc.
 ```
 
-This will run: 
-- decidim with decidim-geo installed
-
-After this first run, you can run
+To stop everything, uses:
 - `docker-compose down` to stop the containers
-- `docker-compose up` to start the containers.
+- `docker-compose down -v` to stop the containers and remove all previously saved data.
 
 ### Debugging
 To debug something on the container:
@@ -105,7 +116,7 @@ To debug something on the container:
 ```bash
     docker ps --all
 #   CONTAINER ID   IMAGE                           COMMAND                  CREATED        STATUS        PORTS                                            NAMES
-#   f16bd5314386   decidim-geo-development-app     "docker-entrypoint s…"   13 hours ago   Up 13 hours   0.0.0.0:3000->3000/tcp, 0.0.0.0:3035->3035/tcp   decidim-app <-------- THIS ONE
+#   f16bd5314386   decidim-geo-development-app     "sleep infinity"   13 hours ago   Up 13 hours   0.0.0.0:3000->3000/tcp, 0.0.0.0:3035->3035/tcp   decidim-app <-------- THIS ONE
 #   b56adf6404d8   decidim-geo-development-app     "bin/webpack-dev-ser…"   54 seconds ago   Up 46 seconds   0.0.0.0:3035->3035/tcp   decidim-webpacker                                       decidim-installer
 #   bc1e912c3d8a   postgis/postgis:14-3.3-alpine   "docker-entrypoint.s…"   13 hours ago   Up 13 hours   0.0.0.0:5432->5432/tcp                           decidim-module-geo-pg-1
 ```

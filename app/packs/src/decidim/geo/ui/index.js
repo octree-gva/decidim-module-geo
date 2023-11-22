@@ -22,3 +22,6 @@ export const {
 export const { 
   default: createScopesMenu, 
 } = require("./createScopesMenu.js");
+export const { 
+  default: createSidebar, 
+} = require("./createSidebar.js");

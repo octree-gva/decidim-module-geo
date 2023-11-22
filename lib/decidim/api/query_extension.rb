@@ -41,6 +41,7 @@ module Decidim
         kwargs[:filters].each do |filter|
           data.push(*term_datasource(filter[:term_filter], locale)) if filter[:term_filter].present?
           data.push(*scope_datasource(filter[:scope_filter], locale)) if filter[:scope_filter].present?
+          data.push(*not_scope_datasource(filter[:not_scope_filter], locale)) if filter[:not_scope_filter].present?
           data.push(*assembly_datasource(filter[:assembly_filter], locale)) if filter[:assembly_filter].present?
           data.push(*process_datasource(filter[:process_filter], locale)) if filter[:process_filter].present?
           data.push(*resource_type_datasource(filter[:resource_type_filter], locale)) if filter[:resource_type_filter].present?
@@ -87,6 +88,18 @@ module Decidim
       
       def scope_datasource(scope_filter, locale)
         search_by_scope(scope_filter, locale)
+      end
+
+      def not_scope_datasource(scope_filter, locale)
+        nofilter = nofilter_datasource(locale)
+        return nofilter if scope_filter.scopes_id.empty?
+        nofilter.filter do |result|
+          if result.respond_to?(:scope) && scope=result.scope
+            !scope_filter.scopes_id.include?("#{scope.id}")
+          else
+            true
+          end
+        end 
       end
 
       def assembly_datasource(assembly_filter, locale)

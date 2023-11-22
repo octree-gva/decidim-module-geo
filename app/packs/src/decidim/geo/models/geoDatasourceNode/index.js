@@ -1,63 +1,90 @@
-const { createNodeMenuItem, createNodeMarker, createGeoScopeLayer } = require("../../ui");
-let previousSelected = undefined;
+const { createNodeMenuItem, createNodeMarker } = require("../../ui");
+let selectedMarker = undefined;
 export default class GeoDatasourceNode {
-  constructor({ node, map, mapConfig }) {
+  constructor({ node, map, mapConfig, onClick}) {
     //Model
     this.data = node;
     this.map = map;
     this.mapConfig = mapConfig;
+    this.selected = false;
+    this.onClick = onClick
   }
 
-  componentMarkersColors() {
-    if (this.data.componentId == this.mapConfig.selected_component) {
-      this.marker.setStyle({ fillColor: '#2952A370', color: '#2952A3' });
-      this.map.eachLayer( layer =>{
-        if (layer.feature) {
-          if (layer.feature.geometry.properties.id === this.data.scope.id) {
-            layer.setStyle({ fillColor: "#2952A370", color: "#2952A3" }) 
-            this.map.panTo(layer.getCenter())
-          }
+  repaint() {
+    if(selectedMarker === this)
+      return this.marker.setStyle(this.selectedState)
+    if (this.data.componentId == this.mapConfig.selected_component) 
+      this.marker.setStyle(this.selectedState);
+    else
+      this.marker.setStyle(this.staledState)
+  }
+
+  colorLayers() {
+    this.map.eachLayer( layer =>{
+      if (layer.feature) {
+        if (layer.feature.geometry.properties.id === this.scopeId) {
+          layer.setStyle(this.selectedState) 
+          this.map.panTo(layer.getCenter())
+        }else {
+          layer.setStyle(this.staledState)
         }
-      });
-    } 
+      }
+    });
+  }
+  get scopeId(){
+    return this.data.scope.id || undefined
   }
 
+  get selectedState() {
+    return { fillColor: '#2952A370', color: '#2952A3' }
+  }
+
+  get staledState() {
+    return { fillColor: '#000000', color: '#cccccc' }
+  }
+
+ 
   unSelect() {
-    this.marker?.setStyle({ fillColor: "#000000", color: "#cccccc" });
-    this.componentMarkersColors()
+    selectedMarker = null;
+    this.repaint();
   }
 
-  select() {
+  panToMarker() {
     const center = L.latLng([this.data.coordinates.latitude, this.data.coordinates.longitude])
     this.marker?.bringToFront();
-    this.marker?.setStyle({ fillColor: "#2952A370", color: "#2952A3" })
     this.map.panTo(
       center
     )
-    if(previousSelected) {
-      previousSelected.unSelect();
+  }
+  select(source="marker") {
+    this.panToMarker();
+    if(selectedMarker) {
+      selectedMarker.unSelect();
     }
-    previousSelected = this;
+    selectedMarker = this;
+    if(this.onClick) this.onClick(source);
+    this.repaint();
   }
 
   init() {
+    if (!this.data?.coordinates) {
+      // This is not a marker
+      return undefined;
+    }
     try {
-      const onMarkerClick = this.select.bind(this);
-      const onPopupClosed = this.unSelect.bind(this);
-
-      if (this.data?.coordinates) {
-        this.marker = createNodeMarker(this.data);
-        this.marker.on("click", onMarkerClick);
-        this.marker.getPopup().on('remove', onPopupClosed)
-        this.componentMarkersColors()
-        this.marker.bringToFront();
-      }
+      this.marker = createNodeMarker(this.data);
+      this.marker.on("click", this.select.bind(this));
+      this.marker.bringToFront();
+      this.repaint()
       this.menuItem = createNodeMenuItem({
         node: this.data,
-        onClick: onMarkerClick,
+        onClick: () => {
+          this.select("sidebar")
+        },
       });
     } catch (error) {
       console.log("init geo data error ", { error });
     }
+    return this;
   }
 }

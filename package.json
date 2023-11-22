@@ -8,5 +8,11 @@
     "shpjs": "4.0.4",
     "leaflet-svgicon": "0.0.2",
     "leaflet.markercluster": "1.5.3"
+  },
+  "devDependencies": {
+    "prettier": "^3.1.0"
+  },
+  "scripts": {
+    "format": "prettier -w ./app/packs"
   }
 }
