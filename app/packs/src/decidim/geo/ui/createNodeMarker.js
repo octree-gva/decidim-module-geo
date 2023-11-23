@@ -5,4 +5,6 @@ const createNodeMarker = (node) => {
   return createCustomMarker(location)
 };
 
+
+
 export default createNodeMarker;

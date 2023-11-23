@@ -199,6 +199,7 @@ async function createScopesDropdown(map, config) {
       L.DomEvent.disableClickPropagation(this.menu);
       L.DomEvent.disableScrollPropagation(this.menu);
       this.initMenuElements();
+<<<<<<< HEAD
       this.isLoading= true
       this.prepareGeoScopes().then(async (geoScopes) => {
         this.geoScopes = geoScopes;
@@ -220,6 +221,31 @@ async function createScopesDropdown(map, config) {
         }
       })
       this.repaint()
+=======
+
+      scopes.forEach(async scope => {
+        const geoScope = new GeoScope({
+          geoScope: scope,
+          mapConfig: config,
+          map,
+          menuElements: {
+            heading: this.heading,
+            title: this.title,
+            list: this.list,
+          },
+          menuActions: {
+            reset: this.reset.bind(this),
+            switchIsListOpened: this.switchIsListOpened.bind(this),
+          },
+        });
+        await geoScope.init();
+        console.log('geoScope')
+        console.log(geoScope)
+        this.menu.appendChild(geoScope.menuItem);
+        this.scopes.push(geoScope);
+      });
+
+>>>>>>> 721711832d408381e39fae609aa19fb3de717289
       return this.menu;
     },
     reset() {
