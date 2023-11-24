@@ -156,6 +156,13 @@
   height: 69px;
   background: #EEE;
 }
+
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
+}
+
 .decidimGeo__sidebar__listCard {
   @include decidimGeo__border;
   display: block;
@@ -167,13 +174,12 @@
 
   &:empty {
     height: 50px;
-    background-image: 
-    linear-gradient(
-      90deg, 
-      rgba(255,255,255, 0),
-      rgba(255,255,255,0.9),
-      rgba(255,255,255, 0)
-    );
+
+    background: #ffffff;
+    background: linear-gradient(110deg, #cfcfcf 8%, #ffffff 18%, #cfcfcf 33%);
+    border-radius: 5px;
+    background-size: 200% 100%;
+    animation: 1.5s shine linear infinite;
     
     background-repeat: no-repeat;
     animation: loading 1.5s infinite;
