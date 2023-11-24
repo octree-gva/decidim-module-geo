@@ -157,12 +157,6 @@
   background: #EEE;
 }
 
-@keyframes shine {
-  to {
-    background-position-x: -200%;
-  }
-}
-
 .decidimGeo__sidebar__listCard {
   @include decidimGeo__border;
   display: block;
@@ -255,4 +249,11 @@
 
 .leaflet-tooltip-top.decidimGeo__scope__tooltip::before {
   border-top-color: transparent;
+}
+
+
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
 }
