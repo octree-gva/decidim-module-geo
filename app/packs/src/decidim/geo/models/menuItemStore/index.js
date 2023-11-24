@@ -17,10 +17,6 @@ class MenuItemStore {
 
     addMenuItem(menuItem) {
         this.menuItems.push(menuItem);
-        if (!this.itemsLoaded) {
-            this.itemsLoaded = true;
-            this.menuItems = []
-        }
     }
 }
 export default new MenuItemStore();
