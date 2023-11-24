@@ -13,14 +13,6 @@ const createNodeMenuItem = ({ node, onClick }) => {
   );
   listCard.onclick = onClick;
   MenuItemStore.addMenuItem(listCard)
-  if (node.bannerImage) {
-    const image = createDom(
-      "img",
-      "decidimGeo__sidebar__listCardImg",
-      listCard
-    );
-    image.src = node.bannerImage;
-  }
 
   const info = createDom(
     "div",
@@ -50,6 +42,15 @@ const createNodeMenuItem = ({ node, onClick }) => {
     );
     infoDescription.textContent +=
       node.shortDescription.translation.replace(/<[^>]+>/g, "");
+  }
+
+  if (node.bannerImage) {
+    const image = createDom(
+      "img",
+      "decidimGeo__sidebar__listCardImg",
+      listCard
+    );
+    image.src = node.bannerImage;
   }
   return listCard;
 };
