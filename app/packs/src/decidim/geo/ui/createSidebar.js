@@ -1,5 +1,11 @@
 import MenuItemStore from "../models/menuItemStore";
+import {createDomElement} from "./createDomElement";
 import createClasses from "./createClasses";
+
+const createSkeletonItem = () => createDomElement(
+    "li",
+    "decidimGeo__sidebar__listCard"
+  );
 
 async function createSidebar(map, config, eventHandler) {
     const CustomLayerControl = L.Control.extend({
@@ -12,7 +18,7 @@ async function createSidebar(map, config, eventHandler) {
         menuItems: MenuItemStore.menuItems,
         // View
         cardList: null,
-        _loadingDOM: null,
+        _loadingDOMElements: null,
 
         isEmpty() {
             return false;
@@ -21,20 +27,21 @@ async function createSidebar(map, config, eventHandler) {
             this.menuItems = MenuItemStore.menuItems
         },
         loadingDom() {
-            if (!this._loadingDOM)
-                this._loadingDOM = L.DomUtil.create(
-                    "div",
-                    createClasses(
-                        "decidimGeo__sidebar__listCardLoader"
-                    )
-                );
-            return this._loadingDOM
+            if (!this._loadingDOMElements){
+                this._loadingDOMElements = [
+                    createSkeletonItem(),
+                    createSkeletonItem(),
+                    createSkeletonItem()
+                ]
+            }
+                
+            return this._loadingDOMElements
         },
         repaint() {
             L.DomUtil.empty(this.cardList)
-            const loadingElement = this.loadingDom()
+            
             if (this.isLoading) {
-                this.cardList.appendChild(loadingElement)
+                this._loadingDOMElements().map(skeletonItem => this.cardList.appendChild(skeletonItem))
                 return;
             }
             this.menuItems.forEach(menuItem => {
