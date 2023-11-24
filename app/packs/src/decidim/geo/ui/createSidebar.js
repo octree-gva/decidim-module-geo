@@ -34,9 +34,9 @@ async function createSidebar(map, config, eventHandler) {
                         "decidimGeo__sidebar__listCardLoader"
                     )
                 );
-            this.cardList.appendChild(createSkeletonItem())
-            this.cardList.appendChild(createSkeletonItem())
-            this.cardList.appendChild(createSkeletonItem())
+            this._loadingDOM.appendChild(createSkeletonItem())
+            this._loadingDOM.appendChild(createSkeletonItem())
+            this._loadingDOM.appendChild(createSkeletonItem())
             return this._loadingDOM
         },
         repaint() {
