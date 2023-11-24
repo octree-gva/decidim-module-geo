@@ -1,33 +1,30 @@
 import MenuItemStore from "../models/menuItemStore";
+import {createDomElement} from './createDomElement'
 import i18n from "./i18n"
 
-const createDom = (tag, classes, container = undefined) => L.DomUtil.create(
-  tag,
-  classes,
-  container
-);
+
 const createNodeMenuItem = ({ node, onClick }) => {
-  const listCard = createDom(
+  const listCard = createDomElement(
     "li",
     "decidimGeo__sidebar__listCard"
   );
   listCard.onclick = onClick;
   MenuItemStore.addMenuItem(listCard)
 
-  const info = createDom(
+  const info = createDomElement(
     "div",
     "decidimGeo__sidebar__listCardInfo",
     listCard
   );
 
-  const infoType = createDom(
+  const infoType = createDomElement(
     "div",
     "decidimGeo__sidebar__listCardType",
     info
   );
   infoType.textContent += i18n[node.type];
 
-  const infoTitle = createDom(
+  const infoTitle = createDomElement(
     "div",
     "decidimGeo__sidebar__listCardTitle",
     info
@@ -35,7 +32,7 @@ const createNodeMenuItem = ({ node, onClick }) => {
   infoTitle.textContent += node.title.translation;
 
   if (node.shortDescription) {
-    const infoDescription = createDom(
+    const infoDescription = createDomElement(
       "div",
       "decidimGeo__sidebar__listCardDescription",
       info
@@ -45,7 +42,7 @@ const createNodeMenuItem = ({ node, onClick }) => {
   }
 
   if (node.bannerImage) {
-    const image = createDom(
+    const image = createDomElement(
       "img",
       "decidimGeo__sidebar__listCardImg",
       listCard

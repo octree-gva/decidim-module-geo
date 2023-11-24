@@ -164,6 +164,10 @@
   overflow: hidden;
   margin: 12px 0;
   cursor: pointer;
+
+  &:empty {
+    height: 50px;
+  }
 }
 
 .decidimGeo__sidebar__listCardImg {

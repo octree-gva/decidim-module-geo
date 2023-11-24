@@ -1,7 +1,13 @@
+import {createDomElement} from '../ui/createDomElement'
+
+const skeletonItem = createDom(
+    "li",
+    "decidimGeo__sidebar__listCard"
+  );
 
 class MenuItemStore {
     constructor() {
-        this.menuItems = []
+        this.menuItems = [skeletonItem,skeletonItem,skeletonItem]
     }
 
     addMenuItem(menuItem) {
