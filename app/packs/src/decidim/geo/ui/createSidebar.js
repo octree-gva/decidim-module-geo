@@ -18,7 +18,7 @@ async function createSidebar(map, config, eventHandler) {
         menuItems: MenuItemStore.menuItems,
         // View
         cardList: null,
-        _loadingDOMElements: null,
+        _loadingDOMElements: [],
 
         isEmpty() {
             return false;
@@ -27,15 +27,15 @@ async function createSidebar(map, config, eventHandler) {
             this.menuItems = MenuItemStore.menuItems
         },
         loadingDom() {
-            if (!this._loadingDOMElements){
-                this._loadingDOMElements = [
-                    createSkeletonItem(),
-                    createSkeletonItem(),
-                    createSkeletonItem()
-                ]
+            if (this._loadingDOMElements.length){
+                return this._loadingDOMElements
             }
-                
-            return this._loadingDOMElements
+            this._loadingDOMElements = [
+                createSkeletonItem(),
+                createSkeletonItem(),
+                createSkeletonItem()
+            ]
+           
         },
         repaint() {
             L.DomUtil.empty(this.cardList)
