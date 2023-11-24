@@ -1,4 +1,4 @@
-import {createDomElement} from '../ui/createDomElement'
+import {createDomElement} from '../../ui/createDomElement'
 
 const skeletonItem = createDomElement(
     "li",
