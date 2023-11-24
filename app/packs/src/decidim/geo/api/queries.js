@@ -22,6 +22,7 @@ export const geoDatasource = `
         description {
           translation(locale: $locale)
         }
+        bannerImage
         coordinates{
           latitude
           longitude
