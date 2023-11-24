@@ -16,11 +16,11 @@ class MenuItemStore {
     }
 
     addMenuItem(menuItem) {
-        this.menuItems.push(menuItem);
         if (!this.itemsLoaded) {
             this.itemsLoaded = true;
             this.menuItems = []
         }
+        this.menuItems.push(menuItem);
     }
 }
 export default new MenuItemStore();
