@@ -41,7 +41,7 @@ async function createSidebar(map, config, eventHandler) {
             L.DomUtil.empty(this.cardList)
             
             if (this.isLoading) {
-                this._loadingDOMElements().map(skeletonItem => this.cardList.appendChild(skeletonItem))
+                this._loadingDOMElements.map(skeletonItem => this.cardList.appendChild(skeletonItem))
                 return;
             }
             this.menuItems.forEach(menuItem => {
