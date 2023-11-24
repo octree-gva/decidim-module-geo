@@ -1,6 +1,6 @@
 import {createDomElement} from '../ui/createDomElement'
 
-const skeletonItem = createDom(
+const skeletonItem = createDomElement(
     "li",
     "decidimGeo__sidebar__listCard"
   );
