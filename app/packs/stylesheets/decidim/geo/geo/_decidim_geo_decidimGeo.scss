@@ -56,7 +56,7 @@
 .decidimGeo__scopesDropdown, .decidimGeo__scopesDropdown.leaflet-control{
   @include decidimGeo__border;
   display: block;
-  min-width: 280px;
+  width: 300px;
   background: #fff;
   position: absolute;
   z-index: 9999;
@@ -106,7 +106,7 @@
 
 .decidimGeo__scopesDropdown__list,
 .decidimGeo__sidebar__list {
-  min-width: 280px;
+  width: 300px;
   height: auto;
   max-height: 400px;
   border-top: #cccccc 1px solid;
@@ -119,7 +119,7 @@
   transition: 0.3s;
 
   &--closed {
-    width: 280px;
+    width: 300px;
     height: 0;
     overflow: hidden;
     margin: 0;
