@@ -1,9 +1,9 @@
 const createCustomMarker = (location) => {
   return new L.circleMarker(location, {
     radius: 6,
-    fillColor: "#000000",
+    fillColor: "#ffffff",
     fillOpacity: 1,
-    color: "#cccccc",
+    color: "#000000",
     opacity: 1,
     weight: 5,
   });

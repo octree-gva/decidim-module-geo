@@ -36,11 +36,11 @@ export default class GeoDatasourceNode {
   }
 
   get selectedState() {
-    return { fillColor: '#2952A370', color: '#2952A3' }
-  }
+    return { color: '#2952A3' }
+  } 
 
   get staledState() {
-    return { fillColor: '#000000', color: '#cccccc' }
+    return { color: '#cccccc' }
   }
 
  
