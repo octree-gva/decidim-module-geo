@@ -167,10 +167,18 @@
 
   &:empty {
     height: 50px;
-    background-image: linear-gradient(
-        #eee 50px,
+    background-image: 
+    linear-gradient(
+      90deg, 
+      rgba(255,255,255, 0),
+      rgba(255,255,255,0.6),
+      rgba(255,255,255, 0)
+    ),
+    linear-gradient(
+        #fff 50px,
         transparent 0
     );
+    
     background-repeat: no-repeat;
     animation: loading 1.5s infinite;
   }
