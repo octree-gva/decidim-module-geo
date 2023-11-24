@@ -18,7 +18,7 @@ async function createSidebar(map, config, eventHandler) {
         menuItems: MenuItemStore.menuItems,
         // View
         cardList: null,
-        _loadingDOMElements: [],
+        _loadingDOM: null,
 
         isEmpty() {
             return false;
@@ -27,21 +27,23 @@ async function createSidebar(map, config, eventHandler) {
             this.menuItems = MenuItemStore.menuItems
         },
         loadingDom() {
-            if (this._loadingDOMElements.length){
-                return this._loadingDOMElements
-            }
-            this._loadingDOMElements = [
-                createSkeletonItem(),
-                createSkeletonItem(),
-                createSkeletonItem()
-            ]
-           
+            if (!this._loadingDOM)
+                this._loadingDOM = L.DomUtil.create(
+                    "div",
+                    createClasses(
+                        "decidimGeo__sidebar__listCardLoader"
+                    )
+                );
+            this.cardList.appendChild(createSkeletonItem())
+            this.cardList.appendChild(createSkeletonItem())
+            this.cardList.appendChild(createSkeletonItem())
+            return this._loadingDOM
         },
         repaint() {
             L.DomUtil.empty(this.cardList)
-            
+            const loadingElement = this.loadingDom()
             if (this.isLoading) {
-                this._loadingDOMElements.map(skeletonItem => this.cardList.appendChild(skeletonItem))
+                this.cardList.appendChild(loadingElement)
                 return;
             }
             this.menuItems.forEach(menuItem => {
