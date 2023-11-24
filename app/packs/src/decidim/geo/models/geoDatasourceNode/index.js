@@ -40,7 +40,7 @@ export default class GeoDatasourceNode {
   } 
 
   get staledState() {
-    return { color: '#cccccc' }
+    return { color: '#000000' }
   }
 
  

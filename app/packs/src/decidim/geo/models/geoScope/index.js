@@ -24,7 +24,7 @@ export default class GeoScope {
   }
 
   get activeState() {
-    return { fillColor: '#2952A3', color: '#ffffff' }
+    return { fillColor: '#2952A370', color: '#2952A3' }
   }
 
   isEmpty() {
@@ -36,7 +36,7 @@ export default class GeoScope {
   }
 
   get staledState() {
-    return { fillColor: '#ffffff', color: '#ffffff' }
+    return { fillColor: '#cccccc', color: '#999999' }
   }
 
   redefineResetBtn() {
