@@ -3,7 +3,7 @@ const createCustomMarker = (location) => {
     radius: 6,
     fillColor: "#ffffff",
     fillOpacity: 1,
-    color: "#000000",
+    color: "#404040",
     opacity: 1,
     weight: 5,
   });
