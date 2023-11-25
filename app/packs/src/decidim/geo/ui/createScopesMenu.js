@@ -226,6 +226,7 @@ async function createScopesDropdown(map, config) {
       this.activeScope = null;
       this.isOpen = false;
       this.geoScopes.forEach(geoScope => geoScope.unSelect());
+      this.orphanNodes.forEach(node => node.unSelect())
       triggerEvent("selectAllScopes", null)
       this.repaint();
     },
