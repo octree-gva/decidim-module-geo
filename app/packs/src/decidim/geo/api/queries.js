@@ -37,17 +37,6 @@ export const geoDatasource = `
     }
   }`;
 
-export const geoShapefiles = `{
-  geoShapefiles {
-    id
-    title
-    description
-    shapefile
-    createdAt
-    updatedAt
-  } 
-}`;
-
 export const shapedata = `{
   geoShapedata {
     id
