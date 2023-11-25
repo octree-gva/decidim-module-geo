@@ -78,9 +78,9 @@ export default class GeoScope {
 
   repaint() {
     if(this.isActive()) {
-      this.layer.setStyle(this.activeState);
+      this.layer?.setStyle(this.activeState);
     }else{
-      this.layer.setStyle(this.staledState);
+      this.layer?.setStyle(this.staledState);
     }
   }
 
