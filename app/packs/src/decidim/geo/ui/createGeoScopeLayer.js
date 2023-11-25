@@ -1,5 +1,3 @@
-import { createCustomMarker } from ".";
-
 const createGeoScopeLayer = ({ geoScope, map, onClick }) => {
   geoScope.geom = { ...geoScope.geom, properties: {id: geoScope.id, name: geoScope.name.translation}}
   const layer = L.geoJSON(geoScope.geom, {

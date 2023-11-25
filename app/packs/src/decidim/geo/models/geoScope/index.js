@@ -126,14 +126,17 @@ export default class GeoScope {
     if (this.data.geom?.type === "MultiPolygon") {
       this.centroid = polylabel(this.data.geom.coordinates[0], 1.0);
     }
-    this.layer = createGeoScopeLayer({
-      geoScope: this.data,
-      map: this.map,
-      centroid: this.centroid,
-      onClick: onLayerClick,
-    });
-    this.layer.bringToBack();
-    this.layer.addTo(this.map);
+    if (this.data.geom){
+      this.layer = createGeoScopeLayer({
+        geoScope: this.data,
+        map: this.map,
+        centroid: this.centroid,
+        onClick: onLayerClick,
+      });
+      this.layer.bringToBack();
+      this.layer.addTo(this.map);
+    }
+    
     this.menuItem = createGeoScopeMenuItem({
       label: this.name,
       onClick: () => {

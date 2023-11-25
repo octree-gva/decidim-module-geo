@@ -37,28 +37,12 @@ export const geoDatasource = `
     }
   }`;
 
-export const shapedata = `{
-  geoShapedata {
-    id
-    data
-    geom
-  }
-}`;
-
 export const geoConfig = `{
   geoConfig { 
     latitude 
     longitude 
     zoom 
     tile
-  }
-}`;
-
-export const geoShapedata = `{
-  geoShapedata {
-    id
-    data
-    geom
   }
 }`;
 

@@ -35,5 +35,4 @@ export const getGeoDatasource = async (params = {}) => {
   return {nodes: results, edges: page.edge}
 }
 export const getGeoConfig = makeQuery("geoConfig");
-export const getGeoShapeData = makeQuery("geoShapeData");
 export const getGeoScopes = makeQuery("geoScope");
