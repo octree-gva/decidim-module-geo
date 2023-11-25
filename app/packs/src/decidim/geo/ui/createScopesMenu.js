@@ -1,5 +1,5 @@
 import GeoScope from "../models/geoScope";
-const { default: GeoDatasourceNode } = require("../models/geoDatasourceNode");
+const { default: GeoDatasourceNode, selectedMarker } = require("../models/geoDatasourceNode");
 import createGeoScopeMenuItem from './createGeoScopeMenuItem'
 import createClasses from "./createClasses";
 import i18n from "./i18n";
@@ -226,7 +226,7 @@ async function createScopesDropdown(map, config) {
       this.activeScope = null;
       this.isOpen = false;
       this.geoScopes.forEach(geoScope => geoScope.unSelect());
-      this.orphanNodes.forEach(node => node.unSelect())
+      selectedMarker.unSelect()
       triggerEvent("selectAllScopes", null)
       this.repaint();
     },

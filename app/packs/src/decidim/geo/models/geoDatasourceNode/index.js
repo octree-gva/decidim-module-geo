@@ -1,5 +1,5 @@
 const { createNodeMenuItem, createNodeMarker } = require("../../ui");
-let selectedMarker = undefined;
+export let selectedMarker = undefined;
 export default class GeoDatasourceNode {
   constructor({ node, map, mapConfig, onClick}) {
     //Model
