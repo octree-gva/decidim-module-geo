@@ -14,10 +14,14 @@
         </div>
 
         <div class="row column">
-          <%= form.file_field :shapefile, optional: false %>
+          <div class="row column">
+            <%= label_tag(:shapefile) %> 
+            <legend class="help-text"><strong><%= t(".attachment_max_size") %></strong></legend>
+          </div>
+          <%= form.file_field :shapefile, optional: false, label: false %>
+          <legend class="help-text"><%= t(".support_shape_overlaping") %></legend>
           <legend class="help-text"><%= t(".attachment_legend") %></legend>
           <legend class="help-text"><%= t(".attachment_format") %></legend>
-          <legend class="help-text"><%= t(".attachment_max_size") %></legend>
         </div>
       </fieldset>
     </div>

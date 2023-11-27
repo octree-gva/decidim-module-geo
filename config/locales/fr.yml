@@ -25,6 +25,8 @@ fr:
           form:
             attachment_legend: Uploader un shapefile archivé en format zip
             attachment_max_size: Taille maximale - 10 MB
+            attachment_format: Shapefile doit être dans WGS84 Datum
+            support_shape_overlaping: Les formes superposées ne sont pas prises en charge actuellement
       content_blocks:
         name: Carte
         fields:

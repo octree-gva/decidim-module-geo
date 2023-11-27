@@ -58,6 +58,7 @@ en:
             attachment_legend: Upload shapefile compacted as a zip file
             attachment_format: Shapefile has to be in WGS84 Datum
             attachment_max_size: Max size - 10 MB
+            support_shape_overlaping: Overlapping shapes are not currently supported
       content_blocks:
         name: Geo Maps
         fields:
