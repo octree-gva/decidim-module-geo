@@ -1,49 +1,53 @@
+import MenuItemStore from "../models/menuItemStore";
+import {createDomElement} from './createDomElement'
 import i18n from "./i18n"
 
+
 const createNodeMenuItem = ({ node, onClick }) => {
-  const listCard = L.DomUtil.create(
+  const listCard = createDomElement(
     "li",
-    "decidimGeo__scopesDropdown__listCard"
+    "decidimGeo__sidebar__listCard"
   );
   listCard.onclick = onClick;
+  MenuItemStore.addMenuItem(listCard)
 
-  if (node.bannerImage) {
-    const image = L.DomUtil.create(
-      "img",
-      "decidimGeo__scopesDropdown__listCardImg",
-      listCard
-    );
-    image.src = node.bannerImage;
-  }
-
-  const info = L.DomUtil.create(
+  const info = createDomElement(
     "div",
-    "decidimGeo__scopesDropdown__listCardInfo",
+    "decidimGeo__sidebar__listCardInfo",
     listCard
   );
 
-  const infoType = L.DomUtil.create(
+  const infoType = createDomElement(
     "div",
-    "decidimGeo__scopesDropdown__listCardType",
+    "decidimGeo__sidebar__listCardType",
     info
   );
   infoType.textContent += i18n[node.type];
 
-  const infoTitle = L.DomUtil.create(
+  const infoTitle = createDomElement(
     "div",
-    "decidimGeo__scopesDropdown__listCardTitle",
+    "decidimGeo__sidebar__listCardTitle",
     info
   );
   infoTitle.textContent += node.title.translation;
 
   if (node.shortDescription) {
-    const infoDescription = L.DomUtil.create(
+    const infoDescription = createDomElement(
       "div",
-      "decidimGeo__scopesDropdown__listCardDescription",
+      "decidimGeo__sidebar__listCardDescription",
       info
     );
     infoDescription.textContent +=
       node.shortDescription.translation.replace(/<[^>]+>/g, "");
+  }
+
+  if (node.bannerImage) {
+    const image = createDomElement(
+      "img",
+      "decidimGeo__sidebar__listCardImg",
+      listCard
+    );
+    image.src = node.bannerImage;
   }
   return listCard;
 };

@@ -1,6 +1,6 @@
 export const geoDatasource = `
-  query geoDatasourceQuery ($locale: String!, $filters: [GeoDatasourceFilter!]) {
-    geoDatasource(filters: $filters, locale: $locale){
+  query geoDatasourceQuery ($locale: String!, $filters: [GeoDatasourceFilter!], $first: Int) {
+    geoDatasource(filters: $filters, locale: $locale, first: $first){
       pageInfo {
         hasPreviousPage
         startCursor
@@ -11,6 +11,7 @@ export const geoDatasource = `
         id
         participatorySpaceId
         participatorySpaceType
+        componentId
         type
         title{
           translation(locale: $locale)
@@ -21,32 +22,20 @@ export const geoDatasource = `
         description {
           translation(locale: $locale)
         }
+        bannerImage
         coordinates{
           latitude
           longitude
         }
+        scope {
+          id
+          name {
+            translation(locale: "en")
+          }
+        }
       }
     }
   }`;
-
-export const geoShapefiles = `{
-  geoShapefiles {
-    id
-    title
-    description
-    shapefile
-    createdAt
-    updatedAt
-  } 
-}`;
-
-export const shapedata = `{
-  geoShapedata {
-    id
-    data
-    geom
-  }
-}`;
 
 export const geoConfig = `{
   geoConfig { 
@@ -54,14 +43,6 @@ export const geoConfig = `{
     longitude 
     zoom 
     tile
-  }
-}`;
-
-export const geoShapedata = `{
-  geoShapedata {
-    id
-    data
-    geom
   }
 }`;
 

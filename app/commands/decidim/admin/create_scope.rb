@@ -22,8 +22,8 @@ module Decidim
       def call
         return broadcast(:invalid) if form.invalid?
 
-        create_scope
-        broadcast(:ok)
+        scope = create_scope
+        broadcast(:ok, :scope=>scope)
       end
 
       private
@@ -46,8 +46,6 @@ module Decidim
             scope_type_name: form.scope_type.try(:name)
           }
         )
-        # @scope.shapedata = shapedata
-        # @scope.save!
       end
 
       def shapedata

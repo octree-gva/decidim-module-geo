@@ -7,8 +7,9 @@ module Decidim
       # Public: Initializes the command.
       #
       # form - A form object with the params.
-      def initialize(form)
+      def initialize(form, user = nil)
         @form = form
+        @user = user
       end
 
       # Executes the command. Broadcasts these events:

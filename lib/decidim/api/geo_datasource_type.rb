@@ -84,9 +84,7 @@ module Decidim
       end
 
       def scope
-        unless has_coordinates?
-          object.scope if object.respond_to?(:scope)
-        end
+        object.scope if object.respond_to?(:scope)
       end
 
       def has_coordinates?

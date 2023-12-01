@@ -1,8 +1,10 @@
 <!-- insert_after '.process-header' -->
-<%= cell("decidim/geo/content_blocks/geo_maps", current_participatory_space, 
-    id: "Process",
-    filters: [
-        { processFilter: { processId: current_participatory_space.id } }
-    ],
-    scopes: current_participatory_space.scopes.map{|s| s.id}
-) %>
+<% if controller.controller_name != "participatory_process_steps" %>
+  <%= cell("decidim/geo/content_blocks/geo_maps", current_participatory_space, 
+      id: "Process",
+      filters: [
+          { processFilter: { processId: current_participatory_space.id } }
+      ],
+      scopes: current_participatory_space.scopes.map{|s| s.id}
+  ) %>
+<% end %>

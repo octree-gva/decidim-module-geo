@@ -5,17 +5,22 @@ const createGeoDatasourceLayer = async ({ map, mapConfig}) => {
   const response = await getGeoDatasource({
     variables: { filters: mapConfig.filters, locale: mapConfig.locale },
   });
-  const markers = response.nodes.map(node => {
-    const interactiveNode = new GeoDatasourceNode({
-      map: map,
-      node,
-      mapConfig
+  const nodesMarkers = [];
+    response.nodes.map(node => {
+      if (node?.coordinates?.latitude && node?.coordinates?.longitude) {
+        const interactiveNode = new GeoDatasourceNode({
+          node,
+          map: map,
+          mapConfig: mapConfig
+        });
+        interactiveNode.init();
+        nodesMarkers.push(interactiveNode.marker);
+      } else {
+        console.log("Coordinates not found for ", node);
+      }
     });
-    interactiveNode.init();
-    return interactiveNode.marker;
-  });
-  if (markers.length > 0) return L.layerGroup(markers);
-  throw new Error("This map is empty")
-};
+    return L.layerGroup(nodesMarkers);
+  }
 
 export default createGeoDatasourceLayer;
+

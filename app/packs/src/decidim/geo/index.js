@@ -1,23 +1,25 @@
 import "src/decidim/map/controller/markers"
 import "src/decidim/map/icon"
 
-const { initMap, createScopesMenu, createGeoDatasourceLayer } = require("./ui");
+const { initMap, createScopesMenu, createGeoDatasourceLayer, createSidebar } = require("./ui");
 const { CONFIG } = require("./constants");
 
 async function main() {   
   let map = undefined;
   try {
     map = await initMap(CONFIG);
-    const geoDatasourceLayer = await createGeoDatasourceLayer({
-      mapConfig: CONFIG,
-      map
-    });
+    // inserts the shapes from scopes associated with shapedata
+    // as layers
+    const scopeMenu = await createScopesMenu(map, CONFIG);
+    await createSidebar(map, CONFIG, scopeMenu)
     
-    const scopesMenu = await createScopesMenu(map, CONFIG);
-    console.log('scopesMenu')
-    console.log(scopesMenu)
-
-    geoDatasourceLayer.addTo(map);
+    // inserts the resources with lat and log like,
+    // meetings, proposals, processes and assemblies as circleMarkers
+    // const geoDatasourceLayer = await createGeoDatasourceLayer({
+    //   mapConfig: CONFIG,
+    //   map
+    // });
+    // if (geoDatasourceLayer) { geoDatasourceLayer.addTo(map) }
   } catch(e) {
     console.error(e);
     // If there is anything that happens, 
