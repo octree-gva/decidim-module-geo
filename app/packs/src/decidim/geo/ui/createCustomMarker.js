@@ -5,7 +5,7 @@ const createCustomMarker = (location) => {
     fillOpacity: 1,
     color: "#404040",
     opacity: 1,
-    weight: 5,
+    weight: 5
   });
 };
 

@@ -21,7 +21,6 @@ module Decidim
               space_id: space_id || nil,
               selected_component: current_component || nil,
               filters: @options[:filters] || [],
-              highlighted_scopes: @options[:scopes] || [],
               map_config: {
                 lat: geo_config[:latitude],
                 lng: geo_config[:longitude],
@@ -40,7 +39,7 @@ module Decidim
                 "decidimgeo__map--#{id.underscore}"
               ],
               "data-config" => config.to_json,
-              "geo_i18n" => geo_i18n.to_json
+              "data-i18n" => geo_i18n.to_json
             )
           end
 

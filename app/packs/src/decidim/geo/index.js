@@ -1,36 +1,69 @@
-import "src/decidim/map/controller/markers"
-import "src/decidim/map/icon"
+import "src/decidim/map/controller/markers";
+import "src/decidim/map/icon";
+import configStore from "./models/configStore";
+import pointStore from "./models/pointStore";
+import filterStore from "./models/filterStore";
+import geoStore from "./models/geoStore";
 
-const { initMap, createScopesMenu, createGeoDatasourceLayer, createSidebar } = require("./ui");
-const { CONFIG } = require("./constants");
+import { initMap, createDrawerActions, createDrawer } from "./ui";
+import bootstrap from "./bootstrap";
 
-async function main() {   
-  let map = undefined;
+window.debug = window.debug || {};
+window.debug.stores = () => ({
+  config: configStore.getState(),
+  filter: filterStore.getState(),
+  geo: geoStore.getState(),
+  point: pointStore.getState()
+});
+
+async function main() {
   try {
-    map = await initMap(CONFIG);
-    // inserts the shapes from scopes associated with shapedata
-    // as layers
-    const scopeMenu = await createScopesMenu(map, CONFIG);
-    await createSidebar(map, CONFIG, scopeMenu)
-    
-    // inserts the resources with lat and log like,
-    // meetings, proposals, processes and assemblies as circleMarkers
-    // const geoDatasourceLayer = await createGeoDatasourceLayer({
-    //   mapConfig: CONFIG,
-    //   map
-    // });
-    // if (geoDatasourceLayer) { geoDatasourceLayer.addTo(map) }
-  } catch(e) {
+    // Parse and save server-side information.
+    bootstrap();
+
+    // Create Leaflet map
+    const map = await initMap();
+    configStore.setState(() => ({ map: map }));
+
+    // Be sure to fit all the points whenever you change
+    // any filter.
+    const pointsLayer = L.layerGroup();
+    map.addLayer(pointsLayer);
+    pointStore.subscribe(
+      (state) => [state.isLoading, state.getFilteredPoints, state._lastResponse],
+      ([isLoading, getFilteredPoints]) => {
+        if (isLoading) return;
+        pointsLayer.clearLayers();
+        const group = L.featureGroup(
+          getFilteredPoints().map(({ marker }) => {
+            pointsLayer.addLayer(marker);
+            return marker;
+          })
+        );
+        map.fitBounds(group.getBounds());
+      }
+    );
+
+    // Create the drawer menu
+    await createDrawerActions();
+    // Create the drawer
+    await createDrawer();
+    // Fetch all the data
+    await pointStore.getState().fetchAll();
+  } catch (e) {
     console.error(e);
-    // If there is anything that happens, 
+    const { map, mapID } = configStore.getState();
+
+    // If there is anything that happens,
     // we don't want to see the map.
-    if(map?.remove){
-      map.off()
+    if (map?.remove) {
       map.remove();
     }
-    document.getElementById(CONFIG.mapID)?.remove();
+    if (map?.off) {
+      map.off();
+    }
+    document.getElementById(mapID)?.remove();
   }
-  
 }
 
 main();

@@ -16,8 +16,8 @@
         <div class="row column">
           <div class="row column">
             <%= label_tag(:shapefile) %> 
-            <legend class="help-text"><strong><%= t(".attachment_max_size") %></strong></legend>
           </div>
+          <legend style="color: #202734; margin-top: -8px; font-size: 13px"><strong><%= t(".attachment_max_size") %></strong></legend>
           <%= form.file_field :shapefile, optional: false, label: false %>
           <legend class="help-text"><%= t(".support_shape_overlaping") %></legend>
           <legend class="help-text"><%= t(".attachment_legend") %></legend>
