@@ -43,7 +43,9 @@ module Decidim
             longitude: form.longitude,
             latitude: form.latitude,
             zoom: form.zoom,
-            tile: form.tile
+            tile: form.tile,
+            only_assemblies: form.only_assemblies,
+            only_processes: form.only_processes
           }
         end
       end

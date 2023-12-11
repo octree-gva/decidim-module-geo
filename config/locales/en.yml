@@ -20,7 +20,10 @@ en:
     geo: 
       admin:
         geo_configs: 
-          title: Configurations
+          map_config_title: Map Configurations
+          spaces_config_title: Participatory Spaces Configurations
+          only_assemblies: Display only assemblies in Assemblies?
+          only_processes: Display only processes in Processes?
           index: 
             title: Configurations
             save: Save

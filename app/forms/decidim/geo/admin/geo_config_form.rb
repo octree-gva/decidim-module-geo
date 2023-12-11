@@ -10,6 +10,8 @@ module Decidim
         attribute :latitude, Float
         attribute :zoom, Integer
         attribute :tile, String
+        attribute :only_assemblies, Boolean
+        attribute :only_processes, Boolean
 
         alias organization current_organization
       end

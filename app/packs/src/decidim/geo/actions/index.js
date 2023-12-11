@@ -1,13 +1,13 @@
 export const displayNestedLayers = (leafletContainer, checked) => {
   if (
-    leafletContainer.classList.contains(CONTROLLED_INPUT_CLASS) &&
+    leafletContainer.classList.contains("decidimGeo__customControl__input") &&
     leafletContainer.checked !== checked
   ) {
     leafletContainer.dispatchEvent(
       new MouseEvent("click", {
         view: window,
         bubbles: false,
-        cancelable: false,
+        cancelable: false
       })
     );
     //leafletContainer.checked = checked;
@@ -16,7 +16,7 @@ export const displayNestedLayers = (leafletContainer, checked) => {
   }
 
   if (leafletContainer.children) {
-    return [...leafletContainer.children].map(child =>
+    return [...leafletContainer.children].map((child) =>
       displayNestedLayers(child, checked)
     );
   } else {

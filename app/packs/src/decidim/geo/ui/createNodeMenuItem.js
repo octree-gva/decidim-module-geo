@@ -1,34 +1,17 @@
-import MenuItemStore from "../models/menuItemStore";
-import {createDomElement} from './createDomElement'
-import i18n from "./i18n"
-
+import configStore from "../models/configStore";
+import { createDomElement } from "./createDomElement";
 
 const createNodeMenuItem = ({ node, onClick }) => {
-  const listCard = createDomElement(
-    "li",
-    "decidimGeo__sidebar__listCard"
-  );
+  const { i18n } = configStore.getState();
+  const listCard = createDomElement("li", "decidimGeo__sidebar__listCard");
   listCard.onclick = onClick;
-  MenuItemStore.addMenuItem(listCard)
 
-  const info = createDomElement(
-    "div",
-    "decidimGeo__sidebar__listCardInfo",
-    listCard
-  );
+  const info = createDomElement("div", "decidimGeo__sidebar__listCardInfo", listCard);
 
-  const infoType = createDomElement(
-    "div",
-    "decidimGeo__sidebar__listCardType",
-    info
-  );
+  const infoType = createDomElement("div", "decidimGeo__sidebar__listCardType", info);
   infoType.textContent += i18n[node.type];
 
-  const infoTitle = createDomElement(
-    "div",
-    "decidimGeo__sidebar__listCardTitle",
-    info
-  );
+  const infoTitle = createDomElement("div", "decidimGeo__sidebar__listCardTitle", info);
   infoTitle.textContent += node.title.translation;
 
   if (node.shortDescription) {
@@ -37,16 +20,14 @@ const createNodeMenuItem = ({ node, onClick }) => {
       "decidimGeo__sidebar__listCardDescription",
       info
     );
-    infoDescription.textContent +=
-      node.shortDescription.translation.replace(/<[^>]+>/g, "");
+    infoDescription.textContent += node.shortDescription.translation.replace(
+      /<[^>]+>/g,
+      ""
+    );
   }
 
   if (node.bannerImage) {
-    const image = createDomElement(
-      "img",
-      "decidimGeo__sidebar__listCardImg",
-      listCard
-    );
+    const image = createDomElement("img", "decidimGeo__sidebar__listCardImg", listCard);
     image.src = node.bannerImage;
   }
   return listCard;

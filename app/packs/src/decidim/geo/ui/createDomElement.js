@@ -1,5 +1,2 @@
-export const createDomElement = (tag, classes, container = undefined) => L.DomUtil.create(
-    tag,
-    classes,
-    container
-  );
+export const createDomElement = (tag, classes, container = undefined) =>
+  L.DomUtil.create(tag, classes, container);

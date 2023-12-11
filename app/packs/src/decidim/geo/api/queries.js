@@ -36,6 +36,20 @@ export const geoDatasource = `
       }
     }
   }`;
+export const geoDatasourceIds = `
+  query geoDatasourceQueryIds ($locale: String!, $filters: [GeoDatasourceFilter!], $first: Int) {
+    geoDatasource(filters: $filters, locale: $locale, first: $first){
+      pageInfo {
+        hasPreviousPage
+        startCursor
+        endCursor
+        hasNextPage
+      }
+      nodes {
+        id
+      }
+    }
+  }`;
 
 export const geoConfig = `{
   geoConfig { 

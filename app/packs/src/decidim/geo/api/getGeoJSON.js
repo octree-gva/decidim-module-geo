@@ -4,11 +4,11 @@ const shp = require("shpjs");
 
 async function getGeoJSON(shapefileUrl) {
   //TODO: Fix this in backend
-  const [_, relativePath] = shapefileUrl.split('/public/')
+  const [_, relativePath] = shapefileUrl.split("/public/");
   return await window
     .fetch(relativePath)
-    .then(response => response.arrayBuffer())
-    .then(shp)
+    .then((response) => response.arrayBuffer())
+    .then(shp);
 }
 
 export default getGeoJSON;

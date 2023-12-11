@@ -1,4 +1,5 @@
 <!-- insert_before '.wrapper' -->
+<% byebug %>
 <%= cell("decidim/geo/content_blocks/geo_maps", @group,
     id: "ProcessGroup",
     filters: [
