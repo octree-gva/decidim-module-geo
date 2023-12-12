@@ -70,6 +70,8 @@ en:
           lat: Latitude
       scopes:
         all: "All Scopes"
+      filters:
+        button: "Filters"
     components:
       geo:
         name: Geo

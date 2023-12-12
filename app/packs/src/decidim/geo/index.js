@@ -4,6 +4,7 @@ import configStore from "./models/configStore";
 import pointStore from "./models/pointStore";
 import filterStore from "./models/filterStore";
 import geoStore from "./models/geoStore";
+import dropdownFilterStore from "./models/dropdownFilterStore";
 
 import { initMap, createDrawerActions, createDrawer } from "./ui";
 import bootstrap from "./bootstrap";
@@ -13,7 +14,8 @@ window.debug.stores = () => ({
   config: configStore.getState(),
   filter: filterStore.getState(),
   geo: geoStore.getState(),
-  point: pointStore.getState()
+  point: pointStore.getState(),
+  dropdownFilter: dropdownFilterStore.getState()
 });
 
 async function main() {

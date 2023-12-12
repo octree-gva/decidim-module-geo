@@ -58,7 +58,8 @@ module Decidim
             geo_i18n = supported_models.map { |klass| [klass.name, klass.model_name.human] }.to_h
             geo_i18n = {
               **geo_i18n,
-              "scopes.all":  t('decidim.geo.scopes.all')
+              "decidim_geo.scopes.all":  t('decidim.geo.scopes.all'),
+              "decidim_geo.filters.button":  t('decidim.geo.filters.button')
             }
           end
 

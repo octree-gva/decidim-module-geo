@@ -1,7 +1,7 @@
 import { createNodeMenuItem, createNodeMarker } from "../../ui";
 import geoStore from "../geoStore";
 import configStore from "../configStore";
-import pointStore from "../pointStore";
+
 export default class GeoDatasourceNode {
   constructor({ node, map }) {
     //Model
@@ -44,7 +44,7 @@ export default class GeoDatasourceNode {
   }
 
   get selectedState() {
-    return { color: "#2952A3" };
+    return { color: "var(--primary)" };
   }
 
   get staledState() {
