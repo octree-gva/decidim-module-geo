@@ -3,6 +3,7 @@ import createClasses from "./createClasses";
 import geoStore from "../models/geoStore";
 import pointStore from "../models/pointStore";
 import configStore from "../models/configStore";
+import createFilterDropdown from "./createFilterDropdown";
 
 async function createScopesDropdown() {
   const CustomLayerControl = L.Control.extend({
@@ -17,6 +18,7 @@ async function createScopesDropdown() {
     //View
     menu: null,
     heading: null,
+    filterDropdown: null,
     title: null,
     resetBtn: null,
     dropDownOptions: null,
@@ -53,17 +55,7 @@ async function createScopesDropdown() {
         this.toggleShow();
         this.repaint();
       };
-
-      this.resetBtn = L.DomUtil.create(
-        "button",
-        createClasses("decidimGeo__scopesDropdown__reset", ["hidden"]),
-        this.heading
-      );
-      this.resetBtn.textContent = "reset";
-      this.resetBtn.onclick = () => {
-        geoStore.getState().selectScope(undefined);
-      };
-
+      this.filterDropdown = createFilterDropdown(this.heading, this.menu);
       this.dropDownOptions = L.DomUtil.create(
         "ul",
         createClasses("decidimGeo__scopesDropdown__list", [
@@ -83,11 +75,8 @@ async function createScopesDropdown() {
         this.title.textContent = this.activeScope().name;
       } else {
         // all scopes
-        this.title.textContent = i18n["scopes.all"];
+        this.title.textContent = i18n["decidim_geo.scopes.all"];
       }
-      this.resetBtn.className = createClasses("decidimGeo__scopesDropdown__reset", [
-        !this.activeScope() && "hidden"
-      ]);
     },
     repaintOptions() {
       const { i18n } = configStore.getState();
@@ -97,7 +86,7 @@ async function createScopesDropdown() {
       if (this.activeScope()) {
         // Add a "All Scope" menu item
         const resetItem = createGeoScopeMenuItem({
-          label: i18n["scopes.all"],
+          label: i18n["decidim_geo.scopes.all"],
           onClick: () => {
             geoStore.getState().selectScope(undefined);
           }
