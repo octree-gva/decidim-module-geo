@@ -450,5 +450,6 @@ a.decidimGeo__drawer__viewBtn {
 }
 
 .decidimGeo__marker {
-  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.35));
+  filter: initial;
+  // filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.35));
 }

@@ -1,48 +1,14 @@
-import configStore from "../models/configStore";
-import { createDomElement } from "./createDomElement";
-import createClasses from "./createClasses";
 import _ from "lodash";
+import { fallback, meetings } from "./DrawerMenuItem";
 
-const createNodeMenuItem = ({ node, onClick }) => {
-  const { i18n, images } = configStore.getState();
-  const listCard = createDomElement("li", "decidimGeo__drawer__listCard");
-  listCard.onclick = onClick;
-
-  const info = createDomElement("div", "decidimGeo__drawer__listCardInfo", listCard);
-
-  const infoType = createDomElement("div", "decidimGeo__drawer__listCardType", info);
-  infoType.textContent += i18n[node.type];
-  const notGeoEncodedIcon = createDomElement(
-    "img",
-    createClasses(
-      "decidimGeo__drawer__listCardIcon",
-      [node.coordinates && "hidden"]
-    ),
-    infoType
-  )
-  notGeoEncodedIcon.src = images?.not_geolocated;
-
-  const infoTitle = createDomElement("div", "decidimGeo__drawer__listCardTitle", info);
-  infoTitle.textContent += node.title.translation;
-
-
-  if (node.shortDescription) {
-    const infoDescription = createDomElement(
-      "div",
-      "decidimGeo__drawer__listCardDescription",
-      info
-    );
-    infoDescription.textContent += node.shortDescription.translation.replace(
-      /<[^>]+>/g,
-      ""
-    );
+const createNodeMenuItem = (node) => {
+  console.log(node.type, node.type === "Decidim::Meetings::Meeting")
+  switch (node.type) {
+    case "Decidim::Meetings::Meeting":
+      return meetings(node);
+    default:
+      return fallback(node);
   }
-
-  if (!_.isEmpty(node.bannerImage)) {
-    const image = createDomElement("img", "decidimGeo__drawer__listCardImg", listCard);
-    image.src = node.bannerImage;
-  }
-  return listCard;
 };
 
 export default createNodeMenuItem;

@@ -31,15 +31,15 @@ const fallback = (container, node) => {
     container
   );
   infoTitle.textContent += node.title.translation;
-  if (node.shortDescription) {
+  if (node.description) {
     const infoDescription = L.DomUtil.create(
       "div",
       "decidimGeo__drawer__listCardDescription decidimGeo__drawer__listCardDescription--large",
       container
     );
-    infoDescription.textContent += _.truncate(
-      node.shortDescription.translation.replace(/<[^>]+>/g, ""),
-      800
+    infoDescription.textContent = _.truncate(
+      node.description.translation.replace(/<[^>]+>/g, ""),
+      {length: 2500}
     );
   }
 };
