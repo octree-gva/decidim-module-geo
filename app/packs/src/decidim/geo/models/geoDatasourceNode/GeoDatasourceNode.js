@@ -100,14 +100,11 @@ export default class GeoDatasourceNode {
       this.marker.bringToFront();
     }
     try {
-
       this.repaint();
-      this.menuItem = createNodeMenuItem({
-        node: this.data,
-        onClick: () => {
-          this.select("sidebar");
-        }
-      });
+      this.menuItem = createNodeMenuItem(this.data);
+      this.menuItem.onclick = () => {
+        this.select("sidebar");
+      }
 
       geoStore.subscribe(
         (state) => [state.selectedPoint],

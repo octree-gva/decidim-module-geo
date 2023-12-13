@@ -6,7 +6,7 @@ module Decidim
   module Geo
     class GeoDatasourceType < Decidim::Api::Types::BaseObject
       description "A datasource for all objects"
-
+      include Decidim::SanitizeHelper
       field :type, String, null: false
       field :id, ID, null: false
       field :component_id, ID, null: true
@@ -53,6 +53,7 @@ module Decidim
 
       def short_description
         return object.short_description if object.respond_to?(:short_description)
+        return description
       end
 
       def description
@@ -62,6 +63,7 @@ module Decidim
 
       def banner_image
         return object.attached_uploader(:banner_image).url(only_path: true) if object.respond_to?(:banner_image)
+        return object.attachments.first.url if object.respond_to?(:attachments) && object.attachments.first
       end
 
       def coordinates
