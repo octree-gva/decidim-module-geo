@@ -9,6 +9,7 @@ const store = createStore(
   subscribeWithSelector((set) => ({
     defaultFilters: [],
     activeFilters: [],
+
     setDefaultFilters: (filters = []) => {
       const sortedFilters = _.sortBy(filters, [sortingIteratee]);
       set(() => ({
@@ -34,22 +35,23 @@ const store = createStore(
       }));
     },
     toFilterOptions: (name, filters) => {
+      const {defaultFilters} = dropdownFilterStore.getState();
       switch (name) {
         case "GeoShowFilter":
-          return "all";
+          return defaultFilters.GeoShowFilter || "all";
         case "GeoTimeFilter":
-          return "all";
+          return defaultFilters.GeoTimeFilter || "all";
         case "GeoType":
           const typeMatch = filters.find(
             ({ resourceTypeFilter = undefined }) => resourceTypeFilter
           );
-          if (!typeMatch) return "all";
+          if (!typeMatch) return defaultFilters.GeoType || "all";
           const resourceType = typeMatch.resourceTypeFilter.resourceType;
           if (resourceType === "Decidim::Assembly") return "only_assemblies";
           if (resourceType === "Decidim::Proposals::Proposal") return "only_proposals";
           if (resourceType === "Decidim::Meetings::Meeting") return "only_meetings";
           if (resourceType === "Decidim::ParticipatoryProcess") return "only_processes";
-          return "all";
+          return defaultFilters.GeoType || "all";
       }
     }
   }))

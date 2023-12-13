@@ -61,10 +61,12 @@ const store = createStore(
     },
     pointsForFilters: async (filters = []) => {
       const locale = configStore.getState().locale;
-      const { points, _lastFilter, _lastResponse } = store.getState();
+      const { points, _lastFilter: lastFilter, _lastResponse: lastResponse } = store.getState();
+      const cacheKey = JSON.stringify(filters)
       // cache
-      if (JSON.stringify(filters) === _lastFilter) {
-        return _lastResponse;
+      if (cacheKey === lastFilter) {
+        console.log("CACHE HIT: ", {lastFilter, lastResponse})
+        return lastResponse;
       }
 
       set(() => ({ isLoading: true }));
@@ -84,7 +86,7 @@ const store = createStore(
         .filter(Boolean);
 
       set(() => ({
-        _lastFilter: JSON.stringify(filters),
+        _lastFilter: cacheKey,
         _lastResponse: filteredPoints,
         isLoading: false
       }));

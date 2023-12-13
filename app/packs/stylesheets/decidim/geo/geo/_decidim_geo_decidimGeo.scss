@@ -142,9 +142,29 @@
 .decidimGeo__filterDropdown__dropdown--open {
   display: block;
 }
+.decidimGeo__filterDropdown__counter {
+  border-radius: 50%;
+  float: right;
+  display: flex;
+  width: 20px;
+  height: 20px;
+  padding: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  background: rgba(var(--primary-rgb), 0.25)
+}
+.decidimGeo__filterDropdown__titleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 16px;
+}
 .decidimGeo__filterDropdown__title {
   @include decidimGeo__clickableText;
-  padding: 8px 16px 8px 8px;
+  padding: 8px 10px 8px 8px;
   float: right;
   text-transform: uppercase;
   font-family: $header-font-family;
@@ -157,7 +177,7 @@
   }
 }
 .decidimGeo__filterDropdown__title--disabled {
-  opacity: 0.3;
+  opacity: 0.25;
 }
 .decidimGeo__filterDropdown__list {
   display: flex;
@@ -187,7 +207,6 @@
   box-shadow: none;
   color: #1a181d;
 }
-
 .decidimGeo__filterDropdown__resetBtn,
 .decidimGeo__filterDropdown__applyBtn {
   @include decidimGeo__clickableText;

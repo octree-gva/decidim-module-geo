@@ -20,10 +20,13 @@ const _getGeoDatasourceIds = makeQuery("geoDatasourceIds", "geoDatasource");
 
 export const getGeoDatasource = async (params = {}, fetchAll = true) => {
   let results = [];
+  if(!params.variables) {
+    params.variables = {};
+  }
   const apiQuery = fetchAll ? _getGeoDatasource : _getGeoDatasourceIds;
   let page;
   try {
-    page = await apiQuery({variables: params});
+    page = await apiQuery(params);
   } catch (error) {
     console.error(error);
     throw error;
@@ -32,18 +35,18 @@ export const getGeoDatasource = async (params = {}, fetchAll = true) => {
   const { hasNextPage = false, endCursor = "" } = page?.pageInfo || {};
   results = results.concat(page.nodes);
   let hasMore = hasNextPage;
-  params.after = endCursor;
+  params.variables.after = endCursor;
   while (hasMore) {
     try {
-      page = await apiQuery({variables: params})
+      page = await apiQuery(params)
     } catch (error) {
       console.error(error);
       return { nodes: results, edges: page.edge };
     }
-    const { endCursor = params.after, hasNextPage } = page.pageInfo || {};
+    const { endCursor = params.variables.after, hasNextPage } = page.pageInfo || {};
     results = results.concat(page.nodes);
     hasMore = hasNextPage;
-    params.after = endCursor;
+    params.variables.after = endCursor;
   }
 
   return { nodes: results, edges: page.edge };

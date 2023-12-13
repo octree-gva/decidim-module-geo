@@ -64,7 +64,7 @@ module Decidim
           # The results must be within a process
           search_results = search_results.where(
             decidim_participatory_space_type: "Decidim::ParticipatoryProcess",
-            decidim_participatory_space_id: assembly.process_filter.process_id
+            decidim_participatory_space_id: process.process_filter.process_id
           )
         end
 

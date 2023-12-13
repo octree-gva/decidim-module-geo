@@ -10,11 +10,23 @@ class FilterDropdown {
       "decidimGeo__filterDropdown__container",
       parent
     );
+    const titleContainer =  L.DomUtil.create(
+      "div",
+      "decidimGeo__filterDropdown__titleContainer",
+      this.container
+    );
     this.title = L.DomUtil.create(
       "h6",
       createClasses("decidimGeo__filterDropdown__title", [this.isOpen() && "active"]),
-      this.container
+      titleContainer
     );
+    this.countBadge = L.DomUtil.create(
+      "span",
+      createClasses("decidimGeo__filterDropdown__counter", ["hidden"]),
+      titleContainer
+    );
+    this.countBadge.textContent= 0;
+
     this.dropdown = L.DomUtil.create(
       "div",
       createClasses("decidimGeo__filterDropdown__dropdown", [!this.isOpen() && "closed"]),
@@ -195,12 +207,18 @@ class FilterDropdown {
 
   repaint() {
     const { selectedPoint } = geoStore.getState();
+    const { filterCount } = dropdownFilterStore.getState();
+    const badgeCount = filterCount();
     this.title.onclick = selectedPoint
       ? () => {}
       : () => {
           this.toggle();
           this.repaint();
         };
+      this.countBadge.className = createClasses("decidimGeo__filterDropdown__counter", [
+        badgeCount === 0 && "hidden"
+      ])
+    this.countBadge.textContent = badgeCount
     this.title.className = createClasses("decidimGeo__filterDropdown__title", [
       this.isOpen() && "active",
       selectedPoint && "disabled"
