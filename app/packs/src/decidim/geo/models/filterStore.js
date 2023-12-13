@@ -35,7 +35,7 @@ const store = createStore(
       }));
     },
     toFilterOptions: (name, filters) => {
-      const {defaultFilters} = dropdownFilterStore.getState();
+      const { defaultFilters } = dropdownFilterStore.getState();
       switch (name) {
         case "GeoShowFilter":
           return defaultFilters.GeoShowFilter || "all";

@@ -19,6 +19,7 @@ module Decidim
               locale: current_locale,
               space_id: space_id || nil,
               selected_component: current_component || nil,
+              selected_point: current_component? && params[:id] ? params[:id] : nil,
               filters: @options[:filters] || [],
               map_config: {
                 lat: geo_config[:latitude],
@@ -71,6 +72,7 @@ module Decidim
             return request.env["decidim.current_component"].id if current_component?
             "none"
           end  
+
           def current_component?
             request.env["decidim.current_component"].present?
           end  

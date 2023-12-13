@@ -78,10 +78,14 @@ async function createSidebar() {
       );
       const onClick = () => {
         location.href = node.link;
-      }
-      listCard.onclick = onClick
+      };
+      listCard.onclick = onClick;
 
-      const info = L.DomUtil.create("div", "decidimGeo__drawer__listCardInfo decidimGeo__drawer__listCardInfo--large", listCard);
+      const info = L.DomUtil.create(
+        "div",
+        "decidimGeo__drawer__listCardInfo decidimGeo__drawer__listCardInfo--large",
+        listCard
+      );
       switch (node.type) {
         case "Decidim::Meetings::Meeting":
           meetingDetails(info, node);
@@ -91,8 +95,8 @@ async function createSidebar() {
           break;
       }
       const viewBtn = L.DomUtil.create("a", "decidimGeo__drawer__viewBtn", listCard);
-      viewBtn.textContent = "View"
-      viewBtn.href = node.link
+      viewBtn.textContent = "View";
+      viewBtn.href = node.link;
       return listCard;
     },
     repaint() {

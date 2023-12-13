@@ -61,11 +61,15 @@ const store = createStore(
     },
     pointsForFilters: async (filters = []) => {
       const locale = configStore.getState().locale;
-      const { points, _lastFilter: lastFilter, _lastResponse: lastResponse } = store.getState();
-      const cacheKey = JSON.stringify(filters)
+      const {
+        points,
+        _lastFilter: lastFilter,
+        _lastResponse: lastResponse
+      } = store.getState();
+      const cacheKey = JSON.stringify(filters);
       // cache
       if (cacheKey === lastFilter) {
-        console.log("CACHE HIT: ", {lastFilter, lastResponse})
+        console.log("CACHE HIT: ", { lastFilter, lastResponse });
         return lastResponse;
       }
 

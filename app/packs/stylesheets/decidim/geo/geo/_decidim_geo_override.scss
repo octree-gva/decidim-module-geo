@@ -26,7 +26,7 @@ implementing BEM (https://getbem.com/introduction/) and remove !important rules*
 }
 .leaflet-container a {
   color: var(--primary) !important;
-  &:hover{
+  &:hover {
     color: var(--primary);
     opacity: 0.6;
   }

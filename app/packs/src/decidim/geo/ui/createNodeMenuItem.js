@@ -1,6 +1,6 @@
 import configStore from "../models/configStore";
 import { createDomElement } from "./createDomElement";
-import _ from 'lodash'
+import _ from "lodash";
 
 const createNodeMenuItem = ({ node, onClick }) => {
   const { i18n } = configStore.getState();

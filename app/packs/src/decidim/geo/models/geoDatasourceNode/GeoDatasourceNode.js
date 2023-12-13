@@ -16,15 +16,29 @@ export default class GeoDatasourceNode {
 
   repaint() {
     const { selectedPoint } = geoStore.getState();
-    const { selected_component } = configStore.getState();
+    const { selected_component, selected_point: pinPoint } = configStore.getState();
 
     if(this.isGeoLocated()) {
-      if (selectedPoint === this) {
-        this.marker.setStyle(this.selectedState);
-      } else if (this.data.componentId == selected_component) {
-        this.marker.setStyle(this.selectedState);
-      } else {
-        this.marker.setStyle(this.staledState);
+      if(pinPoint) {
+        if (selectedPoint === this) {
+          this.marker.setStyle(this.selectedState);
+          this.marker.bringToFront();
+        } else if (!selectedPoint && this.data.componentId == selected_component && pinPoint == `${this.data.id}`) {
+          this.marker.setStyle(this.selectedState);
+          this.marker.bringToFront();
+        } else {
+          this.marker.setStyle(this.staledState);
+        }
+      }else {
+        if (selectedPoint === this) {
+          this.marker.setStyle(this.selectedState);
+          this.marker.bringToFront();
+        } else if (!selectedPoint && this.data.componentId == selected_component) {
+          this.marker.setStyle(this.selectedState);
+          this.marker.bringToFront();
+        } else {
+          this.marker.setStyle(this.staledState);
+        }
       }
     }
   }
