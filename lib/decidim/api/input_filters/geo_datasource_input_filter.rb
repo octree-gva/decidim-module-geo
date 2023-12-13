@@ -11,6 +11,7 @@ module Decidim
       argument :process_filter, Decidim::Geo::ProcessInputFilter, description: "List results by ParticipatoryProcess", required: false
       argument :scope_filter, Decidim::Geo::ScopeInputFilter, description: "List results by Scope", required: false
       argument :resource_type_filter, Decidim::Geo::ResourceTypeInputFilter, description: "List results by Resource Type", required: false
+      argument :time_filter, type: Decidim::Geo::TimeInputFilter, description: "List results by time", required: false
     end
   end
 end

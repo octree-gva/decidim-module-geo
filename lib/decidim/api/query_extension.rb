@@ -42,16 +42,17 @@ module Decidim
         resource_type = kwargs[:filters].find {|f| f[:resource_type_filter].present?}
         process = kwargs[:filters].find {|f| f[:process_filter].present?}
         assembly = kwargs[:filters].find {|f| f[:assembly_filter].present?}
-        search_params = {locale: locale, class_name: supported_geo_components};
+        @time = kwargs[:filters].find {|f| f[:time_filter].present?}
+        @search_params = {locale: locale, class_name: supported_geo_components};
         if scope
           # Search only in a given scope
-          search_params = search_params.merge({scope_ids: scope.scope_filter.scope_id})
+          @search_params = @search_params.merge({scope_ids: scope.scope_filter.scope_id})
         end
         if resource_type
           # search only for a resource type
-          search_params = search_params.merge({class_name: resource_type.resource_type_filter.resource_type})
+          @search_params = @search_params.merge({class_name: resource_type.resource_type_filter.resource_type})
         end
-        search_results = filtered_query_for(**search_params)
+        search_results = filtered_query_for(**@search_params)
         if assembly
           # The results must be within an assembly
           search_results = search_results.where(
@@ -68,6 +69,12 @@ module Decidim
           )
         end
 
+        if @time
+          byebug
+          search_results = search_results.where(decidim_participatory_space_id: spaces_to_filter(@time.time_filter.time))
+        end unless @search_params[:class_name] == "Decidim::Meetings::Meeting"
+
+        byebug
         fetch_results(search_results)
       end
 
@@ -134,7 +141,21 @@ module Decidim
         end
 
         data_by_resource_type.map do |k, v|
-          k.constantize.where(id: v)
+          byebug
+          if @time && !@search_params[:class_name].include?("Decidim::Meetings::Meeting")
+            case @time.time_filter.time
+            when "past"
+              k.constantize.where(id: v).where("end_time < ?", DateTime.now)
+            when "active"
+              k.constantize.where(id: v).where(start_time: DateTime.now..30.days.since)
+            when "future"
+              k.constantize.where(id: v).where("start_time >= ?", 30.days.since)
+            else
+              k.constantize.where(id: v)
+            end
+          else
+            k.constantize.where(id: v)
+          end
         end.flatten
       end
 
@@ -142,10 +163,11 @@ module Decidim
         {decidim_scope_id: filter[:scope_ids]}.merge(decidim_participatory_space: spaces_to_filter(filter)).compact
       end
   
-      def spaces_to_filter(filter)  
+      def spaces_to_filter(time_filter)
+        byebug
         Decidim.participatory_space_manifests.flat_map do |manifest|
           public_spaces = manifest.participatory_spaces.call(organization).public_spaces
-          spaces = case filter[:space_state]
+          spaces = case time_filter
                    when "active"
                      public_spaces.active_spaces
                    when "future"
