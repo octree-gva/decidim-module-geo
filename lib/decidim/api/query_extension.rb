@@ -70,11 +70,9 @@ module Decidim
         end
 
         if @time
-          byebug
           search_results = search_results.where(decidim_participatory_space_id: spaces_to_filter(@time.time_filter.time))
         end unless @search_params[:class_name] == "Decidim::Meetings::Meeting"
 
-        byebug
         fetch_results(search_results)
       end
 
@@ -141,7 +139,6 @@ module Decidim
         end
 
         data_by_resource_type.map do |k, v|
-          byebug
           if @time && !@search_params[:class_name].include?("Decidim::Meetings::Meeting")
             case @time.time_filter.time
             when "past"
@@ -164,7 +161,6 @@ module Decidim
       end
   
       def spaces_to_filter(time_filter)
-        byebug
         Decidim.participatory_space_manifests.flat_map do |manifest|
           public_spaces = manifest.participatory_spaces.call(organization).public_spaces
           spaces = case time_filter
