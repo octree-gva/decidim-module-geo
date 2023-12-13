@@ -24,6 +24,13 @@ implementing BEM (https://getbem.com/introduction/) and remove !important rules*
 .leaflet-container .leaflet-popup-tip {
   border-color: transparent;
 }
+.leaflet-container a {
+  color: var(--primary) !important;
+  &:hover{
+    color: var(--primary);
+    opacity: 0.6;
+  }
+}
 
 .leaflet-top .leaflet-control-layers {
   margin-top: 0;

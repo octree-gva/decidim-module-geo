@@ -23,28 +23,26 @@ export const getGeoDatasource = async (params = {}, fetchAll = true) => {
   const apiQuery = fetchAll ? _getGeoDatasource : _getGeoDatasourceIds;
   let page;
   try {
-    page = await apiQuery(params);
+    page = await apiQuery({variables: params});
   } catch (error) {
     console.error(error);
     throw error;
   }
   if (!page) return [];
   const { hasNextPage = false, endCursor = "" } = page?.pageInfo || {};
-  if (page?.pageInfo) delete page.pageInfo;
   results = results.concat(page.nodes);
   let hasMore = hasNextPage;
   params.after = endCursor;
   while (hasMore) {
     try {
-      page = await apiQuery(params);
+      page = await apiQuery({variables: params})
     } catch (error) {
       console.error(error);
       return { nodes: results, edges: page.edge };
     }
-    const { endCursor = params.after } = page.pageInfo || {};
-    if (page?.pageInfo) delete page.pageInfo;
+    const { endCursor = params.after, hasNextPage } = page.pageInfo || {};
     results = results.concat(page.nodes);
-    hasMore = params.after != endCursor;
+    hasMore = hasNextPage;
     params.after = endCursor;
   }
 

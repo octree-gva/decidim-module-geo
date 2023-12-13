@@ -7,21 +7,30 @@ export default class GeoDatasourceNode {
     //Model
     this.data = node;
     this.map = map;
+    this.marker = undefined;
+  }
+
+  isGeoLocated() {
+    return this.marker;
   }
 
   repaint() {
     const { selectedPoint } = geoStore.getState();
     const { selected_component } = configStore.getState();
-    if (selectedPoint === this) {
-      this.marker.setStyle(this.selectedState);
-    } else if (this.data.componentId == selected_component) {
-      this.marker.setStyle(this.selectedState);
-    } else {
-      this.marker.setStyle(this.staledState);
+
+    if(this.isGeoLocated()) {
+      if (selectedPoint === this) {
+        this.marker.setStyle(this.selectedState);
+      } else if (this.data.componentId == selected_component) {
+        this.marker.setStyle(this.selectedState);
+      } else {
+        this.marker.setStyle(this.staledState);
+      }
     }
   }
 
   colorLayers() {
+    if(!this.isGeoLocated()) return;
     const { map } = configStore.getState();
     map.eachLayer((layer) => {
       if (layer.feature) {
@@ -36,7 +45,8 @@ export default class GeoDatasourceNode {
   }
 
   get id() {
-    return this.data.id || undefined;
+    if (!this.data.id || !this.data.type) return undefined;
+    return `${this.data.type}::${this.data.id}`;
   }
 
   get scopeId() {
@@ -52,6 +62,7 @@ export default class GeoDatasourceNode {
   }
 
   panToMarker() {
+    if(!this.isGeoLocated()) return;
     const center = L.latLng([
       this.data.coordinates.latitude,
       this.data.coordinates.longitude
@@ -62,21 +73,20 @@ export default class GeoDatasourceNode {
   }
 
   select() {
-    this.panToMarker();
+    if(this.isGeoLocated())
+      this.panToMarker();
     geoStore.getState().selectPoint(this);
     this.repaint();
   }
 
   init() {
-    if (!this.data?.coordinates) {
-      // This is not a marker
-      console.log("This is not a marker");
-      return undefined;
-    }
-    try {
+    if (this.data?.coordinates) {
       this.marker = createNodeMarker(this.data);
       this.marker.on("click", this.select.bind(this));
       this.marker.bringToFront();
+    }
+    try {
+
       this.repaint();
       this.menuItem = createNodeMenuItem({
         node: this.data,

@@ -86,6 +86,9 @@
     margin-left: 4px;
   }
 
+  &--button:after {
+    display: none;
+  }
   &--closed {
     &:after {
       transform: rotate(0);
@@ -148,10 +151,13 @@
   letter-spacing: 0.2px;
   margin-bottom: 0;
   color: #3d393c;
-  &:hover,
+  &:not(.decidimGeo__filterDropdown__title):hover,
   &.decidimGeo__filterDropdown__title--active {
     color: var(--primary);
   }
+}
+.decidimGeo__filterDropdown__title--disabled {
+  opacity: 0.3;
 }
 .decidimGeo__filterDropdown__list {
   display: flex;
@@ -168,10 +174,10 @@
 .decidimGeo__filterDropdown__label {
   @include decidimGeo__clickableText;
   color: #1a181d;
-
   padding: 8px 16px 8px 8px;
   font-size: 14px;
 }
+
 .decidimGeo__filterDropdown__select,
 .decidimGeo__filterDropdown__select:focus {
   margin-bottom: 0;
@@ -181,6 +187,7 @@
   box-shadow: none;
   color: #1a181d;
 }
+
 .decidimGeo__filterDropdown__resetBtn,
 .decidimGeo__filterDropdown__applyBtn {
   @include decidimGeo__clickableText;
@@ -195,7 +202,7 @@
 }
 
 .decidimGeo__scopesDropdown__list,
-.decidimGeo__sidebar__list {
+.decidimGeo__drawer__list {
   width: 300px;
   height: auto;
   max-height: 400px;
@@ -214,6 +221,9 @@
     margin: 0;
     padding: 0;
   }
+  &--hidden {
+    display: none;
+  }
 }
 .decidimGeo__scopesDropdown__listItem {
   @include decidimGeo__clickableText;
@@ -222,7 +232,7 @@
   padding-left: 16px;
   padding-right: 16px;
 }
-.decidimGeo__sidebar__list {
+.decidimGeo__drawer__list {
   transform: translateY(31px);
   padding: 4px 16px;
   background: #f0f0f0;
@@ -235,21 +245,38 @@
   }
 }
 
-.decidimGeo__sidebar__listItem {
+.decidimGeo__drawer__listItem {
   @include decidimGeo__clickableText;
   display: block;
   margin: 6px 8px;
   padding-left: 16px;
   padding-right: 16px;
 }
-.decidimGeo__sidebar__listCardLoader {
+.decidimGeo__emptyDrawer__container {
+  text-align: center;
+}
+.decidimGeo__emptyDrawer__paragraph {
+  padding: 24px 0;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 21.37px;
+}
+.decidimGeo__emptyDrawer__button {
+  @include decidimGeo__clickableText;
+  display: inline-block;
+  margin: 0 8px;
+  margin-bottom: 24px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.decidimGeo__drawer__listCardLoader {
   content: "";
   width: 100%;
   padding: 0 12px;
   background: #eee;
 }
 
-.decidimGeo__sidebar__listCard {
+.decidimGeo__drawer__listCard {
   @include decidimGeo__border;
   display: block;
   background: #ffffff;
@@ -269,23 +296,48 @@
   }
 }
 
-.decidimGeo__sidebar__listCardImg {
+
+.decidimGeo__drawer__listCardImg {
   display: inline-block;
   vertical-align: bottom;
   width: 69px;
   height: 69px;
   padding: 0;
+  object-fit: cover;
+  &.decidimGeo__drawer__listCardImg--large {
+    width: 100%;
+    height: 180px;
+    position: absolute; 
+    top: 0;
+    left: 0;
+    right: 0;
+  }
 }
 
-.decidimGeo__sidebar__listCardInfo {
+.decidimGeo__drawer__listCardInfo {
   display: inline-block;
   vertical-align: bottom;
   max-height: 69px;
   padding: 8px;
   width: calc(100% - 69px);
+  &--image {
+    padding-top: calc(180px + 16px);
+  }
+  &--large {
+    max-height: none;
+    width: 100%;
+    position: relative;
+  }
+  &::after{
+    display: table;
+    content: "";
+    clear: both;
+    width: 100%;
+    height: 0;
+  }
 }
 
-.decidimGeo__sidebar__listCardType {
+.decidimGeo__drawer__listCardType {
   color: #808080;
   font-weight: bold;
   font-size: 11px;
@@ -293,7 +345,7 @@
   text-transform: uppercase;
 }
 
-.decidimGeo__sidebar__listCardTitle {
+.decidimGeo__drawer__listCardTitle {
   color: var(--primary);
   font-size: 17px;
   font-weight: 400;
@@ -304,7 +356,7 @@
   text-overflow: ellipsis;
 }
 
-.decidimGeo__sidebar__listCardDescription {
+.decidimGeo__drawer__listCardDescription {
   color: #3d393c;
   font-size: 14px;
   font-weight: 400;
@@ -314,7 +366,25 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-
+.decidimGeo__drawer__listCardDescription--large {
+  color: #3d393c;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17.6px;
+  max-width: 192px;
+  overflow: hidden;
+  white-space: initial;
+  text-overflow: initial;
+}
+a.decidimGeo__drawer__viewBtn {
+  @include decidimGeo__clickableText;
+  padding: 8px 16px;
+  letter-spacing: 0.2px;
+  color: #3d393c;
+  text-transform: uppercase;
+  text-decoration: none;
+  float: right;
+}
 .decidimGeo__scope__tooltip {
   background-color: transparent !important;
   border: transparent !important;

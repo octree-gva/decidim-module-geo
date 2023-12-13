@@ -16,7 +16,6 @@ module Decidim
           def insert_map
             id = @options[:id] || "HomePage"
             config = {
-              id: "#{id}", 
               locale: current_locale,
               space_id: space_id || nil,
               selected_component: current_component || nil,
@@ -32,7 +31,7 @@ module Decidim
             content_tag(
               :div, 
               '',
-              id: "GeoMap#{id}",
+              id: "DecidimGeo",
               class: [
                 "js-decidimgeo", 
                 "decidimgeo__map", 

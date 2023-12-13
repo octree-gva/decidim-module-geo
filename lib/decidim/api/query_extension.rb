@@ -37,22 +37,42 @@ module Decidim
       def geo_datasource(**kwargs)
         locale = kwargs[:locale] || I18n.locale
         return nofilter_datasource(locale) unless kwargs[:filters].present?
-        data = []
-        kwargs[:filters].each do |filter|
-          data.push(*term_datasource(filter[:term_filter], locale)) if filter[:term_filter].present?
-          data.push(*scope_datasource(filter[:scope_filter], locale)) if filter[:scope_filter].present?
-          data.push(*not_scope_datasource(filter[:not_scope_filter], locale)) if filter[:not_scope_filter].present?
-          data.push(*assembly_datasource(filter[:assembly_filter], locale)) if filter[:assembly_filter].present?
-          data.push(*process_datasource(filter[:process_filter], locale)) if filter[:process_filter].present?
-          data.push(*resource_type_datasource(filter[:resource_type_filter], locale)) if filter[:resource_type_filter].present?
-          data.push(*process_group_datasource(filter[:process_group_filter], locale)) if filter[:process_group_filter].present?
+        
+        scope = kwargs[:filters].find {|f| f[:scope_filter].present?}
+        resource_type = kwargs[:filters].find {|f| f[:resource_type_filter].present?}
+        process = kwargs[:filters].find {|f| f[:process_filter].present?}
+        assembly = kwargs[:filters].find {|f| f[:assembly_filter].present?}
+        search_params = {locale: locale, class_name: supported_geo_components};
+        if scope
+          # Search only in a given scope
+          search_params = search_params.merge({scope_ids: scope.scope_filter.scope_id})
         end
-        data
+        if resource_type
+          # search only for a resource type
+          search_params = search_params.merge({class_name: resource_type.resource_type_filter.resource_type})
+        end
+        search_results = filtered_query_for(**search_params)
+        if assembly
+          # The results must be within an assembly
+          search_results = search_results.where(
+            decidim_participatory_space_type: "Decidim::Assembly",
+            decidim_participatory_space_id: assembly.assembly_filter.assembly_id
+          )
+        end
+
+        if process
+          # The results must be within a process
+          search_results = search_results.where(
+            decidim_participatory_space_type: "Decidim::ParticipatoryProcess",
+            decidim_participatory_space_id: assembly.process_filter.process_id
+          )
+        end
+
+        fetch_results(search_results)
       end
 
       def geo_shapefiles(title: nil)
         return Decidim::Geo::Shapefile.where(title: title) if title.present?
-
         Decidim::Geo::Shapefile.all
       end
 
@@ -74,103 +94,9 @@ module Decidim
       private
 
       def nofilter_datasource(locale)
-        search_resources(locale: locale)
-      end
-
-      def term_datasource(term_filter, locale)
-        term = term_filter.term
-        resource_type = term_filter.resource_type
-        scope_ids = term_filter.scope_ids
-        space_state = term_filter.space_state
-
-        search_resources(type: resource_type, term: term, scope_ids: scope_ids, space_state: space_state, locale: locale)
-      end
-      
-      def scope_datasource(scope_filter, locale)
-        search_by_scope(scope_filter, locale)
-      end
-
-      def not_scope_datasource(scope_filter, locale)
-        nofilter = nofilter_datasource(locale)
-        return nofilter if scope_filter.scopes_id.empty?
-        nofilter.filter do |result|
-          if result.respond_to?(:scope) && scope=result.scope
-            !scope_filter.scopes_id.include?("#{scope.id}")
-          else
-            true
-          end
-        end 
-      end
-
-      def assembly_datasource(assembly_filter, locale)
-        participatory_space(assembly_filter.assembly_id, Decidim::Assembly, locale)
-      end
-
-      def process_datasource(process_filter, locale)
-        participatory_space(process_filter.process_id, Decidim::ParticipatoryProcess, locale)
-      end
-
-      def resource_type_datasource(resource_type_filter, locale)
-        resource_type = resource_type_filter.resource_type
-        resource_id = resource_type_filter.resource_id
-        search_resources(type: resource_type, id: resource_id, locale: locale)
-      end
-
-      def process_group_datasource(process_group_filter, locale)
-
-        data = []
-
-        process_group = Decidim::ParticipatoryProcessGroup.find(process_group_filter.process_group_id)
-        
-        if process_group.present?
-          process_ids = process_group.participatory_processes.map { |process| process.id }
-          process_ids.each do |process_id|
-            data.push(*participatory_space(process_id, Decidim::ParticipatoryProcess, locale)) 
-          end
-        end
-
-        data
-      end
-
-      def participatory_space(space_id, klass, locale)
-        return [] unless space_id.present?
-        space = klass.find_by(id: space_id) 
-        return [] unless space
-
-        data = []
-        if has_address?(space)
-          data.append(space) 
-        end
-
-        # Get all the component for the participatory space.
-        data.concat(
-          search_resources(spaces: space, locale: locale)
+        fetch_results(
+          filtered_query_for(locale: locale, class_name: supported_geo_components)
         )
-        # Get all the components that are bounded to the scope.
-        data.concat(
-          search_resources(scope_ids: space.scope.id, locale: locale)
-        ) if space.scope
-
-        data
-      end
-
-      def search_resources(type: nil, id: nil, term: nil, scope_ids: nil, space_state: nil, locale: I18n.locale, spaces: nil)
-        searchable_resources = type.present? ? [type] : supported_geo_components
-      
-        data = searchable_resources.flat_map do |klass_name|
-          result_ids = filtered_query_for(
-            class_name: klass_name, 
-            id: id, 
-            term: term, 
-            scope_ids: scope_ids, 
-            space_state: space_state, 
-            locale: locale,
-            spaces: spaces  
-            ).select("resource_id").pluck(:resource_id)
-          klass_name.constantize.where(id: result_ids).select { |result_data| has_address?(result_data) || has_geo_scope?(result_data)}
-        end
-      
-        data
       end
 
       def has_address?(resource)
@@ -195,14 +121,21 @@ module Decidim
 
         query.update(resource_id: id) if id.present?
         result_query = SearchableResource.where(query)
-
-        state_filter(filter).map do |attribute_name, value|
-          result_query = result_query.where(attribute_name => value)
-        end if space_state.present?
-  
         result_query = result_query.order("datetime DESC")
         result_query = result_query.global_search(I18n.transliterate(term)) if term.present?
         result_query
+      end
+
+      def fetch_results(searcheable_results)
+        data_by_resource_type = {}
+        searcheable_results.select("resource_id,resource_type").each do |resource|
+          data_by_resource_type[resource.resource_type] = [] unless data_by_resource_type[resource.resource_type].present?
+          data_by_resource_type[resource.resource_type].push(resource.resource_id) 
+        end
+
+        data_by_resource_type.map do |k, v|
+          k.constantize.where(id: v)
+        end.flatten
       end
 
       def state_filter(filter)
@@ -226,9 +159,10 @@ module Decidim
         end
       end
 
-      def search_by_scope(filter, locale)
+      def search_by_scope_params(filter, locale)
         scope = Decidim::Scope.where(id: filter.scope_id) if filter.scope_id.present?
-        search_resources(scope_ids: filter.scope_id, locale: locale) if scope.present?
+        return {scope_ids: filter.scope_id, locale: locale} if scope.present?
+        {}
       end
 
       def geo_scopes_ids

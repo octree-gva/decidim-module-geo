@@ -20,6 +20,7 @@ module Decidim
       field :start_time, Decidim::Core::DateTimeType, "The time this object starts", null: true
       field :end_time, Decidim::Core::DateTimeType, "The time this object ends", null: true
       field :scope, Decidim::Core::ScopeApiType, null: true
+      field :link, String, null: false
 
       def type
         object.class.name
@@ -39,6 +40,10 @@ module Decidim
 
       def participatory_space_type
         return object.component.participatory_space_type if object.respond_to?(:component) 
+      end
+
+      def link
+        Decidim::ResourceLocatorPresenter.new(object).path(anchor: "DecidimGeo")
       end
 
       def title
