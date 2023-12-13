@@ -3,17 +3,21 @@ import { subscribeWithSelector } from "zustand/middleware";
 const store = createStore(
   subscribeWithSelector((set) => ({
     isOpen: false,
-    defaultFilters: {GeoShowFilter: "all",
+    defaultFilters: {
+      GeoShowFilter: "all",
       GeoTimeFilter: "all",
-      GeoType: "only_active"},
-    selectedFilters: {GeoShowFilter: "all",
-    GeoTimeFilter: "all",
-    GeoType: "only_active"},
+      GeoType: "only_active"
+    },
+    selectedFilters: {
+      GeoShowFilter: "all",
+      GeoTimeFilter: "all",
+      GeoType: "only_active"
+    },
     filterCount: () => {
-      const {selectedFilters, defaultFilters} = store.getState()
+      const { selectedFilters, defaultFilters } = store.getState();
       return Object.entries(selectedFilters).filter(([key, value]) => {
-        return defaultFilters[key] !== value
-      }).length
+        return defaultFilters[key] !== value;
+      }).length;
     },
     resetFilters: () => {
       set(({ defaultFilters }) => ({ selectedFilters: defaultFilters }));

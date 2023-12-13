@@ -20,7 +20,7 @@ const _getGeoDatasourceIds = makeQuery("geoDatasourceIds", "geoDatasource");
 
 export const getGeoDatasource = async (params = {}, fetchAll = true) => {
   let results = [];
-  if(!params.variables) {
+  if (!params.variables) {
     params.variables = {};
   }
   const apiQuery = fetchAll ? _getGeoDatasource : _getGeoDatasourceIds;
@@ -38,7 +38,7 @@ export const getGeoDatasource = async (params = {}, fetchAll = true) => {
   params.variables.after = endCursor;
   while (hasMore) {
     try {
-      page = await apiQuery(params)
+      page = await apiQuery(params);
     } catch (error) {
       console.error(error);
       return { nodes: results, edges: page.edge };

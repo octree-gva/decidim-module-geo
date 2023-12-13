@@ -3,9 +3,13 @@ import configStore from "../../models/configStore";
 const fallback = (container, node) => {
   const { i18n } = configStore.getState();
   if (!_.isEmpty(node.bannerImage)) {
-    const image = L.DomUtil.create("img", "decidimGeo__drawer__listCardImg decidimGeo__drawer__listCardImg--large", container);
+    const image = L.DomUtil.create(
+      "img",
+      "decidimGeo__drawer__listCardImg decidimGeo__drawer__listCardImg--large",
+      container
+    );
     image.src = node.bannerImage;
-    container.className += " decidimGeo__drawer__listCardInfo--image"
+    container.className += " decidimGeo__drawer__listCardInfo--image";
   }
 
   const infoType = L.DomUtil.create("div", "decidimGeo__drawer__listCardType", container);

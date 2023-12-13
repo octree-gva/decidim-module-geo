@@ -6,7 +6,8 @@ const createCustomMarker = (location) => {
     color: "#404040",
     opacity: 1,
     weight: 5,
-    className: "decidimGeo__marker"
+    className: "decidimGeo__marker",
+    riseOnHover: true
   });
 };
 

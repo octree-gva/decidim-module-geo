@@ -68,14 +68,14 @@ async function createScopesDropdown() {
     },
     repaintHeading() {
       const { i18n } = configStore.getState();
-      const {selectedPoint} = geoStore.getState();
-      if(selectedPoint) {
+      const { selectedPoint } = geoStore.getState();
+      if (selectedPoint) {
         this.title.textContent = "Back";
         this.title.onclick = () => {
-          geoStore.getState().goBack()
-        }
+          geoStore.getState().goBack();
+        };
         return;
-      }else {
+      } else {
         this.title.onclick = () => {
           this.toggleShow();
           this.repaint();
@@ -112,7 +112,7 @@ async function createScopesDropdown() {
       });
     },
     repaintOpenClose() {
-      const {selectedPoint} = geoStore.getState();
+      const { selectedPoint } = geoStore.getState();
 
       // Dropdown backdrop open/close
       this.title.className = createClasses("decidimGeo__scopesDropdown__title", [
@@ -124,7 +124,6 @@ async function createScopesDropdown() {
         !this.isOpen && "closed",
         this.isEmpty() && "empty",
         selectedPoint && "hidden"
-
       ]);
     },
     repaint() {

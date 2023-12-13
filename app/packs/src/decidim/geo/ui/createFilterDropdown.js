@@ -10,7 +10,7 @@ class FilterDropdown {
       "decidimGeo__filterDropdown__container",
       parent
     );
-    const titleContainer =  L.DomUtil.create(
+    this.titleContainer = L.DomUtil.create(
       "div",
       "decidimGeo__filterDropdown__titleContainer",
       this.container
@@ -18,14 +18,14 @@ class FilterDropdown {
     this.title = L.DomUtil.create(
       "h6",
       createClasses("decidimGeo__filterDropdown__title", [this.isOpen() && "active"]),
-      titleContainer
+      this.titleContainer
     );
     this.countBadge = L.DomUtil.create(
       "span",
       createClasses("decidimGeo__filterDropdown__counter", ["hidden"]),
-      titleContainer
+      this.titleContainer
     );
-    this.countBadge.textContent= 0;
+    this.countBadge.textContent = 0;
 
     this.dropdown = L.DomUtil.create(
       "div",
@@ -215,14 +215,17 @@ class FilterDropdown {
           this.toggle();
           this.repaint();
         };
-      this.countBadge.className = createClasses("decidimGeo__filterDropdown__counter", [
-        badgeCount === 0 && "hidden"
-      ])
-    this.countBadge.textContent = badgeCount
-    this.title.className = createClasses("decidimGeo__filterDropdown__title", [
-      this.isOpen() && "active",
-      selectedPoint && "disabled"
+    this.countBadge.className = createClasses("decidimGeo__filterDropdown__counter", [
+      badgeCount === 0 && "hidden"
     ]);
+    this.countBadge.textContent = badgeCount;
+    this.title.className = createClasses("decidimGeo__filterDropdown__title", [
+      this.isOpen() && "active"
+    ]);
+    this.titleContainer.className = createClasses(
+      "decidimGeo__filterDropdown__titleContainer",
+      [selectedPoint && "disabled"]
+    );
 
     this.dropdown.className = createClasses("decidimGeo__filterDropdown__dropdown", [
       !this.isOpen() && "closed"
