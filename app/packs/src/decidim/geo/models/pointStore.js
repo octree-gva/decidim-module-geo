@@ -15,11 +15,7 @@ const store = createStore(
     isLoading: true,
     _lastFilter: "",
     _lastResponse: [],
-    getFilteredPoints: () => {
-      const { _lastResponse, points } = store.getState();
-      if (_lastResponse.length > 0) return _lastResponse;
-      return points;
-    },
+    getFilteredPoints: () => store.getState()._lastResponse,
     fetchAll: async () => {
       const locale = configStore.getState().locale;
       set(() => ({ isLoading: true }));
@@ -59,8 +55,8 @@ const store = createStore(
         })
         .filter(Boolean);
       set(() => ({
-        isLoading: false,
-        scopes: geoScopes
+        scopes: geoScopes,
+        isLoading: false
       }));
     },
     pointsForFilters: async (filters = []) => {
@@ -68,7 +64,6 @@ const store = createStore(
       const { points, _lastFilter, _lastResponse } = store.getState();
       // cache
       if (JSON.stringify(filters) === _lastFilter) {
-        console.log("Cache Hit: same filter");
         return _lastResponse;
       }
 
@@ -83,8 +78,8 @@ const store = createStore(
         return [];
       }
       const filteredPoints = ids.nodes
-        .map(({ id: needleId }) => {
-          return points.find(({ id }) => needleId === id);
+        .map(({ id: needleId, type: needleType }) => {
+          return points.find(({ id }) => `${needleType}::${needleId}` === id);
         })
         .filter(Boolean);
 

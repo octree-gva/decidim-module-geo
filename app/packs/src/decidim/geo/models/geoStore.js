@@ -2,6 +2,7 @@ import { createStore } from "zustand/vanilla";
 import { subscribeWithSelector } from "zustand/middleware";
 import dataPointStore from "./pointStore";
 import filterStore from "./filterStore";
+import dropdownFilterStore from "./dropdownFilterStore";
 
 const store = createStore(
   subscribeWithSelector((set) => ({
@@ -26,7 +27,7 @@ const store = createStore(
         ...state,
         selectedScope: dataPointStore
           .getState()
-          .scopes.find(({ data }) => data.id === point.scopeId),
+          .scopes.find(({ data }) => data.id === point?.scopeId),
         selectedPoint: point,
         previousState: state
       }));
@@ -61,12 +62,14 @@ const store = createStore(
     }
   }))
 );
-/**
- * When we select a scope, we define a use filter.
- */
+
 store.subscribe(
   (state) => [state.selectedScope],
   ([selectedScope]) => {
+    // Close the drowp down
+    dropdownFilterStore.getState().close();
+
+    // Update filter associated to the scope
     const { activeFilters, setFilters } = filterStore.getState();
     const filtersWithoutScopes = activeFilters.filter((filter) => {
       return typeof filter["scopeFilter"] === "undefined";
@@ -78,6 +81,13 @@ store.subscribe(
     } else {
       setFilters(filtersWithoutScopes);
     }
+  }
+);
+store.subscribe(
+  (state) => [state.selectedPoint],
+  () => {
+    // Close the filter dropdown
+    dropdownFilterStore.getState().close();
   }
 );
 export default store;

@@ -36,13 +36,16 @@ async function main() {
       ([isLoading, getFilteredPoints]) => {
         if (isLoading) return;
         pointsLayer.clearLayers();
-        const group = L.featureGroup(
-          getFilteredPoints().map(({ marker }) => {
-            pointsLayer.addLayer(marker);
-            return marker;
-          })
-        );
-        map.fitBounds(group.getBounds());
+        const pointInMap = getFilteredPoints().filter((node) => node.isGeoLocated());
+        if (pointInMap.length > 0) {
+          const group = L.featureGroup(
+            pointInMap.map(({ marker }) => {
+              pointsLayer.addLayer(marker);
+              return marker;
+            })
+          );
+          map.fitBounds(group.getBounds());
+        }
       }
     );
 

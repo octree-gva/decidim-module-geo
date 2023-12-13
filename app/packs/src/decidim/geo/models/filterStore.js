@@ -43,18 +43,14 @@ const store = createStore(
           const typeMatch = filters.find(
             ({ resourceTypeFilter = undefined }) => resourceTypeFilter
           );
-          if(!typeMatch) return "all"
-          const resourceType = typeMatch.resourceTypeFilter.resourceType
-          if (resourceType === "Decidim::Assembly")
-            return "only_assemblies";
-          if (resourceType === "Decidim::Proposals::Proposal")
-            return "only_proposals";
-          if (resourceType === "Decidim::Meetings::Meeting")
-            return "only_meetings";
-          if (resourceType === "Decidim::ParticipatoryProcess")
-            return "only_processes";
+          if (!typeMatch) return "all";
+          const resourceType = typeMatch.resourceTypeFilter.resourceType;
+          if (resourceType === "Decidim::Assembly") return "only_assemblies";
+          if (resourceType === "Decidim::Proposals::Proposal") return "only_proposals";
+          if (resourceType === "Decidim::Meetings::Meeting") return "only_meetings";
+          if (resourceType === "Decidim::ParticipatoryProcess") return "only_processes";
           return "all";
-      }  
+      }
     }
   }))
 );
@@ -66,8 +62,8 @@ store.subscribe(
   async ([activeFilters], [previousActiveFilter]) => {
     if (!_.isEqual(activeFilters, previousActiveFilter))
       await pointStore.getState().pointsForFilters(activeFilters);
-    const {toFilterOptions} = store.getState()
-    const {setFilter} = dropdownFilterStore.getState();
+    const { toFilterOptions } = store.getState();
+    const { setFilter } = dropdownFilterStore.getState();
     setFilter("GeoShowFilter", toFilterOptions("GeoShowFilter", activeFilters));
     setFilter("GeoTimeFilter", toFilterOptions("GeoTimeFilter", activeFilters));
     setFilter("GeoType", toFilterOptions("GeoType", activeFilters));

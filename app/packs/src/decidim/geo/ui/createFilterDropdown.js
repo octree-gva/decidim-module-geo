@@ -1,5 +1,6 @@
 import createClasses from "./createClasses";
 import dropdownFilterStore from "../models/dropdownFilterStore";
+import geoStore from "../models/geoStore";
 import configStore from "../models/configStore";
 import filterStore from "../models/filterStore";
 class FilterDropdown {
@@ -32,12 +33,15 @@ class FilterDropdown {
     this.resetBtn.textContent = "Reset";
     this.resetBtn.onclick = () => {
       const { resetFilters } = filterStore.getState();
-      const { resetFilters: resetDropdownFilter, toggleOpen, selectedFilters} = dropdownFilterStore.getState();
+      const {
+        resetFilters: resetDropdownFilter,
+        toggleOpen,
+        selectedFilters
+      } = dropdownFilterStore.getState();
       resetFilters();
       resetDropdownFilter();
       this.applyValues(selectedFilters);
       toggleOpen();
-      this.repaint();
     };
     this.applyBtn = L.DomUtil.create(
       "button",
@@ -63,15 +67,21 @@ class FilterDropdown {
       (state) => [state.isOpen],
       () => this.repaint()
     );
+    filterStore.subscribe(
+      (state) => [state.activeFilters],
+      () => {
+        this.repaint();
+      }
+    );
   }
 
   defaultFilterFor(name) {
     const { toFilterOptions, defaultFilters } = filterStore.getState();
-    return toFilterOptions(name, defaultFilters)
+    return toFilterOptions(name, defaultFilters);
   }
 
   field(label, name, options) {
-    const {selectedFilters} = dropdownFilterStore.getState()
+    const { selectedFilters } = dropdownFilterStore.getState();
     const selectedValue = selectedFilters[name] || this.defaultFilterFor(name);
     const fieldGroup = L.DomUtil.create(
       "li",
@@ -184,12 +194,22 @@ class FilterDropdown {
   }
 
   repaint() {
+    const { selectedPoint } = geoStore.getState();
+    this.title.onclick = selectedPoint
+      ? () => {}
+      : () => {
+          this.toggle();
+          this.repaint();
+        };
+    this.title.className = createClasses("decidimGeo__filterDropdown__title", [
+      this.isOpen() && "active",
+      selectedPoint && "disabled"
+    ]);
+
     this.dropdown.className = createClasses("decidimGeo__filterDropdown__dropdown", [
       !this.isOpen() && "closed"
     ]);
-    this.title.className = createClasses("decidimGeo__filterDropdown__title", [
-      this.isOpen() && "active"
-    ]);
+
     this.repaintOptions();
   }
 

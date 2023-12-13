@@ -1,6 +1,6 @@
 export const geoDatasource = `
-  query geoDatasourceQuery ($locale: String!, $filters: [GeoDatasourceFilter!], $first: Int) {
-    geoDatasource(filters: $filters, locale: $locale, first: $first){
+  query geoDatasourceQuery ($locale: String!, $filters: [GeoDatasourceFilter!], $after: String) {
+    geoDatasource(filters: $filters, locale: $locale, after: $after){
       pageInfo {
         hasPreviousPage
         startCursor
@@ -9,6 +9,7 @@ export const geoDatasource = `
       }
       nodes {
         id
+        link
         participatorySpaceId
         participatorySpaceType
         componentId
@@ -37,8 +38,8 @@ export const geoDatasource = `
     }
   }`;
 export const geoDatasourceIds = `
-  query geoDatasourceQueryIds ($locale: String!, $filters: [GeoDatasourceFilter!], $first: Int) {
-    geoDatasource(filters: $filters, locale: $locale, first: $first){
+  query geoDatasourceQueryIds ($locale: String!, $filters: [GeoDatasourceFilter!], $after: String) {
+    geoDatasource(filters: $filters, locale: $locale, after: $after){
       pageInfo {
         hasPreviousPage
         startCursor
@@ -47,6 +48,7 @@ export const geoDatasourceIds = `
       }
       nodes {
         id
+        type
       }
     }
   }`;

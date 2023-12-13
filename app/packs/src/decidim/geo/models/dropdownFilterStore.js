@@ -1,6 +1,5 @@
 import { createStore } from "zustand/vanilla";
 import { subscribeWithSelector } from "zustand/middleware";
-import geoStore from "./geoStore";
 const store = createStore(
   subscribeWithSelector((set) => ({
     isOpen: false,
@@ -12,23 +11,17 @@ const store = createStore(
     resetFilters: () => {
       set(({ defaultFilters }) => ({ selectedFilters: defaultFilters }));
     },
-    setFilter: (name, value) =>{
+    setFilter: (name, value) => {
       set((state) => ({
         selectedFilters: {
           ...state.selectedFilters,
           [`${name}`]: value || "all"
         }
-      }))},
+      }));
+    },
     toggleOpen: () => set((state) => ({ isOpen: !state.isOpen })),
     close: () => set(() => ({ isOpen: false }))
   }))
 );
 
-// When selection (of point or scope) happens, close the drawer.
-geoStore.subscribe(
-  (state) => [state.selectedPoint, state.selectedScope],
-  () => {
-    store.getState().close();
-  }
-);
 export default store;
