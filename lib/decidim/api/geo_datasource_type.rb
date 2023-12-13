@@ -53,12 +53,24 @@ module Decidim
 
       def short_description
         return object.short_description if object.respond_to?(:short_description)
-        return description
+        return truncate_translated(object.body, 250) if object.respond_to?(:body)
+        return truncate_translated(object.description, 250) if object.respond_to?(:description)
       end
 
       def description
-        return object.body if object.respond_to?(:body)
-        return object.description if object.respond_to?(:description)
+        return truncate_translated(object.body) if object.respond_to?(:body)
+        return truncate_translated(object.description) if object.respond_to?(:description)
+      end
+
+      def truncate_translated(value, chars=2800) 
+        value.each do |key, v| 
+          if v.is_a?(Hash) 
+            value[key] = truncate_translated(v, chars)
+          else
+            value[key] = Decidim::HtmlTruncation.new(v, max_length: 2800,tail: "…",count_tags: false,count_tail: false,tail_before_final_tag: false).perform
+          end
+        end
+        value
       end
 
       def banner_image
