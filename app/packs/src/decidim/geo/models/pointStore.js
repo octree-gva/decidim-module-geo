@@ -1,8 +1,8 @@
 import { createStore } from "zustand/vanilla";
 import configStore from "./configStore";
 import { getGeoDatasource, getGeoScopes } from "../api";
-import GeoDatasourceNode from "./GeoDatasourceNode";
-import GeoScope from "./GeoScope";
+import GeoDatasourceNode from "./geoDatasourceNode";
+import GeoScope from "./geoScope";
 import { subscribeWithSelector } from "zustand/middleware";
 
 const store = createStore(
