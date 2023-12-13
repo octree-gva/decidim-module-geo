@@ -20,6 +20,9 @@ module Decidim
               space_id: space_id || nil,
               selected_component: current_component || nil,
               selected_point: current_component? && params[:id] ? params[:id] : nil,
+              images: {
+                not_geolocated: ActionController::Base.helpers.asset_pack_path("media/images/not-geolocated.svg")
+              },
               filters: @options[:filters] || [],
               map_config: {
                 lat: geo_config[:latitude],

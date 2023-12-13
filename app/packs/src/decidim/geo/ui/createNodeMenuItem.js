@@ -1,9 +1,10 @@
 import configStore from "../models/configStore";
 import { createDomElement } from "./createDomElement";
+import createClasses from "./createClasses";
 import _ from "lodash";
 
 const createNodeMenuItem = ({ node, onClick }) => {
-  const { i18n } = configStore.getState();
+  const { i18n, images } = configStore.getState();
   const listCard = createDomElement("li", "decidimGeo__drawer__listCard");
   listCard.onclick = onClick;
 
@@ -11,9 +12,19 @@ const createNodeMenuItem = ({ node, onClick }) => {
 
   const infoType = createDomElement("div", "decidimGeo__drawer__listCardType", info);
   infoType.textContent += i18n[node.type];
+  const notGeoEncodedIcon = createDomElement(
+    "img",
+    createClasses(
+      "decidimGeo__drawer__listCardIcon",
+      [node.coordinates && "hidden"]
+    ),
+    infoType
+  )
+  notGeoEncodedIcon.src = images?.not_geolocated;
 
   const infoTitle = createDomElement("div", "decidimGeo__drawer__listCardTitle", info);
   infoTitle.textContent += node.title.translation;
+
 
   if (node.shortDescription) {
     const infoDescription = createDomElement(
