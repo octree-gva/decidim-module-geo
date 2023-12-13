@@ -4,6 +4,7 @@ import geoStore from "../models/geoStore";
 import pointStore from "../models/pointStore";
 import configStore from "../models/configStore";
 import createFilterDropdown from "./createFilterDropdown";
+import scopeDropdownStore from "../models/scopeDropdownStore";
 
 async function createScopesDropdown() {
   const CustomLayerControl = L.Control.extend({
@@ -12,8 +13,6 @@ async function createScopesDropdown() {
       position: "topleft"
     },
 
-    //Model
-    isOpen: false,
 
     //View
     menu: null,
@@ -23,8 +22,8 @@ async function createScopesDropdown() {
     dropDownOptions: null,
 
     //Controlers
-    toggleShow() {
-      this.isOpen = !this.isOpen;
+    toggleOpen() {
+      scopeDropdownStore.getState().toggleOpen();
     },
 
     isEmpty() {
@@ -36,29 +35,30 @@ async function createScopesDropdown() {
     },
     initMenuElements() {
       const { isLoading } = pointStore.getState();
+      const {isOpen} = scopeDropdownStore.getState()
       this.heading = L.DomUtil.create(
         "div",
-        createClasses("decidimGeo__scopesDropdown__heading", [!this.isOpen && "closed"]),
+        createClasses("decidimGeo__scopesDropdown__heading", [!isOpen && "closed"]),
         this.menu
       );
 
       this.title = L.DomUtil.create(
         "h6",
         createClasses("decidimGeo__scopesDropdown__title", [
-          !this.isOpen && "closed",
+          !isOpen && "closed",
           isLoading && "loading"
         ]),
         this.heading
       );
       this.title.onclick = () => {
-        this.toggleShow();
+        this.toggleOpen();
         this.repaint();
       };
       this.filterDropdown = createFilterDropdown(this.heading, this.menu);
       this.dropDownOptions = L.DomUtil.create(
         "ul",
         createClasses("decidimGeo__scopesDropdown__list", [
-          !this.isOpen && "closed",
+          !isOpen && "closed",
           this.isEmpty() && "empty"
         ]),
         this.menu
@@ -77,7 +77,7 @@ async function createScopesDropdown() {
         return;
       } else {
         this.title.onclick = () => {
-          this.toggleShow();
+          this.toggleOpen();
           this.repaint();
         };
       }
@@ -113,15 +113,16 @@ async function createScopesDropdown() {
     },
     repaintOpenClose() {
       const { selectedPoint } = geoStore.getState();
+      const {isOpen} = scopeDropdownStore.getState()
 
       // Dropdown backdrop open/close
       this.title.className = createClasses("decidimGeo__scopesDropdown__title", [
-        !this.isOpen && "closed",
+        !isOpen && "closed",
         this.isEmpty() && "empty",
         selectedPoint && "button"
       ]);
       this.dropDownOptions.className = createClasses("decidimGeo__scopesDropdown__list", [
-        !this.isOpen && "closed",
+        !isOpen && "closed",
         this.isEmpty() && "empty",
         selectedPoint && "hidden"
       ]);
@@ -137,12 +138,9 @@ async function createScopesDropdown() {
       L.DomEvent.disableScrollPropagation(this.menu);
       const repaint = this.repaint.bind(this);
       // We we change the available scopes, repaint.
-      const _this = this;
       geoStore.subscribe(
         (state) => [state.selectedScope],
         ([_geoScope], [prevGeoScope]) => {
-          // always close the dropdown on changing scope
-          _this.isOpen = false;
           if (prevGeoScope) {
             prevGeoScope.repaint();
           }
@@ -158,10 +156,13 @@ async function createScopesDropdown() {
       );
       this.initMenuElements();
       this.repaint(); // first repaint
+      scopeDropdownStore.subscribe((state) => [state.isOpen], ([isOpen]) => {
+        this.repaint();
+      })
       return this.menu;
     },
     reset() {
-      this.isOpen = false;
+      scopeDropdownStore.getState().close();
     }
   });
 

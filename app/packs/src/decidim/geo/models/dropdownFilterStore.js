@@ -1,5 +1,6 @@
 import { createStore } from "zustand/vanilla";
 import { subscribeWithSelector } from "zustand/middleware";
+import scopeDropdownStore from './scopeDropdownStore'
 const store = createStore(
   subscribeWithSelector((set) => ({
     isOpen: false,
@@ -35,4 +36,9 @@ const store = createStore(
   }))
 );
 
+store.subscribe((state) => [state.isOpen], ([isOpen]) => {
+  if(isOpen) {
+    scopeDropdownStore.getState().close()
+  }
+})
 export default store;
