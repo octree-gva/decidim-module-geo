@@ -7,6 +7,8 @@ const store = createStore(
   subscribeWithSelector((set) => ({
     locale: "en",
     selected_component: undefined,
+    selected_point: undefined,
+    images: {},
     map: undefined,
     mapID: "Generic",
     map_config: {},
@@ -18,7 +20,8 @@ const store = createStore(
         selected_point: mapConfig.selected_point,
         mapID: mapConfig.mapID,
         map_config: mapConfig.map_config,
-        i18n: mapConfig.i18n
+        i18n: mapConfig.i18n,
+        images: mapConfig.images || {}
       }));
       filterStore.getState().setDefaultFilters(mapConfig.filters);
     }

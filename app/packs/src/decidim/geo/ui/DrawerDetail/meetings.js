@@ -1,7 +1,7 @@
 import _ from "lodash";
 import configStore from "../../models/configStore";
 const meetings = (container, node) => {
-  const { i18n } = configStore.getState();
+  const { i18n, images } = configStore.getState();
   if (!_.isEmpty(node.bannerImage)) {
     const image = L.DomUtil.create(
       "img",
@@ -14,6 +14,14 @@ const meetings = (container, node) => {
 
   const infoType = L.DomUtil.create("div", "decidimGeo__drawer__listCardType", container);
   infoType.textContent += i18n[node.type];
+  const notGeoEncodedIcon = L.DomUtil.create(
+    "img",
+    createClasses(
+      "decidimGeo__drawer__listCardIcon",
+      [node.coordinates && "hidden"]),
+      infoType
+  )
+  notGeoEncodedIcon.src=images?.not_geolocated;
 
   const infoTitle = L.DomUtil.create(
     "div",
@@ -21,7 +29,6 @@ const meetings = (container, node) => {
     container
   );
   infoTitle.textContent += node.title.translation;
-
   if (node.shortDescription) {
     const infoDescription = L.DomUtil.create(
       "div",

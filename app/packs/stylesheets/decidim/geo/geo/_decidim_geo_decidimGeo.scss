@@ -318,7 +318,14 @@
     animation: 1.5s shine linear infinite;
   }
 }
-
+.decidimGeo__drawer__listCardIcon {
+  padding-left: 2px;
+  max-height: 16px;
+  transform: translateY(-2px);
+  &--hidden {
+    display: none;
+  }
+}
 .decidimGeo__drawer__listCardImg {
   display: inline-block;
   vertical-align: bottom;
@@ -365,6 +372,7 @@
   font-size: 11px;
   line-height: 13.83px;
   text-transform: uppercase;
+  min-height:16px;
 }
 
 .decidimGeo__drawer__listCardTitle {
