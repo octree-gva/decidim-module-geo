@@ -9,7 +9,6 @@ const store = createStore(
   subscribeWithSelector((set) => ({
     defaultFilters: [],
     activeFilters: [],
-
     setDefaultFilters: (filters = []) => {
       const sortedFilters = _.sortBy(filters, [sortingIteratee]);
       set(() => ({
@@ -17,13 +16,22 @@ const store = createStore(
         activeFilters: sortedFilters
       }));
     },
+    isFilteredByScope: () => {
+      const { activeFilters } = store.getState();
+      return !!activeFilters.find(({ scopeFilter }) => scopeFilter);
+    },
+    isFilteredByTime: () => {
+      const { activeFilters } = store.getState();
+      return !!activeFilters.find(({ timeFilter }) => timeFilter);
+    },
     hasUserFilters: () => {
       const { defaultFilters, activeFilters } = store.getState();
       return _.isEqual(defaultFilters, activeFilters);
     },
     setFilters: (filters = []) => {
-      const activeFilters = _.sortBy(filters, [sortingIteratee]);
-
+      const activeFilters = _.uniqBy(_.sortBy(filters, [sortingIteratee]), (filter) => {
+        return Object.keys(filter).join("");
+      });
       set((state) => {
         if (_.isEqual(state.activeFilters, activeFilters)) return {};
         return { activeFilters: activeFilters };
@@ -38,15 +46,30 @@ const store = createStore(
       const { defaultFilters } = dropdownFilterStore.getState();
       switch (name) {
         case "GeoShowFilter":
-          return defaultFilters.GeoShowFilter || "all";
+          const showFilterMatch = filters.find(
+            ({ geoencodedFilter = undefined }) => geoencodedFilter
+          );
+          if (!showFilterMatch) return defaultFilters.GeoShowFilter || "all";
+          const geoencodedFilter = showFilterMatch.geoencodedFilter.geoencoded;
+          if (geoencodedFilter === true) return "only_geoencoded";
+          if (geoencodedFilter === false) return "only_virtual";
+          return "all";
         case "GeoTimeFilter":
-          return defaultFilters.GeoTimeFilter || "all";
+          const timeFilterMatch = filters.find(
+            ({ timeFilter = undefined }) => timeFilter
+          );
+          if (!timeFilterMatch) return defaultFilters.GeoTimeFilter || "all";
+          const timeFilter = timeFilterMatch.timeFilter.time;
+          if (timeFilter === "past") return "only_past";
+          if (timeFilter === "active") return "only_active";
+          if (timeFilter === "future") return "only_future";
+          return "all";
         case "GeoType":
-          const typeMatch = filters.find(
+          const typeFilterMatch = filters.find(
             ({ resourceTypeFilter = undefined }) => resourceTypeFilter
           );
-          if (!typeMatch) return defaultFilters.GeoType || "all";
-          const resourceType = typeMatch.resourceTypeFilter.resourceType;
+          if (!typeFilterMatch) return defaultFilters.GeoType || "all";
+          const resourceType = typeFilterMatch.resourceTypeFilter.resourceType;
           if (resourceType === "Decidim::Assembly") return "only_assemblies";
           if (resourceType === "Decidim::Proposals::Proposal") return "only_proposals";
           if (resourceType === "Decidim::Meetings::Meeting") return "only_meetings";

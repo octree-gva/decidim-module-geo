@@ -1,2 +1,2 @@
 import "src/decidim/geo/index.js";
-require.context("../images", true)
+require.context("../images", true);
