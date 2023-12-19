@@ -13,7 +13,7 @@ const store = createStore(
     setDefaultFilters: (filters = []) => {
       const sortedFilters = _.sortBy(filters, [sortingIteratee]);
       set(() => ({
-        defaultFilters: sortedFilters,
+        defaultFilters: sortedFilters
       }));
     },
     isFilteredByScope: () => {

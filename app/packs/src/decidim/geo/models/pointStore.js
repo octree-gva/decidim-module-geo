@@ -19,15 +19,15 @@ const store = createStore(
       set(() => ({ _lastFilter: "", _lastResponse: [] }));
     },
     addProcess: () => {
-      set(({isLoading}) => ({isLoading: isLoading + 1}))
+      set(({ isLoading }) => ({ isLoading: isLoading + 1 }));
     },
     removeProcess: () => {
-      set(({isLoading}) => ({isLoading: isLoading - 1}))
+      set(({ isLoading }) => ({ isLoading: isLoading - 1 }));
     },
     getFilteredPoints: () => store.getState()._lastResponse,
     fetchAll: async () => {
       const locale = configStore.getState().locale;
-      set(({isLoading}) => ({ isLoading: isLoading+1 }));
+      set(({ isLoading }) => ({ isLoading: isLoading + 1 }));
       const data = await getGeoDatasource(
         {
           variables: { filters: [], locale: locale }
@@ -47,7 +47,7 @@ const store = createStore(
         .filter(Boolean);
 
       set(() => ({
-        points: points,
+        points: points
       }));
       const scopes = await getGeoScopes({
         variables: { locale: locale }
@@ -62,10 +62,10 @@ const store = createStore(
         })
         .filter(Boolean);
       set(() => ({
-        scopes: geoScopes,
+        scopes: geoScopes
       }));
-      set(({isLoading}) => ({
-        isLoading: isLoading-1
+      set(({ isLoading }) => ({
+        isLoading: isLoading - 1
       }));
     },
     pointsForFilters: async (filters = []) => {
@@ -82,7 +82,7 @@ const store = createStore(
         return lastResponse;
       }
 
-      set(({isLoading}) => ({ isLoading: isLoading+1 }));
+      set(({ isLoading }) => ({ isLoading: isLoading + 1 }));
       const ids = await getGeoDatasource(
         {
           variables: { filters, locale: locale }
@@ -98,10 +98,10 @@ const store = createStore(
         })
         .filter(Boolean);
 
-      set(({isLoading}) => ({
+      set(({ isLoading }) => ({
         _lastFilter: cacheKey,
         _lastResponse: filteredPoints,
-        isLoading: isLoading-1
+        isLoading: isLoading - 1
       }));
       return filteredPoints;
     }

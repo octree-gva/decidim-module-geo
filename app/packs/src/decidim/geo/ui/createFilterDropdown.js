@@ -134,7 +134,7 @@ class FilterDropdown {
   }
 
   applyValues(filters) {
-    const { setFilters, activeFilters, defaultFilters} = filterStore.getState();
+    const { setFilters, activeFilters, defaultFilters } = filterStore.getState();
     const newFilters = activeFilters.filter((filter) => {
       const [filterName] = Object.keys(filter);
       return !["resourceTypeFilter", "timeFilter", "geoencodedFilter"].includes(

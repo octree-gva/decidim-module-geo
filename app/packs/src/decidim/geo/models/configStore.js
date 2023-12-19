@@ -23,7 +23,7 @@ const store = createStore(
         i18n: mapConfig.i18n,
         images: mapConfig.images || {}
       }));
-      const { setDefaultFilters,setFilters, toFilterOptions } = filterStore.getState();
+      const { setDefaultFilters, setFilters, toFilterOptions } = filterStore.getState();
       setDefaultFilters(mapConfig.filters);
       setFilters(mapConfig.filters);
       dropdownFilterStore.getState().setDefaultFilters({
