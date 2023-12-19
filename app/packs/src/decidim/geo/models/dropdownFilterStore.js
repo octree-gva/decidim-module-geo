@@ -1,18 +1,18 @@
 import { createStore } from "zustand/vanilla";
 import { subscribeWithSelector } from "zustand/middleware";
-import scopeDropdownStore from './scopeDropdownStore'
+import scopeDropdownStore from "./scopeDropdownStore";
 const store = createStore(
   subscribeWithSelector((set) => ({
     isOpen: false,
     defaultFilters: {
       GeoShowFilter: "all",
-      GeoTimeFilter: "all",
-      GeoType: "only_active"
+      GeoTimeFilter: "only_active",
+      GeoType: "all"
     },
     selectedFilters: {
       GeoShowFilter: "all",
-      GeoTimeFilter: "all",
-      GeoType: "only_active"
+      GeoTimeFilter: "only_active",
+      GeoType: "all"
     },
     filterCount: () => {
       const { selectedFilters, defaultFilters } = store.getState();
@@ -36,9 +36,12 @@ const store = createStore(
   }))
 );
 
-store.subscribe((state) => [state.isOpen], ([isOpen]) => {
-  if(isOpen) {
-    scopeDropdownStore.getState().close()
+store.subscribe(
+  (state) => [state.isOpen],
+  ([isOpen]) => {
+    if (isOpen) {
+      scopeDropdownStore.getState().close();
+    }
   }
-})
+);
 export default store;

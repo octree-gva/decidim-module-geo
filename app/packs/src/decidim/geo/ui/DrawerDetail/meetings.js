@@ -1,6 +1,6 @@
 import _ from "lodash";
 import configStore from "../../models/configStore";
-import createClasses from '../createClasses'
+import createClasses from "../createClasses";
 const meetings = (container, node) => {
   const { i18n, images } = configStore.getState();
   if (!_.isEmpty(node.bannerImage)) {
@@ -17,12 +17,10 @@ const meetings = (container, node) => {
   infoType.textContent += i18n[node.type];
   const notGeoEncodedIcon = L.DomUtil.create(
     "img",
-    createClasses(
-      "decidimGeo__drawer__listCardIcon",
-      [node.coordinates && "hidden"]),
-      infoType
-  )
-  notGeoEncodedIcon.src=images?.not_geolocated;
+    createClasses("decidimGeo__drawer__listCardIcon", [node.coordinates && "hidden"]),
+    infoType
+  );
+  notGeoEncodedIcon.src = images?.not_geolocated;
   const infoTitle = L.DomUtil.create(
     "div",
     "decidimGeo__drawer__listCardTitle",
@@ -37,7 +35,7 @@ const meetings = (container, node) => {
     );
     infoDescription.textContent = _.truncate(
       node.description.translation.replace(/<[^>]+>/g, ""),
-      {length: 2500}
+      { length: 2500 }
     );
   }
 };

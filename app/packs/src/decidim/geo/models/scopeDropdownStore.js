@@ -1,6 +1,6 @@
 import { createStore } from "zustand/vanilla";
 import { subscribeWithSelector } from "zustand/middleware";
-import dropdownFilterStore from './dropdownFilterStore'
+import dropdownFilterStore from "./dropdownFilterStore";
 const store = createStore(
   subscribeWithSelector((set) => ({
     isOpen: false,
@@ -9,9 +9,12 @@ const store = createStore(
   }))
 );
 
-store.subscribe((state) => [state.isOpen], ([isOpen]) => {
-  if(isOpen) {
-    dropdownFilterStore.getState().close()
+store.subscribe(
+  (state) => [state.isOpen],
+  ([isOpen]) => {
+    if (isOpen) {
+      dropdownFilterStore.getState().close();
+    }
   }
-})
+);
 export default store;

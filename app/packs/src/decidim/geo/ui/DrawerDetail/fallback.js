@@ -17,13 +17,10 @@ const fallback = (container, node) => {
   infoType.textContent += i18n[node.type];
   const notGeoEncodedIcon = L.DomUtil.create(
     "img",
-    createClasses(
-      "decidimGeo__drawer__listCardIcon",
-      [node.coordinates && "hidden"]),
-      infoType
-  )
-  notGeoEncodedIcon.src=images?.not_geolocated;
-
+    createClasses("decidimGeo__drawer__listCardIcon", [node.coordinates && "hidden"]),
+    infoType
+  );
+  notGeoEncodedIcon.src = images?.not_geolocated;
 
   const infoTitle = L.DomUtil.create(
     "div",
@@ -39,7 +36,7 @@ const fallback = (container, node) => {
     );
     infoDescription.textContent = _.truncate(
       node.description.translation.replace(/<[^>]+>/g, ""),
-      {length: 2500}
+      { length: 2500 }
     );
   }
 };

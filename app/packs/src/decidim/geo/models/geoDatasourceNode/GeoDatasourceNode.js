@@ -18,18 +18,22 @@ export default class GeoDatasourceNode {
     const { selectedPoint } = geoStore.getState();
     const { selected_component, selected_point: pinPoint } = configStore.getState();
 
-    if(this.isGeoLocated()) {
-      if(pinPoint) {
+    if (this.isGeoLocated()) {
+      if (pinPoint) {
         if (selectedPoint === this) {
           this.marker.setStyle(this.selectedState);
           this.marker.bringToFront();
-        } else if (!selectedPoint && this.data.componentId == selected_component && pinPoint == `${this.data.id}`) {
+        } else if (
+          !selectedPoint &&
+          this.data.componentId == selected_component &&
+          pinPoint == `${this.data.id}`
+        ) {
           this.marker.setStyle(this.selectedState);
           this.marker.bringToFront();
         } else {
           this.marker.setStyle(this.staledState);
         }
-      }else {
+      } else {
         if (selectedPoint === this) {
           this.marker.setStyle(this.selectedState);
           this.marker.bringToFront();
@@ -44,7 +48,7 @@ export default class GeoDatasourceNode {
   }
 
   colorLayers() {
-    if(!this.isGeoLocated()) return;
+    if (!this.isGeoLocated()) return;
     const { map } = configStore.getState();
     map.eachLayer((layer) => {
       if (layer.feature) {
@@ -76,7 +80,7 @@ export default class GeoDatasourceNode {
   }
 
   panToMarker() {
-    if(!this.isGeoLocated()) return;
+    if (!this.isGeoLocated()) return;
     const center = L.latLng([
       this.data.coordinates.latitude,
       this.data.coordinates.longitude
@@ -87,8 +91,7 @@ export default class GeoDatasourceNode {
   }
 
   select() {
-    if(this.isGeoLocated())
-      this.panToMarker();
+    if (this.isGeoLocated()) this.panToMarker();
     geoStore.getState().selectPoint(this);
     this.repaint();
   }
@@ -104,7 +107,7 @@ export default class GeoDatasourceNode {
       this.menuItem = createNodeMenuItem(this.data);
       this.menuItem.onclick = () => {
         this.select("sidebar");
-      }
+      };
 
       geoStore.subscribe(
         (state) => [state.selectedPoint],

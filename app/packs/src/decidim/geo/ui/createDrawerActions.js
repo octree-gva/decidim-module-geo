@@ -13,7 +13,6 @@ async function createScopesDropdown() {
       position: "topleft"
     },
 
-
     //View
     menu: null,
     heading: null,
@@ -35,7 +34,7 @@ async function createScopesDropdown() {
     },
     initMenuElements() {
       const { isLoading } = pointStore.getState();
-      const {isOpen} = scopeDropdownStore.getState()
+      const { isOpen } = scopeDropdownStore.getState();
       this.heading = L.DomUtil.create(
         "div",
         createClasses("decidimGeo__scopesDropdown__heading", [!isOpen && "closed"]),
@@ -113,7 +112,7 @@ async function createScopesDropdown() {
     },
     repaintOpenClose() {
       const { selectedPoint } = geoStore.getState();
-      const {isOpen} = scopeDropdownStore.getState()
+      const { isOpen } = scopeDropdownStore.getState();
 
       // Dropdown backdrop open/close
       this.title.className = createClasses("decidimGeo__scopesDropdown__title", [
@@ -156,9 +155,12 @@ async function createScopesDropdown() {
       );
       this.initMenuElements();
       this.repaint(); // first repaint
-      scopeDropdownStore.subscribe((state) => [state.isOpen], ([isOpen]) => {
-        this.repaint();
-      })
+      scopeDropdownStore.subscribe(
+        (state) => [state.isOpen],
+        ([isOpen]) => {
+          this.repaint();
+        }
+      );
       return this.menu;
     },
     reset() {

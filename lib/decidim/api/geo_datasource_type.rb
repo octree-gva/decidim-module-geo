@@ -52,7 +52,7 @@ module Decidim
       end
 
       def short_description
-        return object.short_description if object.respond_to?(:short_description)
+        return truncate_translated(object.short_description, 250) if object.respond_to?(:short_description)
         return truncate_translated(object.body, 250) if object.respond_to?(:body)
         return truncate_translated(object.description, 250) if object.respond_to?(:description)
       end
@@ -67,7 +67,7 @@ module Decidim
           if v.is_a?(Hash) 
             value[key] = truncate_translated(v, chars)
           else
-            value[key] = Decidim::ContentProcessor.render_without_format(Decidim::HtmlTruncation.new(v, max_length: 2800,tail: "…",count_tags: false,count_tail: false,tail_before_final_tag: false).perform)
+            value[key] = Decidim::ContentProcessor.render_without_format(Decidim::HtmlTruncation.new(v, max_length: 2800,tail: "…",count_tags: false,count_tail: false,tail_before_final_tag: false).perform).html_safe
           end
         end
         value

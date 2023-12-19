@@ -137,24 +137,44 @@ class FilterDropdown {
     const { setFilters, activeFilters } = filterStore.getState();
     const newFilters = activeFilters.filter((filter) => {
       const [filterName] = Object.keys(filter);
-      return !["resourceTypeFilter"].includes(filterName);
+      return !["resourceTypeFilter", "timeFilter", "geoencodedFilter"].includes(
+        filterName
+      );
     });
     switch (filters.GeoShowFilter || "all") {
       case "all":
         break;
       case "only_geoencoded":
+        newFilters.push({
+          geoencodedFilter: { geoencoded: true }
+        });
         break;
       case "only_virtual":
+        newFilters.push({
+          geoencodedFilter: { geoencoded: false }
+        });
         break;
     }
     switch (filters.GeoTimeFilter || "all") {
       case "all":
+        newFilters.push({
+          timeFilter: { time: "all" }
+        });
         break;
       case "only_past":
+        newFilters.push({
+          timeFilter: { time: "past" }
+        });
         break;
       case "only_active":
+        newFilters.push({
+          timeFilter: { time: "active" }
+        });
         break;
       case "only_future":
+        newFilters.push({
+          timeFilter: { time: "future" }
+        });
         break;
     }
 
