@@ -158,7 +158,7 @@ async function createScopesDropdown() {
       this.repaint(); // first repaint
       scopeDropdownStore.subscribe(
         (state) => [state.isOpen],
-        ([isOpen]) => {
+        ([]) => {
           this.repaint();
         }
       );
