@@ -71,13 +71,17 @@ store.subscribe(
 
     // Update filter associated to the scope
     const { activeFilters, setFilters } = filterStore.getState();
-    const filtersWithoutScopes = activeFilters.filter((filter) => {
-      return typeof filter["scopeFilter"] === "undefined";
+    const filtersWithoutScopes = activeFilters.filter(({ scopeFilter }) => {
+      return !scopeFilter;
     });
     if (selectedScope?.id) {
-      setFilters(
-        filtersWithoutScopes.concat({ scopeFilter: { scopeId: selectedScope.id } })
+      const matchFilter = activeFilters.find(
+        ({ scopeFilter }) => scopeFilter?.scopeId === selectedScope.id
       );
+      if (!matchFilter)
+        setFilters(
+          filtersWithoutScopes.concat({ scopeFilter: { scopeId: selectedScope.id } })
+        );
     } else {
       setFilters(filtersWithoutScopes);
     }

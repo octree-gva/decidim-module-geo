@@ -2,6 +2,7 @@ import { createGeoScopeMenuItem, createGeoScopeLayer } from "../../ui";
 import geoStore from "../geoStore";
 import pointStore from "../pointStore";
 import configStore from "../configStore";
+import scopeDropdownStore from "../scopeDropdownStore";
 import polylabel from "polylabel";
 
 export default class GeoScope {
@@ -85,8 +86,9 @@ export default class GeoScope {
   nodesForScope() {
     const { points } = pointStore.getState();
     const currentScopeId = this.id;
-    return points.filter(({ scopeId }) => scopeId === currentScopeId);
+    return points.filter(({ scopeId }) => scopeId === currentScopeId).filter(Boolean);
   }
+
   markersForScope() {
     return this.nodesForScope().map(({ marker }) => marker);
   }
@@ -99,6 +101,7 @@ export default class GeoScope {
       label: this.name,
       onClick: () => {
         geoStore.getState().selectScope(this);
+        scopeDropdownStore.getState().toggleOpen();
       }
     });
     if (this.data.geom) {
