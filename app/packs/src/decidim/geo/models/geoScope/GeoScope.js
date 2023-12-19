@@ -100,8 +100,9 @@ export default class GeoScope {
     this.menuItem = createGeoScopeMenuItem({
       label: this.name,
       onClick: () => {
-        geoStore.getState().selectScope(this);
         scopeDropdownStore.getState().toggleOpen();
+        geoStore.getState().selectScope(this);
+        this.repaint();
       }
     });
     if (this.data.geom) {
