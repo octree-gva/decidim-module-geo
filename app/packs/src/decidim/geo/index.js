@@ -34,7 +34,7 @@ async function main() {
     pointStore.subscribe(
       (state) => [state.isLoading, state.getFilteredPoints, state._lastResponse],
       ([isLoading, getFilteredPoints]) => {
-        if (isLoading) return;
+        if (isLoading || !map) return;
         pointsLayer.clearLayers();
         const pointInMap = getFilteredPoints().filter((node) => node.isGeoLocated());
         if (pointInMap.length > 0) {
@@ -45,6 +45,13 @@ async function main() {
             })
           );
           map.fitBounds(group.getBounds());
+        } else {
+          // maybe we are selecting only non-geolocated points
+          // with still a zone.
+          const { selectedScope } = geoStore.getState();
+          if (selectedScope?.layer) {
+            map.fitBounds(selectedScope.layer.getBounds());
+          }
         }
       }
     );

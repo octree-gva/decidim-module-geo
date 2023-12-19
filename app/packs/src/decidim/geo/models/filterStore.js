@@ -2,6 +2,7 @@ import { createStore } from "zustand/vanilla";
 import _ from "lodash";
 import { subscribeWithSelector } from "zustand/middleware";
 import pointStore from "./pointStore";
+import geoStore from "./geoStore";
 import dropdownFilterStore from "./dropdownFilterStore";
 
 const sortingIteratee = (filter) => JSON.stringify(filter);
@@ -85,8 +86,18 @@ const store = createStore(
 store.subscribe(
   (state) => [state.activeFilters],
   async ([activeFilters], [previousActiveFilter]) => {
-    if (!_.isEqual(activeFilters, previousActiveFilter))
+    if (!_.isEqual(activeFilters, previousActiveFilter)) {
       await pointStore.getState().pointsForFilters(activeFilters);
+      const { isFilteredByScope } = store.getState();
+      if (isFilteredByScope()) {
+        const {
+          scopeFilter: { scopeId }
+        } = activeFilters.find(({ scopeFilter }) => scopeFilter);
+        const { scopes } = pointStore.getState();
+        const selectedScope = scopes.find(({ id }) => `${id}` == `${scopeId}`);
+        geoStore.getState().selectScope(selectedScope);
+      }
+    }
     const { toFilterOptions } = store.getState();
     const { setFilter } = dropdownFilterStore.getState();
     setFilter("GeoShowFilter", toFilterOptions("GeoShowFilter", activeFilters));

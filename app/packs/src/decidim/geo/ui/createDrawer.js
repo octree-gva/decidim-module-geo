@@ -61,8 +61,10 @@ async function createSidebar() {
       emptyAction.onclick = () => {
         const { resetFilters } = filterStore.getState();
         const { resetFilters: resetDropdownFilter } = dropdownFilterStore.getState();
+        const { selectScope } = geoStore.getState();
         resetFilters();
         resetDropdownFilter();
+        selectScope(undefined);
         this.repaint();
       };
     },

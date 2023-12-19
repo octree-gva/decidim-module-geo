@@ -100,6 +100,7 @@ async function createScopesDropdown() {
           label: i18n["decidim_geo.scopes.all"],
           onClick: () => {
             geoStore.getState().selectScope(undefined);
+            this.toggleOpen();
           }
         });
         this.dropDownOptions.appendChild(resetItem);
@@ -164,6 +165,9 @@ async function createScopesDropdown() {
       return this.menu;
     },
     reset() {
+      scopeDropdownStore.getState().close();
+    },
+    close() {
       scopeDropdownStore.getState().close();
     }
   });
