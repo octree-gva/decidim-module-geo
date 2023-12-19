@@ -1,0 +1,19 @@
+<% def icon_aria_selected_link_to(text, link, icon_name, options = {})
+  aria_selected_link_to(safe_join([icon(icon_name), text]), link, options)
+end %>
+
+<% content_for :secondary_nav do %>
+  <div class="secondary-nav">
+    <%= sidebar_menu(:admin_geo_menu).render %>
+  </div>
+<% end %>
+
+<%= render "layouts/decidim/admin/application" do %>
+  <div class="process-title">
+    <div class="process-title-content">
+      Decidim GEO
+    </div>
+  </div>
+
+  <%= yield %>
+<% end %>
