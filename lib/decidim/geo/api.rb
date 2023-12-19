@@ -14,6 +14,7 @@ module Decidim
     autoload :ProcessInputFilter, "decidim/api/input_filters/process_input_filter"
     autoload :ResourceTypeInputFilter, "decidim/api/input_filters/resource_type_input_filter"
     autoload :TimeInputFilter, "decidim/api/input_filters/time_input_filter"
+    autoload :GeoencodedInputFilter, "decidim/api/input_filters/geoencoded_input_filter"
     autoload :MeetingsInputFilter, "decidim/api/meetings_input_filter"
     autoload :GeoDatasourceType, "decidim/api/geo_datasource_type"
     autoload :GeoDatasourcesType, "decidim/api/geo_datasources_type"

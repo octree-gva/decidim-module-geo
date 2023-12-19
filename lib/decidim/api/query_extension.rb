@@ -43,16 +43,18 @@ module Decidim
         process = kwargs[:filters].find {|f| f[:process_filter].present?}
         assembly = kwargs[:filters].find {|f| f[:assembly_filter].present?}
         @time = kwargs[:filters].find {|f| f[:time_filter].present?}
-        @search_params = {locale: locale, class_name: supported_geo_components};
+        @geoencoded = kwargs[:filters].find {|f| f[:geoencoded_filter].present?}
+        search_params = {locale: locale, class_name: supported_geo_components};
         if scope
           # Search only in a given scope
-          @search_params = @search_params.merge({scope_ids: scope.scope_filter.scope_id})
+          search_params = search_params.merge({scope_ids: scope.scope_filter.scope_id})
         end
         if resource_type
           # search only for a resource type
-          @search_params = @search_params.merge({class_name: resource_type.resource_type_filter.resource_type})
+          search_params = search_params.merge({class_name: resource_type.resource_type_filter.resource_type})
         end
-        search_results = filtered_query_for(**@search_params)
+        search_results = filtered_query_for(**search_params)
+
         if assembly
           # The results must be within an assembly
           search_results = search_results.where(
@@ -68,10 +70,6 @@ module Decidim
             decidim_participatory_space_id: process.process_filter.process_id
           )
         end
-
-        if @time
-          search_results = search_results.where(decidim_participatory_space_id: spaces_to_filter(@time.time_filter.time))
-        end unless @search_params[:class_name] == "Decidim::Meetings::Meeting"
 
         fetch_results(search_results)
       end
@@ -138,43 +136,140 @@ module Decidim
           data_by_resource_type[resource.resource_type].push(resource.resource_id) 
         end
 
-        data_by_resource_type.map do |k, v|
-          if @time && !@search_params[:class_name].include?("Decidim::Meetings::Meeting")
-            case @time.time_filter.time
-            when "past"
-              k.constantize.where(id: v).where("end_time < ?", DateTime.now)
-            when "active"
-              k.constantize.where(id: v).where(start_time: DateTime.now..30.days.since)
-            when "future"
-              k.constantize.where(id: v).where("start_time >= ?", 30.days.since)
-            else
-              k.constantize.where(id: v)
+        if @geoencoded
+          
+        end
+        
+        if @time
+          processes_by_time = processes_time_filter(@time.time_filter.time)
+
+          assemblies_ids = data_by_resource_type["Decidim::Assembly"]
+          assemblies_by_time = assembly_time_filter(assemblies_ids, @time.time_filter.time) unless assemblies_ids.nil?
+
+          meetings_ids = data_by_resource_type["Decidim::Meetings::Meeting"]
+          meetings_by_time = meeting_time_filter(meetings_ids, @time.time_filter.time) unless meetings_ids.nil?
+
+          proposals_ids = data_by_resource_type["Decidim::Proposals::Proposal"]
+          proposals_by_time = proposal_time_filter(proposals_ids, @time.time_filter.time) unless proposals_ids.nil?
+        end
+
+        data_by_resource_type_filtered = {}
+        data_by_resource_type.each do |key, values|
+          processes_by_time.each do |process_key, process_id|
+            if process_key == key
+              data_by_resource_type_filtered.merge!({key => values.reject { |ids| !process_id.include?(ids)}})
             end
-          else
-            k.constantize.where(id: v)
-          end
-        end.flatten
+          end unless processes_by_time.nil?
+
+          assemblies_by_time.each do |assembly_key, assembly_id|
+            if assembly_key == key
+              data_by_resource_type_filtered.merge!({key => values.reject { |ids| !assembly_id.include?(ids)}})
+            end 
+          end unless assemblies_by_time.nil?
+
+          meetings_by_time.each do |meeting_key, meeting_id|
+            if meeting_key == key
+              data_by_resource_type_filtered.merge!({key => values.reject { |ids| !meeting_id.include?(ids)}})
+            end
+          end unless meetings_by_time.nil?
+          
+          proposals_by_time.each do |proposal_key, proposal_id|
+            if proposal_key == key
+              data_by_resource_type_filtered.merge!({key => values.reject { |ids| !proposal_id.include?(ids)}})
+            end
+          end unless proposals_by_time.nil?
+        end
+
+        data_by_resource_type.merge!(data_by_resource_type_filtered)
+
+        result = data_by_resource_type.flat_map do |k, v|
+          query = k.constantize.where(id: v)
+          query = @geoencoded.geoencoded_filter.geoencoded ? query.where.not(latitude: nil) : query.where(latitude: nil) if @geoencoded
+          query
+        end
+        result.flatten
       end
 
       def state_filter(filter)
         {decidim_scope_id: filter[:scope_ids]}.merge(decidim_participatory_space: spaces_to_filter(filter)).compact
       end
   
-      def spaces_to_filter(time_filter)
-        Decidim.participatory_space_manifests.flat_map do |manifest|
+      def processes_time_filter(time_filter)
+        processes = Decidim.participatory_space_manifests.flat_map do |manifest|
           public_spaces = manifest.participatory_spaces.call(organization).public_spaces
-          spaces = case time_filter
-                   when "active"
-                     public_spaces.active_spaces
-                   when "future"
-                     public_spaces.future_spaces
-                   when "past"
-                     public_spaces.past_spaces
-                   else
-                     public_spaces
-                   end
-          spaces.select(:id).to_a
+          case time_filter
+            when "active"
+              public_spaces.active_spaces
+            when "future"
+              public_spaces.future_spaces
+            when "past"
+              public_spaces.past_spaces
+            else
+              public_spaces
+            end
+        end.each_with_object([]) do |process, array_processes| 
+          array_processes.push(process.id) if process.class.name == "Decidim::ParticipatoryProcess"
         end
+        return {"Decidim::ParticipatoryProcess" => []} if processes.empty?
+        {"Decidim::ParticipatoryProcess" => processes}
+      end
+
+      def assembly_time_filter(assemblies, time_filter)
+        search_result = assemblies.map do |id|
+          search_assembly = Decidim::Assembly.where(id: id, private_space: false).published
+          case time_filter
+          when "past"
+            search_assembly.where("duration < ?", DateTime.now)
+          when "active"
+            search_assembly.where(duration: 15.days.ago..15.days.since)
+          when "future"
+            search_assembly.where("included_at >= ?", 15.days.since)
+          else
+            search_assembly
+          end
+        end.each_with_object([]) do |assembly, array_assembly| 
+          array_assembly.push(assembly.take.id) unless assembly.empty?
+        end 
+        return {"Decidim::Assembly" => []} if search_result.empty?
+        {"Decidim::Assembly" => search_result}
+      end
+
+      def meeting_time_filter(meetings, time_filter)
+        search_result = meetings.map do |id|
+          search_meeting = Decidim::Meetings::Meeting.where(id: id, private_meeting: false).published
+          case time_filter
+          when "past"
+            search_meeting.where("end_time < ?", DateTime.now)
+          when "active"
+            search_meeting.where("start_time <= ? AND end_time >= ?", DateTime.now, DateTime.now).or(search_meeting.where("start_time >= ?", DateTime.now))
+          when "future"
+            search_meeting.where("start_time >= ?", DateTime.now)
+          else
+            search_meeting
+          end
+        end.each_with_object([]) do |meeting, array_meeting| 
+          array_meeting.push(meeting.take.id) unless meeting.empty?
+        end 
+        return {"Decidim::Meetings::Meeting" => []} if search_result.empty?
+        {"Decidim::Meetings::Meeting" => search_result}
+      end
+
+      def proposal_time_filter(proposals, time_filter)
+        search_result = proposals.map do |id|
+          search_proposal = Decidim::Proposals::Proposal.where(id: id).published
+          case time_filter
+          when "past"
+            search_proposal.where(state: ["rejected", "accepted"])
+          when "active" || "future"
+            search_proposal.where(state: ["not_answered", nil, "evaluating"])
+          else
+            search_proposal
+          end
+        end.each_with_object([]) do |proposal, array_proposal| 
+          array_proposal.push(proposal.take.id) unless proposal.empty?
+        end 
+        return {"Decidim::Proposals::Proposal" => []} if search_result.empty?
+        {"Decidim::Proposals::Proposal" => search_result}
       end
 
       def search_by_scope_params(filter, locale)
