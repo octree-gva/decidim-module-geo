@@ -1,6 +1,9 @@
 import _ from "lodash";
 import configStore from "../../models/configStore";
 import createClasses from "../createClasses";
+import { format } from "date-fns";
+
+
 const meetings = (container, node) => {
   const { i18n, images } = configStore.getState();
   if (!_.isEmpty(node.bannerImage)) {
@@ -27,10 +30,36 @@ const meetings = (container, node) => {
     container
   );
   infoTitle.textContent += node.title.translation;
+  const infoDescription = L.DomUtil.create(
+    "div",
+    "decidimGeo__drawer__listCardDate",
+    container
+  );
+  const infoStart = L.DomUtil.create(
+    "div",
+    "decidimGeo__drawer__listCardStartDate",
+    infoDescription
+  );
+  infoStart.textContent =  format(node.startTime, "dd/MM/yy") + " — " + format(node.endTime, "dd/MM/yy");
+
+  const infoStartSep = L.DomUtil.create(
+    "div",
+    "decidimGeo__drawer__listCardStartDateSep",
+    infoDescription
+  );
+  infoStartSep.textContent = "·";
+
+  const infoStartTime = L.DomUtil.create(
+    "div",
+    "decidimGeo__drawer__listCardStartTime",
+    infoDescription
+  );
+  infoStartTime.textContent = format(node.startTime, "kk:mm") + "-" +format(node.endTime, "kk:mm");
+
   if (node.description) {
     const infoDescription = L.DomUtil.create(
       "div",
-      "decidimGeo__drawer__listCardDescription decidimGeo__drawer__listCardDescription--large",
+      "decidimGeo__drawer__listCardDescription decidimGeo__drawer__listCardDescription--large decidimGeo__drawer__listCardDescription--meetings",
       container
     );
     infoDescription.textContent = _.truncate(

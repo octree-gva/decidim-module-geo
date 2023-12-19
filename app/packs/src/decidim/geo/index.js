@@ -22,8 +22,8 @@ async function main() {
   try {
     // Parse and save server-side information.
     bootstrap();
-    const {addProcess, removeProcess} = pointStore.getState();
-    addProcess()
+    const { addProcess, removeProcess } = pointStore.getState();
+    addProcess();
     // Create Leaflet map
     const map = await initMap();
     configStore.setState(() => ({ map: map }));
@@ -33,26 +33,27 @@ async function main() {
     const pointsLayer = L.layerGroup();
     map.addLayer(pointsLayer);
     pointStore.subscribe(
-      (state) => [state.isLoading, state.getFilteredPoints, state._lastResponse],
+      (state) => [!!state.isLoading, state.getFilteredPoints, state._lastResponse],
       ([isLoading, getFilteredPoints]) => {
         if (isLoading || !map) return;
         pointsLayer.clearLayers();
         const { selectedPoint, selectedScope } = geoStore.getState();
         const { selected_component } = configStore.getState();
-        let filter = (node) => node.isGeoLocated();
+        let filter = (node) => true;
         if (!selectedPoint && !selectedScope && selected_component) {
           filter = (node) =>
             node.isGeoLocated() && `${node.data.componentId}` === `${selected_component}`;
         }
-        const pointInMap = getFilteredPoints().filter(filter);
+        const pointInMap = getFilteredPoints().filter((node) => node.isGeoLocated());
         if (pointInMap.length > 0) {
-          const group = L.featureGroup(
-            pointInMap.map(({ marker }) => {
-              pointsLayer.addLayer(marker);
-              return marker;
-            })
+          pointInMap.forEach(({ marker }) => {
+            pointsLayer.addLayer(marker);
+          });
+          const idealBoundingBox = pointInMap.filter(filter).map(({marker}) => marker);
+          const boundingBox = L.featureGroup(
+            _.isEmpty(idealBoundingBox) ? pointInMap.map(({marker}) => marker) : idealBoundingBox
           );
-          map.fitBounds(group.getBounds());
+          map.fitBounds(boundingBox.getBounds());
         } else {
           // maybe we are selecting only non-geolocated points
           // with still a zone.
@@ -69,11 +70,11 @@ async function main() {
     // Create the drawer
     await createDrawer();
     // Fetch all the data
-    const {fetchAll, pointsForFilters, clearCache} = pointStore.getState();
+    const { fetchAll, pointsForFilters, clearCache } = pointStore.getState();
     await fetchAll();
     clearCache();
     await pointsForFilters(filterStore.getState().defaultFilters);
-    removeProcess()
+    removeProcess();
   } catch (e) {
     console.error(e);
     const { map, mapID } = configStore.getState();
