@@ -14,7 +14,6 @@ const store = createStore(
       const sortedFilters = _.sortBy(filters, [sortingIteratee]);
       set(() => ({
         defaultFilters: sortedFilters,
-        activeFilters: sortedFilters
       }));
     },
     isFilteredByScope: () => {
@@ -50,32 +49,33 @@ const store = createStore(
           const showFilterMatch = filters.find(
             ({ geoencodedFilter = undefined }) => geoencodedFilter
           );
-          if (!showFilterMatch) return defaultFilters.GeoShowFilter || "all";
+          if (!showFilterMatch) return defaultFilters.GeoShowFilter;
           const geoencodedFilter = showFilterMatch.geoencodedFilter.geoencoded;
           if (geoencodedFilter === true) return "only_geoencoded";
           if (geoencodedFilter === false) return "only_virtual";
-          return "all";
+          return defaultFilters.GeoShowFilter;
         case "GeoTimeFilter":
           const timeFilterMatch = filters.find(
             ({ timeFilter = undefined }) => timeFilter
           );
-          if (!timeFilterMatch) return defaultFilters.GeoTimeFilter || "all";
+          if (!timeFilterMatch) return defaultFilters.GeoTimeFilter;
           const timeFilter = timeFilterMatch.timeFilter.time;
           if (timeFilter === "past") return "only_past";
           if (timeFilter === "active") return "only_active";
           if (timeFilter === "future") return "only_future";
-          return "all";
+          return defaultFilters.GeoTimeFilter;
         case "GeoType":
           const typeFilterMatch = filters.find(
             ({ resourceTypeFilter = undefined }) => resourceTypeFilter
           );
-          if (!typeFilterMatch) return defaultFilters.GeoType || "all";
+          if (!typeFilterMatch) return defaultFilters.GeoType;
           const resourceType = typeFilterMatch.resourceTypeFilter.resourceType;
           if (resourceType === "Decidim::Assembly") return "only_assemblies";
           if (resourceType === "Decidim::Proposals::Proposal") return "only_proposals";
           if (resourceType === "Decidim::Meetings::Meeting") return "only_meetings";
           if (resourceType === "Decidim::ParticipatoryProcess") return "only_processes";
-          return defaultFilters.GeoType || "all";
+          if (resourceType === "all") return "all";
+          return defaultFilters.GeoType;
       }
     }
   }))

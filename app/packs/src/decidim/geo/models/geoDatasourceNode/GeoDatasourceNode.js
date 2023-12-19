@@ -36,7 +36,10 @@ export default class GeoDatasourceNode {
         if (selectedPoint === this) {
           this.marker.setStyle(this.selectedState);
           this.marker.bringToFront();
-        } else if (!selectedPoint && `${this.data.componentId}` === `${selected_component}`) {
+        } else if (
+          !selectedPoint &&
+          `${this.data.componentId}` === `${selected_component}`
+        ) {
           this.marker.setStyle(this.selectedState);
           this.marker.bringToFront();
         } else {

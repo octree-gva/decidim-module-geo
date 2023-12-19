@@ -1,7 +1,7 @@
 import { createStore } from "zustand/vanilla";
 import { subscribeWithSelector } from "zustand/middleware";
 import filterStore from "./filterStore";
-import pointStore from "./pointStore";
+import dropdownFilterStore from "./dropdownFilterStore";
 
 const store = createStore(
   subscribeWithSelector((set) => ({
@@ -23,7 +23,14 @@ const store = createStore(
         i18n: mapConfig.i18n,
         images: mapConfig.images || {}
       }));
-      filterStore.getState().setDefaultFilters(mapConfig.filters);
+      const { setDefaultFilters,setFilters, toFilterOptions } = filterStore.getState();
+      setDefaultFilters(mapConfig.filters);
+      setFilters(mapConfig.filters);
+      dropdownFilterStore.getState().setDefaultFilters({
+        GeoShowFilter: toFilterOptions("GeoShowFilter", mapConfig.filters),
+        GeoTimeFilter: toFilterOptions("GeoTimeFilter", mapConfig.filters),
+        GeoType: toFilterOptions("GeoType", mapConfig.filters)
+      });
     }
   }))
 );

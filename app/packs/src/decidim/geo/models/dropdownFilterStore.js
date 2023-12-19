@@ -23,11 +23,14 @@ const store = createStore(
     resetFilters: () => {
       set(({ defaultFilters }) => ({ selectedFilters: defaultFilters }));
     },
+    setDefaultFilters: (newFilters) => {
+      set(() => ({ defaultFilters: newFilters, selectedFilters: newFilters }));
+    },
     setFilter: (name, value) => {
       set((state) => ({
         selectedFilters: {
           ...state.selectedFilters,
-          [`${name}`]: value || "all"
+          [`${name}`]: value || state.defaultFilters[`${name}`]
         }
       }));
     },

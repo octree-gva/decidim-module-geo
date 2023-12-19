@@ -134,14 +134,14 @@ class FilterDropdown {
   }
 
   applyValues(filters) {
-    const { setFilters, activeFilters } = filterStore.getState();
+    const { setFilters, activeFilters, defaultFilters} = filterStore.getState();
     const newFilters = activeFilters.filter((filter) => {
       const [filterName] = Object.keys(filter);
       return !["resourceTypeFilter", "timeFilter", "geoencodedFilter"].includes(
         filterName
       );
     });
-    switch (filters.GeoShowFilter || "all") {
+    switch (filters.GeoShowFilter || defaultFilters.GeoShowFilter) {
       case "all":
         break;
       case "only_geoencoded":
@@ -155,7 +155,7 @@ class FilterDropdown {
         });
         break;
     }
-    switch (filters.GeoTimeFilter || "all") {
+    switch (filters.GeoTimeFilter || defaultFilters.GeoTimeFilter) {
       case "all":
         newFilters.push({
           timeFilter: { time: "all" }
@@ -178,8 +178,11 @@ class FilterDropdown {
         break;
     }
 
-    switch (filters.GeoType || "all") {
+    switch (filters.GeoType || defaultFilters.GeoType) {
       case "all":
+        newFilters.push({
+          resourceTypeFilter: { resourceType: "all" }
+        });
         break;
       case "only_processes":
         newFilters.push({
