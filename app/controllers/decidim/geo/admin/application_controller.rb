@@ -3,6 +3,7 @@
 module Decidim
   module Geo
     module Admin
+
       # This controller is the abstract class from which all other controllers of
       # this engine inherit.
       #

@@ -4,7 +4,7 @@ module Decidim
   module Geo
     module Admin
       class ShapefilesController < Decidim::Geo::Admin::ApplicationController
-
+        layout "decidim/decidim-geo/admin/application"
         before_action :authenticate_user!
         
         def index

@@ -42,7 +42,7 @@ module Decidim
         end
       end
 
-      initializer "decidim_geo.admin_geo_menu" do
+      initializer "decidim_geo.admin_menu" do
         Decidim.menu :admin_geo_menu do |menu|
           menu.add_item :edit_config,
                         I18n.t("menu.geo", scope: "decidim.admin", default: "Configurations"),
