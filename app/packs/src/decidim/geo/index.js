@@ -36,7 +36,13 @@ async function main() {
       ([isLoading, getFilteredPoints]) => {
         if (isLoading || !map) return;
         pointsLayer.clearLayers();
-        const pointInMap = getFilteredPoints().filter((node) => node.isGeoLocated());
+        const { selectedPoint, selectedScope } = geoStore.getState();
+        const { selected_component } = configStore.getState();
+        let filter = (node) => node.isGeoLocated();
+        if(!selectedPoint && !selectedScope && selected_component){
+          filter = (node) => node.isGeoLocated() && `${node.data.componentId}` === `${selected_component}`
+        }
+        const pointInMap = getFilteredPoints().filter(filter);
         if (pointInMap.length > 0) {
           const group = L.featureGroup(
             pointInMap.map(({ marker }) => {
