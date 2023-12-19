@@ -22,7 +22,8 @@ async function main() {
   try {
     // Parse and save server-side information.
     bootstrap();
-
+    const {addProcess, removeProcess} = pointStore.getState();
+    addProcess()
     // Create Leaflet map
     const map = await initMap();
     configStore.setState(() => ({ map: map }));
@@ -39,8 +40,9 @@ async function main() {
         const { selectedPoint, selectedScope } = geoStore.getState();
         const { selected_component } = configStore.getState();
         let filter = (node) => node.isGeoLocated();
-        if(!selectedPoint && !selectedScope && selected_component){
-          filter = (node) => node.isGeoLocated() && `${node.data.componentId}` === `${selected_component}`
+        if (!selectedPoint && !selectedScope && selected_component) {
+          filter = (node) =>
+            node.isGeoLocated() && `${node.data.componentId}` === `${selected_component}`;
         }
         const pointInMap = getFilteredPoints().filter(filter);
         if (pointInMap.length > 0) {
@@ -67,7 +69,11 @@ async function main() {
     // Create the drawer
     await createDrawer();
     // Fetch all the data
-    await pointStore.getState().fetchAll();
+    const {fetchAll, pointsForFilters, clearCache} = pointStore.getState();
+    await fetchAll();
+    clearCache();
+    await pointsForFilters(filterStore.getState().defaultFilters);
+    removeProcess()
   } catch (e) {
     console.error(e);
     const { map, mapID } = configStore.getState();

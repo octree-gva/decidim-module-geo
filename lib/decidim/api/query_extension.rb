@@ -56,7 +56,8 @@ module Decidim
         end
         if resource_type
           # search only for a resource type
-          search_params = search_params.merge({class_name: resource_type.resource_type_filter.resource_type})
+          class_name = resource_type.resource_type_filter.resource_type
+          search_params = search_params.merge({class_name: class_name}) unless class_name == "all"
         end
         search_results = filtered_query_for(**search_params)
 
