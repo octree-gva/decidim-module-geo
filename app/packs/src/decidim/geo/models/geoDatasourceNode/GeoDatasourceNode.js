@@ -11,13 +11,12 @@ export default class GeoDatasourceNode {
   }
 
   isGeoLocated() {
-    return this.marker;
+    return !!this.marker;
   }
 
   repaint() {
     const { selectedPoint } = geoStore.getState();
     const { selected_component, selected_point: pinPoint } = configStore.getState();
-
     if (this.isGeoLocated()) {
       if (pinPoint) {
         if (selectedPoint === this) {
@@ -25,7 +24,7 @@ export default class GeoDatasourceNode {
           this.marker.bringToFront();
         } else if (
           !selectedPoint &&
-          this.data.componentId == selected_component &&
+          `${this.data.componentId}` == `${selected_component}` &&
           pinPoint == `${this.data.id}`
         ) {
           this.marker.setStyle(this.selectedState);
@@ -37,7 +36,7 @@ export default class GeoDatasourceNode {
         if (selectedPoint === this) {
           this.marker.setStyle(this.selectedState);
           this.marker.bringToFront();
-        } else if (!selectedPoint && this.data.componentId == selected_component) {
+        } else if (!selectedPoint && `${this.data.componentId}` === `${selected_component}`) {
           this.marker.setStyle(this.selectedState);
           this.marker.bringToFront();
         } else {
