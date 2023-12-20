@@ -32,12 +32,14 @@ async function main() {
     // any filter.
     const pointsLayer = L.layerGroup();
     map.addLayer(pointsLayer);
+
     pointStore.subscribe(
       (state) => [!!state.isLoading, state.getFilteredPoints, state._lastResponse],
       ([isLoading, getFilteredPoints]) => {
         if (isLoading || !map) return;
-        pointsLayer.clearLayers();
         const { selectedPoint, selectedScope } = geoStore.getState();
+        if (selectedPoint) return;
+        pointsLayer.clearLayers();
         const { selected_component } = configStore.getState();
         let filter = (node) => true;
         if (!selectedPoint && !selectedScope && selected_component) {
@@ -49,17 +51,20 @@ async function main() {
           pointInMap.forEach(({ marker }) => {
             pointsLayer.addLayer(marker);
           });
-          const idealBoundingBox = pointInMap.filter(filter).map(({marker}) => marker);
+          const idealBoundingBox = pointInMap.filter(filter).map(({ marker }) => marker);
           const boundingBox = L.featureGroup(
-            _.isEmpty(idealBoundingBox) ? pointInMap.map(({marker}) => marker) : idealBoundingBox
+            _.isEmpty(idealBoundingBox)
+              ? pointInMap.map(({ marker }) => marker)
+              : idealBoundingBox,
+            { updateWhenZooming: true }
           );
-          map.fitBounds(boundingBox.getBounds());
+          map.fitBounds(boundingBox.getBounds(), { padding: [64, 64] });
         } else {
           // maybe we are selecting only non-geolocated points
           // with still a zone.
           const { selectedScope } = geoStore.getState();
           if (selectedScope?.layer) {
-            map.fitBounds(selectedScope.layer.getBounds());
+            map.fitBounds(selectedScope.layer.getBounds(), { padding: [64, 64] });
           }
         }
       }

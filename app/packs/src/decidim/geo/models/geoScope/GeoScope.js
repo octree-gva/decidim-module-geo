@@ -9,7 +9,6 @@ export default class GeoScope {
   constructor({ geoScope }) {
     //Model
     this.data = geoScope;
-    this.oldLayer = null;
     this.markers_group = [];
     this.menuItem = null;
   }
@@ -31,31 +30,20 @@ export default class GeoScope {
   get staledState() {
     return { fillColor: "#cccccc", color: "#999999" };
   }
-
-  select(source = "marker") {
+  mapToScope() {
     const { map } = configStore.getState();
-
-    const { selectedScope: previousScope } = geoStore.getState();
-    geoStore.getState().selectScope(this);
-
-    if (previousScope === this) return;
-
-    // If the source of click is not the shape
-    // in the map, we do only a pan to.
-    // This is a discovery mode.
-    if (source === "marker") {
-      if (this.centroid) {
-        map.panTo([this.centroid[1], this.centroid[0]]);
-      }
-      return;
-    } // TODO: check if this is used in some cenario
-    if (previousScope) previousScope.repaint();
-
+    const { selectedPoint } = geoStore.getState();
+    if (selectedPoint) return;
     if (this.centroid) {
-      let group = L.featureGroup(this.markers_group);
-      map.fitBounds(group.getBounds());
+      let group = L.featureGroup(this.markers_group, { updateWhenZooming: true });
+      map.fitBounds(group.getBounds(), { padding: [64, 64] });
     }
-    this.repaint();
+  }
+
+  select() {
+    const { selectedScope: previousScope, selectedPoint } = geoStore.getState();
+    if (previousScope === this) return;
+    geoStore.getState().selectScope(this);
   }
 
   /**

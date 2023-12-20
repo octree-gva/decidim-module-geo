@@ -21,27 +21,23 @@ export default class GeoDatasourceNode {
       if (pinPoint) {
         if (selectedPoint === this) {
           this.marker.setStyle(this.selectedState);
-          this.marker.bringToFront();
         } else if (
           !selectedPoint &&
           `${this.data.componentId}` == `${selected_component}` &&
           pinPoint == `${this.data.id}`
         ) {
           this.marker.setStyle(this.selectedState);
-          this.marker.bringToFront();
         } else {
           this.marker.setStyle(this.staledState);
         }
       } else {
         if (selectedPoint === this) {
           this.marker.setStyle(this.selectedState);
-          this.marker.bringToFront();
         } else if (
           !selectedPoint &&
           `${this.data.componentId}` === `${selected_component}`
         ) {
           this.marker.setStyle(this.selectedState);
-          this.marker.bringToFront();
         } else {
           this.marker.setStyle(this.staledState);
         }
@@ -56,7 +52,7 @@ export default class GeoDatasourceNode {
       if (layer.feature) {
         if (layer.feature.geometry.properties.id === this.scopeId) {
           layer.setStyle(this.selectedState);
-          map.panTo(layer.getCenter());
+          map.fitBounds(layer.getBounds(), { padding: [64, 64] });
         } else {
           layer.setStyle(this.staledState);
         }
@@ -81,21 +77,22 @@ export default class GeoDatasourceNode {
     return { color: "#404040" };
   }
 
-  panToMarker() {
+  async panToMarker() {
     if (!this.isGeoLocated()) return;
-    const center = L.latLng([
-      this.data.coordinates.latitude,
-      this.data.coordinates.longitude
-    ]);
-    this.marker?.bringToFront();
     const { map } = configStore.getState();
-    map.panTo(center);
+    return new Promise((resolve) => {
+      map
+        .flyTo(this.marker.getLatLng(), 15, {
+          animate: false,
+          duration: 1.2,
+          noMoveStart: true
+        })
+        .once("moveend", resolve);
+    });
   }
 
   select() {
-    if (this.isGeoLocated()) this.panToMarker();
     geoStore.getState().selectPoint(this);
-    this.repaint();
   }
 
   init() {

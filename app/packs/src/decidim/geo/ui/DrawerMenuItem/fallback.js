@@ -5,10 +5,14 @@ import _ from "lodash";
 
 const fallback = (node) => {
   const { i18n, images } = configStore.getState();
-  const hasImage = !_.isEmpty(node.bannerImage)
+  const hasImage = !_.isEmpty(node.bannerImage);
   const listCard = createDomElement("li", "decidimGeo__drawer__listCard");
 
-  const info = createDomElement("div", createClasses("decidimGeo__drawer__listCardInfo", [!hasImage && "large"]), listCard);
+  const info = createDomElement(
+    "div",
+    createClasses("decidimGeo__drawer__listCardInfo", [!hasImage && "large"]),
+    listCard
+  );
 
   const infoType = createDomElement("div", "decidimGeo__drawer__listCardType", info);
   infoType.textContent += i18n[node.type];

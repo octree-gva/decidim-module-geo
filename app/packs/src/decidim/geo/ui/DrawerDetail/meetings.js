@@ -1,8 +1,7 @@
 import _ from "lodash";
 import configStore from "../../models/configStore";
 import createClasses from "../createClasses";
-import { format,isSameDay } from "date-fns";
-
+import { format, isSameDay } from "date-fns";
 
 const meetings = (container, node) => {
   const { i18n, images } = configStore.getState();
@@ -40,11 +39,12 @@ const meetings = (container, node) => {
     "decidimGeo__drawer__listCardStartDate",
     infoDescription
   );
-  let displayedDate = format(node.startTime, "dd/MM/yy") + " — " + format(node.endTime, "dd/MM/yy");
-  if(isSameDay(node.startTime, node.endTime)) {
-    displayedDate = format(node.startTime, "dd/MM/yy") 
+  let displayedDate =
+    format(node.startTime, "dd/MM/yy") + " — " + format(node.endTime, "dd/MM/yy");
+  if (isSameDay(node.startTime, node.endTime)) {
+    displayedDate = format(node.startTime, "dd/MM/yy");
   }
-  infoStart.textContent =  displayedDate;
+  infoStart.textContent = displayedDate;
 
   const infoStartSep = L.DomUtil.create(
     "div",
@@ -58,7 +58,8 @@ const meetings = (container, node) => {
     "decidimGeo__drawer__listCardStartTime",
     infoDescription
   );
-  infoStartTime.textContent = format(node.startTime, "kk:mm") + "-" +format(node.endTime, "kk:mm");
+  infoStartTime.textContent =
+    format(node.startTime, "kk:mm") + "-" + format(node.endTime, "kk:mm");
 
   if (node.description) {
     const infoDescription = L.DomUtil.create(
@@ -66,10 +67,9 @@ const meetings = (container, node) => {
       "decidimGeo__drawer__listCardDescription decidimGeo__drawer__listCardDescription--large decidimGeo__drawer__listCardDescription--meetings",
       container
     );
-    infoDescription.textContent = _.truncate(
-      node.description.translation,
-      { length: 2500 }
-    );
+    infoDescription.textContent = _.truncate(node.description.translation, {
+      length: 2500
+    });
   }
 };
 export default meetings;
