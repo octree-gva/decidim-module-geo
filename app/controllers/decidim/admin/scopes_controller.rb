@@ -5,7 +5,6 @@ module Decidim
     # Controller that allows managing all scopes at the admin panel.
     #
     class ScopesController < Decidim::Admin::ApplicationController
-      layout "decidim/decidim-geo/admin/application"
       helper_method :scope, :parent_scope, :add_scope_path, :current_scopes_path
 
       def index
