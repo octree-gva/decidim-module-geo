@@ -4,6 +4,7 @@ import { getGeoDatasource, getGeoScopes } from "../api";
 import GeoDatasourceNode from "./geoDatasourceNode";
 import GeoScope from "./geoScope";
 import { subscribeWithSelector } from "zustand/middleware";
+import _ from "lodash";
 
 const store = createStore(
   subscribeWithSelector((set) => ({
@@ -106,6 +107,23 @@ const store = createStore(
       return filteredPoints;
     }
   }))
+);
+
+const unsubscribe = store.subscribe(
+  (state) => [state.isLoading, state.scopes],
+  ([isLoading, scopes]) => {
+    if (isLoading || scopes.length === 0) return;
+
+    const { space_id: selectedScope, mapReady } = configStore.getState();
+    if (!mapReady) {
+      return;
+    } else {
+      unsubscribe();
+    }
+    const selectedScopes = scopes.filter(({ id }) => `${id}` === `${selectedScope}`);
+    if (_.isEmpty(selectedScopes)) return;
+    _.first(selectedScopes).panToScope();
+  }
 );
 
 export default store;

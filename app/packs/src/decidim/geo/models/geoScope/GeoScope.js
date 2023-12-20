@@ -4,6 +4,7 @@ import pointStore from "../pointStore";
 import configStore from "../configStore";
 import scopeDropdownStore from "../scopeDropdownStore";
 import polylabel from "polylabel";
+import _ from "lodash";
 
 export default class GeoScope {
   constructor({ geoScope }) {
@@ -30,18 +31,19 @@ export default class GeoScope {
   get staledState() {
     return { fillColor: "#cccccc", color: "#999999" };
   }
-  mapToScope() {
-    const { map } = configStore.getState();
-    const { selectedPoint } = geoStore.getState();
-    if (selectedPoint) return;
-    if (this.centroid) {
-      let group = L.featureGroup(this.markers_group, { updateWhenZooming: true });
-      map.fitBounds(group.getBounds(), { padding: [64, 64] });
+
+  panToScope() {
+    const { map, mapReady } = configStore.getState();
+    if (!mapReady) return;
+    const markers = this.markersForScope();
+    if (this.centroid && markers.length > 0) {
+      let group = L.featureGroup(markers);
+      map.fitBounds(group.getBounds(), { padding: [32, 32] });
     }
   }
 
   select() {
-    const { selectedScope: previousScope, selectedPoint } = geoStore.getState();
+    const { selectedScope: previousScope } = geoStore.getState();
     if (previousScope === this) return;
     geoStore.getState().selectScope(this);
   }
@@ -52,7 +54,9 @@ export default class GeoScope {
    */
   isActive() {
     const { selectedScope } = geoStore.getState();
-    return selectedScope === this;
+    const { space_id: filteredScope } = configStore.getState();
+    if (selectedScope) return selectedScope === this;
+    return filteredScope && `${this.id}` === `${filteredScope}`;
   }
 
   repaint() {
@@ -78,13 +82,22 @@ export default class GeoScope {
   }
 
   markersForScope() {
-    return this.nodesForScope().map(({ marker }) => marker);
+    if (this.markers_group.length > 0) return this.markers_group;
+    return this.nodesForScope()
+      .filter((node) => node.isGeoLocated())
+      .map(({ marker }) => marker);
+  }
+
+  componentIds() {
+    return _.uniq(
+      this.nodesForScope()
+        .map(({ data }) => (data.componentId ? `${data.componentId}` : false))
+        .filter(Boolean)
+    );
   }
 
   init() {
-    const { map } = configStore.getState();
     this.markers_group = this.markersForScope();
-
     this.menuItem = createGeoScopeMenuItem({
       label: this.name,
       onClick: () => {
@@ -108,9 +121,10 @@ export default class GeoScope {
       pointStore.subscribe(
         (state) => [state.isLoading, state.points],
         ([isLoading, points]) => {
-          if (isLoading || points.length === 0) return;
+          const { map, mapReady } = configStore.getState();
+          if (!this.layer || isLoading || points.length === 0) return;
           if (this.isEmpty()) {
-            if (map.hasLayer(this.layer)) {
+            if (map.hasLayer(this.layer) && mapReady) {
               map.removeLayer(this.layer);
             }
           } else {
