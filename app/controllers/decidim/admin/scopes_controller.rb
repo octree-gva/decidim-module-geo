@@ -6,6 +6,7 @@ module Decidim
     #
     class ScopesController < Decidim::Admin::ApplicationController
       helper_method :scope, :parent_scope, :add_scope_path, :current_scopes_path
+      layout "decidim/admin/settings"
 
       def index
         enforce_permission_to :read, :scope
