@@ -54,6 +54,7 @@ module Decidim
           # Search only in a given scope
           search_params = search_params.merge({scope_ids: scope.scope_filter.scope_id})
         end
+
         if resource_type
           # search only for a resource type
           class_name = resource_type.resource_type_filter.resource_type
@@ -153,7 +154,7 @@ module Decidim
           meetings_matches = meeting_time_filter(meetings_matches, time_filter)
           # Proposals & Debates are always hidden when adding a time filter
           # in the past or the future, as they are not bound to time.
-          proposals_matches = [] if ["past", "future"].include? time_filter
+          proposals_matches = proposals_time_filter(proposals_matches, time_filter)
           debates_matches = [] if ["past", "future"].include? time_filter
         end
 
@@ -213,11 +214,28 @@ module Decidim
         when "past"
           search_assembly.where("duration < ?", DateTime.now)
         when "active"
-          search_assembly.where(duration: 15.days.ago..15.days.since)
+          search_assembly.where(duration: 15.days.ago..15.days.from_now).or(
+            search_assembly.where(duration: nil)
+          )
         when "future"
-          search_assembly.where("included_at >= ?", 15.days.since)
+          search_assembly.where("included_at > ?", DateTime.now)
         else
           search_assembly
+        end
+        query.pluck(:id)
+      end
+
+      def proposals_time_filter(proposals, time_filter)
+        proposal_query = Decidim::Proposals::Proposal.where(id: proposals).published
+        query = case time_filter
+        when "past"
+          proposal_query.where(state: ["rejected", "accepted"])
+        when "active", "future"
+          proposal_query.where(state: ["not_answered", "evaluating"]).or(
+            proposal_query.where(state: nil)
+          )
+        else
+          proposal_query
         end
         query.pluck(:id)
       end
