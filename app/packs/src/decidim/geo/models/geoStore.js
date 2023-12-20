@@ -87,11 +87,34 @@ store.subscribe(
     }
   }
 );
+
 store.subscribe(
-  (state) => [state.selectedPoint],
-  () => {
+  (state) => [state.selectedScope],
+  ([selectedScope], [previousScope]) => {
     // Close the filter dropdown
     dropdownFilterStore.getState().close();
+    if (previousScope) previousScope.repaint();
+    if (selectedScope) {
+      // Center to the marker
+      selectedScope.mapToScope();
+      selectedScope.repaint();
+    }
+  }
+);
+
+store.subscribe(
+  (state) => [state.selectedPoint],
+  async ([selectedPoint], [previousPoint]) => {
+    if (selectedPoint === previousPoint) return;
+
+    // Close the filter dropdown
+    dropdownFilterStore.getState().close();
+    if (selectedPoint) {
+      // Center to the marker
+      await selectedPoint.panToMarker();
+      selectedPoint.repaint();
+      if (previousPoint) previousPoint.repaint();
+    }
   }
 );
 export default store;
