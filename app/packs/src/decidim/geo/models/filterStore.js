@@ -16,13 +16,23 @@ const store = createStore(
         defaultFilters: sortedFilters
       }));
     },
-    isFilteredByScope: () => {
-      const { activeFilters } = store.getState();
-      return !!activeFilters.find(({ scopeFilter }) => scopeFilter);
+    isFilteredByScope: (filters = undefined) => {
+      const { scopeFilter } = store.getState();
+      return !!scopeFilter(filters);
     },
-    isFilteredByTime: () => {
-      const { activeFilters } = store.getState();
-      return !!activeFilters.find(({ timeFilter }) => timeFilter);
+    scopeFilter: (filters = undefined) => {
+      if (!filters) {
+        const { activeFilters } = store.getState();
+        filters = activeFilters;
+      }
+      return filters.find(({ scopeFilter }) => scopeFilter)?.scopeFilter?.scopeId;
+    },
+    isFilteredByTime: (filters = undefined) => {
+      if (!filters) {
+        const { activeFilters } = store.getState();
+        filters = activeFilters;
+      }
+      return !!filters.find(({ timeFilter }) => timeFilter);
     },
     hasUserFilters: () => {
       const { defaultFilters, activeFilters } = store.getState();
@@ -81,6 +91,20 @@ const store = createStore(
   }))
 );
 
+const onFilteredByScope = (filters) => {
+  const { scopeFilter } = store.getState();
+  let scopeId;
+  if ((scopeId = scopeFilter(filters))) {
+    const { selectScope, selectedScope: previousScope } = geoStore.getState();
+    if (`${scopeId}` === `${previousScope?.id}`) return;
+
+    const { scopes } = pointStore.getState();
+    const selectedScope = scopes.find(({ id }) => `${id}` === `${scopeId}`);
+    selectScope(selectedScope);
+  }
+};
+
+
 // If you update the active filters, we need to fetch
 // the point matching this filter.
 store.subscribe(
@@ -88,15 +112,7 @@ store.subscribe(
   async ([activeFilters], [previousActiveFilter]) => {
     if (!_.isEqual(activeFilters, previousActiveFilter)) {
       await pointStore.getState().pointsForFilters(activeFilters);
-      const { isFilteredByScope } = store.getState();
-      if (isFilteredByScope()) {
-        const {
-          scopeFilter: { scopeId }
-        } = activeFilters.find(({ scopeFilter }) => scopeFilter);
-        const { scopes } = pointStore.getState();
-        const selectedScope = scopes.find(({ id }) => `${id}` == `${scopeId}`);
-        geoStore.getState().selectScope(selectedScope);
-      }
+      onFilteredByScope(activeFilters);
     }
     const { toFilterOptions } = store.getState();
     const { setFilter } = dropdownFilterStore.getState();

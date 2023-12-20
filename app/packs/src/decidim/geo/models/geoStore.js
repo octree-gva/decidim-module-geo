@@ -70,10 +70,12 @@ store.subscribe(
     dropdownFilterStore.getState().close();
 
     // Update filter associated to the scope
-    const { activeFilters, setFilters } = filterStore.getState();
+    const { activeFilters, setFilters, scopeFilter } = filterStore.getState();
     const filtersWithoutScopes = activeFilters.filter(({ scopeFilter }) => {
       return !scopeFilter;
     });
+    const currentScopeFilterId = scopeFilter(activeFilters);
+    if(`${currentScopeFilterId}` === `${selectedScope?.id}`) return;
     if (selectedScope?.id) {
       const matchFilter = activeFilters.find(
         ({ scopeFilter }) => scopeFilter?.scopeId === selectedScope.id
