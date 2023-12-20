@@ -96,7 +96,7 @@ store.subscribe(
     if (previousScope) previousScope.repaint();
     if (selectedScope) {
       // Center to the marker
-      selectedScope.mapToScope();
+      selectedScope.panToScope();
       selectedScope.repaint();
     }
   }

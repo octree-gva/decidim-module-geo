@@ -32,26 +32,29 @@ async function main() {
     // any filter.
     const pointsLayer = L.layerGroup();
     map.addLayer(pointsLayer);
-
+    map.whenReady(() => {
+      configStore.getState().setReady();
+    });
     pointStore.subscribe(
       (state) => [!!state.isLoading, state.getFilteredPoints, state._lastResponse],
       ([isLoading, getFilteredPoints]) => {
-        if (isLoading || !map) return;
+        const { space_id: spaceId, map } = configStore.getState();
+        if (isLoading) return;
         const { selectedPoint, selectedScope } = geoStore.getState();
-        if (selectedPoint) return;
         pointsLayer.clearLayers();
-        const { selected_component } = configStore.getState();
-        let filter = (node) => true;
-        if (!selectedPoint && !selectedScope && selected_component) {
-          filter = (node) =>
-            node.isGeoLocated() && `${node.data.componentId}` === `${selected_component}`;
+        let boudingBoxFilter = () => true;
+        if (!selectedPoint && !selectedScope && spaceId) {
+          boudingBoxFilter = (node) =>
+            node.isGeoLocated() && `${node.scopeId}` === `${spaceId}`;
         }
         const pointInMap = getFilteredPoints().filter((node) => node.isGeoLocated());
         if (pointInMap.length > 0) {
           pointInMap.forEach(({ marker }) => {
             pointsLayer.addLayer(marker);
           });
-          const idealBoundingBox = pointInMap.filter(filter).map(({ marker }) => marker);
+          const idealBoundingBox = pointInMap
+            .filter(boudingBoxFilter)
+            .map(({ marker }) => marker);
           const boundingBox = L.featureGroup(
             _.isEmpty(idealBoundingBox)
               ? pointInMap.map(({ marker }) => marker)
