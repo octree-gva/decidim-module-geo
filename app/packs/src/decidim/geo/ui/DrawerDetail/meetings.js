@@ -1,7 +1,7 @@
 import _ from "lodash";
 import configStore from "../../models/configStore";
 import createClasses from "../createClasses";
-import { format } from "date-fns";
+import { format,isSameDay } from "date-fns";
 
 
 const meetings = (container, node) => {
@@ -36,11 +36,15 @@ const meetings = (container, node) => {
     container
   );
   const infoStart = L.DomUtil.create(
-    "div",
+    "strong",
     "decidimGeo__drawer__listCardStartDate",
     infoDescription
   );
-  infoStart.textContent =  format(node.startTime, "dd/MM/yy") + " — " + format(node.endTime, "dd/MM/yy");
+  let displayedDate = format(node.startTime, "dd/MM/yy") + " — " + format(node.endTime, "dd/MM/yy");
+  if(isSameDay(node.startTime, node.endTime)) {
+    displayedDate = format(node.startTime, "dd/MM/yy") 
+  }
+  infoStart.textContent =  displayedDate;
 
   const infoStartSep = L.DomUtil.create(
     "div",

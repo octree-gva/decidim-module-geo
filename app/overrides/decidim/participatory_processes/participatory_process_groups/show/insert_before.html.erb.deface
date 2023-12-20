@@ -2,7 +2,6 @@
 <%= cell("decidim/geo/content_blocks/geo_maps", @group,
     id: "ProcessGroup",
     filters: [
-        { processGroupFilter: {processGroupId: @group.id } }
     ],
     scopes: @group.participatory_processes.scope.map{|s| s.id}
 ) %>

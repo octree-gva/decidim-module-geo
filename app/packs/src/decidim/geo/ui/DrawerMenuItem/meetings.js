@@ -2,7 +2,7 @@ import configStore from "../../models/configStore";
 import createClasses from "../createClasses";
 import { createDomElement } from "../createDomElement";
 import _ from "lodash";
-import { format } from "date-fns";
+import { format,isSameDay } from "date-fns";
 
 const meetings = (node) => {
   const { i18n, images } = configStore.getState();
@@ -27,21 +27,25 @@ const meetings = (node) => {
     info
   );
   const infoStart = createDomElement(
-    "div",
+    "strong",
     "decidimGeo__drawer__listCardStartDate",
     infoDescription
   );
-  infoStart.textContent =  format(node.startTime, "dd/MM/yy") + " — " + format(node.endTime, "dd/MM/yy");
+  let displayedDate = format(node.startTime, "dd/MM/yy") + " — " + format(node.endTime, "dd/MM/yy");
+  if(isSameDay(node.startTime, node.endTime)) {
+    displayedDate = format(node.startTime, "dd/MM/yy") 
+  }
+  infoStart.textContent =  displayedDate;
 
   const infoStartSep = createDomElement(
-    "div",
+    "span",
     "decidimGeo__drawer__listCardStartDateSep",
     infoDescription
   );
   infoStartSep.textContent = "·";
 
   const infoStartTime = createDomElement(
-    "div",
+    "span",
     "decidimGeo__drawer__listCardStartTime",
     infoDescription
   );
