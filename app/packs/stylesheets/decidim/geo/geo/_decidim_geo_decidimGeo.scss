@@ -388,35 +388,21 @@
 }
 
 .decidimGeo__drawer__listCardDate {
-  display: flex;
-
+  display: inline-flex;
   justify-content: space-between;
+  gap: 6px;
 }
 .decidimGeo__drawer__listCardStartDateSep,
-.decidimGeo__drawer__listCardStartTime {
-  leading-trim: both;
-  color: #3d393c; 
-
-  text-edge: cap;
-  /* Body/Body-4 */
-  font-family: Source Sans Pro;
-  font-size: 16px;
+.decidimGeo__drawer__listCardStartTime,
+.decidimGeo__drawer__listCardStartDate {
   font-style: normal;
-  font-weight: 400;
-  line-height: 130%; /* 20.8px */
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: #3d393c;
+  text-transform: uppercase;
 }
 .decidimGeo__drawer__listCardStartDate {
-  color: black;
-  leading-trim: both;
-  text-edge: cap;
-  /* Body/Body-4-semibold-caps */
-  font-family: Source Sans Pro;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 130%; /* 20.8px */
-  letter-spacing: 0.16px;
-  text-transform: uppercase;
+    font-weight: 600;
 }
 .decidimGeo__drawer__listCardDescription {
   color: #3d393c;
