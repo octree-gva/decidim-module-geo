@@ -27,6 +27,8 @@ const store = createStore(
     },
     getFilteredPoints: () => store.getState()._lastResponse,
     fetchAll: async () => {
+      const {points: fetchedPoints} = store.getState();
+      if(fetchedPoints.length > 0) return;
       const locale = configStore.getState().locale;
       set(({ isLoading }) => ({ isLoading: isLoading + 1 }));
       const data = await getGeoDatasource(

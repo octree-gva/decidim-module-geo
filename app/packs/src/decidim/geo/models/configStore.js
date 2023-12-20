@@ -1,6 +1,5 @@
 import { createStore } from "zustand/vanilla";
 import { subscribeWithSelector } from "zustand/middleware";
-import geoStore from "./geoStore";
 import filterStore from "./filterStore";
 import dropdownFilterStore from "./dropdownFilterStore";
 
@@ -31,6 +30,7 @@ const store = createStore(
       const { setDefaultFilters, setFilters, toFilterOptions } = filterStore.getState();
       setDefaultFilters(mapConfig.filters);
       setFilters(mapConfig.filters);
+
       dropdownFilterStore.getState().setDefaultFilters({
         GeoShowFilter: toFilterOptions("GeoShowFilter", mapConfig.filters),
         GeoTimeFilter: toFilterOptions("GeoTimeFilter", mapConfig.filters),

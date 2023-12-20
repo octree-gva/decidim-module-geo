@@ -15,6 +15,7 @@ module Decidim
 
           def insert_map
             id = @options[:id] || "HomePage"
+            filters = @options[:filters] || []
             config = {
               locale: current_locale,
               space_id: space_id || nil,
