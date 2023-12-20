@@ -380,10 +380,11 @@
   font-size: 17px;
   font-weight: 400;
   line-height: 21.37px;
-  max-width: 192px;
+  max-width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+
 }
 
 .decidimGeo__drawer__listCardDate {
@@ -394,7 +395,7 @@
 .decidimGeo__drawer__listCardStartDateSep,
 .decidimGeo__drawer__listCardStartTime {
   leading-trim: both;
-  color: #3d393c;
+  color: #3d393c; 
 
   text-edge: cap;
   /* Body/Body-4 */
@@ -422,7 +423,7 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 17.6px;
-  max-width: 192px;
+  max-width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

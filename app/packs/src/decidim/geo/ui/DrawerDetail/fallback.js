@@ -35,7 +35,7 @@ const fallback = (container, node) => {
       container
     );
     infoDescription.textContent = _.truncate(
-      node.description.translation.replace(/<[^>]+>/g, ""),
+      node.description.translation,
       { length: 2500 }
     );
   }

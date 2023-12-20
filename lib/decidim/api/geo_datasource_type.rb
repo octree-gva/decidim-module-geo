@@ -67,7 +67,19 @@ module Decidim
           if v.is_a?(Hash) 
             value[key] = truncate_translated(v, chars)
           else
-            value[key] = Decidim::ContentProcessor.render_without_format(Decidim::HtmlTruncation.new(v, max_length: 2800,tail: "…",count_tags: false,count_tail: false,tail_before_final_tag: false).perform).html_safe
+            value[key] = 
+              Rails::Html::FullSanitizer.new.sanitize(
+                Decidim::HtmlTruncation.new(
+                  Decidim::ContentProcessor.render(
+                    v
+                  ),
+                  max_length: 2800,
+                  tail: "…",
+                  count_tags: false,
+                  count_tail: false,
+                  tail_before_final_tag: false
+                ).perform
+              ).html_safe
           end
         end
         value
