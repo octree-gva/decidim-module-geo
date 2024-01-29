@@ -14,14 +14,24 @@ const store = createStore(
       GeoTimeFilter: "only_active",
       GeoType: "all"
     },
+    nextFilters: undefined,
     filterCount: () => {
       const { selectedFilters, defaultFilters } = store.getState();
       return Object.entries(selectedFilters).filter(([key, value]) => {
         return defaultFilters[key] !== value;
       }).length;
     },
+    setNextFilter: (name, value) => {
+      set((state) => ({nextFilters: {
+        ...state.nextFilters,
+        [`${name}`]: value || state.defaultFilters[`${name}`]
+      }}));
+    },
+    applyNextFilters: () => {
+      set(({nextFilters}) => nextFilters ? ({selectedFilters: nextFilters}) : ({}))
+    },
     resetFilters: () => {
-      set(({ defaultFilters }) => ({ selectedFilters: defaultFilters }));
+      set(({ defaultFilters }) => ({ selectedFilters: defaultFilters, nextFilters: defaultFilters }));
     },
     setDefaultFilters: (newFilters) => {
       set(() => ({ defaultFilters: newFilters, selectedFilters: newFilters }));

@@ -194,18 +194,20 @@
 .decidimGeo__filterDropdown__field {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .decidimGeo__filterDropdown__label {
   @include decidimGeo__clickableText;
   color: #1a181d;
   padding: 8px 16px 8px 8px;
   font-size: 14px;
+  text-wrap: nowrap;
 }
 
 .decidimGeo__filterDropdown__select,
 .decidimGeo__filterDropdown__select:focus {
   margin-bottom: 0;
-  max-width: 125px;
+  max-width: 100%;
   border: 0;
   text-align: right;
   box-shadow: none;
