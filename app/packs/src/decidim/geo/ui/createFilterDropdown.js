@@ -48,13 +48,13 @@ class FilterDropdown {
       const {
         resetFilters: resetDropdownFilter,
         toggleOpen,
-        selectedFilters
+        defaultFilters
       } = dropdownFilterStore.getState();
-      resetFilters();
       resetDropdownFilter();
-      this.applyValues(selectedFilters);
+      // resetFilters();
+      this.applyValues(defaultFilters);
       toggleOpen();
-    };
+    }; 
     this.applyBtn = L.DomUtil.create(
       "button",
       "decidimGeo__filterDropdown__applyBtn",
@@ -63,8 +63,9 @@ class FilterDropdown {
     this.applyBtn.textContent = "Apply";
 
     this.applyBtn.onclick = () => {
-      const { selectedFilters, toggleOpen } = dropdownFilterStore.getState();
-      this.applyValues(selectedFilters);
+      const { nextFilters, toggleOpen, applyNextFilters} = dropdownFilterStore.getState();
+      this.applyValues(nextFilters);
+      applyNextFilters();
       toggleOpen();
       this.repaint();
     };
@@ -93,8 +94,9 @@ class FilterDropdown {
   }
 
   field(label, name, options) {
-    const { selectedFilters } = dropdownFilterStore.getState();
-    const selectedValue = selectedFilters[name] || this.defaultFilterFor(name);
+    const { nextFilters } = dropdownFilterStore.getState();
+    const selectedValue = (nextFilters && nextFilters[name]) || this.defaultFilterFor(name);
+
     const fieldGroup = L.DomUtil.create(
       "li",
       "decidimGeo__filterDropdown__field",
@@ -115,7 +117,7 @@ class FilterDropdown {
     );
     selectTag.id = name;
     selectTag.onchange = (evt) => {
-      dropdownFilterStore.getState().setFilter(name, evt.target.value);
+      dropdownFilterStore.getState().setNextFilter(name, evt.target.value);
     };
     options.forEach(([key, value]) => {
       const option = L.DomUtil.create(
@@ -134,7 +136,7 @@ class FilterDropdown {
   }
 
   applyValues(filters) {
-    const { setFilters, activeFilters, defaultFilters } = filterStore.getState();
+    const { setFilters, activeFilters, defaultFilters,  } = filterStore.getState();
     const newFilters = activeFilters.filter((filter) => {
       const [filterName] = Object.keys(filter);
       return !["resourceTypeFilter", "timeFilter", "geoencodedFilter"].includes(
