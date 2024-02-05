@@ -209,7 +209,7 @@ module Decidim
       end
 
       def assembly_time_filter(assemblies, time_filter)
-        search_assembly = Decidim::Assembly.where(id: assemblies, private_space: false).published
+        search_assembly = Decidim::Assembly.visible_for(current_user)
         query = case time_filter
         when "past"
           search_assembly.where("duration < ?", DateTime.now)
@@ -218,7 +218,7 @@ module Decidim
             search_assembly.where(duration: nil)
           )
         when "future"
-          search_assembly.where("included_at > ?", DateTime.now)
+          search_assembly.where("duration > ?", DateTime.now)
         else
           search_assembly
         end
@@ -241,7 +241,7 @@ module Decidim
       end
 
       def meeting_time_filter(meetings, time_filter)
-        search_result = Decidim::Meetings::Meeting.where(id: meetings, private_meeting: false).published
+        search_result = Decidim::Meetings::Meeting.visible_for(current_user).where(id: meetings)
         search_result = case time_filter
           when "past"
             search_result.where("end_time < ?", DateTime.now)
@@ -250,11 +250,11 @@ module Decidim
               # Meeting is happening
               "start_time <= ? AND end_time >= ?", DateTime.now, DateTime.now
             ).or(
-              # Meeting is about to start
+              # Meeting is about to start (now..in 15 days)
               search_result.where("start_time > ? AND start_time < ?", DateTime.now, 15.days.from_now)
             ).or(
-              # Meeting has just ended
-              search_result.where("end_time < ? AND end_time > ?", DateTime.now, 15.days.ago)
+              # Meeting has just ended (15days ago ... now)
+              search_result.where("end_time > ? AND end_time < ?", 15.days.ago, DateTime.now)
             )
           when "future"
             search_result.where("start_time >= ?", DateTime.now)
@@ -285,6 +285,12 @@ module Decidim
         given_organization.try(:default_locale)
       end
 
+      def current_user
+        context[:current_user]
+      end
+      def current_organization
+        context[:current_organization]
+      end
     end
   end
 end
