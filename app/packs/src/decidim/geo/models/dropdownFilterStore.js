@@ -22,16 +22,21 @@ const store = createStore(
       }).length;
     },
     setNextFilter: (name, value) => {
-      set((state) => ({nextFilters: {
-        ...state.nextFilters,
-        [`${name}`]: value || state.defaultFilters[`${name}`]
-      }}));
+      set((state) => ({
+        nextFilters: {
+          ...state.nextFilters,
+          [`${name}`]: value || state.defaultFilters[`${name}`]
+        }
+      }));
     },
     applyNextFilters: () => {
-      set(({nextFilters}) => nextFilters ? ({selectedFilters: nextFilters}) : ({}))
+      set(({ nextFilters }) => (nextFilters ? { selectedFilters: nextFilters } : {}));
     },
     resetFilters: () => {
-      set(({ defaultFilters }) => ({ selectedFilters: defaultFilters, nextFilters: defaultFilters }));
+      set(({ defaultFilters }) => ({
+        selectedFilters: defaultFilters,
+        nextFilters: defaultFilters
+      }));
     },
     setDefaultFilters: (newFilters) => {
       set(() => ({ defaultFilters: newFilters, selectedFilters: newFilters }));

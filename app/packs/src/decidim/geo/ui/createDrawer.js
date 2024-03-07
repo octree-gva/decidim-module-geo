@@ -62,9 +62,19 @@ async function createSidebar() {
         const { resetFilters } = filterStore.getState();
         const { resetFilters: resetDropdownFilter } = dropdownFilterStore.getState();
         const { selectScope } = geoStore.getState();
+        const { space_ids } = configStore.getState();
+        const { scopeForId } = pointStore.getState();
+
         resetFilters();
         resetDropdownFilter();
-        selectScope(undefined);
+        const scopes = space_ids.map((scope) => scopeForId(scope)).filter(Boolean);
+        if (scopes.length === 1) {
+          const scope = scopeForId(scopes[0]);
+          selectScope(scope);
+          scope.repaint();
+        } else {
+          selectScope(undefined);
+        }
         this.repaint();
       };
     },

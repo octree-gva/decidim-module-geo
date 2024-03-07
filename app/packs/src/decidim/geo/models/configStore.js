@@ -1,6 +1,7 @@
 import { createStore } from "zustand/vanilla";
 import { subscribeWithSelector } from "zustand/middleware";
 import filterStore from "./filterStore";
+import geoStore from "./geoStore";
 import dropdownFilterStore from "./dropdownFilterStore";
 
 const store = createStore(
@@ -8,7 +9,7 @@ const store = createStore(
     locale: "en",
     selected_component: undefined,
     selected_point: undefined,
-    space_id: undefined,
+    space_ids: [],
     images: {},
     map: undefined,
     mapReady: false,
@@ -20,7 +21,7 @@ const store = createStore(
       set(() => ({
         locale: mapConfig.locale,
         selected_component: mapConfig.selected_component,
-        space_id: mapConfig.space_id,
+        space_ids: mapConfig.space_ids,
         selected_point: mapConfig.selected_point,
         mapID: mapConfig.mapID,
         map_config: mapConfig.map_config,

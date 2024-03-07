@@ -1,6 +1,25 @@
 <!-- insert_after '.process-header' -->
+<%
+assemblies = []
+# recursivly get all the children assemblies.
+def iter_children(assembly, collection)
+    assembly.children.map {|ch| iter_children(ch, collection) } if assembly.children
+    collection.push(assembly.id)
+end
+iter_children(current_participatory_space, assemblies) unless current_participatory_space.scope.present?
+%>
 <%= cell("decidim/geo/content_blocks/geo_maps", current_participatory_space, 
     id: "Assembly",
-    filters: [{ assemblyFilter: { assemblyId: current_participatory_space.id } }],
-    scopes: current_participatory_space.scopes.map{|s| s.id}
+    filters: if current_participatory_space.scope.present?
+        [
+          { scopeFilter: { scopeId: current_participatory_space.scope.id } }
+        ]
+    else 
+        assemblies.map { |assembly_id| { assemblyFilter: { assemblyId: assembly_id } } }
+    end,
+    scopes: if current_participatory_space.scope.present?
+        [current_participatory_space.scope.id]
+    else
+        []
+    end
 ) %>

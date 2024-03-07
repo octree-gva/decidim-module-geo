@@ -38,15 +38,19 @@ async function main() {
     pointStore.subscribe(
       (state) => [!!state.isLoading, state.getFilteredPoints, state._lastResponse],
       ([isLoading, getFilteredPoints]) => {
-        const { space_id: spaceId, map } = configStore.getState();
         if (isLoading) return;
+        const { space_ids: spaceIds, map } = configStore.getState();
         const { selectedPoint, selectedScope } = geoStore.getState();
         pointsLayer.clearLayers();
         let boudingBoxFilter = () => true;
-        if (!selectedPoint && !selectedScope && spaceId) {
+        if (!selectedPoint && !selectedScope && spaceIds) {
           boudingBoxFilter = (node) =>
-            node.isGeoLocated() && `${node.scopeId}` === `${spaceId}`;
+            node.isGeoLocated() && spaceIds.includes(`${node.scopeId}`);
         }
+        if (selectedScope && !selectedPoint) {
+          map.fitBounds(selectedScope.layer.getBounds(), { padding: [64, 64] });
+        }
+
         const pointInMap = getFilteredPoints().filter((node) => node.isGeoLocated());
         if (pointInMap.length > 0) {
           pointInMap.forEach(({ marker }) => {
@@ -61,13 +65,8 @@ async function main() {
               : idealBoundingBox,
             { updateWhenZooming: true }
           );
-          map.fitBounds(boundingBox.getBounds(), { padding: [64, 64] });
-        } else {
-          // maybe we are selecting only non-geolocated points
-          // with still a zone.
-          const { selectedScope } = geoStore.getState();
-          if (selectedScope?.layer) {
-            map.fitBounds(selectedScope.layer.getBounds(), { padding: [64, 64] });
+          if (!selectedScope && !selectedPoint) {
+            map.fitBounds(boundingBox.getBounds(), { padding: [64, 64] });
           }
         }
       }
@@ -79,7 +78,7 @@ async function main() {
     await createDrawer();
     // Fetch all the data
     const { fetchAll, pointsForFilters, clearCache } = pointStore.getState();
-    await fetchAll();
+    await fetchAll(filterStore.getState().defaultFilters);
     clearCache();
     await pointsForFilters(filterStore.getState().defaultFilters);
     removeProcess();

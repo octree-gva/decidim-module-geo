@@ -52,7 +52,6 @@ export default class GeoDatasourceNode {
       if (layer.feature) {
         if (layer.feature.geometry.properties.id === this.scopeId) {
           layer.setStyle(this.selectedState);
-          map.fitBounds(layer.getBounds(), { padding: [64, 64] });
         } else {
           layer.setStyle(this.staledState);
         }
@@ -66,7 +65,7 @@ export default class GeoDatasourceNode {
   }
 
   get scopeId() {
-    return this.data.scope?.id || undefined;
+    return parseInt(`${this.data.scope?.id}`) || undefined;
   }
 
   get selectedState() {
@@ -77,17 +76,19 @@ export default class GeoDatasourceNode {
     return { color: "#404040" };
   }
 
-  async panToMarker() {
+  async panToMarker(zoom = 21) {
     if (!this.isGeoLocated()) return;
     const { map } = configStore.getState();
     return new Promise((resolve) => {
       map
-        .flyTo(this.marker.getLatLng(), 15, {
+        .flyTo(this.marker.getLatLng(), zoom, {
           animate: false,
-          duration: 1.2,
           noMoveStart: true
         })
-        .once("moveend", resolve);
+        .once("moveend", () => {
+          this.repaint();
+          resolve();
+        });
     });
   }
 

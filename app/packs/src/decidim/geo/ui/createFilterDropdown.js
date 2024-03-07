@@ -54,7 +54,7 @@ class FilterDropdown {
       // resetFilters();
       this.applyValues(defaultFilters);
       toggleOpen();
-    }; 
+    };
     this.applyBtn = L.DomUtil.create(
       "button",
       "decidimGeo__filterDropdown__applyBtn",
@@ -63,7 +63,8 @@ class FilterDropdown {
     this.applyBtn.textContent = "Apply";
 
     this.applyBtn.onclick = () => {
-      const { nextFilters, toggleOpen, applyNextFilters} = dropdownFilterStore.getState();
+      const { nextFilters, toggleOpen, applyNextFilters } =
+        dropdownFilterStore.getState();
       this.applyValues(nextFilters);
       applyNextFilters();
       toggleOpen();
@@ -95,7 +96,8 @@ class FilterDropdown {
 
   field(label, name, options) {
     const { nextFilters } = dropdownFilterStore.getState();
-    const selectedValue = (nextFilters && nextFilters[name]) || this.defaultFilterFor(name);
+    const selectedValue =
+      (nextFilters && nextFilters[name]) || this.defaultFilterFor(name);
 
     const fieldGroup = L.DomUtil.create(
       "li",
@@ -136,7 +138,10 @@ class FilterDropdown {
   }
 
   applyValues(filters) {
-    const { setFilters, activeFilters, defaultFilters,  } = filterStore.getState();
+    if (!filters) {
+      throw new Error("Filters missing");
+    }
+    const { setFilters, activeFilters, defaultFilters } = filterStore.getState();
     const newFilters = activeFilters.filter((filter) => {
       const [filterName] = Object.keys(filter);
       return !["resourceTypeFilter", "timeFilter", "geoencodedFilter"].includes(

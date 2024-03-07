@@ -69,8 +69,9 @@ en:
           lng: Longitude
           lat: Latitude
       scopes:
-        all: "All Scopes"
+        all: "Scopes"
       filters:
+        back: "Back"
         button: "Filters"
     components:
       geo:

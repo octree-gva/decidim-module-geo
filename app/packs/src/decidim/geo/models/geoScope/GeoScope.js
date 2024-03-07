@@ -21,7 +21,7 @@ export default class GeoScope {
   isEmpty() {
     const { points } = pointStore.getState();
     const currentScopeId = this.id;
-    return !points.find(({ scopeId }) => scopeId === currentScopeId);
+    return !points.find(({ scopeId }) => `${scopeId}` === `${currentScopeId}`);
   }
 
   isLoading() {
@@ -30,16 +30,6 @@ export default class GeoScope {
 
   get staledState() {
     return { fillColor: "#cccccc", color: "#999999" };
-  }
-
-  panToScope() {
-    const { map, mapReady } = configStore.getState();
-    if (!mapReady) return;
-    const markers = this.markersForScope();
-    if (this.centroid && markers.length > 0) {
-      let group = L.featureGroup(markers);
-      map.fitBounds(group.getBounds(), { padding: [32, 32] });
-    }
   }
 
   select() {
@@ -54,9 +44,8 @@ export default class GeoScope {
    */
   isActive() {
     const { selectedScope } = geoStore.getState();
-    const { space_id: filteredScope } = configStore.getState();
     if (selectedScope) return selectedScope === this;
-    return filteredScope && `${this.id}` === `${filteredScope}`;
+    return false;
   }
 
   repaint() {
@@ -72,7 +61,7 @@ export default class GeoScope {
   }
 
   get id() {
-    return this.data.id;
+    return parseInt(`${this.data.id}`);
   }
 
   nodesForScope() {
@@ -119,10 +108,10 @@ export default class GeoScope {
       // Add the layer only when we are sure there is some point
       // in the layer.
       pointStore.subscribe(
-        (state) => [state.isLoading, state.points],
-        ([isLoading, points]) => {
+        (state) => [state.isLoading],
+        ([isLoading]) => {
           const { map, mapReady } = configStore.getState();
-          if (!this.layer || isLoading || points.length === 0) return;
+          if (isLoading) return;
           if (this.isEmpty()) {
             if (map.hasLayer(this.layer) && mapReady) {
               map.removeLayer(this.layer);
@@ -134,7 +123,6 @@ export default class GeoScope {
       );
     }
     this.repaint();
-
     return this;
   }
 }

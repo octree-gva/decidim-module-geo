@@ -39,9 +39,7 @@ const store = createStore(
       return _.isEqual(defaultFilters, activeFilters);
     },
     setFilters: (filters = []) => {
-      const activeFilters = _.uniqBy(_.sortBy(filters, [sortingIteratee]), (filter) => {
-        return Object.keys(filter).join("");
-      });
+      const activeFilters = _.sortBy(filters, [sortingIteratee]);
       set((state) => {
         if (_.isEqual(state.activeFilters, activeFilters)) return {};
         return { activeFilters: activeFilters };
@@ -93,24 +91,22 @@ const store = createStore(
 
 const onFilteredByScope = (filters) => {
   const { scopeFilter } = store.getState();
+  const { scopeForId } = pointStore.getState();
   let scopeId;
   if ((scopeId = scopeFilter(filters))) {
     const { selectScope, selectedScope: previousScope } = geoStore.getState();
-    if (`${scopeId}` === `${previousScope?.id}`) return;
-
-    const { scopes } = pointStore.getState();
-    const selectedScope = scopes.find(({ id }) => `${id}` === `${scopeId}`);
-    selectScope(selectedScope);
+    if (previousScope && `${scopeId}` === `${previousScope?.id}`) return;
+    const selectedScope = scopeForId(scopeId);
+    if (selectedScope) selectScope(selectedScope);
   }
 };
-
 
 // If you update the active filters, we need to fetch
 // the point matching this filter.
 store.subscribe(
   (state) => [state.activeFilters],
   async ([activeFilters], [previousActiveFilter]) => {
-    if (!_.isEqual(activeFilters, previousActiveFilter)) {
+    if (!previousActiveFilter || !_.isEqual(activeFilters, previousActiveFilter)) {
       await pointStore.getState().pointsForFilters(activeFilters);
       onFilteredByScope(activeFilters);
     }

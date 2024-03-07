@@ -18,7 +18,7 @@ module Decidim
             filters = @options[:filters] || []
             config = {
               locale: current_locale,
-              space_id: space_id || nil,
+              space_ids: @options[:scopes] || [],
               selected_component: current_component || nil,
               selected_point: current_component? && params[:id] ? params[:id] : nil,
               images: {
@@ -47,10 +47,6 @@ module Decidim
             )
           end
 
-          def space_id
-            @model.decidim_scope_id if @model.respond_to?(:decidim_scope_id)
-          end
-
           def geo_i18n
             supported_models = [
               Decidim::Meetings::Meeting, 
@@ -63,6 +59,7 @@ module Decidim
             geo_i18n = {
               **geo_i18n,
               "decidim_geo.scopes.all":  t('decidim.geo.scopes.all'),
+              "decidim_geo.filters.back":  t('decidim.geo.filters.back'),
               "decidim_geo.filters.button":  t('decidim.geo.filters.button')
             }
           end

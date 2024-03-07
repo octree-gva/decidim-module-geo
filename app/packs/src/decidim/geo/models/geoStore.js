@@ -25,9 +25,7 @@ const store = createStore(
     selectPoint: (point) => {
       set((state) => ({
         ...state,
-        selectedScope: dataPointStore
-          .getState()
-          .scopes.find(({ data }) => data.id === point?.scopeId),
+        selectedScope: dataPointStore.getState().scopeForId(point.scopeId),
         selectedPoint: point,
         previousState: state
       }));
@@ -38,19 +36,18 @@ const store = createStore(
      * -
      */
     selectScope: (scope) => {
-      set((state) =>
-        state.selectedScope === scope
-          ? {}
-          : {
-              selectedScope: scope,
-              previousState: state,
-              // unselect point when moving away from its scope
-              selectedPoint:
-                state.selectedPoint && state.selectedPoint.scopeId === scope?.id
-                  ? state.selectedPoint
-                  : undefined
-            }
-      );
+      set((state) => ({
+        selectedScope: scope,
+        ...(`${scope?.id}` !== `${state.selectedScope?.id}`
+          ? { previousState: state }
+          : {}),
+        // unselect point when moving away from its scope
+        selectedPoint:
+          state.selectedPoint && state.selectedPoint.scopeId === scope?.id
+            ? state.selectedPoint
+            : undefined
+      }));
+      scope.repaint();
     },
     /**
      * Go back to previous state
@@ -70,12 +67,13 @@ store.subscribe(
     dropdownFilterStore.getState().close();
 
     // Update filter associated to the scope
-    const { activeFilters, setFilters, scopeFilter } = filterStore.getState();
+    const { activeFilters, setFilters, scopeFilter, defaultFilters } =
+      filterStore.getState();
     const filtersWithoutScopes = activeFilters.filter(({ scopeFilter }) => {
       return !scopeFilter;
     });
     const currentScopeFilterId = scopeFilter(activeFilters);
-    if(`${currentScopeFilterId}` === `${selectedScope?.id}`) return;
+    if (`${currentScopeFilterId}` === `${selectedScope?.id}`) return;
     if (selectedScope?.id) {
       const matchFilter = activeFilters.find(
         ({ scopeFilter }) => scopeFilter?.scopeId === selectedScope.id
@@ -85,7 +83,9 @@ store.subscribe(
           filtersWithoutScopes.concat({ scopeFilter: { scopeId: selectedScope.id } })
         );
     } else {
-      setFilters(filtersWithoutScopes);
+      const defaultScopeFilter = defaultFilters.find(({ scopeFiler }) => scopeFilter);
+      if (defaultScopeFilter) setFilters(filtersWithoutScopes.concat(defaultScopeFilter));
+      else setFilters(filtersWithoutScopes);
     }
   }
 );
@@ -97,8 +97,6 @@ store.subscribe(
     dropdownFilterStore.getState().close();
     if (previousScope) previousScope.repaint();
     if (selectedScope) {
-      // Center to the marker
-      selectedScope.panToScope();
       selectedScope.repaint();
     }
   }
@@ -107,16 +105,13 @@ store.subscribe(
 store.subscribe(
   (state) => [state.selectedPoint],
   async ([selectedPoint], [previousPoint]) => {
-    if (selectedPoint === previousPoint) return;
-
+    if (!selectedPoint || selectedPoint === previousPoint) return;
     // Close the filter dropdown
     dropdownFilterStore.getState().close();
-    if (selectedPoint) {
-      // Center to the marker
-      await selectedPoint.panToMarker();
-      selectedPoint.repaint();
-      if (previousPoint) previousPoint.repaint();
-    }
+    // Center to the marker
+    selectedPoint.repaint();
+    await selectedPoint.panToMarker();
+    if (previousPoint) previousPoint.repaint();
   }
 );
 export default store;
