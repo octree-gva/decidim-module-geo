@@ -40,41 +40,47 @@ module Decidim
       end
 
       def geo_datasource(**kwargs)
+        
         locale = kwargs[:locale] || I18n.locale
         return nofilter_datasource(locale) unless kwargs[:filters].present?
         
-        scope = kwargs[:filters].find {|f| f[:scope_filter].present?}
+        scopes = kwargs[:filters].select {|f| f[:scope_filter].present?}
         resource_type = kwargs[:filters].find {|f| f[:resource_type_filter].present?}
-        process = kwargs[:filters].find {|f| f[:process_filter].present?}
-        assembly = kwargs[:filters].find {|f| f[:assembly_filter].present?}
-        @time = kwargs[:filters].find {|f| f[:time_filter].present?}
+        processes = kwargs[:filters].select {|f| f[:process_filter].present?}
+        assemblies = kwargs[:filters].select {|f| f[:assembly_filter].present?}
+        @time = kwargs[:filters].find {|f| f[:time_filter].present?} 
         @geoencoded = kwargs[:filters].find {|f| f[:geoencoded_filter].present?}
-        search_params = {locale: locale, class_name: supported_geo_components};
-        if scope
+        search_params = {locale: locale, class_name: supported_geo_components}
+        
+        if scopes.length > 0
           # Search only in a given scope
-          search_params = search_params.merge({scope_ids: scope.scope_filter.scope_id})
+          search_params = search_params.merge({scope_ids: scopes.map {|scope| scope.scope_filter.scope_id }})
         end
 
         if resource_type
           # search only for a resource type
           class_name = resource_type.resource_type_filter.resource_type
           search_params = search_params.merge({class_name: class_name}) unless class_name == "all"
+        elsif assemblies.length > 0 && processes.length == 0
+          search_params = search_params.merge({class_name: supported_geo_components.select {|k| k != :"Decidim::ParticipatoryProcess"}})
+        elsif processes.length > 0 && assemblies.length == 0
+          search_params = search_params.merge({class_name: supported_geo_components.select {|k| k != :"Decidim::Assembly"}})
         end
         search_results = filtered_query_for(**search_params)
 
-        if assembly
+        if assemblies.length > 0
           # The results must be within an assembly
           search_results = search_results.where(
             decidim_participatory_space_type: "Decidim::Assembly",
-            decidim_participatory_space_id: assembly.assembly_filter.assembly_id
+            decidim_participatory_space_id: assemblies.map{|assembly| assembly.assembly_filter.assembly_id }
           )
         end
 
-        if process
+        if processes.length > 0
           # The results must be within a process
           search_results = search_results.where(
             decidim_participatory_space_type: "Decidim::ParticipatoryProcess",
-            decidim_participatory_space_id: process.process_filter.process_id
+            decidim_participatory_space_id: processes.map {|process| process.process_filter.process_id }
           )
         end
 
@@ -128,7 +134,6 @@ module Decidim
           query.update(decidim_scope_id: scope_ids)
         end
         query.update(decidim_participatory_space: spaces) if spaces.present?
-
         query.update(resource_id: id) if id.present?
         result_query = SearchableResource.where(query)
         result_query = result_query.order("datetime DESC")
@@ -148,15 +153,18 @@ module Decidim
         proposals_matches = data_by_resource_type["Decidim::Proposals::Proposal"] || []
         debates_matches = data_by_resource_type["Decidim::Debates::Debate"] || []
         if @time
-          time_filter = @time.time_filter.time
-          processes_matches = processes_time_filter(processes_matches, time_filter)
-          assemblies_matches = assembly_time_filter(assemblies_matches, time_filter)
-          meetings_matches = meeting_time_filter(meetings_matches, time_filter)
-          # Proposals & Debates are always hidden when adding a time filter
-          # in the past or the future, as they are not bound to time.
-          proposals_matches = proposals_time_filter(proposals_matches, time_filter)
-          debates_matches = [] if ["past", "future"].include? time_filter
+          time_filter = @time.time_filter.time 
+        else
+          time_filter = "active"
         end
+
+        processes_matches = processes_time_filter(processes_matches, time_filter)
+        assemblies_matches = assembly_time_filter(assemblies_matches, time_filter)
+        meetings_matches = meeting_time_filter(meetings_matches, time_filter)
+        # Proposals & Debates are always hidden when adding a time filter
+        # in the past or the future, as they are not bound to time.
+        proposals_matches = proposals_time_filter(proposals_matches, time_filter)
+        debates_matches = [] if ["past", "future"].include? time_filter
 
         only_geo_encoded = @geoencoded && @geoencoded.geoencoded_filter.geoencoded
         only_not_geo_encoded = @geoencoded && !@geoencoded.geoencoded_filter.geoencoded
@@ -222,7 +230,7 @@ module Decidim
         else
           search_assembly
         end
-        query.pluck(:id)
+        query.where(id: assemblies).pluck(:id)
       end
 
       def proposals_time_filter(proposals, time_filter)
@@ -241,27 +249,27 @@ module Decidim
       end
 
       def meeting_time_filter(meetings, time_filter)
-        search_result = Decidim::Meetings::Meeting.visible_for(current_user).where(id: meetings)
-        search_result = case time_filter
+        meetings = Decidim::Meetings::Meeting.visible_for(current_user).where(id: meetings)
+        meetings = case time_filter
           when "past"
-            search_result.where("end_time < ?", DateTime.now)
+            meetings.where("end_time < ?", DateTime.now)
           when "active"
-            search_result.where(
+            meetings.where(
               # Meeting is happening
-              "start_time <= ? AND end_time >= ?", DateTime.now, DateTime.now
+              "start_time <= ? AND end_time > ?", DateTime.now, DateTime.now
             ).or(
               # Meeting is about to start (now..in 15 days)
-              search_result.where("start_time > ? AND start_time < ?", DateTime.now, 15.days.from_now)
+              meetings.where("start_time > ? AND start_time < ?", DateTime.now, 15.days.from_now)
             ).or(
               # Meeting has just ended (15days ago ... now)
-              search_result.where("end_time > ? AND end_time < ?", 15.days.ago, DateTime.now)
+              meetings.where("end_time > ? AND end_time < ?", 15.days.ago, DateTime.now)
             )
           when "future"
-            search_result.where("start_time >= ?", DateTime.now)
+            meetings.where("start_time >= ?", DateTime.now)
         else
-          search_result
+          meetings
         end
-        search_result.pluck(:id)
+        meetings.pluck(:id)
       end
 
 

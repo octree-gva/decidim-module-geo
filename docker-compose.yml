@@ -31,7 +31,6 @@ services:
       - 3035:3035
     volumes:
       - .:/home/decidim/decidim_module_geo
-      - ./.migrations:/home/decidim/app/db/migrate:delegated
       - node_modules:/home/decidim/app/node_modules
       - bundle:/home/decidim/app/vendor
       - public:/home/decidim/app/public
@@ -58,7 +57,6 @@ services:
 
 volumes:
   bundle: {}
-  migration: {}
   pg_data: {}
   public: {}
   node_modules: {}

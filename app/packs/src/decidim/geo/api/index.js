@@ -1,6 +1,5 @@
 import * as queries from "./queries";
 import { getDecidimData } from "../utils";
-import getGeoJSON from "./getGeoJSON";
 import configStore from "../models/configStore";
 
 const makeQuery =
@@ -14,7 +13,6 @@ const makeQuery =
     return response.data[_responseKey];
   };
 
-export { getGeoJSON };
 const _getGeoDatasource = makeQuery("geoDatasource");
 const _getGeoDatasourceIds = makeQuery("geoDatasourceIds", "geoDatasource");
 

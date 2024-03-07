@@ -2,9 +2,21 @@
 <% if controller.controller_name != "participatory_process_steps" %>
   <%= cell("decidim/geo/content_blocks/geo_maps", current_participatory_space, 
       id: "Process",
-      filters: [
+      filters: if current_participatory_space.scope.present?
+        # If the process has a scope, filter by its scope
+        [
+          { scopeFilter: { scopeId: current_participatory_space.scope.id } }
+        ]
+      else 
+        # Else filter on the process data
+        [
           { processFilter: { processId: current_participatory_space.id } }
-      ],
-      scopes: current_participatory_space.scopes.map{|s| s.id}
+        ]
+      end,
+      scopes:  if current_participatory_space.scope.present?
+          [current_participatory_space.scope.id]
+        else
+            []
+        end
   ) %>
 <% end %>

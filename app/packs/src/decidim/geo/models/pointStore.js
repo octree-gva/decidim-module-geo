@@ -1,5 +1,6 @@
 import { createStore } from "zustand/vanilla";
 import configStore from "./configStore";
+import geoStore from "./geoStore";
 import { getGeoDatasource, getGeoScopes } from "../api";
 import GeoDatasourceNode from "./geoDatasourceNode";
 import GeoScope from "./geoScope";
@@ -16,6 +17,9 @@ const store = createStore(
     isLoading: 0,
     _lastFilter: "",
     _lastResponse: [],
+    scopeForId: (scopeId) => {
+      return store.getState().scopes.find(({ data }) => `${data.id}` === `${scopeId}`);
+    },
     clearCache: () => {
       set(() => ({ _lastFilter: "", _lastResponse: [] }));
     },
@@ -26,14 +30,14 @@ const store = createStore(
       set(({ isLoading }) => ({ isLoading: isLoading - 1 }));
     },
     getFilteredPoints: () => store.getState()._lastResponse,
-    fetchAll: async () => {
-      const {points: fetchedPoints} = store.getState();
-      if(fetchedPoints.length > 0) return;
+    fetchAll: async (filters = []) => {
+      const { points: fetchedPoints } = store.getState();
+      if (fetchedPoints.length > 0) return;
       const locale = configStore.getState().locale;
       set(({ isLoading }) => ({ isLoading: isLoading + 1 }));
       const data = await getGeoDatasource(
         {
-          variables: { filters: [], locale: locale }
+          variables: { filters: filters, locale: locale }
         },
         true
       );
@@ -111,20 +115,20 @@ const store = createStore(
   }))
 );
 
-const unsubscribe = store.subscribe(
-  (state) => [state.isLoading, state.scopes],
-  ([isLoading, scopes]) => {
-    if (isLoading || scopes.length === 0) return;
+store.subscribe(
+  (state) => [state.scopes],
+  async ([scopes], [previousScopes]) => {
+    if (scopes.length === previousScopes.length) return;
 
-    const { space_id: selectedScope, mapReady } = configStore.getState();
-    if (!mapReady) {
-      return;
-    } else {
-      unsubscribe();
+    const { selectedScope, selectScope } = geoStore.getState();
+    if (!!selectedScope) return;
+
+    const { space_ids } = configStore.getState();
+    if (space_ids.length === 1) {
+      const { scopeForId } = store.getState();
+      const scope = scopeForId(space_ids[0]);
+      if (scope) selectScope(scope);
     }
-    const selectedScopes = scopes.filter(({ id }) => `${id}` === `${selectedScope}`);
-    if (_.isEmpty(selectedScopes)) return;
-    _.first(selectedScopes).panToScope();
   }
 );
 

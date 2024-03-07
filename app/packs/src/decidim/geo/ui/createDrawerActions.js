@@ -24,10 +24,15 @@ async function createScopesDropdown() {
     toggleOpen() {
       scopeDropdownStore.getState().toggleOpen();
     },
-
+    scopes() {
+      const { scopeForId, scopes } = pointStore.getState();
+      const { space_ids } = configStore.getState();
+      if (space_ids.length > 0)
+        return space_ids.map((id) => scopeForId(id)).filter(Boolean);
+      return scopes;
+    },
     isEmpty() {
-      const { scopes } = pointStore.getState();
-      return scopes.length === 0;
+      return this.scopes().length < 2;
     },
     activeScope() {
       return geoStore.getState().selectedScope;
@@ -66,13 +71,21 @@ async function createScopesDropdown() {
       this.repaint();
     },
     repaintHeading() {
-      const { i18n } = configStore.getState();
+      const { i18n, space_ids } = configStore.getState();
       const { selectedPoint } = geoStore.getState();
+      const { scopeForId } = pointStore.getState();
+      const scopes = this.scopes();
       if (selectedPoint) {
-        this.title.textContent = "Back";
+        this.title.textContent = i18n["decidim_geo.filters.back"];
         this.title.onclick = () => {
+          selectedPoint.panToMarker(16);
           geoStore.getState().goBack();
         };
+        return;
+      } else if (scopes.length === 0) {
+        this.title.textContent = i18n["decidim_geo.scopes.all"];
+        this.title.className += " decidimGeo__scopesDropdown__list--disabled";
+        this.title.onclick = () => false;
         return;
       } else {
         this.title.onclick = () => {
@@ -80,10 +93,13 @@ async function createScopesDropdown() {
           this.repaint();
         };
       }
+
       // Dropdown heading text
       if (this.activeScope()) {
         // specific scope
         this.title.textContent = this.activeScope().name;
+      } else if (scopes.length === 1) {
+        this.title.textContent = scopes[0].name;
       } else {
         // all scopes
         this.title.textContent = i18n["decidim_geo.scopes.all"];
@@ -91,16 +107,18 @@ async function createScopesDropdown() {
     },
     repaintOptions() {
       const { i18n } = configStore.getState();
-      const { scopes } = pointStore.getState();
+      const scopes = this.scopes();
       // Dropdown options
       L.DomUtil.empty(this.dropDownOptions);
-      if (this.activeScope()) {
+      if (scopes.length == 1) return;
+      if (this.activeScope() && scopes.length > 1) {
         // Add a "All Scope" menu item
         const resetItem = createGeoScopeMenuItem({
           label: i18n["decidim_geo.scopes.all"],
           onClick: () => {
-            geoStore.getState().selectScope(undefined);
             this.toggleOpen();
+            geoStore.getState().selectScope(undefined);
+            geoStore.getState().selectPoint(undefined);
           }
         });
         this.dropDownOptions.appendChild(resetItem);
