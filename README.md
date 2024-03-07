@@ -57,6 +57,17 @@ Add this line to your application's Gemfile:
 ```ruby
 gem "decidim-geo", git: "https://github.com/octree-gva/decidim-module-geo", branch: "main"
 ```
+Update your database adapter to postgis: 
+```
+# config/database.yml
+default: &default
+  adapter: postgis
+```
+
+Update your `DATABASE_URL` environment with `postgis://`: 
+```
+DATABASE_URL="postgis://myuser:mypass@localhost/somedatabase"
+```
 
 And then execute:
 

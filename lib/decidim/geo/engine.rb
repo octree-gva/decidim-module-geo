@@ -27,13 +27,12 @@ module Decidim
 
       initializer "decidim.graphql_api" do
         Decidim::Api::QueryType.include Decidim::Geo::QueryExtension
-
         Decidim::ParticipatoryProcesses::ParticipatoryProcessInputFilter.include Decidim::Geo::HasScopeableInputFilter
       end
 
       initializer "decidim_geo.overrides" do
         unless RGeo::Geos.supported?
-          throw "GEOS is not available, but is required for correct interpretation of polygons in shapefiles"
+          logger.warn("GEOS is not available, but is required for correct interpretation of polygons in shapefiles")
         end
       end
       
