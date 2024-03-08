@@ -1,7 +1,7 @@
 version: '3'
 services:
-  decidim-app:
-    container_name: decidim-app
+  decidim-geo:
+    container_name: decidim-geo
     entrypoint: ""
     build: 
       dockerfile_inline: |
