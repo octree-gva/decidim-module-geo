@@ -32,7 +32,7 @@ module Decidim
 
       initializer "decidim_geo.overrides" do
         unless RGeo::Geos.supported?
-          logger.warn("GEOS is not available, but is required for correct interpretation of polygons in shapefiles")
+          Rails.logger.warn("GEOS is not available, but is required for correct interpretation of polygons in shapefiles")
         end
       end
       
