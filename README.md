@@ -51,13 +51,16 @@ We use this module to map a shape to an application zone, to be able to geo-refe
 
 
 ## Installation
+This gem supports decidim version `0.26.x` and `0.27.x`.
+
+Read the [needed dependancies for `rgeo` gem](https://github.com/rgeo/rgeo?tab=readme-ov-file#dependencies). If you have `libgeos-dev`, be sure you have a postgis database with postgres > 14.0.
 
 Add this line to your application's Gemfile:
-
 ```ruby
 gem "decidim-geo", git: "https://github.com/octree-gva/decidim-module-geo", branch: "main"
 ```
-Update your database adapter to postgis: 
+
+Update your database adapter to postgis adapter (already installed as dependancy of this gem): 
 ```
 # config/database.yml
 default: &default
@@ -75,13 +78,9 @@ And then execute:
 bundle
 bundle exec rails decidim_geo:install:migrations
 bundle exec rails db:migrate
-
 ```
 
-You will need a posgis database, at least version 14 to be able to do the migration.
-
 ## Testing
-
 ```
 bundle exec rake test_app
 ```
@@ -95,8 +94,7 @@ docker-compose up -d
 Once created, you access the decidim container
 ```
 # Get the id of the decidim dev container
-docker ps --format {{.ID}} --filter=label=org.label-schema.name=dec
-idim
+docker ps --format {{.ID}} --filter=label=org.label-schema.name=decidim
 # f16bd5314386
 docker exec -it f16bd5314386 bash
 ```

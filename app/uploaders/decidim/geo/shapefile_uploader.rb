@@ -1,14 +1,6 @@
 module Decidim
   module Geo
-    class ShapefileUploader < Decidim::Cw::ApplicationUploader
-
-      def store_dir
-        default_path = "uploads/shapefiles"
-  
-        return File.join(Decidim.base_uploads_path, default_path) if Decidim.base_uploads_path.present?
-  
-        default_path
-      end
+    class ShapefileUploader < ::Decidim::ApplicationUploader
 
       def extension_allowlist
         %w(zip)

@@ -20,10 +20,12 @@ module Decidim
 
           def extract_file(dir)
             logger.debug "Extract shapefile in tmp dir '#{dir}'"
-            Zip::File.open(@shapefile.shapefile.path) do |zip_file|
-              zip_file.each do |entry|
-                logger.debug "Extracting #{entry.name}"
-                entry.extract(File.join(dir,entry.name))
+            @shapefile.shapefile.blob.open do |file|
+              Zip::File.open(file) do |zip_file|
+                zip_file.each do |entry|
+                  logger.debug "Extracting #{entry.name}"
+                  entry.extract(File.join(dir, entry.name))
+                end
               end
             end
           rescue Exception => e

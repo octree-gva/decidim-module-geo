@@ -28,7 +28,7 @@ module Decidim
             end
 
             on(:invalid) do
-              flash.now[:alert] = @form.errors.full_messages_for(:base).join(',')
+              flash.now[:alert] = @form.errors.full_messages.join(',') || "Can not upload this shapefile"
               render action: "new"
             end
           end
