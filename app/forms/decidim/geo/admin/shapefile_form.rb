@@ -13,6 +13,7 @@ module Decidim
 
         validates :title, :description, :presence => true
         validates :shapefile, passthru: { to: Decidim::Geo::Shapefile }, if: ->(form) { form.shapefile.present? }
+
         validates_upload :shapefile, uploader: Decidim::Geo::ShapefileUploader
 
         alias organization current_organization

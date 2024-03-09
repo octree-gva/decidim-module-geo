@@ -5,6 +5,7 @@ module Decidim
     # The data store for a Proposal in the Decidim::Proposals component.
     class Shapefile < ApplicationRecord
       #include Decidim::TranslatableResource
+      include Decidim::HasUploadValidations
 
       self.table_name = 'decidim_geo_shapefiles'
 
@@ -15,10 +16,12 @@ module Decidim
       #translatable_fields :title, :description
 
       validates :title, :description, :presence => true
-
-      mount_uploader :shapefile, Decidim::Geo::ShapefileUploader
-      validates_integrity_of :shapefile
       
+      has_one_attached :shapefile
+      validates_upload :shapefile, uploader: Decidim::Geo::ShapefileUploader
+      belongs_to :organization,
+               foreign_key: "decidim_organization_id",
+               class_name: "Decidim::Organization"
     end
   end
 end

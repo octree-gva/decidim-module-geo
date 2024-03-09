@@ -21,14 +21,10 @@ module Decidim
         def call
           return broadcast(:invalid) if form.invalid?
 
-          transaction do
-            create_shapefile
-            load_shapefile
-          end
+          create_shapefile
+          load_shapefile
 
           broadcast(:ok, @shapefile)
-        rescue
-          broadcast(:invalid)
         end
 
         private
@@ -39,13 +35,17 @@ module Decidim
           @shapefile = Decidim::Geo::Shapefile.create!(
             title: form.title,
             description: form.description,
-            shapefile: form.shapefile
+            shapefile: form.shapefile,
+            organization: form.organization
           )
         end
 
         def load_shapefile
           load_shapefile = LoadShp::AppLoadShp.new(@shapefile)
           load_shapefile.run!
+        rescue Exception => e
+          @shapefile.destroy
+          broadcast(:invalid)
         end
 
       end
