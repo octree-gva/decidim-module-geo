@@ -119,9 +119,10 @@ module Decidim
       end
 
       def has_coordinates?
-        if object.respond_to?(:latitude) && object.respond_to?(:longitude)
-          object.latitude.present? && object.longitude.present?
+        if object.respond_to?(:latitude) && object.respond_to?(:longitude) 
+          return !object.latitude.nil? && !object.longitude.nil?
         end
+        return false
       end
 
     end
