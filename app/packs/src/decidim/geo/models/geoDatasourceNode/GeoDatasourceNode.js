@@ -97,7 +97,7 @@ export default class GeoDatasourceNode {
   }
 
   init() {
-    if (this.data?.coordinates) {
+    if (this.data?.coordinates?.latitude && this.data?.coordinates?.longitude) {
       this.marker = createNodeMarker(this.data);
       this.marker.on("click", this.select.bind(this));
       this.marker.bringToFront();
