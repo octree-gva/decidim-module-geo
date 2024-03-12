@@ -1,48 +1,83 @@
 ---
 fr:
   decidim:
+    assemblies:
+      admin:
+        assemblies:
+          form:
+            address: Adresse
+            address_help: Si l'assemblée a une adresse physique, remplissez ce champ avec son adresse.
+      show:
+        address: Adresse
+    participatory_processes:
+      admin:
+        participatory_processes:
+          form:
+            geocoding: Adresse
+            address_help: Si le processus a une adresse physique, remplissez ce champ avec son adresse.
+      show:
+        address: Adresse
     geo: 
       admin:
+        geo_configs: 
+          map_config_title: Configurations de la carte
+          spaces_config_title: Configurations des espaces participatifs
+          only_assemblies: Afficher uniquement les assemblées dans Assemblées
+          only_processes: Afficher uniquement les processus dans Processus
+          index: 
+            title: Configurations
+            save: Enregistrer
+          edit:
+            title: Configurations
+            save: Enregistrer
+          fields:
+            zoom: Zoom
+            longitude: Longitude
+            latitude: Latitude
+            tile: Tuile
+          actions:
+            update:
+              success: Configurations mises à jour
         shapefiles:
-          title: Shapefiles
+          title: Fichiers de formes
           new:
-            title: Upload Shapefile
+            title: Télécharger un fichier de forme
             create: Créer
           actions:
-            new_shapefile: Nouveau Shapefile
+            new_shapefile: Nouveau fichier de forme
             new:
-              attachment_legend: Uploader votre fichier zip ici
+              attachment_legend: Mettez votre fichier zip ici
             create:
-              success: fichier uploadé
-              invalid: erreur, le fichier n'a pas pu être chargé
+              success: Fichier téléchargé
+              invalid: Échec du téléchargement du fichier
           fields:
             title: Nom
             url: URL
             file_name: Nom de fichier
-            created_at: Date de création
+            created_at: Créé à
             description: Description
             actions: Actions
           form:
-            attachment_legend: Uploader un shapefile archivé en format zip
-            attachment_max_size: Taille maximale - 10 MB
-            attachment_format: Shapefile doit être dans WGS84 Datum
-            support_shape_overlaping: Les formes superposées ne sont pas prises en charge actuellement
+            attachment_legend: Téléchargez le fichier de formes compressé au format zip
+            attachment_format: Le fichier de formes doit être au format Datum WGS84
+            attachment_max_size: Taille maximale - 10 Mo
+            support_shape_overlaping: Les formes superposées ne sont pas actuellement prises en charge
       content_blocks:
-        name: Carte
+        name: Cartes géographiques
         fields:
           zoom: Zoom
           lng: Longitude
-          lat: Latitude 
+          lat: Latitude
       scopes:
-        all: "All Scopes"
-
+        all: "Régions"
+      filters:
+        back: "Retour"
+        button: "Filtres"
     components:
       geo:
-        name: Geo
+        name: Géo
         settings:
           global:
             announcement: Annonce
           step:
             announcement: Annonce
-      
-
