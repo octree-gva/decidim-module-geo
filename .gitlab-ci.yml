@@ -1,40 +1,16 @@
-include:
-  - project: o/infra/templates
-    file: /gitlab-ci/includes/jobs.yaml
 
-development-app:026:
-  stage: build
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: ['']
-  variables:
-    DECIDIM_VERSION: '0.26'
+stages:
+  - publish
+
+publish_gem:
+  image: ruby
+  stage: publish
   script:
-    - echo
-      "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}"
-      > /kaniko/.docker/config.json
-    - REG=$CI_REGISTRY_IMAGE
-    - CONTEXT="$CI_PROJECT_DIR"
-    - REP_GRP="decidim-geo-$DECIDIM_VERSION"
-    - /kaniko/executor 
-      --context "$CONTEXT" 
-      --dockerfile "$CONTEXT/Dockerfile" 
-      --destination $REG/$REP_GRP:${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
-      --destination $REG/$REP_GRP:latest 
-      --verbosity=error
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-    - if: '$CI_COMMIT_TAG =~ /v.*$/'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
-deploy:test:
-  extends: .deployJelastic
-  needs: ['development-app:026']
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-    - if: '$CI_COMMIT_TAG =~ /v.*$/'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: manual
-  environment:
-    name: Development
-    url: 'http://node136828-decidim-geo-test.jcloud-ver-jpc.ik-server.com:11814'
+    - echo "---" > .credentials
+    - |
+      echo ":ci_rubygems_api_key: $GEM_HOST_API_KEY" >> .credentials
+    - chmod 0600 .credentials
+    - gem build decidim-geo.gemspec
+    - gem push decidim-geo-*.gem -k ci_rubygems_api_key --config-file .credentials
+  only:
+    - tags

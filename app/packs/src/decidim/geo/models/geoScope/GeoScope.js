@@ -95,7 +95,7 @@ export default class GeoScope {
         this.repaint();
       }
     });
-    if (this.data.geom) {
+    if (this.data.geom?.type) {
       if (this.data.geom.type === "MultiPolygon") {
         this.centroid = polylabel(this.data.geom.coordinates[0], 1.0);
       }
