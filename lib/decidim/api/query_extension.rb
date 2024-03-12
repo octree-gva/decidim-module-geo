@@ -51,10 +51,12 @@ module Decidim
         @time = kwargs[:filters].find {|f| f[:time_filter].present?} 
         @geoencoded = kwargs[:filters].find {|f| f[:geoencoded_filter].present?}
         search_params = {locale: locale, class_name: supported_geo_components}
-        
+        filtered_by_spaces = assemblies.length > 0 || processes.length > 0
+        filtered_by_scopes = scopes.length > 0
+        search_variants = []
         if scopes.length > 0
           # Search only in a given scope
-          search_params = search_params.merge({scope_ids: scopes.map {|scope| scope.scope_filter.scope_id }})
+          search_variants.push({scope_ids: scopes.map {|scope| scope.scope_filter.scope_id }})
         end
 
         if resource_type
@@ -62,11 +64,14 @@ module Decidim
           class_name = resource_type.resource_type_filter.resource_type
           search_params = search_params.merge({class_name: class_name}) unless class_name == "all"
         elsif assemblies.length > 0 && processes.length == 0
-          search_params = search_params.merge({class_name: supported_geo_components.select {|k| k != :"Decidim::ParticipatoryProcess"}})
+          search_variants.push({class_name: supported_geo_components.select {|k| k != :"Decidim::ParticipatoryProcess"}})
         elsif processes.length > 0 && assemblies.length == 0
-          search_params = search_params.merge({class_name: supported_geo_components.select {|k| k != :"Decidim::Assembly"}})
+          search_variants.push({class_name: supported_geo_components.select {|k| k != :"Decidim::Assembly"}})
         end
-        search_results = filtered_query_for(**search_params)
+
+        search_results = search_variants.map do |variant|
+          filtered_query_for(**search_params, **variant)
+        end.flatten
 
         if assemblies.length > 0
           # The results must be within an assembly
