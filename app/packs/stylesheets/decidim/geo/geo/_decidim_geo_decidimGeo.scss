@@ -95,9 +95,7 @@
     }
   }
   &--empty {
-    &:after {
-      display: none;
-    }
+    opacity: 0.6;
   }
 }
 

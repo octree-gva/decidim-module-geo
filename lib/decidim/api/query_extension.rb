@@ -51,7 +51,8 @@ module Decidim
         @time = kwargs[:filters].find {|f| f[:time_filter].present?} 
         @geoencoded = kwargs[:filters].find {|f| f[:geoencoded_filter].present?}
         search_params = {locale: locale, class_name: supported_geo_components}
-        
+        filtered_by_spaces = assemblies.length > 0 || processes.length > 0
+        filtered_by_scopes = scopes.length > 0
         if scopes.length > 0
           # Search only in a given scope
           search_params = search_params.merge({scope_ids: scopes.map {|scope| scope.scope_filter.scope_id }})

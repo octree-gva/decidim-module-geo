@@ -69,7 +69,8 @@ fr:
           lng: Longitude
           lat: Latitude
       scopes:
-        all: "Régions"
+        dropdown: "Régions"
+        all: "Toutes les régions"
       filters:
         back: "Retour"
         button: "Filtres"
