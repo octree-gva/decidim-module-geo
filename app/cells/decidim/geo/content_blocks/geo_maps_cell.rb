@@ -59,8 +59,25 @@ module Decidim
             geo_i18n = {
               **geo_i18n,
               "decidim_geo.scopes.all":  t('decidim.geo.scopes.all'),
+              "decidim_geo.scopes.dropdown":  t('decidim.geo.scopes.dropdown'),
               "decidim_geo.filters.back":  t('decidim.geo.filters.back'),
-              "decidim_geo.filters.button":  t('decidim.geo.filters.button')
+              "decidim_geo.filters.button":  t('decidim.geo.filters.button'),
+              "decidim_geo.filters.geo.label":  t('decidim.geo.filters.geo.label'),
+              "decidim_geo.filters.geo.all":  t('decidim.geo.filters.geo.all'),
+              "decidim_geo.filters.geo.only_geoencoded":  t('decidim.geo.filters.geo.only_geoencoded'),
+              "decidim_geo.filters.geo.only_virtual":  t('decidim.geo.filters.geo.only_virtual'),
+              "decidim_geo.filters.time.label":  t('decidim.geo.filters.time.label'),
+              "decidim_geo.filters.time.all":  t('decidim.geo.filters.time.all'),
+              "decidim_geo.filters.time.only_past":  t('decidim.geo.filters.time.only_past'),
+              "decidim_geo.filters.time.only_active":  t('decidim.geo.filters.time.only_active'),
+              "decidim_geo.filters.time.only_future":  t('decidim.geo.filters.time.only_future'),
+              "decidim_geo.filters.type.label":  t('decidim.geo.filters.type.label'),
+              "decidim_geo.filters.type.all":  t('decidim.geo.filters.type.all'),
+              "decidim_geo.filters.type.only_processes":  t('decidim.geo.filters.type.only_processes'),
+              "decidim_geo.filters.type.only_assemblies":  t('decidim.geo.filters.type.only_assemblies'),
+              "decidim_geo.filters.type.only_proposals":  t('decidim.geo.filters.type.only_proposals'),
+              "decidim_geo.filters.type.only_meetings":  t('decidim.geo.filters.type.only_meetings'),
+
             }
           end
 

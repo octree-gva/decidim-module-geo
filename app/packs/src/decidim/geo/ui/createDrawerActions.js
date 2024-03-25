@@ -83,7 +83,7 @@ async function createScopesDropdown() {
         };
         return;
       } else if (scopes.length === 0) {
-        this.title.textContent = i18n["decidim_geo.scopes.all"];
+        this.title.textContent = i18n["decidim_geo.scopes.dropdown"];
         this.title.className += " decidimGeo__scopesDropdown__list--disabled";
         this.title.onclick = () => false;
         return;
@@ -102,7 +102,7 @@ async function createScopesDropdown() {
         this.title.textContent = scopes[0].name;
       } else {
         // all scopes
-        this.title.textContent = i18n["decidim_geo.scopes.all"];
+        this.title.textContent = i18n["decidim_geo.scopes.dropdown"];
       }
     },
     repaintOptions() {

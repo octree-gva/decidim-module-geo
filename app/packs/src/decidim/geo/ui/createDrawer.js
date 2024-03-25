@@ -117,7 +117,7 @@ async function createSidebar() {
       const { selectedPoint } = geoStore.getState();
       const pointsInMap = getFilteredPoints();
 
-      if (isLoading || points.length === 0) {
+      if (isLoading) {
         return this.repaintLoading();
       }
       if (selectedPoint) {

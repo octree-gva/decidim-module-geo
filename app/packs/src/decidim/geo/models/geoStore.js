@@ -25,7 +25,7 @@ const store = createStore(
     selectPoint: (point) => {
       set((state) => ({
         ...state,
-        selectedScope: dataPointStore.getState().scopeForId(point.scopeId),
+        selectedScope: point ? dataPointStore.getState().scopeForId(point.scopeId) : undefined,
         selectedPoint: point,
         previousState: state
       }));
@@ -47,7 +47,8 @@ const store = createStore(
             ? state.selectedPoint
             : undefined
       }));
-      scope.repaint();
+      if(scope)
+        scope.repaint();
     },
     /**
      * Go back to previous state

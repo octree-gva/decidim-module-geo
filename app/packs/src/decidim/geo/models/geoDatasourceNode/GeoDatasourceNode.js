@@ -117,7 +117,7 @@ export default class GeoDatasourceNode {
         }
       );
     } catch (error) {
-      console.log("ERROR: decidim-geo can't initialize ", { error });
+      console.error("ERROR: decidim-geo can't initialize ", { error });
     }
     return this;
   }

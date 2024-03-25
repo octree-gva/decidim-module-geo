@@ -47,7 +47,7 @@ async function main() {
           boudingBoxFilter = (node) =>
             node.isGeoLocated() && spaceIds.includes(`${node.scopeId}`);
         }
-        if (selectedScope && !selectedPoint) {
+        if (selectedScope?.layer && selectedScope && !selectedPoint) {
           map.fitBounds(selectedScope.layer.getBounds(), { padding: [64, 64] });
         }
 
@@ -65,7 +65,7 @@ async function main() {
               : idealBoundingBox,
             { updateWhenZooming: true }
           );
-          if (!selectedScope && !selectedPoint) {
+          if (boundingBox && !selectedScope && !selectedPoint) {
             map.fitBounds(boundingBox.getBounds(), { padding: [64, 64] });
           }
         }

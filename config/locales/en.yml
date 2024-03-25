@@ -69,10 +69,29 @@ en:
           lng: Longitude
           lat: Latitude
       scopes:
-        all: "Scopes"
+        dropdown: "Scopes"
+        all: "All Scopes"
       filters:
         back: "Back"
         button: "Filters"
+        geo:
+          label: Show
+          all: All
+          only_geoencoded: "Mapped activity only"
+          only_virtual: "Other activity only"
+        time:
+          label: "Filter By Time"
+          all: "All"
+          only_past: "Past"
+          only_active: "Active"
+          only_future: "Future"
+        type:
+          label: "Filter By Type"
+          all: "All"
+          only_processes: "Processes"
+          only_assemblies: "Assemblies"
+          only_proposals: "Proposals"
+          only_meetings: "Meetings"
     components:
       geo:
         name: Geo
