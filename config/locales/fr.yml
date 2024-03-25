@@ -6,7 +6,7 @@ fr:
         assemblies:
           form:
             address: Adresse
-            address_help: Si l'assemblée a une adresse physique, remplissez ce champ avec son adresse.
+            address_help: Si l'Assemblée a une adresse physique, remplissez ce champ avec son adresse.
       show:
         address: Adresse
     participatory_processes:
@@ -14,22 +14,22 @@ fr:
         participatory_processes:
           form:
             geocoding: Adresse
-            address_help: Si le processus a une adresse physique, remplissez ce champ avec son adresse.
+            address_help: Si le Processus a une adresse physique, remplissez ce champ avec son adresse.
       show:
         address: Adresse
     geo: 
       admin:
         geo_configs: 
-          map_config_title: Configurations de la carte
-          spaces_config_title: Configurations des espaces participatifs
+          map_config_title: Configurations de la Carte
+          spaces_config_title: Configurations des Espaces Participatifs
           only_assemblies: Afficher uniquement les assemblées dans Assemblées
           only_processes: Afficher uniquement les processus dans Processus
           index: 
             title: Configurations
-            save: Enregistrer
+            save: Sauvegarder
           edit:
             title: Configurations
-            save: Enregistrer
+            save: Sauvegarder
           fields:
             zoom: Zoom
             longitude: Longitude
@@ -37,33 +37,33 @@ fr:
             tile: Tuile
           actions:
             update:
-              success: Configurations mises à jour
+              success: Configurations Mises à Jour
         shapefiles:
-          title: Fichiers de formes
+          title: Fichiers de forme
           new:
-            title: Télécharger un fichier de forme
+            title: Télécharger un Shapefile
             create: Créer
           actions:
-            new_shapefile: Nouveau fichier de forme
+            new_shapefile: Nouveau Shapefile
             new:
-              attachment_legend: Mettez votre fichier zip ici
+              attachment_legend: Déposez votre fichier zip ici
             create:
               success: Fichier téléchargé
               invalid: Échec du téléchargement du fichier
           fields:
             title: Nom
             url: URL
-            file_name: Nom de fichier
-            created_at: Créé à
+            file_name: Nom du fichier
+            created_at: Créé le
             description: Description
             actions: Actions
           form:
-            attachment_legend: Téléchargez le fichier de formes compressé au format zip
-            attachment_format: Le fichier de formes doit être au format Datum WGS84
-            attachment_max_size: Taille maximale - 10 Mo
-            support_shape_overlaping: Les formes superposées ne sont pas actuellement prises en charge
+            attachment_legend: Téléchargez le shapefile compacté en tant que fichier zip
+            attachment_format: Le Shapefile doit être au format WGS84 Datum
+            attachment_max_size: Taille max - 10 Mo
+            support_shape_overlaping: Les formes superposées ne sont actuellement pas prises en charge
       content_blocks:
-        name: Cartes géographiques
+        name: Cartes Géo
         fields:
           zoom: Zoom
           lng: Longitude
@@ -74,6 +74,24 @@ fr:
       filters:
         back: "Retour"
         button: "Filtres"
+        geo:
+          label: Montrer
+          all: Tout
+          only_geoencoded: "Activité mappée uniquement"
+          only_virtual: "Autre activité uniquement"
+        time:
+          label: "Filtrer par Temps"
+          all: "Tout"
+          only_past: "Passé"
+          only_active: "Actif"
+          only_future: "Futur"
+        type:
+          label: "Filtrer par Type"
+          all: "Tout"
+          only_processes: "Processus"
+          only_assemblies: "Assemblées"
+          only_proposals: "Propositions"
+          only_meetings: "Réunions"
     components:
       geo:
         name: Géo
