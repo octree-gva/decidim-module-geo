@@ -1,0 +1,102 @@
+---
+de:
+  decidim:
+    assemblies:
+      admin:
+        assemblies:
+          form:
+            address: Adresse
+            address_help: Wenn die Versammlung eine physische Adresse hat, füllen Sie dieses Feld mit ihrer Adresse aus.
+      show:
+        address: Adresse
+    participatory_processes:
+      admin:
+        participatory_processes:
+          form:
+            geocoding: Adresse
+            address_help: Wenn der Prozess eine physische Adresse hat, füllen Sie dieses Feld mit seiner Adresse aus.
+      show:
+        address: Adresse
+    geo: 
+      admin:
+        geo_configs: 
+          map_config_title: Kartenkonfigurationen
+          spaces_config_title: Konfigurationen für partizipative Räume
+          only_assemblies: Zeige nur Versammlungen in den Versammlungen
+          only_processes: Zeige nur Prozesse in den Prozessen
+          index: 
+            title: Konfigurationen
+            save: Speichern
+          edit:
+            title: Konfigurationen
+            save: Speichern
+          fields:
+            zoom: Zoom
+            longitude: Längengrad
+            latitude: Breitengrad
+            tile: Tile 
+          actions:
+            update:
+              success: Konfigurationen aktualisiert
+        shapefiles:
+          title: Shapefiles
+          new:
+            title: Shapefile hochladen
+            create: Erstellen
+          actions:
+            new_shapefile: Neues Shapefile
+            new:
+              attachment_legend: Legen Sie Ihre Zip-Datei hier ab
+            create:
+              success: Datei hochgeladen
+              invalid: Datei-Upload fehlgeschlagen
+          fields:
+            title: Name
+            url: URL
+            file_name: Dateiname
+            created_at: Erstellt am
+            description: Beschreibung
+            actions: Aktionen
+          form:
+            attachment_legend: Laden Sie Shapefile komprimiert als Zip-Datei hoch
+            attachment_format: Shapefile muss im WGS84-Datum sein
+            attachment_max_size: Maximale Größe - 10 MB
+            support_shape_overlaping: Überlappende Formen werden derzeit nicht unterstützt
+      content_blocks:
+        name: Geo-Karten
+        fields:
+          zoom: Zoom
+          lng: Längengrad
+          lat: Breitengrad
+      scopes:
+        dropdown: "Bereiche"
+        all: "Alle Bereiche"
+      filters:
+        back: "Zurück"
+        button: "Filter"
+        geo:
+          label: Zeigen
+          all: Alle
+          only_geoencoded: "Nur kartierte Aktivität"
+          only_virtual: "Nur andere Aktivität"
+        time:
+          label: "Filtern nach Zeit"
+          all: "Alle"
+          only_past: "Vergangen"
+          only_active: "Aktiv"
+          only_future: "Zukunft"
+        type:
+          label: "Filtern nach Typ"
+          all: "Alle"
+          only_processes: "Prozesse"
+          only_assemblies: "Versammlungen"
+          only_proposals: "Vorschläge"
+          only_meetings: "Treffen"
+    components:
+      geo:
+        name: Geo
+        settings:
+          global:
+            announcement: Ankündigung
+          step:
+            announcement: Ankündigung      
