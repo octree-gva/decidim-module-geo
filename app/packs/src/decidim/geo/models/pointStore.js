@@ -85,7 +85,6 @@ const store = createStore(
       const cacheKey = JSON.stringify(filters);
       // cache
       if (cacheKey === lastFilter) {
-        console.log("CACHE HIT: ", { lastFilter, lastResponse });
         return lastResponse;
       }
 

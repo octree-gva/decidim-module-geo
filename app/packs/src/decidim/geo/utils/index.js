@@ -4,11 +4,9 @@ export async function getDecidimData(query, params) {
     query,
     ...params
   };
-  const now = `${+new Date()}`;
-  console.log(`${now} | GRAPHQL | query: `, body);
   var result = await window
     .fetch("/api", {
-      method: "POST",
+      method: "POST", 
       headers: {
         "Content-Type": "application/json"
       },
@@ -16,11 +14,13 @@ export async function getDecidimData(query, params) {
     })
     .then(async (response) => {
       const res = await response.json();
-      console.log(`${now} | GRAPHQL | response: `, res);
       if (res.errors) {
         throw new Error(JSON.stringify(res.errors));
       }
       return res;
+    }).catch((e) => {
+      console.error(e);
+      return null;
     });
 
   if (result) {
