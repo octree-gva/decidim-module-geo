@@ -2,7 +2,7 @@
 
 $LOAD_PATH.push File.expand_path('lib', __dir__)
 
-require 'decidim/geo/version'
+require 'decidim/decidim_geo/version'
 
 Gem::Specification.new do |s|
   s.version = Decidim::Geo.version
@@ -12,11 +12,11 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/decidim/decidim-module-geo'
   s.required_ruby_version = '>= 2.7'
 
-  s.name = 'decidim-geo'
+  s.name = 'decidim-decidim_geo'
   s.summary = 'A decidim geo module'
   s.description = "Component for manage geo files, like shapefiles, in a participatory space."
 
-  s.files = Dir["{app,config,lib}/**/*", "LICENSE-AGPLv3.txt", "Rakefile", "README.md"]
+  s.files = Dir["{app,config,lib,vendor,db}/**/*", "LICENSE-AGPLv3.txt", "Rakefile", "README.md"]
 
   s.add_dependency 'decidim-admin', Decidim::Geo.decidim_version
   s.add_dependency 'decidim-core', Decidim::Geo.decidim_version

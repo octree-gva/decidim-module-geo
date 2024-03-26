@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Decidim
-  # This holds the decidim-geo version.
+  # This holds the decidim_geo version.
   module Geo
     def self.version
-      "0.2.0"
+      "0.2.1"
     end
 
     def self.decidim_version

@@ -172,8 +172,6 @@ module Decidim
         result = {
           "Decidim::Meetings::Meeting": meetings_matches, 
           "Decidim::Proposals::Proposal": proposals_matches, 
-          "Decidim::Assembly": assemblies_matches,
-          "Decidim::ParticipatoryProcess": processes_matches,
           "Decidim::Debates::Debate": debates_matches
         }.flat_map do |klass, match_ids|
           query = "#{klass}".constantize.where(id: match_ids)
@@ -188,6 +186,23 @@ module Decidim
           end
           query
         end
+        result.concat({
+          "Decidim::Assembly": assemblies_matches,
+          "Decidim::ParticipatoryProcess": processes_matches
+        }.flat_map do |klass, match_ids|
+          query = "#{klass}".constantize.joins(:decidim_geo_space_location).where(id: match_ids)
+          supports_geo = geo_manifests[klass]
+          if only_geo_encoded
+            next [] unless supports_geo
+            query = query.where.not(decidim_geo_space_location: {latitude: nil})
+          end
+          if only_not_geo_encoded
+            next query unless supports_geo
+            query = query.where(decidim_geo_space_location: {latitude: nil}) 
+          end
+          query
+        end)
+
         result.flatten
       end
 

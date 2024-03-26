@@ -10,7 +10,7 @@ publish_gem:
     - |
       echo ":ci_rubygems_api_key: $GEM_HOST_API_KEY" >> .credentials
     - chmod 0600 .credentials
-    - gem build decidim-geo.gemspec
-    - gem push decidim-geo-*.gem -k ci_rubygems_api_key --config-file .credentials
+    - gem build decidim-decidim_geo.gemspec
+    - gem push decidim-decidim_geo-*.gem -k ci_rubygems_api_key --config-file .credentials
   only:
     - tags

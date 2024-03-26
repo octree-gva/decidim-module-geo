@@ -4,7 +4,7 @@ module Decidim
   module Geo
     module Admin
       class GeoConfigsController < Decidim::Geo::Admin::ApplicationController
-        layout "decidim/decidim-geo/admin/application"
+        layout "decidim/decidim_geo/admin/application"
 
         before_action :authenticate_user!
         

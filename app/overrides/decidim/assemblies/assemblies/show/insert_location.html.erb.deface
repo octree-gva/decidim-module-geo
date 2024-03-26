@@ -1,0 +1,7 @@
+<!-- insert_before "erb[loud]:contains('social_handler_links')" -->
+<% if current_participatory_space.decidim_geo_space_location && current_participatory_space.decidim_geo_space_location.has_address?%>
+    <div class="definition-data__item scope">
+    <span class="definition-data__title"><%= t("decidim_geo_space_location", scope: "decidim.assemblies.show") %></span>
+    <%= current_participatory_space.decidim_geo_space_location.address %>
+    </div>
+<% end %>
