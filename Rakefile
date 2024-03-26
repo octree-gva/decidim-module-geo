@@ -93,7 +93,6 @@ task :prepare_dev do
   Dir.chdir("development_app") do
     system("bundle exec rake db:migrate")
     system("npm install -D webpack-dev-server")
-    #system("bundle exec rake decidim_geo:seed")
   end
 end
 

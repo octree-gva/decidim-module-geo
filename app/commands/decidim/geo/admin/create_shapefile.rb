@@ -22,9 +22,13 @@ module Decidim
           return broadcast(:invalid) if form.invalid?
 
           create_shapefile
-          load_shapefile
-
+          load_shapefile = LoadShp::AppLoadShp.new(@shapefile)
+          load_shapefile.run!
           broadcast(:ok, @shapefile)
+
+        rescue Exception => e
+          @shapefile.destroy
+          broadcast(:invalid, "#{e}")
         end
 
         private
@@ -40,13 +44,6 @@ module Decidim
           )
         end
 
-        def load_shapefile
-          load_shapefile = LoadShp::AppLoadShp.new(@shapefile)
-          load_shapefile.run!
-        rescue Exception => e
-          @shapefile.destroy
-          broadcast(:invalid)
-        end
 
       end
     end

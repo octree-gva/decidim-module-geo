@@ -66,16 +66,19 @@
 .decidimGeo__scopesDropdown__heading {
   width: 100%;
   display: flex;
+  justify-content: space-between;
 }
 
 .decidimGeo__scopesDropdown__title {
   @include decidimGeo__clickableText;
   display: inline-block;
-  padding: 8px 16px;
+  padding: 8px 32px 8px 16px;
   margin: 0;
-  width: 100%;
   text-transform: uppercase;
   letter-spacing: 0.2px;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
 
   &:after {
     display: inline-block;
@@ -83,7 +86,9 @@
     color: #0c0c0c;
     transform: rotate(-180deg);
     transition: 0.3s;
-    margin-left: 4px;
+    position: absolute;
+    right: 16px;
+    top: 7px;
   }
 
   &--button:after {

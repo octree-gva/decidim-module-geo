@@ -1,0 +1,13 @@
+<!-- insert_after ".card-section:nth-child(2)" -->
+<% if Decidim::Map.available?(:geocoding) %>
+    <div class="card-divider">
+        <h2 class="card-title"><%= t(".decidim_geo_space_address") %></h2>
+    </div>
+
+    <div class="card-section">
+        <div class="row column">
+            <%= form.geocoding_field :decidim_geo_space_address, autocomplete: true %>
+            <p class="help-text"><%= t(".decidim_geo_space_address_help") %></p>
+        </div>
+    </div>
+<% end %>

@@ -1,7 +1,7 @@
 module Decidim
   module Geo
     module GeoQueryExtension
-      # Public: Extends a type with `decidim-geo`'s fields.
+      # Public: Extends a type with `decidim_geo`'s fields.
       #
       # type - A GraphQL::BaseType to extend.
       #

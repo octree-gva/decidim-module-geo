@@ -57,7 +57,7 @@ Read the [needed dependancies for `rgeo` gem](https://github.com/rgeo/rgeo?tab=r
 
 Add this line to your application's Gemfile:
 ```ruby
-gem "decidim-geo"
+gem "decidim-decidim_geo"
 ```
 
 Update your database adapter to postgis adapter (already installed as dependancy of this gem): 

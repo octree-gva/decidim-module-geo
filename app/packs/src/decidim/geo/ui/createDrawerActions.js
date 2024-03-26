@@ -71,9 +71,8 @@ async function createScopesDropdown() {
       this.repaint();
     },
     repaintHeading() {
-      const { i18n, space_ids } = configStore.getState();
+      const { i18n } = configStore.getState();
       const { selectedPoint } = geoStore.getState();
-      const { scopeForId } = pointStore.getState();
       const scopes = this.scopes();
       if (selectedPoint) {
         this.title.textContent = i18n["decidim_geo.filters.back"];
@@ -136,7 +135,7 @@ async function createScopesDropdown() {
       // Dropdown backdrop open/close
       this.title.className = createClasses("decidimGeo__scopesDropdown__title", [
         !isOpen && "closed",
-        this.isEmpty() && "empty",
+        !selectedPoint && this.isEmpty() && "empty",
         selectedPoint && "button"
       ]);
       this.dropDownOptions.className = createClasses("decidimGeo__scopesDropdown__list", [

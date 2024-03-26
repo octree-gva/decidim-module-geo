@@ -55,7 +55,7 @@ namespace :decidim_geo do
     end
 
     def gem_name
-      "decidim-geo"
+      "decidim-decidim_geo"
     end
   end
 end

@@ -72,7 +72,7 @@ class FilterDropdown {
       this.repaint();
     };
 
-    this.title.textContent = this.i18n()["filters.button"] || "Filters";
+    this.title.textContent = this.i18n()["decidim_geo.filters.button"];
     this.title.onclick = () => {
       this.toggle();
       this.repaint();

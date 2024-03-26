@@ -103,10 +103,12 @@ module Decidim
       end
 
       def latitude
+        return location.latitude if has_geo_location?
         object.latitude
       end
 
       def longitude
+        return location.longitude if has_geo_location?
         object.longitude
       end
 
@@ -118,13 +120,27 @@ module Decidim
         object.scope if object.respond_to?(:scope)
       end
 
-      def has_coordinates?
-        if object.respond_to?(:latitude) && object.respond_to?(:longitude) 
-          return !object.latitude.nil? && !object.longitude.nil?
-        end
-        return false
+      def has_geo_location?
+        object.respond_to?(:decidim_geo_space_location)
+      end
+      
+      def location
+        return nil unless has_geo_location?
+        object.decidim_geo_space_location
       end
 
+      def has_coordinates?
+        (
+          has_geo_location? && 
+          !location.latitude.nil? && 
+          !location.longitude.nil?
+        ) || (
+          object.respond_to?(:latitude) &&
+          object.respond_to?(:longitude) && 
+          !object.latitude.nil? && 
+          !object.longitude.nil?
+        )
+      end
     end
   end
 end

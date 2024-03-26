@@ -1,23 +1,27 @@
 ---
-en:
+en:  
+  activemodel:
+    attributes:
+      assembly:
+        decidim_geo_space_address: Address
   decidim:
     assemblies:
       admin:
         assemblies:
           form:
-            address: Address
-            address_help: If the Assembly has a fisical address, fill this field with its address.
+            decidim_geo_space_address: Fisical Address
+            decidim_geo_space_address_help: If the Assembly has a fisical address, fill this field with its address.
       show:
-        address: Address
+        decidim_geo_space_location: Address
     participatory_processes:
       admin:
         participatory_processes:
           form:
-            geocoding: Address
-            address_help: If the Process has a fisical address, fill this field with its address.
+            decidim_geo_space_address: Fisical Address
+            decidim_geo_space_address_help: If the Process has a fisical address, fill this field with its address.
       show:
-        address: Address
-    geo: 
+        decidim_geo_space_address: Address
+    geo:
       admin:
         geo_configs: 
           map_config_title: Map Configurations
