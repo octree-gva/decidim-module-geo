@@ -74,6 +74,8 @@ de:
       filters:
         back: "Zurück"
         button: "Filter"
+        reset_button: "Wiedereinsetzen"
+        apply_button: "Anwenden"
         geo:
           label: Zeigen
           all: Alle

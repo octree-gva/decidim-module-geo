@@ -43,16 +43,14 @@ class FilterDropdown {
       "decidimGeo__filterDropdown__resetBtn",
       this.dropdown
     );
-    this.resetBtn.textContent = "Reset";
+    this.resetBtn.textContent = this.i18n()["decidim_geo.filters.reset_button"];
     this.resetBtn.onclick = () => {
-      const { resetFilters } = filterStore.getState();
       const {
         resetFilters: resetDropdownFilter,
         toggleOpen,
         defaultFilters
       } = dropdownFilterStore.getState();
       resetDropdownFilter();
-      // resetFilters();
       this.applyValues(defaultFilters);
       toggleOpen();
     };
@@ -61,7 +59,7 @@ class FilterDropdown {
       "decidimGeo__filterDropdown__applyBtn",
       this.dropdown
     );
-    this.applyBtn.textContent = "Apply";
+    this.applyBtn.textContent = this.i18n()["decidim_geo.filters.apply_button"];
 
     this.applyBtn.onclick = () => {
       const { nextFilters, toggleOpen, applyNextFilters } =

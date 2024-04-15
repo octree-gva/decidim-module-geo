@@ -73,20 +73,22 @@ fr:
         all: "Toutes les régions"
       filters:
         back: "Retour"
-        button: "Filtres"
+        button: "Filtrer"
+        reset_button: "Rétablir"
+        apply_button: "Appliquer"
         geo:
-          label: Montrer
+          label: Localisation
           all: Tout
-          only_geoencoded: "Activité mappée uniquement"
-          only_virtual: "Autre activité uniquement"
+          only_geoencoded: "Éléments localisés"
+          only_virtual: "Autres éléments"
         time:
-          label: "Filtrer par Temps"
+          label: "Temps"
           all: "Tout"
           only_past: "Passé"
           only_active: "Actif"
           only_future: "Futur"
         type:
-          label: "Filtrer par Type"
+          label: "Type"
           all: "Tout"
           only_processes: "Processus"
           only_assemblies: "Assemblées"
