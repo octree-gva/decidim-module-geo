@@ -78,6 +78,8 @@ en:
       filters:
         back: "Back"
         button: "Filters"
+        reset_button: "Reset"
+        apply_button: "Apply"
         geo:
           label: Show
           all: All

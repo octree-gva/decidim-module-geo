@@ -62,6 +62,8 @@ module Decidim
               "decidim_geo.scopes.dropdown":  t('decidim.geo.scopes.dropdown'),
               "decidim_geo.filters.back":  t('decidim.geo.filters.back'),
               "decidim_geo.filters.button":  t('decidim.geo.filters.button'),
+              "decidim_geo.filters.reset_button":  t('decidim.geo.filters.reset_button'),
+              "decidim_geo.filters.apply_button":  t('decidim.geo.filters.apply_button'),
               "decidim_geo.filters.geo.label":  t('decidim.geo.filters.geo.label'),
               "decidim_geo.filters.geo.all":  t('decidim.geo.filters.geo.all'),
               "decidim_geo.filters.geo.only_geoencoded":  t('decidim.geo.filters.geo.only_geoencoded'),
