@@ -9,7 +9,7 @@ RUN cd /home/decidim/app \
     # Remove spring from deps, that can have some issues with rgeo
     && echo "$(cat Gemfile | awk '!/spring/')" > Gemfile \
     # Add decidim-geo gem with a local path (bounded as volume)
-    && echo "gem \"decidim-geo\", path: \"../decidim_module_geo\"" >> Gemfile \
+    && echo "gem \"decidim-decidim_geo\", path: \"../decidim_module_geo\"" >> Gemfile \
     && echo "gem \"deface\",  \">= 1.8.1\"" >> Gemfile \
     && bundle
     

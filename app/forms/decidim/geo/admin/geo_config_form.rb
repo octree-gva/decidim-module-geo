@@ -5,7 +5,6 @@ module Decidim
     module Admin
       # A form object to be used when admin configure default .
       class GeoConfigForm < Form
-   
         attribute :longitude, Float
         attribute :latitude, Float
         attribute :zoom, Integer

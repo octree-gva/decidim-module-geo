@@ -11,6 +11,7 @@ module Decidim
       end
 
       private
+
       def participatory_space?
         [
           "decidim/assemblies/assemblies:index",
@@ -25,19 +26,20 @@ module Decidim
       def search_options
         param_filter = params[:filter]
         return {} if param_filter.nil?
+
         param_filter.permit!
         filters = param_filter.keys.map do |key|
-          case "#{key}"
+          case key.to_s
           when "resource_type"
-            {resourceTypeFilter: {resourceType: param_filter[key]}}
+            { resourceTypeFilter: { resourceType: param_filter[key] } }
           when "term"
-            {termFilter: {term: param_filter[key]}}
+            { termFilter: { term: param_filter[key] } }
           when "decidim_scope_id"
-            {scopeFilter: {scopeId: [param_filter[key]]}}
+            { scopeFilter: { scopeId: [param_filter[key]] } }
           when "space_state"
-            {termFilter: {space_state: param_filter[key]}}
+            { termFilter: { space_state: param_filter[key] } }
           end
-        end.select {|v| !v.nil?}
+        end.compact
         {
           id: "Search",
           filters: filters,
@@ -48,17 +50,17 @@ module Decidim
       def collection_options
         case "#{params[:controller]}:#{params[:action]}"
         when "decidim/assemblies/assemblies:index"
-            {
-              id: "Assemblies",
-              filters: assemblies_filter,
-              scopes: assemblies_scopes
-            }
+          {
+            id: "Assemblies",
+            filters: assemblies_filter,
+            scopes: assemblies_scopes
+          }
         when "decidim/participatory_processes/participatory_processes:index"
-            {
-              id: "Processes",
-              filters: processes_filter,
-              scopes: processes_scopes
-            }
+          {
+            id: "Processes",
+            filters: processes_filter,
+            scopes: processes_scopes
+          }
         else
           {}
         end
@@ -69,28 +71,33 @@ module Decidim
           current_user
         )
       end
+
       def processes_scopes
-        visible_processes.map { |a| a.scopes.map{ |s| s.id} }.flatten.uniq
+        visible_processes.map { |a| a.scopes.map(&:id) }.flatten.uniq
       end
+
       def visible_assemblies
         Decidim::Assembly.visible_for(
           current_user
         )
       end
+
       def assemblies_scopes
-        visible_assemblies.map { |a| a.scopes.map{ |s| s.id} }.flatten.uniq
+        visible_assemblies.map { |a| a.scopes.map(&:id) }.flatten.uniq
       end
 
       def assemblies_filter
-        return [{resourceTypeFilter: {resourceType: "Decidim::Assembly"}}] if geo_config.only_assemblies
+        return [{ resourceTypeFilter: { resourceType: "Decidim::Assembly" } }] if geo_config.only_assemblies
+
         # Filter only content that are bound to one of the displayed assemblies
-        visible_assemblies.map {|assembly| {assemblyFilter: {assemblyId: assembly.id}} }
+        visible_assemblies.map { |assembly| { assemblyFilter: { id: assembly.id } } }
       end
-      
+
       def processes_filter
-        return [{resourceTypeFilter: {resourceType: "Decidim::ParticipatoryProcess"}}] if geo_config.only_processes
+        return [{ resourceTypeFilter: { resourceType: "Decidim::ParticipatoryProcess" } }] if geo_config.only_processes
+
         # Filter only content that are bound to one of the displayed processes
-        visible_processes.map {|process| {processFilter: {processId: process.id}} }
+        visible_processes.map { |process| { processFilter: { id: process.id } } }
       end
 
       def geo_config
@@ -99,4 +106,3 @@ module Decidim
     end
   end
 end
-  

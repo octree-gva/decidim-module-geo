@@ -7,7 +7,7 @@ module Decidim
         layout "decidim/decidim_geo/admin/application"
 
         before_action :authenticate_user!
-        
+
         def index
           @form = form(Decidim::Geo::Admin::GeoConfigForm).from_model(geo_config_default)
         end
@@ -25,7 +25,7 @@ module Decidim
             end
 
             on(:invalid) do
-              flash.now[:alert] = @form.errors.full_messages_for(:base).join(',')
+              flash.now[:alert] = @form.errors.full_messages_for(:base).join(",")
             end
 
             render action: "index"
@@ -37,7 +37,6 @@ module Decidim
         def geo_config_default
           Decidim::Geo::GeoConfig.geo_config_default
         end
-
       end
     end
   end

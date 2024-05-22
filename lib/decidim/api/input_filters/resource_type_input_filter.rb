@@ -3,7 +3,6 @@
 module Decidim
   module Geo
     class ResourceTypeInputFilter < Decidim::Core::BaseInputFilter
-    
       graphql_name "ResourceTypeFilter"
       description "A type used for filtering geo datasources by Resource Type"
 

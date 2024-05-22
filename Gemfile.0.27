@@ -10,7 +10,7 @@ DECIDIM_VERSION = "~> 0.27.4"
 
 gem "decidim", DECIDIM_VERSION
 
-gem "decidim-geo", path: "."
+gem "decidim-decidim_geo", path: "."
 
 gem "puma", ">= 5.5.1"
 gem "bootsnap", "~> 1.4"

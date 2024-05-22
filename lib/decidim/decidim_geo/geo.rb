@@ -2,6 +2,8 @@
 
 module Decidim
   module Geo
+    include ActiveSupport::Configurable
+
     autoload :QueryExtension, "decidim/api/query_extension"
     autoload :GeoShapefileType, "decidim/api/geo_shapefile_type"
     autoload :GeoShapedataType, "decidim/api/geo_shapedata_type"
@@ -19,5 +21,17 @@ module Decidim
     autoload :GeoDatasourceType, "decidim/api/geo_datasource_type"
     autoload :GeoDatasourcesType, "decidim/api/geo_datasources_type"
     autoload :GeoCoordinatesType, "decidim/api/geo_coordinates_type"
+
+    ##
+    # Active model filters for the API.
+    config_accessor :supported_filters do
+      [
+        "Decidim::Geo::Api::ProcessFilter",
+        "Decidim::Geo::Api::AssemblyFilter",
+        "Decidim::Geo::Api::ProposalFilter",
+        "Decidim::Geo::Api::DebateFilter",
+        "Decidim::Geo::Api::MeetingFilter"
+      ]
+    end
   end
 end

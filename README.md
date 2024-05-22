@@ -51,13 +51,13 @@ We use this module to map a shape to an application zone, to be able to geo-refe
 
 
 ## Installation
-This gem supports decidim version `0.26.x` and `0.27.x`.
+This gem supports decidim version `0.27.x`.
 
 Read the [needed dependancies for `rgeo` gem](https://github.com/rgeo/rgeo?tab=readme-ov-file#dependencies). If you have `libgeos-dev`, be sure you have a postgis database with postgres > 14.0.
 
 Add this line to your application's Gemfile:
 ```ruby
-gem "decidim-decidim_geo"
+gem "decidim-decidim_geo", git: "https://git.octree.ch/decidim/decidim-module-geo", 
 ```
 
 Update your database adapter to postgis adapter (already installed as dependancy of this gem): 
@@ -107,6 +107,7 @@ You are now ready to use your container in the way you want for development:
 
 * Run a rails server: `bundle exec rails s -b 0.0.0.0`
 * Have live-reload on your assets: `bin/webpack-dev-server`
+* Lint the module `bundle exec rubocop -A ../decidim_module_geo -c ../decidim_module_geo/.rubocop.yml`
 * Execute tasks, like `bundle exec rails g migration AddSomeColumn`
 * etc.
 ```
@@ -140,19 +141,42 @@ To debug something on the container:
 ### FAQ
 
 **I can't see logs on the `decidim-app`?**
+
 `decidim-app` runs here in development `webpacker-dev-server` AND a puma server, on the same container. 
 Thus, we just run both, and only one will be displayed on STDOUT. To see puma log: `docker exec decidim-app tail -f /home/app/decidim/log/development.log`
 
 **It takes for ever to pull the image?**
+
 Try to pull from docker hub before doing your install script. `docker pull hfroger/decidim:0.26.8-dev` can help. 
 
 **Why must I access to `127.0.0.1` and not `localhost`?**
+
 `webpack-dev-server` run a websocket server on port 3535, and the rails server needs to connect to it. 
 `localhost` won't make the trick, and you need to use a "real" ip, like `127.0.0.1`.  [More info](https://stackoverflow.com/a/54102318)
 
-## Contributing
 
-We are not yet ready for contributions, but we are working on a goood workflow
+More information on [our wiki](https://github.com/octree-gva/decidim-module-geo/wiki)
+
+## Contributing
+If you consider contribute, please read our [Code of Conduct](./CONTRIBUTING)
+
+[Octree](https://octree.ch) is the main contributor of the repository. We are accountable to: 
+
+- Plan roadmaps
+- Design Epics
+- Plan releases
+
+What you can do?
+
+* Propose [a new feature](https://feedback.voca.city/?tags=decidim-geo,feature)
+* Finance [an existing feature](https://feedback.voca.city/?tags=decidim-geo,feature)
+* Fix some existing [bugs](https://git.octree.ch/decidim/decidim-module-geo/-/boards/151)
+
+If you want to code your own feature, please be sure to: 
+
+1. Propose [your feature](https://feedback.voca.city/?tags=decidim-geo,feature)
+2. Wait for review
+
 
 # Why it's not on MetaDecidim?
 We think Decidim is already over complicated to install and setup. This module uses PosGis extensions on a postgres database, that can be hard to install. We block the proposal to metadecidim until these points are solved:

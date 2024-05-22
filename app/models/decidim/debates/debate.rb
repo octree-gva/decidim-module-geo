@@ -25,7 +25,7 @@ module Decidim
       include Decidim::Endorsable
       include Decidim::Randomable
 
-      if Decidim.version == '0.27.4'
+      if Decidim.version == "0.27.4"
         include Decidim::DownloadYourData
         include Decidim::FilterableResource
       end
@@ -36,7 +36,7 @@ module Decidim
       validates :title, presence: true
 
       translatable_fields :title, :description, :instructions, :information_updates
-      searchable_fields({ 
+      searchable_fields({
                           scope_id: :decidim_scope_id,
                           participatory_space: { component: :participatory_space },
                           A: :title,
@@ -59,9 +59,7 @@ module Decidim
         )
       }
 
-      if Decidim.version == '0.27.4'
-        scope_search_multi :with_any_state, [:open, :closed]
-      end
+      scope_search_multi :with_any_state, [:open, :closed] if Decidim.version == "0.27.4"
 
       def self.log_presenter_class_for(_log)
         Decidim::Debates::AdminLog::DebatePresenter
@@ -187,7 +185,6 @@ module Decidim
       # way in order to properly calculate the counter with hidden
       # comments.
       #
-      # rubocop:disable Rails/SkipsModelValidations
       def update_comments_count
         comments_count = comments.not_hidden.not_deleted.count
         last_comment = comments.not_hidden.not_deleted.order("created_at DESC").first
@@ -200,13 +197,11 @@ module Decidim
           updated_at: Time.current
         )
       end
-      # rubocop:enable Rails/SkipsModelValidations
-
-      if Decidim.version == '0.27.4'
+      if Decidim.version == "0.27.4"
         # Create i18n ransackers for :title and :description.
         # Create the :search_text ransacker alias for searching from both of these.
         ransacker_i18n_multi :search_text, [:title, :description]
-      end
+end
 
       def self.ransackable_scopes(_auth_object = nil)
         [:with_any_state, :with_any_origin, :with_any_category, :with_any_scope]

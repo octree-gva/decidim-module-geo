@@ -10,12 +10,13 @@ iter_children(current_participatory_space, assemblies) unless current_participat
 %>
 <%= cell("decidim/geo/content_blocks/geo_maps", current_participatory_space, 
     id: "Assembly",
+    hide_empty: true,
     filters: if current_participatory_space.scope.present?
         [
           { scopeFilter: { scopeId: current_participatory_space.scope.id } }
         ]
     else 
-        assemblies.map { |assembly_id| { assemblyFilter: { assemblyId: assembly_id } } }
+        assemblies.map { |assembly_id| { assemblyFilter: { id: assembly_id } } }
     end,
     scopes: if current_participatory_space.scope.present?
         [current_participatory_space.scope.id]

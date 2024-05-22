@@ -3,7 +3,6 @@
 module Decidim
   module Geo
     class GeoShapefileType < Decidim::Api::Types::BaseObject
-
       description "A shapefile"
 
       field :id, ID, null: false
@@ -16,7 +15,6 @@ module Decidim
       def shapefile
         object.shapefile.path
       end
-
     end
   end
 end

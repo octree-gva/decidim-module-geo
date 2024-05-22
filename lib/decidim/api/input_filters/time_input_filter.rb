@@ -3,7 +3,6 @@
 module Decidim
   module Geo
     class TimeInputFilter < Decidim::Core::BaseInputFilter
-    
       graphql_name "TimeFilter"
       description "A type used for filtering geo datasources by time: past, future, active"
 

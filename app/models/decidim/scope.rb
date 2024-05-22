@@ -40,7 +40,7 @@ module Decidim
 
     before_validation :update_part_of, on: :update
 
-    validates :name, :code, :organization, presence: true
+    validates :name, :code, presence: true
     validates :code, uniqueness: { scope: :organization }
     validate :forbid_cycles
 
@@ -64,7 +64,7 @@ module Decidim
     end
 
     def ancestor_of?(scope)
-      scope && scope.part_of.member?(id)
+      scope&.part_of&.member?(id)
     end
 
     # Gets the scopes from the part_of list in descending order (first the top level scope, last itself)

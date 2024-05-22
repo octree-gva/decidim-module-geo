@@ -3,7 +3,6 @@
 module Decidim
   module Geo
     class GeoConfigType < Decidim::Api::Types::BaseObject
-
       description "A geo admin config"
 
       field :zoom, Float, null: false

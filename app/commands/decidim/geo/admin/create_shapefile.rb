@@ -3,7 +3,7 @@
 module Decidim
   module Geo
     module Admin
-    # A command with all the business logic when a user creates a new proposal.
+      # A command with all the business logic when a user creates a new proposal.
       class CreateShapefile < Decidim::Geo::Command
         # Public: Initializes the command.
         #
@@ -25,10 +25,9 @@ module Decidim
           load_shapefile = LoadShp::AppLoadShp.new(@shapefile)
           load_shapefile.run!
           broadcast(:ok, @shapefile)
-
         rescue Exception => e
           @shapefile.destroy
-          broadcast(:invalid, "#{e}")
+          broadcast(:invalid, e.to_s)
         end
 
         private
@@ -43,8 +42,6 @@ module Decidim
             organization: form.organization
           )
         end
-
-
       end
     end
   end

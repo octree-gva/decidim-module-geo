@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Decidim
   module Geo
     module GeoQueryExtension
@@ -6,11 +8,16 @@ module Decidim
       # type - A GraphQL::BaseType to extend.
       #
       # Returns nothing.
-      
+
       def self.included(type)
         type.field :shapefiles, [Decidim::Geo::ShapefileType], description: "Return's information about the shapefiles", null: true
 
-        type.field :geo_config, Decidim::Geo::GeoConfigType, description: "Return's information about the geo config", null: true
+      def self.included(type)
+        type.field :shapefiles, [Decidim::Geo::ShapefileType],
+                   description: "Return's information about the shapefiles", null: true
+
+        type.field :geo_config, Decidim::Geo::GeoConfigType, description: "Return's information about the geo config",
+                                                             null: true
       end
 
       def shapefiles

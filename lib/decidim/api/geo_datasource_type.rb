@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'active_storage'
+require "active_storage"
 
 module Decidim
   module Geo
@@ -13,7 +13,8 @@ module Decidim
       field :participatory_space_id, ID, null: true
       field :participatory_space_type, String, null: true
       field :title, Decidim::Core::TranslatedFieldType, "The title for this title", null: true
-      field :short_description, Decidim::Core::TranslatedFieldType, "The short description for this short description", null: true
+      field :short_description, Decidim::Core::TranslatedFieldType, "The short description for this short description",
+            null: true
       field :description, Decidim::Core::TranslatedFieldType, "The description for this description", null: true
       field :banner_image, String, null: true
       field :coordinates, Decidim::Geo::GeoCoordinatesType, "Physical coordinates for this object", null: true
@@ -26,20 +27,18 @@ module Decidim
         object.class.name
       end
 
-      def id
-        object.id 
-      end
+      delegate :id, to: :object
 
       def component_id
-        object.component.id if object.respond_to?(:component) 
+        object.component.id if object.respond_to?(:component)
       end
 
       def participatory_space_id
-        return object.component.participatory_space_id if object.respond_to?(:component) 
+        return object.component.participatory_space_id if object.respond_to?(:component)
       end
 
       def participatory_space_type
-        return object.component.participatory_space_type if object.respond_to?(:component) 
+        return object.component.participatory_space_type if object.respond_to?(:component)
       end
 
       def link
@@ -47,8 +46,8 @@ module Decidim
       end
 
       def title
-        return object.title if object.respond_to?(:title) 
-        return object.name if object.respond_to?(:name) 
+        return object.title if object.respond_to?(:title)
+        return object.name if object.respond_to?(:name)
       end
 
       def short_description
@@ -62,25 +61,24 @@ module Decidim
         return truncate_translated(object.description) if object.respond_to?(:description)
       end
 
-      def truncate_translated(value, chars=2800) 
-        value.each do |key, v| 
-          if v.is_a?(Hash) 
-            value[key] = truncate_translated(v, chars)
-          else
-            value[key] = 
-              Rails::Html::FullSanitizer.new.sanitize(
-                Decidim::HtmlTruncation.new(
-                  Decidim::ContentProcessor.render(
-                    v
-                  ),
-                  max_length: 2800,
-                  tail: "…",
-                  count_tags: false,
-                  count_tail: false,
-                  tail_before_final_tag: false
-                ).perform
-              ).html_safe
-          end
+      def truncate_translated(value, chars = 2800)
+        value.each do |key, v|
+          value[key] = if v.is_a?(Hash)
+                         truncate_translated(v, chars)
+                       else
+                         Rails::Html::FullSanitizer.new.sanitize(
+                           Decidim::HtmlTruncation.new(
+                             Decidim::ContentProcessor.render(
+                               v
+                             ),
+                             max_length: 2800,
+                             tail: "…",
+                             count_tags: false,
+                             count_tail: false,
+                             tail_before_final_tag: false
+                           ).perform
+                         ).html_safe
+                       end
         end
         value
       end
@@ -91,11 +89,11 @@ module Decidim
       end
 
       def coordinates
-        {latitude: latitude, longitude: longitude} if has_coordinates?
+        { latitude: latitude, longitude: longitude } if has_coordinates?
       end
 
       def start_time
-        object.start_time if object.respond_to?(:start_time) 
+        object.start_time if object.respond_to?(:start_time)
       end
 
       def end_time
@@ -104,16 +102,18 @@ module Decidim
 
       def latitude
         return location.latitude if has_geo_location?
+
         object.latitude
       end
 
       def longitude
         return location.longitude if has_geo_location?
+
         object.longitude
       end
 
       def geom
-        RGeo::GeoJSON.encode(object.shapedata.geom) if (object.respond_to?(:shapedata) && !object.shapedata.nil?)
+        RGeo::GeoJSON.encode(object.shapedata.geom) if object.respond_to?(:shapedata) && !object.shapedata.nil?
       end
 
       def scope
@@ -121,27 +121,27 @@ module Decidim
       end
 
       def has_geo_location?
-        object.respond_to?(:decidim_geo_space_location)
+        object.respond_to?(:decidim_geo_space_location) && object.decidim_geo_space_location
       end
-      
+
       def location
         return nil unless has_geo_location?
+
         object.decidim_geo_space_location
       end
 
       def has_coordinates?
         (
-          has_geo_location? && 
-          !location.latitude.nil? && 
+          has_geo_location? &&
+          !location.latitude.nil? &&
           !location.longitude.nil?
         ) || (
           object.respond_to?(:latitude) &&
-          object.respond_to?(:longitude) && 
-          !object.latitude.nil? && 
+          object.respond_to?(:longitude) &&
+          !object.latitude.nil? &&
           !object.longitude.nil?
         )
       end
     end
   end
 end
-

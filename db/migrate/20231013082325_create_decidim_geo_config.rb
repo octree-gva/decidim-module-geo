@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This migration comes from decidim_geo (originally 20231012094655)
 class CreateDecidimGeoConfig < ActiveRecord::Migration[6.0]
   def change

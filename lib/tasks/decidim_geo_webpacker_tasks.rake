@@ -30,7 +30,7 @@ namespace :decidim_geo do
       @decidim_geo_npm_dependencies ||= begin
         package_json = JSON.parse(File.read(decidim_geo_path.join("package.json")))
 
-        { dev: package_json["dependencies"].map { |package, version| "#{package}@#{version}" }}.freeze
+        { dev: package_json["dependencies"].map { |package, version| "#{package}@#{version}" } }.freeze
       end
     end
 
@@ -44,10 +44,6 @@ namespace :decidim_geo do
 
     def rails_app_path
       @rails_app_path ||= Rails.root
-    end
-
-    def copy_geo_file_to_application(origin_path, destination_path = origin_path)
-      FileUtils.cp(decidim_geo_path.join(origin_path), rails_app_path.join(destination_path))
     end
 
     def system!(command)

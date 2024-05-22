@@ -22,6 +22,7 @@ module Decidim
         # Returns nothing.
         def call
           return broadcast(:invalid) if form.invalid?
+
           @geo_config.nil? ? create_geo_config : update_geo_config
           broadcast(:ok)
         end

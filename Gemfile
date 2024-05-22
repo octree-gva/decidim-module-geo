@@ -9,18 +9,21 @@ ruby RUBY_VERSION
 DECIDIM_VERSION = "~> 0.27.4"
 
 gem "decidim", DECIDIM_VERSION
+gem "decidim-decidim_geo", path: "."
 
-gem "decidim-geo", path: "."
-
-gem "puma", ">= 5.5.1"
 gem "bootsnap", "~> 1.4"
+gem "puma", ">= 5.5.1"
+gem "uglifier", "~> 4.1"
+
+gem "bootsnap", "~> 1.4"
+gem "puma", ">= 5.5.1"
 gem "uglifier", "~> 4.1"
 
 gem "activerecord-postgis-adapter", "~> 7.0.0"
-gem "rgeo-shapefile", ">= 1.0"
-gem "rgeo-geojson", ">= 1.0"
-gem "ffi-geos", "~> 2.4"
 gem "deface", ">= 1.8.1"
+gem "ffi-geos", "~> 2.4"
+gem "rgeo-geojson", ">= 1.0"
+gem "rgeo-shapefile", ">= 1.0"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
@@ -29,7 +32,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'rspec-rails', '~> 4.0'
+  gem "rspec-rails", "~> 4.0"
 end
 
 group :development do
@@ -38,5 +41,5 @@ group :development do
   gem "listen", "~> 3.1"
   gem "spring", "~> 4.0"
   gem "spring-watcher-listen", "~> 2.0"
-  gem "web-console", "4.0.4"  
+  gem "web-console", "4.0.4"
 end
