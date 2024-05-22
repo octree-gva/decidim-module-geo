@@ -16,7 +16,6 @@ module Decidim
       def longitude
         object[:longitude]
       end
-
     end
   end
 end

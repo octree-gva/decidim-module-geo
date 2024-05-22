@@ -3,7 +3,6 @@
 module Decidim
   module Geo
     class ScopeInputFilter < Decidim::Core::BaseInputFilter
-    
       graphql_name "ScopeFilter"
       description "A type used for filtering geo datasources by scope"
 

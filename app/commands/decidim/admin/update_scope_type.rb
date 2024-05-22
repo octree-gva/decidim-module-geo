@@ -48,7 +48,7 @@ module Decidim
       end
 
       def shapefile
-        Decidim::Geo::Shapefile.find_by_id(form.shapefile)
+        Decidim::Geo::Shapefile.find_by(id: form.shapefile)
       end
 
       def attributes

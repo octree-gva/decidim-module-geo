@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Decidim
   module Geo
     module ShapefileQueryExtension
@@ -7,7 +9,8 @@ module Decidim
       #
       # Returns nothing.
       def self.included(type)
-        type.field :shapefiles, [Decidim::Geo::ShapefileType], description: "Return's information about the shapefiles", null: true
+        type.field :shapefiles, [Decidim::Geo::ShapefileType],
+                   description: "Return's information about the shapefiles", null: true
       end
 
       def shapefiles

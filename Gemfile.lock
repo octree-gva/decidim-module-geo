@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    decidim-geo (0.1.0)
+    decidim-decidim_geo (0.2.2)
       activerecord-postgis-adapter (>= 6.0)
       decidim-admin (>= 0.26, < 0.28)
       decidim-core (>= 0.26, < 0.28)
@@ -827,8 +827,8 @@ DEPENDENCIES
   bootsnap (~> 1.4)
   byebug (~> 11.0)
   decidim (~> 0.27.4)
+  decidim-decidim_geo!
   decidim-dev (~> 0.27.4)
-  decidim-geo!
   deface (>= 1.8.1)
   faker (~> 2.14)
   ffi-geos (~> 2.4)
@@ -847,4 +847,4 @@ RUBY VERSION
    ruby 3.0.2p107
 
 BUNDLED WITH
-   2.2.22
+   2.2.33

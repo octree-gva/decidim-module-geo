@@ -9,7 +9,7 @@ module Decidim
     # This is the engine that runs on the public interface of geo.
     class Engine < ::Rails::Engine
       isolate_namespace Decidim::Geo
-      
+
       routes do
       end
       config.to_prepare do
@@ -22,7 +22,7 @@ module Decidim
         Decidim::Assemblies::Admin::AssemblyForm.include(Decidim::Geo::AssemblyFormOverride)
         Decidim::Assemblies::Admin::CreateAssembly.include(Decidim::Geo::AssemblyCreateCommandOverride)
         Decidim::Assemblies::Admin::UpdateAssembly.include(Decidim::Geo::AssemblyUpdateCommandOverride)
-        
+
         Decidim::ParticipatoryProcess.include(Decidim::Geo::SpaceOverride)
         Decidim::ParticipatoryProcesses::Admin::ParticipatoryProcessForm.include(Decidim::Geo::ParticipatoryProcessFormOverride)
         Decidim::ParticipatoryProcesses::Admin::CreateParticipatoryProcess.include(Decidim::Geo::ParticipatoryProcessCommandOverride)
@@ -44,15 +44,12 @@ module Decidim
       end
 
       initializer "decidim_geo.check_rgeo" do
-        unless RGeo::Geos.supported?
-          Rails.logger.warn("GEOS is not available, but is required for correct interpretation of polygons in shapefiles")
-        end
+        Rails.logger.warn("GEOS is not available, but is required for correct interpretation of polygons in shapefiles") unless RGeo::Geos.supported?
       end
 
       initializer "decidim_geo.webpacker.assets_path" do
         Decidim.register_assets_path File.expand_path("#{Decidim::Geo::Engine.root}/app/packs")
       end
-
     end
   end
 end

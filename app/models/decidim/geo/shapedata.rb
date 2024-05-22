@@ -4,9 +4,8 @@ module Decidim
   module Geo
     # Data fo the shapfiles uploaded
     class Shapedata < ApplicationRecord
-
-      self.table_name = 'decidim_geo_shapefile_datas'
-      validates :data, :presence => true
+      self.table_name = "decidim_geo_shapefile_datas"
+      validates :data, presence: true
 
       belongs_to :scope, inverse_of: :shapedata, optional: true, foreign_key: "decidim_scopes_id"
 
@@ -15,9 +14,8 @@ module Decidim
       end
 
       def shapedata?
-        return false
+        false
       end
-
     end
   end
 end

@@ -10,7 +10,7 @@ DECIDIM_VERSION = "~> 0.26.8"
 
 gem "decidim", DECIDIM_VERSION
 
-gem "decidim-geo", path: "."
+gem "decidim-decidim_geo", path: "."
 
 gem 'activerecord-postgis-adapter', '~> 6.0.0'
 gem 'rgeo-shapefile'

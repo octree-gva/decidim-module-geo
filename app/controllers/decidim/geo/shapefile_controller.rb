@@ -3,9 +3,7 @@
 module Decidim
   module Geo
     class ShapefileController < Decidim::Geo::ApplicationController
-      def index
-
-      end
+      def index; end
     end
   end
 end

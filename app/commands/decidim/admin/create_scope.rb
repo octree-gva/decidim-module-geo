@@ -23,7 +23,7 @@ module Decidim
         return broadcast(:invalid) if form.invalid?
 
         scope = create_scope
-        broadcast(:ok, :scope=>scope)
+        broadcast(:ok, scope: scope)
       end
 
       private
@@ -49,7 +49,7 @@ module Decidim
       end
 
       def shapedata
-        Decidim::Geo::Shapedata.find_by_id(form.shapedata)
+        Decidim::Geo::Shapedata.find_by(id: form.shapedata)
       end
     end
   end

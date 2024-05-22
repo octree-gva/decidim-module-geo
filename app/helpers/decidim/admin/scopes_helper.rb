@@ -44,7 +44,7 @@ module Decidim
 
         shapefile = scope.scope_type.shapefile
         shapedata = shapedata_version_compat(shapefile)
-        
+
         shapedata.map do |shp|
           Option.new(shp.id, shp.data)
         end
@@ -53,16 +53,18 @@ module Decidim
       def shapedata_name(scope)
         Decidim::Geo::Shapedata
           .select("data['NAME']")
-          .find_by_id(scope.shapedata.id).data
+          .find_by(id: scope.shapedata.id).data
       end
 
       private
 
       def shapedata_version_compat(shapefile)
-        return Decidim::Geo::Shapedata
-                .select("id", "data['NAME']")
-                .where(decidim_geo_shapefiles_id: shapefile.id).order(:data.name) if Decidim.version.to_f >= 0.27
-        
+        if Decidim.version.to_f >= 0.27
+          return Decidim::Geo::Shapedata
+                 .select("id", "data['NAME']")
+                 .where(decidim_geo_shapefiles_id: shapefile.id).order(:data.name)
+        end
+
         Decidim::Geo::Shapedata
           .select("id", "data['NAME']")
           .where(decidim_geo_shapefiles_id: shapefile.id).order("data['NAME'] ASC")

@@ -45,7 +45,7 @@ module Decidim
       end
 
       def shapedata
-        Decidim::Geo::Shapedata.find_by_id(form.shapedata)
+        Decidim::Geo::Shapedata.find_by(id: form.shapedata)
       end
 
       def attributes

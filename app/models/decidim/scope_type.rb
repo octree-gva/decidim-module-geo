@@ -13,10 +13,10 @@ module Decidim
                class_name: "Decidim::Organization",
                inverse_of: :scope_types
 
-    has_one :shapefile, 
-            class_name: "Decidim::Geo::Shapefile", 
-            inverse_of: :scope_type, 
-            foreign_key: "decidim_scope_types_id", 
+    has_one :shapefile,
+            class_name: "Decidim::Geo::Shapefile",
+            inverse_of: :scope_type,
+            foreign_key: "decidim_scope_types_id",
             dependent: :nullify
 
     has_many :scopes, class_name: "Decidim::Scope", inverse_of: :scope_type, dependent: :nullify

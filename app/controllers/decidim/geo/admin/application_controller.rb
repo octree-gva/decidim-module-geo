@@ -3,7 +3,6 @@
 module Decidim
   module Geo
     module Admin
-
       # This controller is the abstract class from which all other controllers of
       # this engine inherit.
       #
@@ -13,8 +12,6 @@ module Decidim
         def permission_class_chain
           [::Decidim::Geo::Admin::Permissions] + super
         end
-
-
       end
     end
   end
