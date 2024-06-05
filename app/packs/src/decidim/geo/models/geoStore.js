@@ -3,7 +3,7 @@ import { subscribeWithSelector } from "zustand/middleware";
 import dataPointStore from "./pointStore";
 import filterStore from "./filterStore";
 import dropdownFilterStore from "./dropdownFilterStore";
-
+import memoryStore from "./memoryStore";
 const store = createStore(
   subscribeWithSelector((set) => ({
     /**
@@ -23,9 +23,13 @@ const store = createStore(
      * Action when we click on a point.
      */
     selectPoint: (point) => {
+      const { saveState } = memoryStore.getState();
+      saveState();
       set((state) => ({
         ...state,
-        selectedScope: point ? dataPointStore.getState().scopeForId(point.scopeId) : undefined,
+        selectedScope: point
+          ? dataPointStore.getState().scopeForId(point.scopeId)
+          : undefined,
         selectedPoint: point,
         previousState: state
       }));
@@ -36,6 +40,9 @@ const store = createStore(
      * -
      */
     selectScope: (scope) => {
+      const { saveState } = memoryStore.getState();
+      saveState();
+
       set((state) => ({
         selectedScope: scope,
         ...(`${scope?.id}` !== `${state.selectedScope?.id}`
@@ -47,8 +54,7 @@ const store = createStore(
             ? state.selectedPoint
             : undefined
       }));
-      if(scope)
-        scope.repaint();
+      if (scope) scope.repaint();
     },
     /**
      * Go back to previous state
@@ -57,6 +63,8 @@ const store = createStore(
       set((state) => ({
         ...state.previousState
       }));
+      const { popState } = memoryStore.getState();
+      setTimeout(popState, 32);
     }
   }))
 );

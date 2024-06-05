@@ -24,10 +24,22 @@ module Decidim
         private
 
         def filtered_data
-          data = if filters.present?
-                   data_by_resource_type(query)
-                 else
-                   data_by_resource_type(nofilter_query)
+          @filtered_data ||= if normalized_filters.present?
+                               data_by_resource_type(query)
+                             else
+                               data_by_resource_type(nofilter_query)
+          end
+        end
+
+        def normalized_filters
+          return filters unless filters.is_a?(Array)
+
+          @normalized_filters ||= filters.map do |hash|
+            next hash unless hash.is_a?(Hash)
+
+            hash.deep_transform_keys { |key| key.to_s.underscore.to_sym }
+                .deep_transform_values { |value| value.is_a?(Hash) ? value.with_indifferent_access : value }
+                .with_indifferent_access
           end
         end
 
@@ -35,11 +47,11 @@ module Decidim
           search_params = { locale: locale, class_name: supported_geo_components }
 
           # Handle scope constraints
-          scopes = filters.select { |f| f[:scope_filter].present? }
+          scopes = normalized_filters.select { |f| f[:scope_filter].present? }
           if scopes.length.positive?
             # Search only in a given scope
             scope_ids = scopes.map do |scope|
-              scope.scope_filter.scope_id
+              scope[:scope_filter][:scope_id]
             end
             search_params = search_params.merge({ scope_ids: scope_ids })
           end
@@ -48,11 +60,10 @@ module Decidim
           # Handle participatory spaces filter (Assemblies, Processes, Conferences, Initiatives)
           space_filters = active_filters.select(&:is_participatory_space?).select do |filter|
             key = filter.graphql_key
-            filters.any? { |f| f[key].present? }
+            normalized_filters.any? { |f| f[key].present? }
           end
-
           # Handle resource type filter (only Meetings)
-          resource_type = filters.find { |f| f[:resource_type_filter].present? }
+          resource_type = normalized_filters.find { |f| f[:resource_type_filter].present? }
           # Define class_name search.
           # if resource_type is "all" => do nothing
           # else if resource_type is defined => search the resource type everywhere
@@ -65,7 +76,7 @@ module Decidim
           elsif space_filters.length.positive?
             # Exclude all the spaces that are not included in the filter.
             not_filtered_spaces = space_filters.select do |filter|
-              filters.find { |f| f[filter.graphql_key].present? }.nil?
+              normalized_filters.find { |f| f[filter.graphql_key].present? }.nil?
             end.map(&:model_klass)
             class_name = supported_geo_components.reject do |k|
               not_filtered_spaces.include?(k)
@@ -77,8 +88,8 @@ module Decidim
           # Bind results to the selected spaces.
           space_filters.each do |space_filter|
             graphql_key = space_filter.graphql_key
-            ids = filters.select { |f| f[graphql_key].present? }.map do |graphql_filter|
-              graphql_filter[graphql_key].id
+            ids = normalized_filters.select { |f| f[graphql_key].present? }.map do |graphql_filter|
+              graphql_filter[graphql_key][:id]
             end
             # The results must be within the filtered space
             search_results = search_results.where(

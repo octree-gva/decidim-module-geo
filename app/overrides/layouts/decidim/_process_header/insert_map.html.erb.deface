@@ -6,7 +6,8 @@
       filters: if current_participatory_space.scope.present?
         # If the process has a scope, filter by its scope
         [
-          { scopeFilter: { scopeId: current_participatory_space.scope.id } }
+          { scopeFilter: { scopeId: current_participatory_space.scope.id } },
+          { processFilter: { id: current_participatory_space.id } }
         ]
       else 
         # Else filter on the process data

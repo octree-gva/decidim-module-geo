@@ -59,6 +59,11 @@ export default class GeoDatasourceNode {
     });
   }
 
+  get type() {
+    if (!this.data.id || !this.data.type) return undefined;
+    return this.data.type;
+  }
+
   get id() {
     if (!this.data.id || !this.data.type) return undefined;
     return `${this.data.type}::${this.data.id}`;

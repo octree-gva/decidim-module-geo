@@ -142,7 +142,6 @@ async function createSidebar() {
       L.DomEvent.disableClickPropagation(this.cardList);
       L.DomEvent.disableScrollPropagation(this.cardList);
 
-      const _this = this;
       const repaint = this.repaint.bind(this);
 
       geoStore.subscribe(

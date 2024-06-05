@@ -8,18 +8,19 @@ module Decidim
         include Decidim::SanitizeHelper
 
         def show
-          return "" if hide_empty? && empty_map?
+          return "<!-- DecidimGeo: Map is empty -->".html_safe if hide_empty? && empty_map?
 
           render
         end
 
         private
+
         def hide_empty?
           @options[:hide_empty] || false
         end
 
         def empty_map?
-          data_count > 1
+          data_count <= 1
         end
 
         def data_count
@@ -64,13 +65,9 @@ module Decidim
         end
 
         def geo_i18n
-          supported_models = [
-            Decidim::Meetings::Meeting,
-            Decidim::Proposals::Proposal,
-            Decidim::ParticipatoryProcess,
-            Decidim::Assembly,
-            Decidim::Debates::Debate
-          ]
+          supported_models = ::Decidim::Geo.config.supported_filters.map do |filter|
+            filter.constantize.new(self).klass
+          end
           geo_i18n = supported_models.to_h { |klass| [klass.name, klass.model_name.human] }
           geo_i18n = {
             **geo_i18n,

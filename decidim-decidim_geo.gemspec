@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.authors = ["Hadrien Froger", "Renato Silva", "Simon Mulquin"]
   s.email = ["hadrien@octree.ch", "renato@octree.ch", "simon@octree.ch"]
   s.license = "AGPL-3.0"
-  s.homepage = "https://github.com/decidim/decidim-module-geo"
+  s.homepage = "https://git.octree.ch/decidim/decidim-module-geo"
   s.required_ruby_version = ">= 2.7"
 
   s.name = "decidim-decidim_geo"
@@ -28,5 +28,6 @@ Gem::Specification.new do |s|
   s.add_dependency "rgeo-shapefile", ">= 1.0"
 
   s.add_development_dependency "decidim-dev", Decidim::Geo.decidim_version
+  s.add_development_dependency "rubocop-faker"
   s.metadata["rubygems_mfa_required"] = "true"
 end
