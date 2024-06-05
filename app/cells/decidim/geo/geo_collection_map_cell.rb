@@ -16,7 +16,7 @@ module Decidim
         [
           "decidim/assemblies/assemblies:index",
           "decidim/participatory_processes/participatory_processes:index"
-        ].include? "#{params[:controller]}:#{params[:action]}"
+        ].include?("#{params[:controller]}:#{params[:action]}")
       end
 
       def search_controller?
@@ -73,7 +73,9 @@ module Decidim
       end
 
       def processes_scopes
-        visible_processes.map { |a| a.scopes.map(&:id) }.flatten.uniq
+        visible_processes.map do |a|
+          a.scopes.empty? ? [] : a.scopes.map(&:id)
+        end.flatten.uniq
       end
 
       def visible_assemblies
@@ -83,7 +85,9 @@ module Decidim
       end
 
       def assemblies_scopes
-        visible_assemblies.map { |a| a.scopes.map(&:id) }.flatten.uniq
+        visible_assemblies.map do |a|
+          a.scopes.empty? ? [] : a.scopes.map(&:id)
+        end.flatten.uniq
       end
 
       def assemblies_filter

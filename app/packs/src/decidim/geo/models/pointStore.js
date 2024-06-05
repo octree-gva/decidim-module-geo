@@ -35,6 +35,7 @@ const store = createStore(
       if (fetchedPoints.length > 0) return;
       const locale = configStore.getState().locale;
       set(({ isLoading }) => ({ isLoading: isLoading + 1 }));
+
       const data = await getGeoDatasource(
         {
           variables: { filters: filters, locale: locale }
@@ -56,6 +57,7 @@ const store = createStore(
       set(() => ({
         points: points
       }));
+
       const scopes = await getGeoScopes({
         variables: { locale: locale }
       });
@@ -68,9 +70,11 @@ const store = createStore(
           return geoScope.isEmpty() ? undefined : geoScope;
         })
         .filter(Boolean);
+
       set(() => ({
         scopes: geoScopes
       }));
+
       set(({ isLoading }) => ({
         isLoading: isLoading - 1
       }));
@@ -112,23 +116,6 @@ const store = createStore(
       return filteredPoints;
     }
   }))
-);
-
-store.subscribe(
-  (state) => [state.scopes],
-  async ([scopes], [previousScopes]) => {
-    if (scopes.length === previousScopes.length) return;
-
-    const { selectedScope, selectScope } = geoStore.getState();
-    if (!!selectedScope) return;
-
-    const { space_ids } = configStore.getState();
-    if (space_ids.length === 1) {
-      const { scopeForId } = store.getState();
-      const scope = scopeForId(space_ids[0]);
-      if (scope) selectScope(scope);
-    }
-  }
 );
 
 export default store;

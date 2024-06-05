@@ -47,48 +47,12 @@ module Decidim
         locale = kwargs[:locale] || I18n.locale
         return nofilter_datasource(locale) if kwargs[:filters].blank?
 
-        scopes = kwargs[:filters].select { |f| f[:scope_filter].present? }
-        resource_type = kwargs[:filters].find { |f| f[:resource_type_filter].present? }
-        processes = kwargs[:filters].select { |f| f[:process_filter].present? }
-        assemblies = kwargs[:filters].select { |f| f[:assembly_filter].present? }
-        @time = kwargs[:filters].find { |f| f[:time_filter].present? }
-        @geoencoded = kwargs[:filters].find { |f| f[:geoencoded_filter].present? }
-        search_params = { locale: locale, class_name: supported_geo_components }
-        filtered_by_spaces = assemblies.length.positive? || processes.length.positive?
-        filtered_by_scopes = scopes.length.positive?
-        if scopes.length.positive?
-          # Search only in a given scope
-          search_params = search_params.merge({ scope_ids: scopes.map { |scope| scope.scope_filter.scope_id } })
-        end
-
-        if resource_type
-          # search only for a resource type
-          class_name = resource_type.resource_type_filter.resource_type
-          search_params = search_params.merge({ class_name: class_name }) unless class_name == "all"
-        elsif assemblies.length.positive? && processes.length.zero?
-          search_params = search_params.merge({ class_name: supported_geo_components.reject { |k| k == :"Decidim::ParticipatoryProcess" } })
-        elsif processes.length.positive? && assemblies.length.zero?
-          search_params = search_params.merge({ class_name: supported_geo_components.reject { |k| k == :"Decidim::Assembly" } })
-        end
-        search_results = filtered_query_for(**search_params)
-
-        if assemblies.length.positive?
-          # The results must be within an assembly
-          search_results = search_results.where(
-            decidim_participatory_space_type: "Decidim::Assembly",
-            decidim_participatory_space_id: assemblies.map { |assembly| assembly.assembly_filter.assembly_id }
-          )
-        end
-
-        if processes.length.positive?
-          # The results must be within a process
-          search_results = search_results.where(
-            decidim_participatory_space_type: "Decidim::ParticipatoryProcess",
-            decidim_participatory_space_id: processes.map { |process| process.process_filter.process_id }
-          )
-        end
-
-        fetch_results(search_results)
+        ::Decidim::Geo::Api::GeoQuery.new(
+          current_organization,
+          current_user,
+          kwargs[:filters],
+          locale
+        ).results
       end
 
       def geo_shapefiles(title: nil)

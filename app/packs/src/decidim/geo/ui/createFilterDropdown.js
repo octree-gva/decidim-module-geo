@@ -92,7 +92,7 @@ class FilterDropdown {
     const { toFilterOptions, defaultFilters } = filterStore.getState();
     return toFilterOptions(name, defaultFilters);
   }
-  field(label, name, options, disabledOptions=[]) {
+  field(label, name, options, disabledOptions = []) {
     const { nextFilters } = dropdownFilterStore.getState();
     const selectedValue =
       (nextFilters && nextFilters[name]) || this.defaultFilterFor(name);
@@ -130,8 +130,8 @@ class FilterDropdown {
       if (value === selectedValue) {
         option.selected = "selected";
       }
-      if(disabledOptions.includes(value)) {
-        option.disabled="disabled"
+      if (disabledOptions.includes(value)) {
+        option.disabled = "disabled";
       }
       option.textContent = key;
     });
@@ -213,24 +213,28 @@ class FilterDropdown {
     }
     setFilters(newFilters);
   }
-  
-  geoFields(points){
+
+  geoFields(points) {
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
-    const hasGeoLocated = points.find((p) => p.isGeoLocated)
-    const hasPhysical = points.find((p) => !p.isGeoLocated)
-
-    return this.field(i18n[`${i18nPrefix}.geo.label`], "GeoShowFilter", [
-      [i18n[`${i18nPrefix}.geo.all`], "all"],
-      [i18n[`${i18nPrefix}.geo.only_geoencoded`], "only_geoencoded"],
-      [i18n[`${i18nPrefix}.geo.only_virtual`], "only_virtual"]
-    ], hasGeoLocated && hasPhysical ? [] : ["only_geoencoded", "only_virtual"]);
+    const hasGeoLocated = points.find((p) => p.isGeoLocated());
+    const hasPhysical = points.find((p) => !p.isGeoLocated());
+    return this.field(
+      i18n[`${i18nPrefix}.geo.label`],
+      "GeoShowFilter",
+      [
+        [i18n[`${i18nPrefix}.geo.all`], "all"],
+        [i18n[`${i18nPrefix}.geo.only_geoencoded`], "only_geoencoded"],
+        [i18n[`${i18nPrefix}.geo.only_virtual`], "only_virtual"]
+      ],
+      hasGeoLocated && hasPhysical ? [] : ["only_geoencoded", "only_virtual"]
+    );
   }
   repaintOptions() {
     L.DomUtil.empty(this.dropDownOptions);
     const i18n = this.i18n();
-    const i18nPrefix = "decidim_geo.filters"
-    const {points} = pointStore.getState();
+    const i18nPrefix = "decidim_geo.filters";
+    const { points } = pointStore.getState();
     this.geoFields(points);
     this.field(i18n[`${i18nPrefix}.time.label`], "GeoTimeFilter", [
       [i18n[`${i18nPrefix}.time.all`], "all"],
@@ -239,33 +243,32 @@ class FilterDropdown {
       [i18n[`${i18nPrefix}.time.only_future`], "only_future"]
     ]);
     this.typeFields(points);
-
   }
 
   typeFields(points) {
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
-    const hasMeetings = points.find((p) => p.type === "Decidim::Meetings::Meeting")
-    const hasProposals = points.find((p) => p.type === "Decidim::Proposals::Proposal")
-    const hasAssemblies = points.find((p) => p.type === "Decidim::Assembly")
-    const hasProcesses = points.find((p) => p.type === "Decidim::ParticipatoryProcess")
-
+    const hasMeetings = points.find((p) => p.type === "Decidim::Meetings::Meeting");
+    const hasProposals = points.find((p) => p.type === "Decidim::Proposals::Proposal");
+    const hasAssemblies = points.find((p) => p.type === "Decidim::Assembly");
+    const hasProcesses = points.find((p) => p.type === "Decidim::ParticipatoryProcess");
     const disabledOptions = [];
-    if(!hasMeetings)
-      disabledOptions.push("only_meetings")
-    if(!hasProposals)
-      disabledOptions.push("only_proposals")
-    if(!hasAssemblies)
-      disabledOptions.push("only_assemblies")
-    if(!hasProcesses)
-      disabledOptions.push("only_processes")
-    this.field(i18n[`${i18nPrefix}.type.label`], "GeoType", [
-      [i18n[`${i18nPrefix}.type.all`], "all"],
-      [i18n[`${i18nPrefix}.type.only_processes`], "only_processes"],
-      [i18n[`${i18nPrefix}.type.only_assemblies`], "only_assemblies"],
-      [i18n[`${i18nPrefix}.type.only_proposals`], "only_proposals"],
-      [i18n[`${i18nPrefix}.type.only_meetings`], "only_meetings"]
-    ], disabledOptions);
+    if (!hasMeetings) disabledOptions.push("only_meetings");
+    if (!hasProposals) disabledOptions.push("only_proposals");
+    if (!hasAssemblies) disabledOptions.push("only_assemblies");
+    if (!hasProcesses) disabledOptions.push("only_processes");
+    this.field(
+      i18n[`${i18nPrefix}.type.label`],
+      "GeoType",
+      [
+        [i18n[`${i18nPrefix}.type.all`], "all"],
+        [i18n[`${i18nPrefix}.type.only_processes`], "only_processes"],
+        [i18n[`${i18nPrefix}.type.only_assemblies`], "only_assemblies"],
+        [i18n[`${i18nPrefix}.type.only_proposals`], "only_proposals"],
+        [i18n[`${i18nPrefix}.type.only_meetings`], "only_meetings"]
+      ],
+      disabledOptions
+    );
   }
 
   repaint() {

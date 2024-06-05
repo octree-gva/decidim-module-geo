@@ -110,6 +110,7 @@ You are now ready to use your container in the way you want for development:
 * Lint the module `bundle exec rubocop -A ../decidim_module_geo -c ../decidim_module_geo/.rubocop.yml`
 * Execute tasks, like `bundle exec rails g migration AddSomeColumn`
 * etc.
+
 ```
 bundle exec rails s -b 0.0.0.0 # rails server
 bin/webpack-dev-server

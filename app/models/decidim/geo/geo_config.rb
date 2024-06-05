@@ -19,7 +19,7 @@ module Decidim
       def self.tile_layer_default
         return "" if Decidim.config.maps.blank?
 
-        Decidim.config.maps[:dynamic][:tile_layer][:url]
+        Decidim.config.maps.dig(:dynamic, :tile_layer, :url) || ""
       end
     end
   end

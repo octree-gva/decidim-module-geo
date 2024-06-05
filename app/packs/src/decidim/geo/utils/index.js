@@ -6,7 +6,7 @@ export async function getDecidimData(query, params) {
   };
   var result = await window
     .fetch("/api", {
-      method: "POST", 
+      method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
@@ -18,8 +18,9 @@ export async function getDecidimData(query, params) {
         throw new Error(JSON.stringify(res.errors));
       }
       return res;
-    }).catch((e) => {
-      console.log(`failed to fetch`, {body})
+    })
+    .catch((e) => {
+      console.log(`failed to fetch`, { body });
       console.error(e);
       return null;
     });

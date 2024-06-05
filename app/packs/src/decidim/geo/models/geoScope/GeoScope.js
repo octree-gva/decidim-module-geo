@@ -86,6 +86,7 @@ export default class GeoScope {
   }
 
   init() {
+    const { map } = configStore.getState();
     this.markers_group = this.markersForScope();
     this.menuItem = createGeoScopeMenuItem({
       label: this.name,
@@ -105,6 +106,8 @@ export default class GeoScope {
         onClick: () => this.select("layer")
       });
       this.layer.bringToBack();
+      map.addLayer(this.layer);
+
       // Add the layer only when we are sure there is some point
       // in the layer.
       pointStore.subscribe(
@@ -112,12 +115,12 @@ export default class GeoScope {
         ([isLoading]) => {
           const { map, mapReady } = configStore.getState();
           if (isLoading) return;
+          // Points are loaded, we can check if the the layer is empty,
+          // and thus remove it.
           if (this.isEmpty()) {
             if (map.hasLayer(this.layer) && mapReady) {
               map.removeLayer(this.layer);
             }
-          } else {
-            map.addLayer(this.layer);
           }
         }
       );

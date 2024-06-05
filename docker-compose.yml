@@ -1,4 +1,3 @@
-version: '3'
 services:
   decidim-geo:
     container_name: decidim-geo

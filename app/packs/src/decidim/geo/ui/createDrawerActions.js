@@ -5,7 +5,7 @@ import pointStore from "../models/pointStore";
 import configStore from "../models/configStore";
 import createFilterDropdown from "./createFilterDropdown";
 import scopeDropdownStore from "../models/scopeDropdownStore";
-
+import memoryStore from "../models/memoryStore";
 async function createScopesDropdown() {
   const CustomLayerControl = L.Control.extend({
     options: {
@@ -32,7 +32,8 @@ async function createScopesDropdown() {
       return scopes;
     },
     isEmpty() {
-      return this.scopes().length < 2;
+      const isEmpty = this.scopes().length === 0;
+      return isEmpty;
     },
     activeScope() {
       return geoStore.getState().selectedScope;
@@ -77,7 +78,6 @@ async function createScopesDropdown() {
       if (selectedPoint) {
         this.title.textContent = i18n["decidim_geo.filters.back"];
         this.title.onclick = () => {
-          selectedPoint.panToMarker(16);
           geoStore.getState().goBack();
         };
         return;
@@ -115,6 +115,8 @@ async function createScopesDropdown() {
         const resetItem = createGeoScopeMenuItem({
           label: i18n["decidim_geo.scopes.all"],
           onClick: () => {
+            const { popState } = memoryStore.getState();
+            popState();
             this.toggleOpen();
             geoStore.getState().selectScope(undefined);
             geoStore.getState().selectPoint(undefined);

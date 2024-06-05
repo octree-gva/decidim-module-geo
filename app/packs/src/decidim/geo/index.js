@@ -4,6 +4,7 @@ import configStore from "./models/configStore";
 import pointStore from "./models/pointStore";
 import filterStore from "./models/filterStore";
 import geoStore from "./models/geoStore";
+import memoryStore from "./models/memoryStore";
 import dropdownFilterStore from "./models/dropdownFilterStore";
 
 import { initMap, createDrawerActions, createDrawer } from "./ui";
@@ -15,7 +16,8 @@ window.debug.stores = () => ({
   filter: filterStore.getState(),
   geo: geoStore.getState(),
   point: pointStore.getState(),
-  dropdownFilter: dropdownFilterStore.getState()
+  dropdownFilter: dropdownFilterStore.getState(),
+  memoryStore: memoryStore.getState()
 });
 
 async function main() {
@@ -23,6 +25,7 @@ async function main() {
     // Parse and save server-side information.
     bootstrap();
     const { addProcess, removeProcess } = pointStore.getState();
+    const { moveHandler, setSavedPosition } = memoryStore.getState();
     addProcess();
     // Create Leaflet map
     const map = await initMap();
@@ -34,6 +37,8 @@ async function main() {
     map.addLayer(pointsLayer);
     map.whenReady(() => {
       configStore.getState().setReady();
+      // Save the first loaded position.
+      setTimeout(setSavedPosition, 320);
     });
     pointStore.subscribe(
       (state) => [!!state.isLoading, state.getFilteredPoints, state._lastResponse],
@@ -41,6 +46,7 @@ async function main() {
         if (isLoading) return;
         const { space_ids: spaceIds, map } = configStore.getState();
         const { selectedPoint, selectedScope } = geoStore.getState();
+        const { savedCenter } = memoryStore.getState();
         pointsLayer.clearLayers();
         let boudingBoxFilter = () => true;
         if (!selectedPoint && !selectedScope && spaceIds) {
@@ -65,7 +71,7 @@ async function main() {
               : idealBoundingBox,
             { updateWhenZooming: true }
           );
-          if (boundingBox && !selectedScope && !selectedPoint) {
+          if (!savedCenter && boundingBox && !selectedScope && !selectedPoint) {
             map.fitBounds(boundingBox.getBounds(), { padding: [64, 64] });
           }
         }
@@ -82,6 +88,8 @@ async function main() {
     clearCache();
     await pointsForFilters(filterStore.getState().defaultFilters);
     removeProcess();
+
+    map.on("moveend", moveHandler);
   } catch (e) {
     console.error(e);
     const { map, mapID } = configStore.getState();
