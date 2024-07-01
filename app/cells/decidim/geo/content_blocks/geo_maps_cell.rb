@@ -64,6 +64,19 @@ module Decidim
           )
         end
 
+        def insert_map_mobile_link
+          content_tag(
+            :div,
+            map_link,
+            id: "DecidimGeoMobile",
+            class: ["js-decidimgeo", "decidimgeo__map-mobile-link"]
+          )
+        end
+
+        def map_link
+          content_tag(:a, "<i class='fas fa-map-marked-alt'></i> #{I18n.t("decidim.geo.mobile.open")}", class: ["js-decidimgeo", "map-link", "button", "secondary", "large"])
+        end
+
         def geo_i18n
           supported_models = ::Decidim::Geo.config.supported_filters.map do |filter|
             filter.constantize.new(self).klass
