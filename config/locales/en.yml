@@ -75,6 +75,8 @@ en:
       scopes:
         dropdown: "Scopes"
         all: "All Scopes"
+      mobile:
+        open: "Open Map"
       filters:
         back: "Back"
         button: "Filters"

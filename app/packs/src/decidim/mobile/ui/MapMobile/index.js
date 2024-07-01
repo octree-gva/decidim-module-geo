@@ -1,0 +1,1 @@
+export { default as mapMobile } from "./mapMobile.js";
