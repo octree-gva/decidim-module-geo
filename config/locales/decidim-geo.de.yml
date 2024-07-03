@@ -1,0 +1,111 @@
+---
+de:
+  activemodel:
+    attributes:
+      assembly:
+        decidim_geo_space_address: Address
+  decidim:
+    assemblies:
+      admin:
+        assemblies:
+          form:
+            decidim_geo_space_address: Fisical Address
+            decidim_geo_space_address_help: If the Assembly has a fisical address, fill this field with its address.
+      show:
+        decidim_geo_space_location: Address
+    participatory_processes:
+      admin:
+        participatory_processes:
+          form:
+            decidim_geo_space_address: Fisical Address
+            decidim_geo_space_address_help: If the Process has a fisical address, fill this field with its address.
+      show:
+        decidim_geo_space_address: Address
+    geo:
+      admin:
+        geo_configs:
+          map_config_title: Map Configurations
+          spaces_config_title: Participatory Spaces Configurations
+          only_assemblies: Display only assemblies in Assemblies
+          only_processes: Display only processes in Processes
+          index:
+            title: Configurations
+            save: Save
+          edit:
+            title: Configurations
+            save: Save
+          fields:
+            zoom: Zoom
+            longitude: Longitude
+            latitude: Latitude
+            tile: Tile
+          actions:
+            update:
+              success: Configurations Updated
+        shapefiles:
+          title: Shapefiles
+          new:
+            title: Upload Shapefile
+            create: Create
+          actions:
+            new_shapefile: New Shapefile
+            new:
+              attachment_legend: Put your zip file here
+            create:
+              success: File uploaded
+              invalid: File upload failed
+          fields:
+            title: Name
+            url: URL
+            file_name: Filename
+            created_at: Created at
+            description: Description
+            actions: Actions
+          form:
+            attachment_legend: Upload shapefile compacted as a zip file
+            attachment_format: Shapefile has to be in WGS84 Datum
+            attachment_max_size: Max size - 10 MB
+            support_shape_overlaping: Overlapping shapes are not currently supported
+      content_blocks:
+        name: Geo Maps
+        fields:
+          zoom: Zoom
+          lng: Longitude
+          lat: Latitude
+      scopes:
+        dropdown: "Scopes"
+        all: "All Scopes"
+      mobile:
+        open: "Open Map"
+      filters:
+        back: "Back"
+        button: "Filters"
+        reset_button: "Reset"
+        apply_button: "Apply"
+        geo:
+          label: Show
+          all: All
+          only_geoencoded: "Mapped activity only"
+          only_virtual: "Other activity only"
+        time:
+          label: "Filter By Time"
+          all: "All"
+          only_past: "Past"
+          only_active: "Active"
+          only_future: "Future"
+        type:
+          label: "Filter By Type"
+          all: "All"
+          only_processes: "Processes"
+          only_assemblies: "Assemblies"
+          only_proposals: "Proposals"
+          only_meetings: "Meetings"
+    components:
+      geo:
+        name: Geo
+        settings:
+          global:
+            announcement: Announcement
+          step:
+            announcement: Announcement
+
