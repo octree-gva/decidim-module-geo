@@ -1,52 +1,56 @@
 ---
 de:
+  activemodel:
+    attributes:
+      assembly:
+        decidim_geo_space_address: Adresse
   decidim:
     assemblies:
       admin:
         assemblies:
           form:
-            address: Adresse
-            address_help: Wenn die Versammlung eine physische Adresse hat, füllen Sie dieses Feld mit ihrer Adresse aus.
+            decidim_geo_space_address: Adresse
+            decidim_geo_space_address_help: Falls das Gremium an einen Standort tätig ist, fülle hier seine Adresse ein.
       show:
-        address: Adresse
+        decidim_geo_space_location: Adresse
     participatory_processes:
       admin:
         participatory_processes:
           form:
-            geocoding: Adresse
-            address_help: Wenn der Prozess eine physische Adresse hat, füllen Sie dieses Feld mit seiner Adresse aus.
+            decidim_geo_space_address: Adresse
+            decidim_geo_space_address_help: Fallls der Prozess an einem Standort stattfindet, fülle hier seine Adresse ein.
       show:
-        address: Adresse
-    geo: 
+        decidim_geo_space_address: Adresse
+    geo:
       admin:
-        geo_configs: 
+        geo_configs:
           map_config_title: Kartenkonfigurationen
-          spaces_config_title: Konfigurationen für partizipative Räume
-          only_assemblies: Zeige nur Versammlungen in den Versammlungen
-          only_processes: Zeige nur Prozesse in den Prozessen
-          index: 
-            title: Konfigurationen
+          spaces_config_title: Einstellungen für partizipative Bereiche
+          only_assemblies: Ausschliesslich Gremien auf der Gremienübersichtsseite anzeigen	
+          only_processes: Ausschliesslich Prozesse auf der Prozessübersichtsseite anzeigen	
+          index:
+            title: Einstellungen
             save: Speichern
           edit:
             title: Konfigurationen
             save: Speichern
           fields:
-            zoom: Zoom
+            zoom: Zoomstufe
             longitude: Längengrad
             latitude: Breitengrad
-            tile: Tile 
+            tile: Kachel
           actions:
             update:
-              success: Konfigurationen aktualisiert
+              success: Einstellungen aktualisiert
         shapefiles:
-          title: Shapefiles
+          title: Shapefile
           new:
             title: Shapefile hochladen
             create: Erstellen
           actions:
             new_shapefile: Neues Shapefile
             new:
-              attachment_legend: Legen Sie Ihre Zip-Datei hier ab
+              attachment_legend: Zip-Datei hier ablegen
             create:
               success: Datei hochgeladen
               invalid: Datei-Upload fehlgeschlagen
@@ -58,23 +62,25 @@ de:
             description: Beschreibung
             actions: Aktionen
           form:
-            attachment_legend: Laden Sie Shapefile komprimiert als Zip-Datei hoch
-            attachment_format: Shapefile muss im WGS84-Datum sein
+            attachment_legend: Laden Sie das Shapefile komprimiert als Zip-Datei hoch
+            attachment_format: Shapefile muss im WGS84-Referenzsystem sein
             attachment_max_size: Maximale Größe - 10 MB
-            support_shape_overlaping: Überlappende Formen werden derzeit nicht unterstützt
+            support_shape_overlaping: Überlappende Topologien werden derzeit nicht unterstützt
       content_blocks:
         name: Geo-Karten
         fields:
-          zoom: Zoom
+          zoom: Zoomstufe
           lng: Längengrad
           lat: Breitengrad
       scopes:
         dropdown: "Bereiche"
         all: "Alle Bereiche"
+      mobile:
+        open: "Open Map"
       filters:
         back: "Zurück"
         button: "Filter"
-        reset_button: "Wiedereinsetzen"
+        reset_button: "Zurücksetzen"
         apply_button: "Anwenden"
         geo:
           label: Zeigen
@@ -82,7 +88,7 @@ de:
           only_geoencoded: "Nur kartierte Aktivität"
           only_virtual: "Nur andere Aktivität"
         time:
-          label: "Filtern nach Zeit"
+          label: "By Time"
           all: "Alle"
           only_past: "Vergangen"
           only_active: "Aktiv"
@@ -91,9 +97,9 @@ de:
           label: "Filtern nach Typ"
           all: "Alle"
           only_processes: "Prozesse"
-          only_assemblies: "Versammlungen"
+          only_assemblies: "Gremien"
           only_proposals: "Vorschläge"
-          only_meetings: "Treffen"
+          only_meetings: "Veranstaltungen"
     components:
       geo:
         name: Geo
@@ -101,4 +107,5 @@ de:
           global:
             announcement: Ankündigung
           step:
-            announcement: Ankündigung      
+            announcement: Ankündigung
+
