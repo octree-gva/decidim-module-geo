@@ -22,8 +22,15 @@ publish_gem:
 upload-translations:
   stage: translations
   image: node:16.18
-  only: 
-    - main
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - if: '$CI_COMMIT_TAG'
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
   script:
     - npm install -g @crowdin/cli
     - crowdin upload --no-progress
@@ -42,13 +49,11 @@ mr-translations:
       when: always
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: manual
-  needs: 
-    - "upload-translations"
   before_script:
     - apt-get update && apt-get install -y git
   script:
-    - git config --global user.email "mr-translations"
-    - git config --global user.name "$GIT_USERNAME"
+    - export BRANCH_NAME="i18n/$(date +%Y%m%d%H%M%S)"
+    - export ORIGIN="crowndin_$(date +%Y%m%d%H%M%S)"
     - npm install -g @crowdin/cli
     - crowdin download --no-progress
     - git checkout -b $BRANCH_NAME
@@ -57,8 +62,8 @@ mr-translations:
         echo "Nothing to commit. Aborting.";
         exit 0;
       fi
-    - export BRANCH_NAME="i18n/$(date +%Y%m%d%H%M%S)"
-    - export ORIGIN="crowndin_$(date +%Y%m%d%H%M%S)"
+    - git config --global user.email "mr-translations"
+    - git config --global user.name "$GIT_USERNAME"
     - echo "add $ORIGIN=https://$GIT_USERNAME:$ACCESS_TOKEN@git.octree.ch/decidim/decidim-module-geo.git"
     - git remote add $ORIGIN https://$GIT_USERNAME:$ACCESS_TOKEN@git.octree.ch/decidim/decidim-module-geo.git
     - git commit -m "Update translations"
