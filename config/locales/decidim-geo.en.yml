@@ -88,7 +88,7 @@ en:
           only_geoencoded: "Mapped activity only"
           only_virtual: "Other activity only"
         time:
-          label: "Filter By Time"
+          label: "By Time"
           all: "All"
           only_past: "Past"
           only_active: "Active"
