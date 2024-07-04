@@ -1,30 +1,34 @@
 ---
 fr:
+  activemodel:
+    attributes:
+      assembly:
+        decidim_geo_space_address: Adresse
   decidim:
     assemblies:
       admin:
         assemblies:
           form:
-            address: Adresse
-            address_help: Si l'Assemblée a une adresse physique, remplissez ce champ avec son adresse.
+            decidim_geo_space_address: Adresse physique
+            decidim_geo_space_address_help: Si l'assemblée possède une adresse physique, remplissez ce champ avec son adresse.
       show:
-        address: Adresse
+        decidim_geo_space_location: Adresse
     participatory_processes:
       admin:
         participatory_processes:
           form:
-            geocoding: Adresse
-            address_help: Si le Processus a une adresse physique, remplissez ce champ avec son adresse.
+            decidim_geo_space_address: Adresse physique
+            decidim_geo_space_address_help: Si le processus a une adresse physique, remplissez ce champ avec son adresse.
       show:
-        address: Adresse
-    geo: 
+        decidim_geo_space_address: Adresse
+    geo:
       admin:
-        geo_configs: 
-          map_config_title: Configurations de la Carte
+        geo_configs:
+          map_config_title: Configurations de la carte
           spaces_config_title: Configurations des Espaces Participatifs
           only_assemblies: Afficher uniquement les assemblées dans Assemblées
           only_processes: Afficher uniquement les processus dans Processus
-          index: 
+          index:
             title: Configurations
             save: Sauvegarder
           edit:
@@ -71,6 +75,8 @@ fr:
       scopes:
         dropdown: "Régions"
         all: "Toutes les régions"
+      mobile:
+        open: "Ouvrir la carte"
       filters:
         back: "Retour"
         button: "Filtrer"
@@ -82,7 +88,7 @@ fr:
           only_geoencoded: "Éléments localisés"
           only_virtual: "Autres éléments"
         time:
-          label: "Temps"
+          label: "Par temps"
           all: "Tout"
           only_past: "Passé"
           only_active: "Actif"
@@ -102,3 +108,4 @@ fr:
             announcement: Annonce
           step:
             announcement: Annonce
+
