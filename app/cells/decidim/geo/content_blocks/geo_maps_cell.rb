@@ -35,6 +35,7 @@ module Decidim
           id = @options[:id] || "HomePage"
           config = {
             locale: current_locale,
+            default_locale: default_locale,
             space_ids: @options[:scopes] || [],
             selected_component: current_component || nil,
             selected_point: current_component? && params[:id] ? params[:id] : nil,
@@ -113,7 +114,9 @@ module Decidim
         def current_locale
           I18n.locale.to_s
         end
-
+        def default_locale
+          current_organization.default_locale
+        end
         def current_component
           return request.env["decidim.current_component"].id if current_component?
 

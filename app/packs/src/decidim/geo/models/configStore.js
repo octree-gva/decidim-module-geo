@@ -1,12 +1,12 @@
 import { createStore } from "zustand/vanilla";
 import { subscribeWithSelector } from "zustand/middleware";
 import filterStore from "./filterStore";
-import geoStore from "./geoStore";
 import dropdownFilterStore from "./dropdownFilterStore";
 
 const store = createStore(
   subscribeWithSelector((set) => ({
     locale: "en",
+    defaultLocale: "en",
     selected_component: undefined,
     selected_point: undefined,
     space_ids: [],
@@ -20,6 +20,7 @@ const store = createStore(
     setConfig: (mapConfig) => {
       set(() => ({
         locale: mapConfig.locale,
+        defaultLocale: mapConfig.default_locale,
         selected_component: mapConfig.selected_component,
         space_ids: mapConfig.space_ids,
         selected_point: mapConfig.selected_point,

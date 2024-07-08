@@ -33,11 +33,12 @@ const store = createStore(
       const { points: fetchedPoints } = store.getState();
       if (fetchedPoints.length > 0) return;
       const locale = configStore.getState().locale;
+      const defaultLocale = configStore.getState().defaultLocale;
       set(({ isLoading }) => ({ isLoading: isLoading + 1 }));
 
       const data = await getGeoDatasource(
         {
-          variables: { filters: filters, locale: locale }
+          variables: { filters, locale, defaultLocale }
         },
         true
       );

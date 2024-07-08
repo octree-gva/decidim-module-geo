@@ -28,7 +28,7 @@ const meetings = (container, node) => {
     "decidimGeo__drawer__listCardTitle",
     container
   );
-  infoTitle.textContent += node.title.translation;
+  infoTitle.textContent = node.title.translation || node.title.defaultTranslation;
   const infoDescription = L.DomUtil.create(
     "div",
     "decidimGeo__drawer__listCardDate",
@@ -67,7 +67,7 @@ const meetings = (container, node) => {
       "decidimGeo__drawer__listCardDescription decidimGeo__drawer__listCardDescription--large decidimGeo__drawer__listCardDescription--meetings",
       container
     );
-    infoDescription.textContent = _.truncate(node.description.translation, {
+    infoDescription.textContent = _.truncate(node.description.translation || node.description.defaultTranslation, {
       length: 2500
     });
   }

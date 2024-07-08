@@ -1,5 +1,5 @@
 export const geoDatasource = `
-  query geoDatasourceQuery ($locale: String!, $filters: [GeoDatasourceFilter!], $after: String) {
+  query geoDatasourceQuery ($defaultLocale: String!, $locale: String!, $filters: [GeoDatasourceFilter!], $after: String) {
     geoDatasource(filters: $filters, locale: $locale, after: $after){
       pageInfo {
         hasPreviousPage
@@ -18,12 +18,15 @@ export const geoDatasource = `
         endTime
         title{
           translation(locale: $locale)
+          defaultTranslation: translation(locale: $defaultLocale)
         }
         shortDescription {
           translation(locale: $locale)
+          defaultTranslation: translation(locale: $defaultLocale)
         }
         description {
           translation(locale: $locale)
+          defaultTranslation: translation(locale: $defaultLocale)
         }
         bannerImage
         coordinates{
@@ -33,7 +36,8 @@ export const geoDatasource = `
         scope {
           id
           name {
-            translation(locale: "en")
+            translation(locale: $locale)
+            defaultTranslation: translation(locale: $defaultLocale)
           }
         }
       }
@@ -65,11 +69,12 @@ export const geoConfig = `{
 }`;
 
 export const geoScope = `
-  query geoScopeQuery ($locale: String!) {
+  query geoScopeQuery ($defaultLocale: String!, $locale: String!) {
     geoScope { 
       id
       name	{ 
-        translation(locale: $locale) 
+        translation(locale: $locale)
+        defaultTranslation: translation(locale: $defaultLocale)
       }
       geom
     }
