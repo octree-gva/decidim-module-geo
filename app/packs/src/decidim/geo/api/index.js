@@ -10,6 +10,7 @@ const makeQuery =
     const variables = { ...(params.variables || {}), locale: locale };
     const queryParams = { ...params, variables };
     const response = await getDecidimData(queries[queryName], queryParams);
+    if(!response?.data) return {nodes: []};
     return response.data[_responseKey];
   };
 

@@ -19,7 +19,7 @@
   font-size: 13px;
   line-height: 16px;
   font-weight: bold;
-  color: var(--primary);
+  color: var(--primary) !important;
   cursor: pointer;
 }
 
@@ -130,8 +130,14 @@
     top: 7px;
   }
 
-  &--button:after {
+  &--button:after,
+  &--alone:after
+   {
     display: none;
+  }
+  &--alone {
+    opacity: 0.6;
+    cursor: unset;
   }
   &--closed {
     &:after {
@@ -140,6 +146,7 @@
   }
   &--empty {
     opacity: 0.6;
+    cursor: unset;
   }
 }
 

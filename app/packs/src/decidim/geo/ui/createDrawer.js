@@ -70,8 +70,10 @@ async function createSidebar() {
         const scopes = space_ids.map((scope) => scopeForId(scope)).filter(Boolean);
         if (scopes.length === 1) {
           const scope = scopeForId(scopes[0]);
-          selectScope(scope);
-          scope.repaint();
+          if(scope){
+            selectScope(scope);
+            scope.repaint();
+          }
         } else {
           selectScope(undefined);
         }

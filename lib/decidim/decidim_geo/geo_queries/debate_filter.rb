@@ -16,13 +16,8 @@ module Decidim
         private
 
         def scoped_by_geoencoded(debates)
-          if !geoencode_filtered?
-            debates
-          elsif only_geoencoded?
-            debates.where.not(latitude: nil)
-          elsif exclude_geoencoded?
-            debates.where(latitude: nil)
-          end
+          return [] if only_geoencoded?
+          debates
         end
 
         ##
