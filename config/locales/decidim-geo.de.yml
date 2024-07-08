@@ -100,6 +100,7 @@ de:
           only_assemblies: "Gremien"
           only_proposals: "Vorschläge"
           only_meetings: "Veranstaltungen"
+          only_debates: "Debates"
     components:
       geo:
         name: Geo
