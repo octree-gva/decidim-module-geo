@@ -1,11 +1,22 @@
 import { createStore } from "zustand/vanilla";
 import configStore from "./configStore";
-import { getGeoDatasource, getGeoScopes } from "../api";
+
+import { getGeoDatasource, getGeoScopes, getFirstGeoDatasource} from "../api";
 import GeoDatasourceNode from "./geoDatasourceNode";
 import GeoScope from "./geoScope";
 import { subscribeWithSelector } from "zustand/middleware";
 import _ from "lodash";
 
+
+const mapNodeToPoint = (node) => {
+  const point = new GeoDatasourceNode({
+    node
+  });
+  if (point.init()) {
+    return point;
+  }
+  return undefined;
+}
 const store = createStore(
   subscribeWithSelector((set, get) => ({
     /**
@@ -35,29 +46,15 @@ const store = createStore(
       const locale = configStore.getState().locale;
       const defaultLocale = configStore.getState().defaultLocale;
       set(({ isLoading }) => ({ isLoading: isLoading + 1 }));
-
-      const data = await getGeoDatasource(
+      const firstData =await getFirstGeoDatasource(
         {
           variables: { filters, locale, defaultLocale }
         },
         true
       );
-      const points = data.nodes
-        .map((node) => {
-          const point = new GeoDatasourceNode({
-            node
-          });
-          if (point.init()) {
-            return point;
-          }
-          return undefined;
-        })
-        .filter(Boolean);
 
-      set(() => ({
-        points: points
-      }));
-
+      set(() => ({points: firstData.nodes.map(mapNodeToPoint).filter(Boolean)}))
+    
       const scopes = await getGeoScopes({
         variables: { locale: locale }
       });
@@ -78,8 +75,21 @@ const store = createStore(
       set(({ isLoading }) => ({
         isLoading: isLoading - 1
       }));
+
+        // Fetch other data after initialization
+      if(firstData.hasMore){
+        const data = await getGeoDatasource(
+          {
+            variables: { filters: filters, locale: locale, after: firstData.after }
+          },
+          true
+        );
+        const newPoints = data.nodes.map(mapNodeToPoint).filter(Boolean);
+        set(({points}) => ({points: points.concat(newPoints)}))
+        
+      }
     },
-    pointsForFilters: async (filters = []) => {
+    pointsForFilters: async (filters = [], forceRefresh=false) => {
       const locale = configStore.getState().locale;
       const {
         points,
@@ -88,7 +98,7 @@ const store = createStore(
       } = store.getState();
       const cacheKey = JSON.stringify(filters);
       // cache
-      if (cacheKey === lastFilter) {
+      if (cacheKey === lastFilter && !forceRefresh) {
         return lastResponse;
       }
 
