@@ -33,5 +33,9 @@ module Decidim
         "Decidim::Geo::Api::MeetingFilter"
       ]
     end
+
+    config_accessor :experimental_features do 
+      false
+    end
   end
 end
