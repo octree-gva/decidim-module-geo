@@ -141,7 +141,11 @@ class FilterDropdown {
 
   applyValues(filters) {
     if (!filters) {
-      throw new Error("Filters missing");
+      filters = {
+        GeoShowFilter: "all",
+        GeoTimeFilter: "all",
+        GeoType: "all"
+      }
     }
     const { setFilters, activeFilters, defaultFilters } = filterStore.getState();
     const newFilters = activeFilters.filter((filter) => {

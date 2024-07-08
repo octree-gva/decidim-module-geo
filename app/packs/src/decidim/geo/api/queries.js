@@ -1,6 +1,6 @@
 export const geoDatasource = `
   query geoDatasourceQuery ($defaultLocale: String!, $locale: String!, $filters: [GeoDatasourceFilter!], $after: String) {
-    geoDatasource(filters: $filters, locale: $locale, after: $after){
+    geoDatasource(filters: $filters, locale: $locale, after: $after, first: 15){
       pageInfo {
         hasPreviousPage
         startCursor

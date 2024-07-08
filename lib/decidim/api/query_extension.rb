@@ -46,7 +46,6 @@ module Decidim
       def geo_datasource(**kwargs)
         locale = kwargs[:locale] || I18n.locale
         return nofilter_datasource(locale) if kwargs[:filters].blank?
-
         ::Decidim::Geo::Api::GeoQuery.new(
           current_organization,
           current_user,
