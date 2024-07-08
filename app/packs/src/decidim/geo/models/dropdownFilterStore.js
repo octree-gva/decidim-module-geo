@@ -2,7 +2,7 @@ import { createStore } from "zustand/vanilla";
 import { subscribeWithSelector } from "zustand/middleware";
 import scopeDropdownStore from "./scopeDropdownStore";
 const store = createStore(
-  subscribeWithSelector((set) => ({
+  subscribeWithSelector((set, get) => ({
     isOpen: false,
     defaultFilters: {
       GeoShowFilter: "all",
@@ -15,13 +15,15 @@ const store = createStore(
       GeoType: "all"
     },
     nextFilters: undefined,
-    filterCount: () => {
+
+
+    filterCount() {
       const { selectedFilters, defaultFilters } = store.getState();
       return Object.entries(selectedFilters).filter(([key, value]) => {
         return defaultFilters[key] !== value;
       }).length;
     },
-    setNextFilter: (name, value) => {
+    setNextFilter(name, value) {
       set((state) => ({
         nextFilters: {
           ...state.nextFilters,
@@ -29,19 +31,19 @@ const store = createStore(
         }
       }));
     },
-    applyNextFilters: () => {
+    applyNextFilters() {
       set(({ nextFilters }) => (nextFilters ? { selectedFilters: nextFilters } : {}));
     },
-    resetFilters: () => {
+    resetFilters()  {
       set(({ defaultFilters }) => ({
         selectedFilters: defaultFilters,
         nextFilters: defaultFilters
       }));
     },
-    setDefaultFilters: (newFilters) => {
+    setDefaultFilters(newFilters) {
       set(() => ({ defaultFilters: newFilters, selectedFilters: newFilters }));
     },
-    setFilter: (name, value) => {
+    setFilter(name, value) {
       set((state) => ({
         selectedFilters: {
           ...state.selectedFilters,
@@ -49,8 +51,8 @@ const store = createStore(
         }
       }));
     },
-    toggleOpen: () => set((state) => ({ isOpen: !state.isOpen })),
-    close: () => set(() => ({ isOpen: false }))
+    toggleOpen() { set((state) => ({ isOpen: !state.isOpen }))},
+    close() {set(() => ({ isOpen: false }))}
   }))
 );
 

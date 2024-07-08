@@ -7,7 +7,7 @@ import dropdownFilterStore from "./dropdownFilterStore";
 
 const sortingIteratee = (filter) => JSON.stringify(filter);
 const store = createStore(
-  subscribeWithSelector((set) => ({
+  subscribeWithSelector((set, get) => ({
     defaultFilters: [],
     activeFilters: [],
     setDefaultFilters: (filters = []) => {
@@ -50,6 +50,24 @@ const store = createStore(
         activeFilters: state.defaultFilters
       }));
     },
+    isProcessOnly() {
+      const {defaultFilters} = get();
+      const resourceFilter = defaultFilters.find(
+        ({ resourceTypeFilter = undefined }) => resourceTypeFilter
+      );
+      if(!resourceFilter) return false;
+      const {resourceType} = resourceFilter.resourceTypeFilter;
+      return resourceType  === "Decidim::ParticipatoryProcess"
+    },
+    isAssemblyOnly() {
+      const {defaultFilters} = get();
+      const resourceFilter = defaultFilters.find(
+        ({ resourceTypeFilter = undefined }) => resourceTypeFilter
+      );
+      if(!resourceFilter) return false;
+      const {resourceType} = resourceFilter.resourceTypeFilter;
+      return resourceType  === "Decidim::Assembly"
+    },
     toFilterOptions: (name, filters) => {
       const { defaultFilters } = dropdownFilterStore.getState();
       switch (name) {
@@ -81,6 +99,7 @@ const store = createStore(
           if (resourceType === "Decidim::Assembly") return "only_assemblies";
           if (resourceType === "Decidim::Proposals::Proposal") return "only_proposals";
           if (resourceType === "Decidim::Meetings::Meeting") return "only_meetings";
+          if (resourceType === "Decidim::Debates::Debate") return "only_debates";
           if (resourceType === "Decidim::ParticipatoryProcess") return "only_processes";
           if (resourceType === "all") return "all";
           return defaultFilters.GeoType;

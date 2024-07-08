@@ -92,6 +92,7 @@ class FilterDropdown {
     const { toFilterOptions, defaultFilters } = filterStore.getState();
     return toFilterOptions(name, defaultFilters);
   }
+
   field(label, name, options, disabledOptions = []) {
     const { nextFilters } = dropdownFilterStore.getState();
     const selectedValue =
@@ -210,6 +211,11 @@ class FilterDropdown {
           resourceTypeFilter: { resourceType: "Decidim::Meetings::Meeting" }
         });
         break;
+      case "only_debates":
+        newFilters.push({
+          resourceTypeFilter: { resourceType: "Decidim::Debates::Debate" }
+        });
+        break;
     }
     setFilters(newFilters);
   }
@@ -217,6 +223,7 @@ class FilterDropdown {
   geoFields(points) {
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
+    _
     const hasGeoLocated = points.find((p) => p.isGeoLocated());
     const hasPhysical = points.find((p) => !p.isGeoLocated());
     return this.field(
@@ -246,17 +253,25 @@ class FilterDropdown {
   }
 
   typeFields(points) {
+    const {isProcessOnly, isAssemblyOnly} = filterStore.getState()
+
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
     const hasMeetings = points.find((p) => p.type === "Decidim::Meetings::Meeting");
     const hasProposals = points.find((p) => p.type === "Decidim::Proposals::Proposal");
     const hasAssemblies = points.find((p) => p.type === "Decidim::Assembly");
     const hasProcesses = points.find((p) => p.type === "Decidim::ParticipatoryProcess");
+    const hasDebates = points.find((p) => p.type === "Decidim::Debates::Debate");
     const disabledOptions = [];
     if (!hasMeetings) disabledOptions.push("only_meetings");
     if (!hasProposals) disabledOptions.push("only_proposals");
     if (!hasAssemblies) disabledOptions.push("only_assemblies");
     if (!hasProcesses) disabledOptions.push("only_processes");
+    if (!hasDebates) disabledOptions.push("only_debates");
+
+    if(isProcessOnly() || isAssemblyOnly())
+      disabledOptions.push("all")
+
     this.field(
       i18n[`${i18nPrefix}.type.label`],
       "GeoType",
@@ -265,7 +280,8 @@ class FilterDropdown {
         [i18n[`${i18nPrefix}.type.only_processes`], "only_processes"],
         [i18n[`${i18nPrefix}.type.only_assemblies`], "only_assemblies"],
         [i18n[`${i18nPrefix}.type.only_proposals`], "only_proposals"],
-        [i18n[`${i18nPrefix}.type.only_meetings`], "only_meetings"]
+        [i18n[`${i18nPrefix}.type.only_meetings`], "only_meetings"],
+        [i18n[`${i18nPrefix}.type.only_debates`], "only_debates"]
       ],
       disabledOptions
     );
@@ -286,6 +302,7 @@ class FilterDropdown {
     ]);
     this.countBadge.textContent = badgeCount;
     this.title.className = createClasses("decidimGeo__filterDropdown__title", [
+      "button",
       this.isOpen() && "active"
     ]);
     this.titleContainer.className = createClasses(

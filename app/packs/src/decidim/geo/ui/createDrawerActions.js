@@ -28,12 +28,14 @@ async function createScopesDropdown() {
       const { scopeForId, scopes } = pointStore.getState();
       const { space_ids } = configStore.getState();
       if (space_ids.length > 0)
-        return space_ids.map((id) => scopeForId(id)).filter(Boolean);
-      return scopes;
+        return space_ids.map((id) => scopeForId(id)).filter(Boolean) || [];
+      return scopes || [];
     },
     isEmpty() {
-      const isEmpty = this.scopes().length === 0;
-      return isEmpty;
+      return this.scopes().length === 0;
+    },
+    hasOneOption() {
+      return this.scopes().length === 1;
     },
     activeScope() {
       return geoStore.getState().selectedScope;
@@ -76,17 +78,24 @@ async function createScopesDropdown() {
       const { selectedPoint } = geoStore.getState();
       const scopes = this.scopes();
       if (selectedPoint) {
+        this.title.className += " decidimGeo__scopesDropdown__list--select-state";
         this.title.textContent = i18n["decidim_geo.filters.back"];
         this.title.onclick = () => {
           geoStore.getState().goBack();
         };
         return;
-      } else if (scopes.length === 0) {
+      } 
+      if (scopes.length < 2) {
         this.title.textContent = i18n["decidim_geo.scopes.dropdown"];
-        this.title.className += " decidimGeo__scopesDropdown__list--disabled";
+        if(scopes.length === 0)
+          this.title.className += " decidimGeo__scopesDropdown__list--disabled";
+        else
+          this.title.className += " decidimGeo__scopesDropdown__list--alone";
         this.title.onclick = () => false;
         return;
       } else {
+        this.title.className += " decidimGeo__scopesDropdown__list--with-options";
+
         this.title.onclick = () => {
           this.toggleOpen();
           this.repaint();
@@ -138,7 +147,8 @@ async function createScopesDropdown() {
       this.title.className = createClasses("decidimGeo__scopesDropdown__title", [
         !isOpen && "closed",
         !selectedPoint && this.isEmpty() && "empty",
-        selectedPoint && "button"
+        selectedPoint && "button",
+        !selectedPoint && this.hasOneOption() && "alone",
       ]);
       this.dropDownOptions.className = createClasses("decidimGeo__scopesDropdown__list", [
         !isOpen && "closed",

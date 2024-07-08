@@ -104,7 +104,8 @@ module Decidim
             "decidim_geo.filters.type.only_processes": t("decidim.geo.filters.type.only_processes"),
             "decidim_geo.filters.type.only_assemblies": t("decidim.geo.filters.type.only_assemblies"),
             "decidim_geo.filters.type.only_proposals": t("decidim.geo.filters.type.only_proposals"),
-            "decidim_geo.filters.type.only_meetings": t("decidim.geo.filters.type.only_meetings")
+            "decidim_geo.filters.type.only_meetings": t("decidim.geo.filters.type.only_meetings"),
+            "decidim_geo.filters.type.only_debates": t("decidim.geo.filters.type.only_debates")
 
           }
         end

@@ -1,6 +1,5 @@
 import { createStore } from "zustand/vanilla";
 import configStore from "./configStore";
-import geoStore from "./geoStore";
 import { getGeoDatasource, getGeoScopes } from "../api";
 import GeoDatasourceNode from "./geoDatasourceNode";
 import GeoScope from "./geoScope";
@@ -8,7 +7,7 @@ import { subscribeWithSelector } from "zustand/middleware";
 import _ from "lodash";
 
 const store = createStore(
-  subscribeWithSelector((set) => ({
+  subscribeWithSelector((set, get) => ({
     /**
      * Data Points
      */
@@ -18,7 +17,7 @@ const store = createStore(
     _lastFilter: "",
     _lastResponse: [],
     scopeForId: (scopeId) => {
-      return store.getState().scopes.find(({ data }) => `${data.id}` === `${scopeId}`);
+      return get().scopes.find(({ data }) => `${data.id}` === `${scopeId}`);
     },
     clearCache: () => {
       set(() => ({ _lastFilter: "", _lastResponse: [] }));
@@ -61,7 +60,7 @@ const store = createStore(
       const scopes = await getGeoScopes({
         variables: { locale: locale }
       });
-      const geoScopes = scopes
+      const geoScopes = (scopes || [])
         .map((scope) => {
           const geoScope = new GeoScope({
             geoScope: scope
