@@ -14,7 +14,7 @@ const fallback = (container, node) => {
   }
 
   const infoType = L.DomUtil.create("div", "decidimGeo__drawer__listCardType", container);
-  infoType.textContent += i18n[node.type];
+  infoType.textContent = i18n[node.type];
   const notGeoEncodedIcon = L.DomUtil.create(
     "img",
     createClasses("decidimGeo__drawer__listCardIcon", [node.coordinates && "hidden"]),
@@ -27,7 +27,7 @@ const fallback = (container, node) => {
     "decidimGeo__drawer__listCardTitle",
     container
   );
-  infoTitle.textContent += node.title.translation;
+  infoTitle.textContent = node.title.translation || node.title.defaultTranslation;
   if (node.description) {
     const infoDescription = L.DomUtil.create(
       "div",

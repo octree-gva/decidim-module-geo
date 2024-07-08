@@ -24,7 +24,7 @@ const fallback = (node) => {
   notGeoEncodedIcon.src = images?.not_geolocated;
 
   const infoTitle = createDomElement("div", "decidimGeo__drawer__listCardTitle", info);
-  infoTitle.textContent += node.title.translation;
+  infoTitle.textContent = node.title.translation || node.title.defaultTranslation;
 
   if (node.shortDescription) {
     const infoDescription = createDomElement(
@@ -32,7 +32,7 @@ const fallback = (node) => {
       "decidimGeo__drawer__listCardDescription",
       info
     );
-    infoDescription.textContent += node.shortDescription.translation;
+    infoDescription.textContent = node.shortDescription.translation || node.shortDescription.defaultTranslation;
   }
 
   if (hasImage) {
