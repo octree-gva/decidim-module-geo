@@ -6,7 +6,9 @@
 
 <%= content_tag :div, "", id: "DecidimGeoContainer" do %>
   <%= insert_map %>
-  <%= insert_map_mobile_link %>
+  <% if Decidim::Geo.experimental_features %>
+    <%= insert_map_mobile_link %>
+  <% end %>
 <% end %>
 
 <%= javascript_pack_tag "decidim_geo_mobile" %>
