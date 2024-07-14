@@ -77,6 +77,8 @@ de:
         all: "Alle Bereiche"
       mobile:
         open: "Open Map"
+        open_fullscreen: "Open the map in fullscreen"
+        close_fullscreen: "Close Map"
       filters:
         back: "Zurück"
         button: "Filter"
