@@ -77,6 +77,8 @@ en:
         all: "All Scopes"
       mobile:
         open: "Open Map"
+        open_fullscreen: "Open the map in fullscreen"
+        close_fullscreen: "Close Map"
       filters:
         back: "Back"
         button: "Filters"

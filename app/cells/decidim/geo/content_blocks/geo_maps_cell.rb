@@ -6,7 +6,7 @@ module Decidim
       class GeoMapsCell < Decidim::ViewModel
         # delegate :current_user, to: :controller
         include Decidim::SanitizeHelper
-
+        include Decidim::LayoutHelper
         def show
           return "<!-- DecidimGeo: Map is empty -->".html_safe if hide_empty? && empty_map?
 
@@ -75,8 +75,13 @@ module Decidim
         end
 
         def map_link
-          content_tag(:a, "<i class='fas fa-map-marked-alt'></i> #{I18n.t("decidim.geo.mobile.open")}", class: ["js-decidimgeo", "map-link", "button", "secondary", "large"])
+          content_tag(:a, icon("map") + " #{I18n.t("decidim.geo.mobile.open")}", class: ["js-decidimgeo", "map-link", "button", "secondary", "large"])
         end
+
+        def insert_scopes_mobile
+          content_tag(:div, "", class: ["js-decidimgeo"])
+        end
+
 
         def geo_i18n
           supported_models = ::Decidim::Geo.config.supported_filters.map do |filter|
@@ -85,6 +90,8 @@ module Decidim
           geo_i18n = supported_models.to_h { |klass| [klass.name, klass.model_name.human] }
           geo_i18n = {
             **geo_i18n,
+            "decidim.geo.mobile.open_fullscreen": t("decidim.geo.mobile.open_fullscreen"),
+            "decidim.geo.mobile.close_fullscreen": t("decidim.geo.mobile.close_fullscreen"),
             "decidim_geo.scopes.all": t("decidim.geo.scopes.all"),
             "decidim_geo.scopes.dropdown": t("decidim.geo.scopes.dropdown"),
             "decidim_geo.filters.back": t("decidim.geo.filters.back"),

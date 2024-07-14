@@ -16,6 +16,8 @@ const store = createStore(
     mapID: "Generic",
     map_config: {},
     i18n: {},
+    isFullscreen: false,
+    setFullscreen: (fullscreen) => set({isFullscreen: !!fullscreen}),
     setReady: () => set({ mapReady: true }),
     setConfig: (mapConfig) => {
       set(() => ({

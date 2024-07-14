@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    decidim-decidim_geo (0.2.2)
+    decidim-decidim_geo (0.2.3)
       activerecord-postgis-adapter (>= 6.0)
       decidim-admin (>= 0.26, < 0.28)
       decidim-core (>= 0.26, < 0.28)
