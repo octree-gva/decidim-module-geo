@@ -6,6 +6,7 @@
     "graphql-ws": "^5.12.1",
     "leaflet": "1.9.2",
     "leaflet-svgicon": "0.0.2",
+    "leaflet.fullscreen": "^3.0.2",
     "leaflet.markercluster": "1.5.3",
     "polylabel": "^1.1.0",
     "shpjs": "4.0.4",

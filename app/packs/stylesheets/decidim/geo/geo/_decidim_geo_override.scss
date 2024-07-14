@@ -9,9 +9,12 @@ implementing BEM (https://getbem.com/introduction/) and remove !important rules*
   border: 0;
   margin-right: 0;
 }
-
+.leaflet-container {
+  font-family: "Source Sans Pro", Helvetica, Roboto, Arial, sans-serif !important;
+}
 .leaflet-control-zoom-in,
-.leaflet-control-zoom-out {
+.leaflet-control-zoom-out,
+.leaflet-control-zoom-fullscreen {
   box-sizing: content-box;
   border: grey solid 1px;
   border-bottom: grey solid 1px !important;
@@ -19,7 +22,6 @@ implementing BEM (https://getbem.com/introduction/) and remove !important rules*
   padding-inline: 2px;
   padding-bottom: 4px !important;
   border-radius: 2px;
-  margin-right: 10px;
 }
 .leaflet-container .leaflet-popup-tip {
   border-color: transparent;

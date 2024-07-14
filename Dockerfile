@@ -31,13 +31,15 @@ RUN bundle config set path "vendor" \
     && bundle config build.charlock_holmes --with-icu-dir=/usr/include \
     && apt-get upgrade -yq \
     && apt-get update -yq \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt install -y nodejs \
     && apt-get install -yq libgeos-dev \
     && apt-get clean \
     && apt-get autoremove -y \
     && rm -rf /usr/local/bundle/cache \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc /usr/share/man \
     && for x in `gem list --no-versions`; do gem uninstall $x -a -x -I; done \
-    && npm install -D webpack-dev-server \
+    && yarn add -D webpack-dev-server@4.15.1 \
     && cd /home/decidim/decidim_module_geo \
     && npm i \
     && npm i -g pm2

@@ -6,9 +6,9 @@ import filterStore from "./models/filterStore";
 import geoStore from "./models/geoStore";
 import memoryStore from "./models/memoryStore";
 import dropdownFilterStore from "./models/dropdownFilterStore";
-
 import { initMap, createDrawerActions, createDrawer } from "./ui";
 import bootstrap from "./bootstrap";
+import registerMobile from "./ui/mobile/registerMobile";
 
 window.debug = window.debug || {};
 window.debug.stores = () => ({
@@ -20,10 +20,12 @@ window.debug.stores = () => ({
   memoryStore: memoryStore.getState()
 });
 
-async function main() {
+async function displayMap(isFullscreen=false) {
   try {
     // Parse and save server-side information.
     bootstrap();
+    configStore.getState().setFullscreen(isFullscreen);
+
     const { addProcess, removeProcess } = pointStore.getState();
     const { moveHandler, setSavedPosition } = memoryStore.getState();
     addProcess();
@@ -35,10 +37,11 @@ async function main() {
     // any filter.
     const pointsLayer = L.layerGroup();
     map.addLayer(pointsLayer);
-    map.whenReady(() => {
-      configStore.getState().setReady();
+    map.whenReady(async () => {
       // Save the first loaded position.
-      setTimeout(setSavedPosition, 320);
+      await new Promise((resolve) => setTimeout(resolve, 120))
+      setSavedPosition();
+      configStore.getState().setReady();
     });
     pointStore.subscribe(
       (state) => [!!state.isLoading, state.getFilteredPoints, state._lastResponse],
@@ -106,4 +109,23 @@ async function main() {
   }
 }
 
+function main() {
+  var smallScreen = window.matchMedia("(max-width: 49.9988em)");
+  if (smallScreen.matches){
+    registerMobile();
+    document.querySelector('.js-decidimgeo.map-link').addEventListener('click', function() {
+      const {mapReady, setFullscreen} = configStore.getState();
+      if(mapReady){
+        setFullscreen(true)
+      }else{
+        displayMap(true)
+      }
+    });
+  }else{
+    displayMap();
+  }
+}
+
+window.addEventListener('load', function() {
 main();
+})
