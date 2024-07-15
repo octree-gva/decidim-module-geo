@@ -89,6 +89,7 @@ export default class GeoScope {
     const { map } = configStore.getState();
     this.markers_group = this.markersForScope();
     this.menuItem = createGeoScopeMenuItem({
+      scopeId: this.id,
       label: this.name,
       onClick: () => {
         scopeDropdownStore.getState().toggleOpen();

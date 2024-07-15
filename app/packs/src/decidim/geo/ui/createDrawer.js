@@ -8,11 +8,11 @@ import { meetings as meetingDetails, fallback as fallbackDetails } from "./Drawe
 
 const createSkeletonItem = () => L.DomUtil.create("li", "decidimGeo__drawer__listCard");
 
-async function createSidebar() {
+async function createSidebar(position) {
   const CustomLayerControl = L.Control.extend({
     options: {
       collapsed: false,
-      position: "topleft"
+      position: position
     },
 
     // View
@@ -70,7 +70,7 @@ async function createSidebar() {
         const scopes = space_ids.map((scope) => scopeForId(scope)).filter(Boolean);
         if (scopes.length === 1) {
           const scope = scopeForId(scopes[0]);
-          if(scope){
+          if (scope) {
             selectScope(scope);
             scope.repaint();
           }
@@ -136,7 +136,7 @@ async function createSidebar() {
       const { isLoading, points } = pointStore.getState();
       this.cardList = L.DomUtil.create(
         "ul",
-        createClasses("decidimGeo__drawer__list", [
+         createClasses("decidimGeo__drawer__list", [
           isLoading && "loading",
           this.isEmpty() && "empty"
         ])

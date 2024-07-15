@@ -32,7 +32,8 @@ const fallback = (node) => {
       "decidimGeo__drawer__listCardDescription",
       info
     );
-    infoDescription.textContent = node.shortDescription.translation || node.shortDescription.defaultTranslation;
+    infoDescription.textContent =
+      node.shortDescription.translation || node.shortDescription.defaultTranslation;
   }
 
   if (hasImage) {

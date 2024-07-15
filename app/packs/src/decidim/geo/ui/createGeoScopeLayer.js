@@ -1,7 +1,10 @@
 const createGeoScopeLayer = ({ geoScope, onClick }) => {
   geoScope.geom = {
     ...geoScope.geom,
-    properties: { id: geoScope.id, name: geoScope.name.translation || geoScope.name.defaultTranslation }
+    properties: {
+      id: geoScope.id,
+      name: geoScope.name.translation || geoScope.name.defaultTranslation
+    }
   };
   const layer = L.geoJSON(geoScope.geom, {
     style: {

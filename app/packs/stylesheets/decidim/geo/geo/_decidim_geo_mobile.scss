@@ -1,0 +1,210 @@
+/** Setup button to open the Map **/
+/** === **/
+.js-decidimgeo.decidimgeo__map-mobile-link {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: hsl(0, 0%, 94%);
+
+  @include breakpoint(medium down) {
+    display: flex;
+    height: 30vh;
+    min-height: 144px;
+  }
+  .map-link {
+    display: inline-flex;
+    align-items: center;
+  }
+  .map-link .icon.icon--map {
+    margin-right: 10px;
+    content: "";
+  }
+}
+
+.decidim__geo__container {
+  $edgeSliderHeight: 50vh;
+  .js-decidimgeo.decidimgeo__map {
+    display: none;
+    /* Toggle elements visibility for mobile */
+    /* === */
+    &.leaflet-pseudo-fullscreen {
+      display: flex !important;
+    }
+    .leaflet-control-zoom-fullscreen {
+      display: none !important;
+      @include breakpoint(medium down) {
+        display: block !important;
+      }
+    }
+    .decidimGeo__aside--open ~ .leaflet-bottom.leaflet-right .leaflet-control-zoom {
+      transform: translateY(calc((-1 * $edgeSliderHeight) + 64px));
+      transition: 0.3s;
+    }
+
+    @include breakpoint(medium down) {
+      .decidimGeo__scopesDropdown__heading,
+      .decidimGeo__filterDropdown__dropdown {
+        display: none;
+      }
+    }
+    /* Setup controls (zoom, fullscreen btn) */
+    /* === */
+    @include breakpoint(medium down) {
+      .leaflet-control-zoom {
+        margin-bottom: 104px;
+      }
+      .leaflet-control-container {
+        .leaflet-bar a {
+          border-color: #d9d9d9 !important;
+          box-sizing: border-box;
+          width: 40px;
+          height: 40px;
+          background-color: white;
+
+          &:hover {
+            opacity: 1;
+            cursor: pointer;
+            border-color: #d9d9d9 !important;
+            background-color: white;
+          }
+        }
+
+        a.leaflet-control-zoom-fullscreen {
+          border-radius: 4px !important;
+          box-shadow: 0px 2px 2px 0px #0000001f;
+          &:hover {
+            box-shadow: 0px 0px 0px 0px #0000001f;
+          }
+        }
+
+        .leaflet-control-attribution.leaflet-control {
+          top: 0;
+          left: 0;
+          right: 0;
+          font-size: 9px;
+          font-family: $header-font-family;
+
+          position: fixed;
+          a {
+            box-shadow: unset;
+            border: unset;
+            color: var(--primary);
+            font-size: 9px;
+            font-family: $header-font-family;
+          }
+        }
+        .leaflet-control-zoom-fullscreen {
+          display: flex !important;
+        }
+      }
+    }
+
+    /* Button to swipe up/down */
+    /* === */
+    .decidimGeo__aside {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: stretch;
+      cursor: pointer;
+      overflow: hidden;
+      width: 100vh;
+      &.decidimGeo__aside--open {
+        max-height: $edgeSliderHeight;
+      }
+      &.decidimGeo__aside--closed {
+        max-height: 64px;
+      }
+      transition: 0.3s;
+    }
+    .decidimGeo__edgeSwipper {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: white;
+      min-height: 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex: 0;
+    }
+    hr.decidimGeo__scopesDropdown_separator {
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      max-width: 60px;
+      margin: 0;
+      margin-top: 8px;
+      padding: 0;
+    }
+    /* resize map pane */
+    &[data-fill='truncated']{
+      transform: translateY(-1 * (100vh - $edgeSliderHeight));
+      min-height: 100vh + $edgeSliderHeight !important;
+    }
+
+    /* Horizontal scroll menu to select scopes*/
+    /* === */
+    @include breakpoint(medium down) {
+      .decidimGeo__scopesDropdown {
+        &,
+        &.leaflet-control,
+        &.decidimGeo__scopesDropdown--closed {
+          position: relative;
+          overflow-x: auto;
+          width: 100%;
+          min-height: 40px;
+
+          flex: 0;
+          min-height: 40px;
+          box-shadow: unset;
+          margin: 0 !important;
+          padding: 0;
+          display: flex;
+        }
+        &.decidimGeo__scopesDropdown--alone,
+        &.decidimGeo__scopesDropdown--hidden {
+          display: none;
+        }
+
+        .decidimGeo__scopesDropdown__list {
+          list-style: none;
+          padding: 0px;
+          margin: 0 !important;
+          display: flex;
+          height: 40px;
+
+          .decidimGeo__scopesDropdown__listItem {
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 13px;
+            line-height: 16px;
+            padding: 12px 8px;
+            margin: 0;
+            flex-shrink: 0; /* Prevent shrinking of the items */
+            color: #989898 !important;
+            text-transform: uppercase;
+            border-bottom: 4px solid transparent;
+          }
+          .decidimGeo__scopesDropdown__listItem--active {
+            color: var(--primary) !important;
+            border-bottom-color: var(--primary);
+          }
+        }
+      }
+    }
+
+    /** Drawer Swipper Styles **/
+    @include breakpoint(medium down) {
+      .decidimGeo__drawer__list {
+        width: 100%;
+        background: #e0e0e0;
+        margin: 0;
+        padding: 16px 16px 0 16px;
+        transform: translateY(0);
+      }
+      .decidimGeo__drawer__listCard:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}

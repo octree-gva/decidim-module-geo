@@ -1,5 +1,5 @@
 import configStore from "../models/configStore";
-import 'leaflet.fullscreen';
+import "leaflet.fullscreen";
 
 const initMap = async () => {
   const {
@@ -15,22 +15,23 @@ const initMap = async () => {
   });
 
   map.zoomControl.setPosition("bottomright");
-  
-  L.tileLayer(tile_layer, {
+
+  const tile = L.tileLayer(tile_layer, {
     maxZoom: 19,
     attribution:
       '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(map);
 
+  L.control
+    .fullscreen({
+      position: "topright",
+      title: i18n["decidim.geo.mobile.open_fullscreen"],
+      titleCancel: i18n["decidim.geo.mobile.close_fullscreen"],
+      forceSeparateButton: true,
+      forcePseudoFullscreen: true
+    })
+    .addTo(map);
 
-  L.control.fullscreen({
-    position: 'topright', 
-    title: i18n['decidim.geo.mobile.open_fullscreen'], 
-    titleCancel: i18n['decidim.geo.mobile.close_fullscreen'], 
-    forceSeparateButton: true,
-    forcePseudoFullscreen: true,
-  }).addTo(map);
-
-  return map;
+  return {map, tile};
 };
 export default initMap;

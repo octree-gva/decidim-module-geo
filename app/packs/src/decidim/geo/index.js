@@ -1,12 +1,13 @@
 import "src/decidim/map/controller/markers";
 import "src/decidim/map/icon";
+
 import configStore from "./models/configStore";
 import pointStore from "./models/pointStore";
 import filterStore from "./models/filterStore";
 import geoStore from "./models/geoStore";
 import memoryStore from "./models/memoryStore";
 import dropdownFilterStore from "./models/dropdownFilterStore";
-import { initMap, createDrawerActions, createDrawer } from "./ui";
+import { initMap, createDrawerActions, createDrawer, createSlideEdge } from "./ui";
 import bootstrap from "./bootstrap";
 import registerMobile from "./ui/mobile/registerMobile";
 
@@ -20,7 +21,7 @@ window.debug.stores = () => ({
   memoryStore: memoryStore.getState()
 });
 
-async function displayMap(isFullscreen=false) {
+async function displayMap(isFullscreen = false) {
   try {
     // Parse and save server-side information.
     bootstrap();
@@ -30,8 +31,8 @@ async function displayMap(isFullscreen=false) {
     const { moveHandler, setSavedPosition } = memoryStore.getState();
     addProcess();
     // Create Leaflet map
-    const map = await initMap();
-    configStore.setState(() => ({ map: map }));
+    const {map, tile} = await initMap();
+    configStore.setState(() => ({ map, tile }));
 
     // Be sure to fit all the points whenever you change
     // any filter.
@@ -39,10 +40,11 @@ async function displayMap(isFullscreen=false) {
     map.addLayer(pointsLayer);
     map.whenReady(async () => {
       // Save the first loaded position.
-      await new Promise((resolve) => setTimeout(resolve, 120))
+      await new Promise((resolve) => setTimeout(resolve, 120));
       setSavedPosition();
       configStore.getState().setReady();
     });
+
     pointStore.subscribe(
       (state) => [!!state.isLoading, state.getFilteredPoints, state._lastResponse],
       ([isLoading, getFilteredPoints]) => {
@@ -80,17 +82,54 @@ async function displayMap(isFullscreen=false) {
         }
       }
     );
+    createSlideEdge([createDrawer, createDrawerActions]);
 
-    // Create the drawer menu
-    await createDrawerActions();
-    // Create the drawer
-    await createDrawer();
     // Fetch all the data
     const { fetchAll, pointsForFilters, clearCache } = pointStore.getState();
     await fetchAll(filterStore.getState().defaultFilters);
     clearCache();
     await pointsForFilters(filterStore.getState().defaultFilters);
     removeProcess();
+    // Set active class on dropdown element
+    geoStore.subscribe(
+      (state) => [state.selectedScope],
+      ([geoScope]) => {
+        // Remove all active classes.
+        const activeList = document.getElementsByClassName(
+          "decidimGeo__scopesDropdown__listItem--active"
+        );
+        for (const domEl of activeList) {
+          domEl.className = domEl.className
+            .replace("decidimGeo__scopesDropdown__listItem--active", "")
+            .trim();
+        }
+        const [container] = document.querySelectorAll(
+          ".decidimGeo__scopesDropdown__list"
+        );
+        if (!container) return;
+        if (geoScope?.id) {
+          const [active] = document.querySelectorAll(
+            `.decidimGeo__scopesDropdown__listItem[data-scope='${geoScope.id}']`
+          );
+          if (active) {
+            active.className += " decidimGeo__scopesDropdown__listItem--active";
+            container.scrollBy(active.getBoundingClientRect().left, 0);
+          }
+        } else {
+          const [active] = document.querySelectorAll(
+            `.decidimGeo__scopesDropdown__listItem[data-scope='all']`
+          );
+          if (active) {
+            active.className += " decidimGeo__scopesDropdown__listItem--active";
+            container.scrollBy(active.getBoundingClientRect().left, 0);
+          }
+        }
+      }
+    );
+    const [active] = document.querySelectorAll(
+      `.decidimGeo__scopesDropdown__listItem[data-scope='all']`
+    );
+    if (active) active.className += " decidimGeo__scopesDropdown__listItem--active";
 
     map.on("moveend", moveHandler);
   } catch (e) {
@@ -111,21 +150,23 @@ async function displayMap(isFullscreen=false) {
 
 function main() {
   var smallScreen = window.matchMedia("(max-width: 49.9988em)");
-  if (smallScreen.matches){
+  if (smallScreen.matches) {
     registerMobile();
-    document.querySelector('.js-decidimgeo.map-link').addEventListener('click', function() {
-      const {mapReady, setFullscreen} = configStore.getState();
-      if(mapReady){
-        setFullscreen(true)
-      }else{
-        displayMap(true)
-      }
-    });
-  }else{
+    document
+      .querySelector(".js-decidimgeo.map-link")
+      .addEventListener("click", function () {
+        const { mapReady, setFullscreen } = configStore.getState();
+        if (mapReady) {
+          setFullscreen(true);
+        } else {
+          displayMap(true);
+        }
+      });
+  } else {
     displayMap();
   }
 }
 
-window.addEventListener('load', function() {
-main();
-})
+window.addEventListener("load", function () {
+  main();
+});
