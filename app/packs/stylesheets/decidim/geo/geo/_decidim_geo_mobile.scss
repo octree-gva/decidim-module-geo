@@ -22,7 +22,7 @@
 }
 
 .decidim__geo__container {
-  $edgeSliderHeight: 50vh;
+  $edgeSliderHeight: 66vh;
   .js-decidimgeo.decidimgeo__map {
     display: none;
     /* Toggle elements visibility for mobile */
@@ -35,10 +35,6 @@
       @include breakpoint(medium down) {
         display: block !important;
       }
-    }
-    .decidimGeo__aside--open ~ .leaflet-bottom.leaflet-right .leaflet-control-zoom {
-      transform: translateY(calc((-1 * $edgeSliderHeight) + 64px));
-      transition: 0.3s;
     }
 
     @include breakpoint(medium down) {
@@ -110,10 +106,11 @@
       overflow: hidden;
       width: 100vh;
       &.decidimGeo__aside--open {
-        max-height: $edgeSliderHeight;
+        min-height: $edgeSliderHeight;
       }
       &.decidimGeo__aside--closed {
         max-height: 64px;
+        min-height: 24px;
       }
       transition: 0.3s;
     }
@@ -138,8 +135,18 @@
     }
     /* resize map pane */
     &[data-fill='truncated']{
-      transform: translateY(-1 * (100vh - $edgeSliderHeight));
+      transform: translateY(-1 * $edgeSliderHeight);
       min-height: 100vh + $edgeSliderHeight !important;
+      & .leaflet-top.leaflet-left,
+      & .leaflet-top.leaflet-right{
+        transform: translateY($edgeSliderHeight);
+      }
+      & .leaflet-bottom.leaflet-right {
+        transform: translateY(calc((-1 * $edgeSliderHeight) + 64px));
+      }
+      & .leaflet-control-attribution {
+        display: none;
+      }
     }
 
     /* Horizontal scroll menu to select scopes*/
@@ -201,6 +208,11 @@
         margin: 0;
         padding: 16px 16px 0 16px;
         transform: translateY(0);
+        max-height: 0;
+        min-height: 0;
+      }
+      .decidimGeo__aside--open .decidimGeo__drawer__list {
+        max-height: calc($edgeSliderHeight - 64px);
       }
       .decidimGeo__drawer__listCard:first-child {
         margin-top: 0;
