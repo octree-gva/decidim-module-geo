@@ -1,67 +1,72 @@
 /* TODO: All these classes overrides may cause other parts of decidim's ui to break due to leaflet dependency.
 This module should therefore implement its own classes before being safely published, ideally by 
 implementing BEM (https://getbem.com/introduction/) and remove !important rules*/
-
-.leaflet-left > .leaflet-control-zoom {
-  display: none;
-}
-.leaflet-right > .leaflet-control-zoom {
-  border: 0;
-  margin-right: 0;
-}
-.leaflet-container {
-  font-family: "Source Sans Pro", Helvetica, Roboto, Arial, sans-serif !important;
-}
-.leaflet-control-zoom-in,
-.leaflet-control-zoom-out,
-.leaflet-control-zoom-fullscreen {
-  box-sizing: content-box;
-  border: grey solid 1px;
-  border-bottom: grey solid 1px !important;
-  display: inline-block !important;
-  padding-inline: 2px;
-  padding-bottom: 4px !important;
-  border-radius: 2px;
-}
-.leaflet-container .leaflet-popup-tip {
-  border-color: transparent;
-}
-.leaflet-container a {
-  color: var(--primary) !important;
-  &:hover {
-    color: var(--primary);
-    opacity: 0.6;
+.decidim__geo__container {
+  .leaflet-left > .leaflet-control-zoom {
+    display: none;
   }
-}
+  .leaflet-right > .leaflet-control-zoom {
+    border: 0;
+    margin-right: 0;
+  }
+  .leaflet-container {
+    font-family: "Source Sans Pro", Helvetica, Roboto, Arial, sans-serif !important;
+  }
+  .leaflet-top,
+  .leaflet-bottom {
+    max-width: 100%;
+  }
+  .leaflet-control-zoom-in,
+  .leaflet-control-zoom-out,
+  .leaflet-control-zoom-fullscreen {
+    box-sizing: content-box;
+    border: grey solid 1px;
+    border-bottom: grey solid 1px !important;
+    display: inline-block !important;
+    padding-inline: 2px;
+    padding-bottom: 4px !important;
+    border-radius: 2px;
+  }
+  .leaflet-container .leaflet-popup-tip {
+    border-color: transparent;
+  }
+  .leaflet-container a {
+    color: var(--primary) !important;
+    &:hover {
+      color: var(--primary);
+      opacity: 0.6;
+    }
+  }
 
-.leaflet-top .leaflet-control-layers {
-  margin-top: 0;
-  padding-block: 0;
-}
+  .leaflet-top .leaflet-control-layers {
+    margin-top: 0;
+    padding-block: 0;
+  }
 
-.leaflet-touch .leaflet-control-layers,
-.leaflet-touch .leaflet-bar {
-  border: 0 !important;
-}
+  .leaflet-touch .leaflet-control-layers,
+  .leaflet-touch .leaflet-bar {
+    border: 0 !important;
+  }
 
-.leaflet-control-layers {
-  border: 0 !important;
-  background: transparent !important;
-}
+  .leaflet-control-layers {
+    border: 0 !important;
+    background: transparent !important;
+  }
 
-.leaflet-control-layers-selector {
-  margin-bottom: 0 !important;
-}
+  .leaflet-control-layers-selector {
+    margin-bottom: 0 !important;
+  }
 
-.leaflet-control-layers-overlays > label {
-  display: block;
-  background: #fff;
-  margin-top: 6px;
-  margin-left: 20px;
-  font-size: 16px;
-  line-height: 20px;
-  padding: 4px 8px;
-  border-radius: 18px;
-  border: 1px solid grey;
-  color: grey;
+  .leaflet-control-layers-overlays > label {
+    display: block;
+    background: #fff;
+    margin-top: 6px;
+    margin-left: 20px;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 4px 8px;
+    border-radius: 18px;
+    border: 1px solid grey;
+    color: grey;
+  }
 }

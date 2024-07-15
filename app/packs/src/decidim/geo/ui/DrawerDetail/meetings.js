@@ -67,9 +67,12 @@ const meetings = (container, node) => {
       "decidimGeo__drawer__listCardDescription decidimGeo__drawer__listCardDescription--large decidimGeo__drawer__listCardDescription--meetings",
       container
     );
-    infoDescription.textContent = _.truncate(node.description.translation || node.description.defaultTranslation, {
-      length: 2500
-    });
+    infoDescription.textContent = _.truncate(
+      node.description.translation || node.description.defaultTranslation,
+      {
+        length: 2500
+      }
+    );
   }
 };
 export default meetings;

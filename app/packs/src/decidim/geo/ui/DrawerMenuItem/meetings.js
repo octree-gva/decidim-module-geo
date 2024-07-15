@@ -23,7 +23,8 @@ const meetings = (node) => {
   notGeoEncodedIcon.src = images?.not_geolocated;
 
   const infoTitle = createDomElement("div", "decidimGeo__drawer__listCardTitle", info);
-  infoTitle.textContent = node.title.translation || node.shortDescription.defaultTranslation;
+  infoTitle.textContent =
+    node.title.translation || node.shortDescription.defaultTranslation;
 
   const infoDescription = createDomElement(
     "div",

@@ -145,7 +145,7 @@ class FilterDropdown {
         GeoShowFilter: "all",
         GeoTimeFilter: "all",
         GeoType: "all"
-      }
+      };
     }
     const { setFilters, activeFilters, defaultFilters } = filterStore.getState();
     const newFilters = activeFilters.filter((filter) => {
@@ -227,7 +227,7 @@ class FilterDropdown {
   geoFields(points) {
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
-    _
+    _;
     const hasGeoLocated = points.find((p) => p.isGeoLocated());
     const hasPhysical = points.find((p) => !p.isGeoLocated());
     return this.field(
@@ -257,7 +257,7 @@ class FilterDropdown {
   }
 
   typeFields(points) {
-    const {isProcessOnly, isAssemblyOnly} = filterStore.getState()
+    const { isProcessOnly, isAssemblyOnly } = filterStore.getState();
 
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
@@ -273,8 +273,7 @@ class FilterDropdown {
     if (!hasProcesses) disabledOptions.push("only_processes");
     if (!hasDebates) disabledOptions.push("only_debates");
 
-    if(isProcessOnly() || isAssemblyOnly())
-      disabledOptions.push("all")
+    if (isProcessOnly() || isAssemblyOnly()) disabledOptions.push("all");
 
     this.field(
       i18n[`${i18nPrefix}.type.label`],

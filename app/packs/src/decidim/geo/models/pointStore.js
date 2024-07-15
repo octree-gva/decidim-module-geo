@@ -1,12 +1,11 @@
 import { createStore } from "zustand/vanilla";
 import configStore from "./configStore";
 
-import { getGeoDatasource, getGeoScopes, getFirstGeoDatasource} from "../api";
+import { getGeoDatasource, getGeoScopes, getFirstGeoDatasource } from "../api";
 import GeoDatasourceNode from "./geoDatasourceNode";
 import GeoScope from "./geoScope";
 import { subscribeWithSelector } from "zustand/middleware";
 import _ from "lodash";
-
 
 const mapNodeToPoint = (node) => {
   const point = new GeoDatasourceNode({
@@ -16,7 +15,7 @@ const mapNodeToPoint = (node) => {
     return point;
   }
   return undefined;
-}
+};
 const store = createStore(
   subscribeWithSelector((set, get) => ({
     /**
@@ -46,15 +45,15 @@ const store = createStore(
       const locale = configStore.getState().locale;
       const defaultLocale = configStore.getState().defaultLocale;
       set(({ isLoading }) => ({ isLoading: isLoading + 1 }));
-      const firstData =await getFirstGeoDatasource(
+      const firstData = await getFirstGeoDatasource(
         {
           variables: { filters, locale, defaultLocale }
         },
         true
       );
 
-      set(() => ({points: firstData.nodes.map(mapNodeToPoint).filter(Boolean)}))
-    
+      set(() => ({ points: firstData.nodes.map(mapNodeToPoint).filter(Boolean) }));
+
       const scopes = await getGeoScopes({
         variables: { locale: locale }
       });
@@ -72,12 +71,8 @@ const store = createStore(
         scopes: geoScopes
       }));
 
-      set(({ isLoading }) => ({
-        isLoading: isLoading - 1
-      }));
-
-        // Fetch other data after initialization
-      if(firstData.hasMore){
+      // Fetch other data after initialization
+      if (firstData.hasMore) {
         const data = await getGeoDatasource(
           {
             variables: { filters: filters, locale: locale, after: firstData.after }
@@ -85,11 +80,13 @@ const store = createStore(
           true
         );
         const newPoints = data.nodes.map(mapNodeToPoint).filter(Boolean);
-        set(({points}) => ({points: points.concat(newPoints)}))
-        
+        set(({ points }) => ({ points: points.concat(newPoints) }));
       }
+      set(({ isLoading }) => ({
+        isLoading: isLoading - 1
+      }));
     },
-    pointsForFilters: async (filters = [], forceRefresh=false) => {
+    pointsForFilters: async (filters = [], forceRefresh = false) => {
       const locale = configStore.getState().locale;
       const {
         points,

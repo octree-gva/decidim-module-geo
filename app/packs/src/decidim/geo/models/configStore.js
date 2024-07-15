@@ -11,13 +11,14 @@ const store = createStore(
     selected_point: undefined,
     space_ids: [],
     images: {},
+    tile: undefined,
     map: undefined,
     mapReady: false,
     mapID: "Generic",
     map_config: {},
     i18n: {},
     isFullscreen: false,
-    setFullscreen: (fullscreen) => set({isFullscreen: !!fullscreen}),
+    setFullscreen: (fullscreen) => set({ isFullscreen: !!fullscreen }),
     setReady: () => set({ mapReady: true }),
     setConfig: (mapConfig) => {
       set(() => ({

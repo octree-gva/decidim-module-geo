@@ -16,7 +16,6 @@ const store = createStore(
     },
     nextFilters: undefined,
 
-
     filterCount() {
       const { selectedFilters, defaultFilters } = store.getState();
       return Object.entries(selectedFilters).filter(([key, value]) => {
@@ -34,7 +33,7 @@ const store = createStore(
     applyNextFilters() {
       set(({ nextFilters }) => (nextFilters ? { selectedFilters: nextFilters } : {}));
     },
-    resetFilters()  {
+    resetFilters() {
       set(({ defaultFilters }) => ({
         selectedFilters: defaultFilters,
         nextFilters: defaultFilters
@@ -51,8 +50,12 @@ const store = createStore(
         }
       }));
     },
-    toggleOpen() { set((state) => ({ isOpen: !state.isOpen }))},
-    close() {set(() => ({ isOpen: false }))}
+    toggleOpen() {
+      set((state) => ({ isOpen: !state.isOpen }));
+    },
+    close() {
+      set(() => ({ isOpen: false }));
+    }
   }))
 );
 

@@ -51,22 +51,22 @@ const store = createStore(
       }));
     },
     isProcessOnly() {
-      const {defaultFilters} = get();
+      const { defaultFilters } = get();
       const resourceFilter = defaultFilters.find(
         ({ resourceTypeFilter = undefined }) => resourceTypeFilter
       );
-      if(!resourceFilter) return false;
-      const {resourceType} = resourceFilter.resourceTypeFilter;
-      return resourceType  === "Decidim::ParticipatoryProcess"
+      if (!resourceFilter) return false;
+      const { resourceType } = resourceFilter.resourceTypeFilter;
+      return resourceType === "Decidim::ParticipatoryProcess";
     },
     isAssemblyOnly() {
-      const {defaultFilters} = get();
+      const { defaultFilters } = get();
       const resourceFilter = defaultFilters.find(
         ({ resourceTypeFilter = undefined }) => resourceTypeFilter
       );
-      if(!resourceFilter) return false;
-      const {resourceType} = resourceFilter.resourceTypeFilter;
-      return resourceType  === "Decidim::Assembly"
+      if (!resourceFilter) return false;
+      const { resourceType } = resourceFilter.resourceTypeFilter;
+      return resourceType === "Decidim::Assembly";
     },
     toFilterOptions: (name, filters) => {
       const { defaultFilters } = dropdownFilterStore.getState();

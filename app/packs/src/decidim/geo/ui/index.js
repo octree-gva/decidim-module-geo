@@ -6,3 +6,4 @@ export { default as createGeoScopeMenuItem } from "./createGeoScopeMenuItem.js";
 export { default as createNodeMenuItem } from "./createNodeMenuItem.js";
 export { default as createDrawerActions } from "./createDrawerActions.js";
 export { default as createDrawer } from "./createDrawer.js";
+export { default as createSlideEdge } from "./createSlideEdge";

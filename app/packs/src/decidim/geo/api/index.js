@@ -10,7 +10,7 @@ const makeQuery =
     const variables = { ...(params.variables || {}), locale, defaultLocale };
     const queryParams = { ...params, variables };
     const response = await getDecidimData(queries[queryName], queryParams);
-    if(!response?.data) return {nodes: []};
+    if (!response?.data) return { nodes: [] };
     return response.data[_responseKey];
   };
 
@@ -30,7 +30,7 @@ export const getGeoDatasource = async (params = {}, fetchAll = true) => {
     console.error(error);
     throw error;
   }
-  if (!page) return {nodes: [], edges: []};
+  if (!page) return { nodes: [], edges: [] };
   const { hasNextPage = false, endCursor = "" } = page?.pageInfo || {};
   results = results.concat(page.nodes);
   let hasMore = hasNextPage;
@@ -62,9 +62,9 @@ export const getFirstGeoDatasource = async (params = {}, fetchAll = true) => {
     console.error(error);
     throw error;
   }
-  if (!page) return {nodes: [], hasMore: false, endCursor: ""};
+  if (!page) return { nodes: [], hasMore: false, endCursor: "" };
   const { hasNextPage = false, endCursor = "" } = page?.pageInfo || {};
-  return {nodes: page.nodes, hasMore: hasNextPage, after: endCursor};
+  return { nodes: page.nodes, hasMore: hasNextPage, after: endCursor };
 };
 export const getGeoConfig = makeQuery("geoConfig");
 export const getGeoScopes = makeQuery("geoScope");

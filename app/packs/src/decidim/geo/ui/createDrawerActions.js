@@ -6,14 +6,15 @@ import configStore from "../models/configStore";
 import createFilterDropdown from "./createFilterDropdown";
 import scopeDropdownStore from "../models/scopeDropdownStore";
 import memoryStore from "../models/memoryStore";
-async function createScopesDropdown() {
+async function createScopesDropdown(position) {
   const CustomLayerControl = L.Control.extend({
     options: {
       collapsed: false,
-      position: "topleft"
+      position: position
     },
 
     //View
+    resetBtn: null,
     menu: null,
     heading: null,
     filterDropdown: null,
@@ -84,13 +85,12 @@ async function createScopesDropdown() {
           geoStore.getState().goBack();
         };
         return;
-      } 
+      }
       if (scopes.length < 2) {
         this.title.textContent = i18n["decidim_geo.scopes.dropdown"];
-        if(scopes.length === 0)
+        if (scopes.length === 0)
           this.title.className += " decidimGeo__scopesDropdown__list--disabled";
-        else
-          this.title.className += " decidimGeo__scopesDropdown__list--alone";
+        else this.title.className += " decidimGeo__scopesDropdown__list--alone";
         this.title.onclick = () => false;
         return;
       } else {
@@ -113,30 +113,42 @@ async function createScopesDropdown() {
         this.title.textContent = i18n["decidim_geo.scopes.dropdown"];
       }
     },
-    repaintOptions() {
+    resetItem() {
+      if (this.resetBtn) return this.resetBtn;
       const { i18n } = configStore.getState();
+      return (this.resetBtn = createGeoScopeMenuItem({
+        scopeId: "all",
+        label: i18n["decidim_geo.scopes.all"],
+        onClick: () => {
+          const { popState } = memoryStore.getState();
+          popState();
+          this.toggleOpen();
+          geoStore.getState().selectScope(undefined);
+          geoStore.getState().selectPoint(undefined);
+        }
+      }));
+    },
+    repaintOptions() {
+      const { isFullscreen } = configStore.getState();
       const scopes = this.scopes();
       // Dropdown options
       L.DomUtil.empty(this.dropDownOptions);
-      if (scopes.length == 1) return;
-      if (this.activeScope() && scopes.length > 1) {
-        // Add a "All Scope" menu item
-        const resetItem = createGeoScopeMenuItem({
-          label: i18n["decidim_geo.scopes.all"],
-          onClick: () => {
-            const { popState } = memoryStore.getState();
-            popState();
-            this.toggleOpen();
-            geoStore.getState().selectScope(undefined);
-            geoStore.getState().selectPoint(undefined);
-          }
-        });
-        this.dropDownOptions.appendChild(resetItem);
+      if (scopes.length == 1) {
+        return;
       }
+      if (isFullscreen || (this.activeScope() && scopes.length > 1)) {
+        // Add a "All Scope" menu item
+        this.dropDownOptions.appendChild(this.resetItem());
+      }
+      const activeItem = this.activeScope();
+
       // Add all the other scopes
       scopes.forEach((geoScope) => {
-        if (geoScope !== this.activeScope() && !geoScope.isEmpty())
+        if (geoScope !== activeItem && !geoScope.isEmpty()) {
           this.dropDownOptions.appendChild(geoScope.menuItem);
+        } else if (activeItem && !activeItem.isEmpty() && isFullscreen) {
+          this.dropDownOptions.appendChild(activeItem.menuItem);
+        }
       });
     },
     repaintOpenClose() {
@@ -148,13 +160,21 @@ async function createScopesDropdown() {
         !isOpen && "closed",
         !selectedPoint && this.isEmpty() && "empty",
         selectedPoint && "button",
-        !selectedPoint && this.hasOneOption() && "alone",
+        !selectedPoint && this.hasOneOption() && "alone"
       ]);
       this.dropDownOptions.className = createClasses("decidimGeo__scopesDropdown__list", [
         !isOpen && "closed",
         this.isEmpty() && "empty",
-        selectedPoint && "hidden"
+        selectedPoint && "hidden",
+        !selectedPoint && this.hasOneOption() && "alone"
       ]);
+      if (this.menu)
+        this.menu.className = "leaflet-control " + createClasses("decidimGeo__scopesDropdown", [
+          !isOpen && "closed",
+          this.isEmpty() && "empty",
+          selectedPoint && "hidden",
+          !selectedPoint && this.hasOneOption() && "alone"
+        ]);
     },
     repaint() {
       this.repaintHeading();
@@ -162,7 +182,7 @@ async function createScopesDropdown() {
       this.repaintOpenClose();
     },
     onAdd(map) {
-      this.menu = L.DomUtil.create("div", "decidimGeo__scopesDropdown");
+      this.menu = L.DomUtil.create("div", "leaflet-control decidimGeo__scopesDropdown");
       L.DomEvent.disableClickPropagation(this.menu);
       L.DomEvent.disableScrollPropagation(this.menu);
       const repaint = this.repaint.bind(this);
