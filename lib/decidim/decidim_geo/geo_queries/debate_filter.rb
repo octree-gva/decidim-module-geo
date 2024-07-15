@@ -17,6 +17,7 @@ module Decidim
 
         def scoped_by_geoencoded(debates)
           return [] if only_geoencoded?
+
           debates
         end
 
@@ -37,4 +38,4 @@ module Decidim
       end
     end
   end
-  end
+end

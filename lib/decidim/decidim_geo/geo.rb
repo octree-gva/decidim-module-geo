@@ -34,7 +34,7 @@ module Decidim
       ]
     end
 
-    config_accessor :experimental_features do 
+    config_accessor :experimental_features do
       # By default enable experimental feature while developping
       ENV.fetch("RAILS_ENV", "production") == "development"
     end

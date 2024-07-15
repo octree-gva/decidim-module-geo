@@ -46,6 +46,7 @@ module Decidim
       def geo_datasource(**kwargs)
         locale = kwargs[:locale] || I18n.locale
         return nofilter_datasource(locale) if kwargs[:filters].blank?
+
         ::Decidim::Geo::Api::GeoQuery.new(
           current_organization,
           current_user,
@@ -210,7 +211,7 @@ module Decidim
                   search_assembly.where("duration > ?", Time.zone.now)
                 else
                   search_assembly
-        end
+                end
         query.where(id: assemblies).pluck(:id)
       end
 
@@ -225,7 +226,7 @@ module Decidim
                   )
                 else
                   proposal_query
-        end
+                end
         query.pluck(:id)
       end
 
@@ -249,7 +250,7 @@ module Decidim
                      meetings.where("start_time >= ?", Time.zone.now)
                    else
                      meetings
-        end
+                   end
         meetings.pluck(:id)
       end
 

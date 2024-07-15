@@ -82,13 +82,12 @@ module Decidim
           content_tag(:div, "", class: ["js-decidimgeo"])
         end
 
-
         def geo_i18n
           supported_models = ::Decidim::Geo.config.supported_filters.map do |filter|
             filter.constantize.new(self).klass
           end
           geo_i18n = supported_models.to_h { |klass| [klass.name, klass.model_name.human] }
-          geo_i18n = {
+          {
             **geo_i18n,
             "decidim.geo.mobile.open_fullscreen": t("decidim.geo.mobile.open_fullscreen"),
             "decidim.geo.mobile.close_fullscreen": t("decidim.geo.mobile.close_fullscreen"),
@@ -121,9 +120,11 @@ module Decidim
         def current_locale
           I18n.locale.to_s
         end
+
         def default_locale
           current_organization.default_locale
         end
+
         def current_component
           return request.env["decidim.current_component"].id if current_component?
 

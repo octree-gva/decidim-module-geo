@@ -32,18 +32,18 @@ module Decidim
         end
 
         def scoped_by_time(assemblies)
-          scoped_assemblies = case time_filter
-                              when "past"
-                                assemblies.where("duration < ?", Time.zone.now)
-                              when "active"
-                                assemblies.where(duration: 15.days.ago..15.days.from_now).or(
-                                  assemblies.where(duration: nil)
-                                )
-                              when "future"
-                                assemblies.where("duration > ?", Time.zone.now)
-                              else
-                                assemblies
-                              end
+          case time_filter
+          when "past"
+            assemblies.where("duration < ?", Time.zone.now)
+          when "active"
+            assemblies.where(duration: 15.days.ago..15.days.from_now).or(
+              assemblies.where(duration: nil)
+            )
+          when "future"
+            assemblies.where("duration > ?", Time.zone.now)
+          else
+            assemblies
+          end
         end
 
         def manifest

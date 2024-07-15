@@ -30,7 +30,8 @@ namespace :decidim_geo do
       @decidim_geo_npm_dependencies ||= begin
         package_json = JSON.parse(File.read(decidim_geo_path.join("package.json")))
 
-        { dev: package_json["dependencies"].map { |package, version| "#{package}@#{version}" } }.freeze
+        { prod: package_json["dependencies"].map { |package, version| "#{package}@#{version}" },
+          dev: package_json["devDependencies"].map { |package, version| "#{package}@#{version}" } }.freeze
       end
     end
 

@@ -44,13 +44,13 @@ module Decidim
 
         ##
         # If the filter is for a component
-        def is_component?
+        def component?
           klass.include? Decidim::HasComponent
         end
 
         ##
         # If the filter is for a participatory space
-        def is_participatory_space?
+        def participatory_space?
           klass.include? Decidim::ScopableParticipatorySpace
         end
 
@@ -63,7 +63,7 @@ module Decidim
         protected
 
         def extract_time_filter
-          @extracted_time_filter ||= filters.find { |f| f[:time_filter].present? }
+          @extract_time_filter ||= filters.find { |f| f[:time_filter].present? }
         end
 
         def time_filter

@@ -28,7 +28,7 @@ module Decidim
               end
             end
           end
-        rescue Exception => e
+        rescue StandardError => e
           logger.error "can not extract file."
           logger.error e.message
           raise e
@@ -45,7 +45,7 @@ module Decidim
             file.each do |record|
               shp_loader(record)
             end
-          rescue Exception => e
+          rescue StandardError => e
             logger.error e.message
             raise e
           end

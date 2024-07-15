@@ -28,7 +28,7 @@ module Decidim
                                data_by_resource_type(query)
                              else
                                data_by_resource_type(nofilter_query)
-          end
+                             end
         end
 
         def normalized_filters
@@ -58,7 +58,7 @@ module Decidim
           filtered_by_scopes = scopes.length.positive?
 
           # Handle participatory spaces filter (Assemblies, Processes, Conferences, Initiatives)
-          space_filters = active_filters.select(&:is_participatory_space?).select do |filter|
+          space_filters = active_filters.select(&:participatory_space?).select do |filter|
             key = filter.graphql_key
             normalized_filters.any? { |f| f[key].present? }
           end

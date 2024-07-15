@@ -26,7 +26,7 @@ task :prepare_tests do
     system("bundle exec rake db:create")
   end
   ENV["RAILS_ENV"] = "test"
-  databaseYml = {
+  database_yml = {
     "test" => {
       "adapter" => "postgis",
       "encoding" => "unicode",
@@ -38,7 +38,7 @@ task :prepare_tests do
     }
   }
   config_file = File.expand_path("spec/decidim_dummy_app/config/database.yml", __dir__)
-  File.open(config_file, "w") { |f| YAML.dump(databaseYml, f) }
+  File.open(config_file, "w") { |f| YAML.dump(database_yml, f) }
   Dir.chdir("spec/decidim_dummy_app") do
     system("bundle exec rails db:migrate")
   end
@@ -77,7 +77,7 @@ task :prepare_dev do
     system("bundle exec rake db:create")
   end
   ENV["RAILS_ENV"] = "development"
-  databaseYml = {
+  database_yml = {
     "development" => {
       "adapter" => "postgis",
       "encoding" => "unicode",
@@ -89,7 +89,7 @@ task :prepare_dev do
     }
   }
   config_file = File.expand_path("development_app/config/database.yml", __dir__)
-  File.open(config_file, "w") { |f| YAML.dump(databaseYml, f) }
+  File.open(config_file, "w") { |f| YAML.dump(database_yml, f) }
   Dir.chdir("development_app") do
     system("bundle exec rake db:migrate")
     system("npm install -D webpack-dev-server")

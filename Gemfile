@@ -15,15 +15,12 @@ gem "bootsnap", "~> 1.4"
 gem "puma", ">= 5.5.1"
 gem "uglifier", "~> 4.1"
 
-gem "bootsnap", "~> 1.4"
-gem "puma", ">= 5.5.1"
-gem "uglifier", "~> 4.1"
-
 gem "activerecord-postgis-adapter", "~> 7.0.0"
 gem "deface", ">= 1.8.1"
 gem "ffi-geos", "~> 2.4"
 gem "rgeo-geojson", ">= 1.0"
 gem "rgeo-shapefile", ">= 1.0"
+gem "rubocop-faker"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
