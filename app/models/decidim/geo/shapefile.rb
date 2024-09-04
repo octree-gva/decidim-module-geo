@@ -9,7 +9,7 @@ module Decidim
 
       self.table_name = "decidim_geo_shapefiles"
 
-      has_many :shapedatas, foreign_key: "decidim_geo_shapefiles_id"
+      has_many :shapedatas, foreign_key: "decidim_geo_shapefiles_id", dependent: :destroy
 
       belongs_to :scope_type, inverse_of: :shapefile, optional: true, foreign_key: "decidim_scope_types_id"
 

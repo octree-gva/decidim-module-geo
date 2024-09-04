@@ -7,11 +7,6 @@ module Decidim
       #
       # type - A GraphQL::BaseType to extend.
       #
-      # Returns nothing.
-
-      def self.included(type)
-        type.field :shapefiles, [Decidim::Geo::ShapefileType], description: "Return's information about the shapefiles", null: true
-
       def self.included(type)
         type.field :shapefiles, [Decidim::Geo::ShapefileType],
                    description: "Return's information about the shapefiles", null: true

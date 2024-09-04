@@ -1,5 +1,5 @@
 import _ from "lodash";
-import configStore from "../../models/configStore";
+import configStore from "../../stores/configStore";
 import createClasses from "../createClasses";
 import { format, isSameDay } from "date-fns";
 

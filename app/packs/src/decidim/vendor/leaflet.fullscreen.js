@@ -319,12 +319,6 @@
     }
   });
 
-  leaflet.Map.include({
-    toggleFullscreen() {
-      this.fullscreenControl.toggleFullScreen();
-    }
-  });
-
   leaflet.Map.addInitHook(function () {
     if (this.options.fullscreenControl) {
       this.addControl(leaflet.control.fullscreen(this.options.fullscreenControlOptions));

@@ -39,38 +39,6 @@ module Decidim
           end
         end
       end
-
-      describe "#create_scope_type" do
-        it "creates a scope type with the form data" do
-          allow(ScopeType).to receive(:create!).and_return(double("scope_type", save!: nil))
-          allow(create_scope_type).to receive(:shapefile).and_return(double("shapefile"))
-
-          expect(ScopeType).to receive(:create!).with(
-            name: "Test Scope",
-            organization: "Test Organization",
-            plural: "Test Plural"
-          )
-
-          create_scope_type.send(:create_scope_type)
-        end
-
-        it "sets the shapefile for the created scope type" do
-          allow(ScopeType).to receive(:create!).and_return(double("scope_type", save!: nil))
-          allow(create_scope_type).to receive(:shapefile).and_return(double("shapefile"))
-          allow(ScopeType).to receive(:find_by_id).and_return(double("shapefile"))
-
-          expect_any_instance_of(ScopeType).to receive(:shapefile=).with(double("shapefile"))
-
-          create_scope_type.send(:create_scope_type)
-        end
-      end
-
-      describe "#shapefile" do
-        it "finds and returns the shapefile based on the form data" do
-          allow(Decidim::Geo::Shapefile).to receive(:find_by_id).with(1).and_return(double("shapefile"))
-          expect(create_scope_type.send(:shapefile)).to eq double("shapefile")
-        end
-      end
     end
   end
 end

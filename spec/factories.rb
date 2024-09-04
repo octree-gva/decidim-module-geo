@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-require "decidim/geo/test/factories"
+require_relative "decidim/geo/test/factories"

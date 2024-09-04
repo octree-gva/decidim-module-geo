@@ -25,7 +25,7 @@ module Decidim
           load_shapefile = LoadShp::AppLoadShp.new(@shapefile)
           load_shapefile.run!
           broadcast(:ok, @shapefile)
-        rescue Exception => e
+        rescue StandardError => e
           @shapefile.destroy
           broadcast(:invalid, e.to_s)
         end

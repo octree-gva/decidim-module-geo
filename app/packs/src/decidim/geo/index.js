@@ -1,13 +1,13 @@
 import "src/decidim/map/controller/markers";
 import "src/decidim/map/icon";
 
-import configStore from "./models/configStore";
-import pointStore from "./models/pointStore";
-import filterStore from "./models/filterStore";
-import geoStore from "./models/geoStore";
-import memoryStore from "./models/memoryStore";
-import dropdownFilterStore from "./models/dropdownFilterStore";
-import { initMap, createDrawerActions, createDrawer, createSlideEdge } from "./ui";
+import configStore from "./stores/configStore";
+import pointStore from "./stores/pointStore";
+import filterStore from "./stores/filterStore";
+import geoStore from "./stores/geoStore";
+import memoryStore from "./stores/memoryStore";
+import dropdownFilterStore from "./stores/dropdownFilterStore";
+import { initMap, ScopeDropdown, Drawer, aside } from "./ui";
 import bootstrap from "./bootstrap";
 import registerMobile from "./ui/mobile/registerMobile";
 
@@ -21,18 +21,28 @@ window.debug.stores = () => ({
   memoryStore: memoryStore.getState()
 });
 
-async function displayMap(isFullscreen = false) {
+async function prepareLeaflet(isSmallScreen) {
+  bootstrap();
+  // Parse and save server-side information.
+  const { map, tile } = await initMap();
+  configStore.setState(() => ({ map, tile, isSmallScreen }));
+}
+async function fetchData() {
+  const { addProcess, removeProcess } = pointStore.getState();
+  const { fetchAll, pointsForFilters, clearCache } = pointStore.getState();
+  addProcess();
+  // Fetch all the data
+  await fetchAll(filterStore.getState().defaultFilters);
+  clearCache();
+  await pointsForFilters(filterStore.getState().defaultFilters);
+  removeProcess();
+}
+async function displayMap() {
   try {
-    // Parse and save server-side information.
-    bootstrap();
-    configStore.getState().setFullscreen(isFullscreen);
-
     const { addProcess, removeProcess } = pointStore.getState();
     const { moveHandler, setSavedPosition } = memoryStore.getState();
+    const { map } = configStore.getState();
     addProcess();
-    // Create Leaflet map
-    const {map, tile} = await initMap();
-    configStore.setState(() => ({ map, tile }));
 
     // Be sure to fit all the points whenever you change
     // any filter.
@@ -43,6 +53,7 @@ async function displayMap(isFullscreen = false) {
       await new Promise((resolve) => setTimeout(resolve, 120));
       setSavedPosition();
       configStore.getState().setReady();
+      removeProcess();
     });
 
     pointStore.subscribe(
@@ -82,14 +93,8 @@ async function displayMap(isFullscreen = false) {
         }
       }
     );
-    createSlideEdge([createDrawer, createDrawerActions]);
+    aside([ScopeDropdown, Drawer]);
 
-    // Fetch all the data
-    const { fetchAll, pointsForFilters, clearCache } = pointStore.getState();
-    await fetchAll(filterStore.getState().defaultFilters);
-    clearCache();
-    await pointsForFilters(filterStore.getState().defaultFilters);
-    removeProcess();
     // Set active class on dropdown element
     geoStore.subscribe(
       (state) => [state.selectedScope],
@@ -148,25 +153,20 @@ async function displayMap(isFullscreen = false) {
   }
 }
 
-function main() {
+async function main() {
   var smallScreen = window.matchMedia("(max-width: 49.9988em)");
-  if (smallScreen.matches) {
+  const isSmallScreen = !!smallScreen.matches;
+  if (isSmallScreen) {
     registerMobile();
-    document
-      .querySelector(".js-decidimgeo.map-link")
-      .addEventListener("click", function () {
-        const { mapReady, setFullscreen } = configStore.getState();
-        if (mapReady) {
-          setFullscreen(true);
-        } else {
-          displayMap(true);
-        }
-      });
-  } else {
-    displayMap();
   }
+  await prepareLeaflet(isSmallScreen);
+  await fetchData();
+
+  await displayMap();
 }
 
 window.addEventListener("load", function () {
-  main();
+  main().then(() => {
+    console.log("decidim geo ready");
+  });
 });

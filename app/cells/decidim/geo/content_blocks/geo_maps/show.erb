@@ -1,10 +1,10 @@
 
 <%= javascript_pack_tag "decidim_geo" %>
 
-<%= content_tag :div, "", id: "DecidimGeoContainer", class: ["decidim__geo__container"] do %>
+<%= content_tag :div, "", id: "DecidimGeoContainer", class: ["decidimGeo__container"] do %>
+  <div class="decidimGeo__mobile_btn__mobile_btn">
+    <span><%= t("decidim.geo.mobile.open_fullscreen") %></span>
+  </div>
   <%= insert_map %>
-  <% if Decidim::Geo.experimental_features %>
-    <%= insert_map_mobile_link %>
-  <% end %>
 <% end %>
 
