@@ -95,7 +95,7 @@ From the participatory budget page, you will see all the points in the neighborh
 
 
 ## Documentation
-You can consult our documentation on the [decidim-geo website](decidim-geo.octree.ch)
+You can consult our documentation on the [decidim-geo documentation website](https://octree-gva.github.io/decidim-module-geo/)
 
 ## Contributions
 
