@@ -11,11 +11,7 @@
     <a href="https://meta.decidim.org">Participatory Governance (meta decidim)</a><br/><br/>
     <a href="https://matrix.to/#/+decidim:matrix.org">Decidim Community (Matrix+Element.io)</a>
 </h4>
-<p align="center">
-        <img
-            src="https://git.octree.ch/decidim/decidim-module-geo/-/raw/main/partners.png?raw=true"
-            alt="Lausanne Participe — Une plateforme de participation pour imaginer et réaliser ensemble" />
-</p>
+
 
 
 # Decidim::Geo
@@ -30,10 +26,65 @@ This project is its early stage, and has it is quiet ambicious, we open CO-FUNDI
 If you are curious on how it started, [we've made some slide to present the project](https://drive.google.com/file/d/1lfQJumDg0Ic-RZi-R3MM8frYtKN7PB_S/view?usp=sharing).
 
 
-## How it works?
+## Features
 
-Postgis can load Shapefiles that can represents anything: neighbourghoods, cities, states, trees, public spaces.
-We use this module to map a shape to an application zone, to be able to geo-references all the participatory processes of the platform. This way we can offer better consultation experience, and open new perspective for participation.
+**Link shapes to a scope**<br />
+On the admin side, you can now upload a zip shapefile in the `WGS 84` format.
+Once uploaded, you can assign a scope type to the shapefile.
+
+Example of use: 
+- Add a shapefile to the admin with the shapes of the city neighborhoods
+- Create a scope type called "neighborhoods"
+- For each neighborhood, create a scope of type "neighborhoods"
+- Link related meetings, assemblies, processes, and proposals to these scopes
+- See the magic: the maps now display the neighborhoods, allowing you to navigate the platform through maps. 
+
+---
+
+**Homepage block**<br />
+In the homepage settings, you can now drag a Decidim Geo block to display a map
+with all the points of the platform.
+Once the Decidim Geo homepage block is active, the map will provide an entry point to
+navigate through the participatory platform.
+
+---
+**Default map center and zoom**<br />
+You can now customize all Decidim Geo maps at once by defining a default center and zoom level. 
+This provides a better experience when loading the map, already having the right perspective to start navigating.
+
+To update the map's center and zoom, go to the Geo tab in the administration and click on Configuration.
+
+---
+
+**Custom Tiles**<br />
+You can now define custom tiles to change the underlying appearance of the map.
+Displaying custom tiles allows more precise control over what is viewed, and can, for example, increase map contrast for better accessibility.
+
+---
+
+**Hide maps when there is nothing to show**<br />
+Maps will be hidden if there is no point to show. For example, a meeting without a location won't display a map in its details. 
+Scopes that do not contain any data will also be hidden, preventing the user from filtering something when there is no data to display.
+
+**Highlight points**<br />
+We've defined some rules to highlight points displayed on the current page:
+
+- When you are on a meeting detail page that is geolocated, the current point will be highlighted.
+- When you are on a meeting page, all geolocated points will be highlighted.
+
+Same for proposals, debates etc.
+
+---
+
+**Discover points around**<br />
+If you have multiple processes linked to the same geolocated scope, points will appear to suggest navigating through the area you are currently in. 
+
+Imagine the following situation:
+- A participatory budget is running in the neighborhood.
+- In the same neighborhood, another process is gathering projects.
+
+From the participatory budget page, you will see all the points in the neighborhood, providing a quick overview of what is happening there.
+
 
 <img
     src="https://github.com/octree-gva/meta/blob/main/decidim/static/geo/admin.png?raw=true"
@@ -43,148 +94,24 @@ We use this module to map a shape to an application zone, to be able to geo-refe
     alt="Administration of the GEO space" />
 
 
-## Installation
-This gem supports decidim version `0.27.x`.
+## Documentation
+You can consult our documentation on the [decidim-geo website](decidim-geo.octree.ch)
 
-Read the [needed dependancies for `rgeo` gem](https://github.com/rgeo/rgeo?tab=readme-ov-file#dependencies). If you have `libgeos-dev`, be sure you have a postgis database with postgres > 14.0.
+## Contributions
 
-Add this line to your application's Gemfile:
-```ruby
-gem "decidim-decidim_geo", git: "https://git.octree.ch/decidim/decidim-module-geo"
-```
-
-Update your database adapter to postgis adapter (already installed as dependancy of this gem): 
-```
-# config/database.yml
-default: &default
-  adapter: postgis
-```
-
-Update your `DATABASE_URL` environment with `postgis://`: 
-```
-DATABASE_URL="postgis://myuser:mypass@localhost/somedatabase"
-```
-
-And then execute:
-
-```bash
-bundle
-bundle exec rails decidim_geo:install:migrations
-bundle exec rails db:migrate
-```
-
-## Testing
-```
-bundle exec rake test_app
-```
-
-## Local development
-First, you need to run an empty database with a decidim dev container which runs nothing.
-```
-docker-compose down -v --remove-orphans
-docker-compose up -d
-```
-Once created, you access the decidim container
-```
-# Get the id of the decidim dev container
-docker ps --format {{.ID}} --filter=label=org.label-schema.name=decidim
-# f16bd5314386
-docker exec -it f16bd5314386 bash
-```
-You are now in bash, run manually `docker-entrypoint`.
-```
-# Will check your environment and do migrations if needed
-docker-entrypoint
-```
-You are now ready to use your container in the way you want for development:
-
-* Run a rails server: `bundle exec rails s -b 0.0.0.0`
-* Have live-reload on your assets: `bin/webpack-dev-server`
-* Lint the module `bundle exec rubocop -A ../decidim_module_geo -c ../decidim_module_geo/.rubocop.yml`
-* Execute tasks, like `bundle exec rails g migration AddSomeColumn`
-* etc.
-
-```
-bundle exec rails s -b 0.0.0.0 # rails server
-bin/webpack-dev-server
-etc.
-```
-
-To stop everything, uses:
-- `docker-compose down` to stop the containers
-- `docker-compose down -v` to stop the containers and remove all previously saved data.
-
-### Debugging
-To debug something on the container:
-1. Ensure `decidim-app` is running
-```bash
-    docker ps --all
-#   CONTAINER ID   IMAGE                           COMMAND                  CREATED        STATUS        PORTS                                            NAMES
-#   f16bd5314386   decidim-geo-development-app     "sleep infinity"   13 hours ago   Up 13 hours   0.0.0.0:3000->3000/tcp, 0.0.0.0:3035->3035/tcp   decidim-app <-------- THIS ONE
-#   b56adf6404d8   decidim-geo-development-app     "bin/webpack-dev-ser…"   54 seconds ago   Up 46 seconds   0.0.0.0:3035->3035/tcp   decidim-webpacker                                       decidim-installer
-#   bc1e912c3d8a   postgis/postgis:14-3.3-alpine   "docker-entrypoint.s…"   13 hours ago   Up 13 hours   0.0.0.0:5432->5432/tcp                           decidim-module-geo-pg-1
-```
-
-2. Run `docker exec -it decidim-app bash`
-3. Run
-    - `tail -f $ROOT/log/development.log` to **access logs**
-    - `bundle exec rails restart` to **restart rails server AND keeps webpacker running**
-    - `cd $ROOT` to access the `development_app`
-    - `cd $ROOT/../decidim_module_geo` to access the module directory
-
-### FAQ
-
-**I can't see logs on the `decidim-app`?**
-
-`decidim-app` runs here in development `webpacker-dev-server` AND a puma server, on the same container. 
-Thus, we just run both, and only one will be displayed on STDOUT. To see puma log: `docker exec decidim-app tail -f /home/app/decidim/log/development.log`
-
-**It takes for ever to pull the image?**
-
-Try to pull from docker hub before doing your install script. `docker pull hfroger/decidim:0.26.8-dev` can help. 
-
-**Why must I access to `127.0.0.1` and not `localhost`?**
-
-`webpack-dev-server` run a websocket server on port 3535, and the rails server needs to connect to it. 
-`localhost` won't make the trick, and you need to use a "real" ip, like `127.0.0.1`.  [More info](https://stackoverflow.com/a/54102318)
-
-
-More information on [our wiki](https://github.com/octree-gva/decidim-module-geo/wiki)
-
-## Contributing
-If you consider contribute, please read our [Code of Conduct](./CONTRIBUTING)
-
-[Octree](https://octree.ch) is the main contributor of the repository. We are accountable to: 
-
-- Plan roadmaps
-- Design Epics
-- Plan releases
-
-What you can do?
-
-* Propose [a new feature](https://feedback.voca.city/?tags=decidim-geo,feature)
-* Finance [an existing feature](https://feedback.voca.city/?tags=decidim-geo,feature)
-* Fix some existing [bugs](https://git.octree.ch/decidim/decidim-module-geo/-/boards/151)
-
-If you want to code your own feature, please be sure to: 
-
-1. Propose [your feature](https://feedback.voca.city/?tags=decidim-geo,feature)
-2. Wait for review
-
-
-# Why it's not on MetaDecidim?
-We think Decidim is already over complicated to install and setup. This module uses PosGis extensions on a postgres database, that can be hard to install. We block the proposal to metadecidim until these points are solved:
-
-- We have stable release.
-- We have feedbacks from participants that it is actually usefull.
-- We have feedbacks from Decidim's admins that this is actually improving participation.
-- Decidim run primarly on docker, with an updated documentation on installation. (We, at Octree is working on it for a while)
+New ideas are welcome on our [feedback page](https://feedback.voca.city/?tags=decidim-geo). We manage there co-financing and release planning.
+For technical aspects (contributions, code, issues), take a look at our [gitlab](https://git.octree.ch/decidim/decidim-module-geo).
 
 ## License
 
 This engine is distributed under the [GNU AFFERO GENERAL PUBLIC LICENSE](LICENSE-AGPLv3.txt)
 
 <br /><br />
+
+<h3 align="center">With the support of</h3>
 <p align="center">
-    <img src="https://raw.githubusercontent.com/octree-gva/meta/main/decidim/static/octree_and_decidim.png" height="90" alt="Decidim Installation by Octree" />
+        <img
+            src="https://git.octree.ch/decidim/decidim-module-geo/-/raw/main/partners.png?raw=true"
+            alt="Lausanne Participe — Une plateforme de participation pour imaginer et réaliser ensemble" />
 </p>
+
