@@ -7,17 +7,15 @@
 
 @import "./decidim_geo_mobile";
 
-.decidim__geo__container {
+.decidimGeo__container {
+  position: relative;
   .js-decidimgeo.decidimgeo__map {
-    display: none;
+    display: flex;
     min-height: 640px;
     height: 90vh;
     width: 100%;
     max-width: 100%;
     max-height: 100vh;
-    @include breakpoint(medium up) {
-      display: flex;
-    }
     * {
       box-sizing: border-box;
     }

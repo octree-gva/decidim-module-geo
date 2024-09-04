@@ -185,10 +185,11 @@ module Decidim
       # way in order to properly calculate the counter with hidden
       # comments.
       #
+      # FIXME: this is a hot fix that should be reported to decidim
       def update_comments_count
         comments_count = comments.not_hidden.not_deleted.count
         last_comment = comments.not_hidden.not_deleted.order("created_at DESC").first
-
+        # rubocop:disable Rails/SkipsModelValidations
         update_columns(
           last_comment_at: last_comment&.created_at,
           last_comment_by_id: last_comment&.decidim_user_group_id || last_comment&.decidim_author_id,
@@ -196,7 +197,9 @@ module Decidim
           comments_count: comments_count,
           updated_at: Time.current
         )
+        # rubocop:enable Rails/SkipsModelValidations
       end
+
       if Decidim.version == "0.27.4"
         # Create i18n ransackers for :title and :description.
         # Create the :search_text ransacker alias for searching from both of these.

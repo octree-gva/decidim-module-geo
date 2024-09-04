@@ -16,6 +16,8 @@ module Decidim
           decidim_original_map_model(model)
           location = model.decidim_geo_space_location || Decidim::Geo::SpaceLocation.new
           self.decidim_geo_space_address = location.address
+          self.latitude = location.latitude
+          self.longitude = location.longitude
         end
 
         def geocoding_enabled?

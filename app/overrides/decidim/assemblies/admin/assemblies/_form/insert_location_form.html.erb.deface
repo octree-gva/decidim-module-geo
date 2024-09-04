@@ -9,5 +9,13 @@
             <%= form.geocoding_field :decidim_geo_space_address, autocomplete: true %>
             <p class="help-text"><%= t(".decidim_geo_space_address_help") %></p>
         </div>
+        <div class="grid-x grid-margin-x">
+            <div class="cell small-12 medium-6">
+                <%= form.text_field :latitude %>
+            </div>
+            <div class="cell small-12 medium-6">
+                <%= form.text_field :longitude %>
+            </div>
+        </div>
     </div>
 <% end %>

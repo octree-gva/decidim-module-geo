@@ -1,0 +1,8 @@
+hadrien:
+  name: Hadrien Froger
+  title: Software engineer @ octree.ch
+  url: https://github.com/froger
+  image_url: https://github.com/froger.png
+  page: true
+  socials:
+    github: hfroger

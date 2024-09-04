@@ -1,4 +1,4 @@
-.decidim__geo__container .js-decidimgeo.decidimgeo__map {
+.decidimGeo__container .js-decidimgeo.decidimgeo__map {
   .decidimGeo__drawer__list {
     @include decidimGeo__drawerContainer;
     min-height: 400px;
@@ -81,7 +81,7 @@
     height: 69px;
     padding: 0;
     object-fit: cover;
-    &.decidimGeo__drawer__listCardImg--large {
+    &--large {
       width: 100%;
       height: 180px;
       position: absolute;

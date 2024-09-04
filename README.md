@@ -1,4 +1,4 @@
-<h1 align="center"><img src="https://github.com/octree-gva/meta/blob/main/decidim/static/header.png?raw=true" alt="Decidim - Octree Participatory democracy on a robust and open source solution" /></h1>
+<h1 align="center"><img src="https://github.com/octree-gva/decidim-geo/blob/main/parners.png?raw=true" alt="Decidim - Octree Participatory democracy on a robust and open source solution" /></h1>
 <h4 align="center">
     <a href="https://octreegva.notion.site/Roadmap-Decidim-GEO-f191fcb9e220401f8135514a7bd41aab">Roadmap</a> |
     <a href="https://drive.google.com/file/d/1lfQJumDg0Ic-RZi-R3MM8frYtKN7PB_S/view?usp=sharing">Presentation</a> |
@@ -57,7 +57,7 @@ Read the [needed dependancies for `rgeo` gem](https://github.com/rgeo/rgeo?tab=r
 
 Add this line to your application's Gemfile:
 ```ruby
-gem "decidim-decidim_geo", git: "https://git.octree.ch/decidim/decidim-module-geo", 
+gem "decidim-decidim_geo", git: "https://git.octree.ch/decidim/decidim-module-geo"
 ```
 
 Update your database adapter to postgis adapter (already installed as dependancy of this gem): 

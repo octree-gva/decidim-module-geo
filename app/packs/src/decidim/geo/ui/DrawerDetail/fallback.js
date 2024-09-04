@@ -1,5 +1,5 @@
 import _ from "lodash";
-import configStore from "../../models/configStore";
+import configStore from "../../stores/configStore";
 import createClasses from "../createClasses";
 const fallback = (container, node) => {
   const { i18n, images } = configStore.getState();

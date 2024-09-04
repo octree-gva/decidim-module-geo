@@ -43,10 +43,7 @@ module Decidim
           end
         end
 
-        def query
-          search_params = { locale: locale, class_name: supported_geo_components }
-
-          # Handle scope constraints
+        def query_with_scope_contraints(search_params)
           scopes = normalized_filters.select { |f| f[:scope_filter].present? }
           if scopes.length.positive?
             # Search only in a given scope
@@ -55,27 +52,31 @@ module Decidim
             end
             search_params = search_params.merge({ scope_ids: scope_ids })
           end
-          filtered_by_scopes = scopes.length.positive?
+          search_params
+        end
 
-          # Handle participatory spaces filter (Assemblies, Processes, Conferences, Initiatives)
-          space_filters = active_filters.select(&:participatory_space?).select do |filter|
+        # Participatory spaces filter (Assemblies, Processes, Conferences, Initiatives)
+        def query_space_filters
+          @query_space_filters ||= active_filters.select(&:participatory_space?).select do |filter|
             key = filter.graphql_key
             normalized_filters.any? { |f| f[key].present? }
           end
-          # Handle resource type filter (only Meetings)
+        end
+
+        # Define class_name search.
+        # if resource_type is "all" => do nothing
+        # else if resource_type is defined => search the resource type everywhere
+        # else if we are filtering by space => exclude all the other kind of spaces in the filter.
+        def query_with_resource_type(search_params)
           resource_type = normalized_filters.find { |f| f[:resource_type_filter].present? }
-          # Define class_name search.
-          # if resource_type is "all" => do nothing
-          # else if resource_type is defined => search the resource type everywhere
-          # else if we are filtering by space => exclude all the other kind of spaces in the filter.
           if resource_type
             # Search only for a resource type
             class_name = resource_type.resource_type_filter.resource_type
 
             search_params = search_params.merge({ class_name: class_name }) unless class_name == "all"
-          elsif space_filters.length.positive?
+          elsif query_space_filters.length.positive?
             # Exclude all the spaces that are not included in the filter.
-            not_filtered_spaces = space_filters.select do |filter|
+            not_filtered_spaces = query_space_filters.select do |filter|
               normalized_filters.find { |f| f[filter.graphql_key].present? }.nil?
             end.map(&:model_klass)
             class_name = supported_geo_components.reject do |k|
@@ -83,10 +84,22 @@ module Decidim
             end
             search_params = search_params.merge({ class_name: class_name })
           end
+          search_params
+        end
+
+        def query
+          search_params = { locale: locale, class_name: supported_geo_components }
+          # Handle scope constraints
+          search_params = query_with_scope_contraints(search_params)
+
+          # Handle resource type filter (ex: select only Meetings)
+          search_params = query_with_resource_type(search_params)
+
+          # Execute the query
           search_results = filtered_query_for(**search_params)
 
           # Bind results to the selected spaces.
-          space_filters.each do |space_filter|
+          query_space_filters.each do |space_filter|
             graphql_key = space_filter.graphql_key
             ids = normalized_filters.select { |f| f[graphql_key].present? }.map do |graphql_filter|
               graphql_filter[graphql_key][:id]
@@ -114,7 +127,13 @@ module Decidim
           filtered_query_for(locale: locale, class_name: supported_geo_components)
         end
 
-        def filtered_query_for(class_name: nil, id: nil, term: nil, scope_ids: nil, space_state: nil, locale: nil, spaces: nil)
+        def filtered_query_for(filter_options = {})
+          class_name = filter_options[:class_name]
+          id = filter_options[:id]
+          term = filter_options[:term]
+          scope_ids = filter_options[:scope_ids]
+          locale = filter_options[:locale]
+          spaces = filter_options[:spaces]
           query = { organization: organization,
                     locale: locale,
                     resource_type: class_name }
@@ -125,15 +144,16 @@ module Decidim
               # => scope || space.
               space_query = query.dup
               space_query.update(decidim_participatory_space: spaces)
-              result_query.or(
+              result_query = result_query.or(
                 SearchableResource.where(space_query)
               )
             end
-            query.update(decidim_scope_id: scope_ids)
+
+            result_query = result_query.and(SearchableResource.where(decidim_scope_id: scope_ids))
           elsif spaces.present?
-            query.update(decidim_participatory_space: spaces) if spaces.present?
+            result_query = result_query.where(decidim_participatory_space: spaces) if spaces.present?
           end
-          query.update(resource_id: id) if id.present?
+          result_query = result_query.where(resource_id: id) if id.present?
           result_query = result_query.order("datetime DESC")
           result_query = result_query.global_search(I18n.transliterate(term)) if term.present?
           result_query

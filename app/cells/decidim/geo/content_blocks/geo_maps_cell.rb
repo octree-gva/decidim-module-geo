@@ -65,19 +65,6 @@ module Decidim
           )
         end
 
-        def insert_map_mobile_link
-          content_tag(
-            :div,
-            map_link,
-            id: "DecidimGeoMobile",
-            class: ["js-decidimgeo", "decidimgeo__map-mobile-link"]
-          )
-        end
-
-        def map_link
-          content_tag(:a, icon("map") + " #{I18n.t("decidim.geo.mobile.open")}", class: ["js-decidimgeo", "map-link", "button", "secondary", "large"])
-        end
-
         def insert_scopes_mobile
           content_tag(:div, "", class: ["js-decidimgeo"])
         end

@@ -1,4 +1,4 @@
-import configStore from "../models/configStore";
+import configStore from "../stores/configStore";
 export default function saveConfig() {
   const mapElements = document.getElementsByClassName("js-decidimgeo");
   if (mapElements.length < 1) {

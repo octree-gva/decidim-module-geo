@@ -1,4 +1,4 @@
-import configStore from "../models/configStore";
+import configStore from "../stores/configStore";
 import "leaflet.fullscreen";
 
 const initMap = async () => {
@@ -32,6 +32,6 @@ const initMap = async () => {
     })
     .addTo(map);
 
-  return {map, tile};
+  return { map, tile };
 };
 export default initMap;

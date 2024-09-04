@@ -11,7 +11,9 @@ module Decidim
       isolate_namespace Decidim::Geo
 
       routes do
+        # Custom routes
       end
+
       config.to_prepare do
         # API overrides
         Decidim::Api::QueryType.include Decidim::Geo::QueryExtension
@@ -38,9 +40,6 @@ module Decidim
 
       initializer "add_cells_view_paths" do
         Cell::ViewModel.view_paths << File.expand_path("#{Decidim::Geo::Engine.root}/app/cells")
-      end
-
-      initializer "decidim.graphql_api" do
       end
 
       initializer "decidim_geo.check_rgeo" do
