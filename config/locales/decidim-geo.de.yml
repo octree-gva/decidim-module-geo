@@ -76,9 +76,9 @@ de:
         dropdown: "Bereiche"
         all: "Alle Bereiche"
       mobile:
-        open: "Open Map"
-        open_fullscreen: "Open the map in fullscreen"
-        close_fullscreen: "Close Map"
+        open: "Karte öffnen"
+        open_fullscreen: "Karte im Vollbildmodus öffnen"
+        close_fullscreen: "Karte schliessen"
       filters:
         back: "Zurück"
         button: "Filter"
@@ -90,7 +90,7 @@ de:
           only_geoencoded: "Nur kartierte Aktivität"
           only_virtual: "Nur andere Aktivität"
         time:
-          label: "By Time"
+          label: "Nach Zeit"
           all: "Alle"
           only_past: "Vergangen"
           only_active: "Aktiv"
@@ -102,7 +102,7 @@ de:
           only_assemblies: "Gremien"
           only_proposals: "Vorschläge"
           only_meetings: "Veranstaltungen"
-          only_debates: "Debates"
+          only_debates: "Debatten"
     components:
       geo:
         name: Geo
