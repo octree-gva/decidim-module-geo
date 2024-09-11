@@ -14,21 +14,46 @@ module Decidim
         end
 
         def results
-          fetch_results(filtered_data)
+          fetch_results
         end
 
         def results_count
-          count_results(filtered_data)
+          count_results
+        end
+
+        def participatory_spaces
+          @participatory_spaces ||= begin
+            matches = active_space_filters.map do |space_filter|
+              [
+                space_filter.model_klass,
+                normalized_filters.select do |filter|
+                  filter[space_filter.graphql_key].present?
+                end.collect { |filter| filter[space_filter.graphql_key][:id] }
+              ]
+            end.reject { |_model_klass, ids| ids.empty? }.map do |model_klass, ids|
+              {
+                participatory_space_type: model_klass,
+                participatory_space_id: model_klass.constantize.visible_for(current_user).where(id: ids).ids
+              }
+            end
+
+            if matches.size.positive?
+              matches
+            else
+              default_participatory_spaces
+            end
+          end
         end
 
         private
 
-        def filtered_data
-          @filtered_data ||= if normalized_filters.present?
-                               data_by_resource_type(query)
-                             else
-                               data_by_resource_type(nofilter_query)
-                             end
+        def default_participatory_spaces
+          @default_participatory_spaces ||= active_space_filters.map do |space_filter|
+            {
+              participatory_space_type: space_filter.model_klass,
+              participatory_space_id: space_filter.klass.visible_for(current_user).ids
+            }
+          end
         end
 
         def normalized_filters
@@ -43,76 +68,6 @@ module Decidim
           end
         end
 
-        def query_with_scope_contraints(search_params)
-          scopes = normalized_filters.select { |f| f[:scope_filter].present? }
-          if scopes.length.positive?
-            # Search only in a given scope
-            scope_ids = scopes.map do |scope|
-              scope[:scope_filter][:scope_id]
-            end
-            search_params = search_params.merge({ scope_ids: scope_ids })
-          end
-          search_params
-        end
-
-        # Participatory spaces filter (Assemblies, Processes, Conferences, Initiatives)
-        def query_space_filters
-          @query_space_filters ||= active_filters.select(&:participatory_space?).select do |filter|
-            key = filter.graphql_key
-            normalized_filters.any? { |f| f[key].present? }
-          end
-        end
-
-        # Define class_name search.
-        # if resource_type is "all" => do nothing
-        # else if resource_type is defined => search the resource type everywhere
-        # else if we are filtering by space => exclude all the other kind of spaces in the filter.
-        def query_with_resource_type(search_params)
-          resource_type = normalized_filters.find { |f| f[:resource_type_filter].present? }
-          if resource_type
-            # Search only for a resource type
-            class_name = resource_type.resource_type_filter.resource_type
-
-            search_params = search_params.merge({ class_name: class_name }) unless class_name == "all"
-          elsif query_space_filters.length.positive?
-            # Exclude all the spaces that are not included in the filter.
-            not_filtered_spaces = query_space_filters.select do |filter|
-              normalized_filters.find { |f| f[filter.graphql_key].present? }.nil?
-            end.map(&:model_klass)
-            class_name = supported_geo_components.reject do |k|
-              not_filtered_spaces.include?(k)
-            end
-            search_params = search_params.merge({ class_name: class_name })
-          end
-          search_params
-        end
-
-        def query
-          search_params = { locale: locale, class_name: supported_geo_components }
-          # Handle scope constraints
-          search_params = query_with_scope_contraints(search_params)
-
-          # Handle resource type filter (ex: select only Meetings)
-          search_params = query_with_resource_type(search_params)
-
-          # Execute the query
-          search_results = filtered_query_for(**search_params)
-
-          # Bind results to the selected spaces.
-          query_space_filters.each do |space_filter|
-            graphql_key = space_filter.graphql_key
-            ids = normalized_filters.select { |f| f[graphql_key].present? }.map do |graphql_filter|
-              graphql_filter[graphql_key][:id]
-            end
-            # The results must be within the filtered space
-            search_results = search_results.where(
-              decidim_participatory_space_type: space_filter.model_klass,
-              decidim_participatory_space_id: ids
-            )
-          end
-          search_results
-        end
-
         def active_filters
           @active_filters ||= ::Decidim::Geo.config.supported_filters.map do |filter|
             filter.constantize.new(self)
@@ -123,69 +78,56 @@ module Decidim
           active_filters.map(&:model_klass)
         end
 
-        def nofilter_query
-          filtered_query_for(locale: locale, class_name: supported_geo_components)
-        end
-
-        def filtered_query_for(filter_options = {})
-          class_name = filter_options[:class_name]
-          id = filter_options[:id]
-          term = filter_options[:term]
-          scope_ids = filter_options[:scope_ids]
-          locale = filter_options[:locale]
-          spaces = filter_options[:spaces]
-          query = { organization: organization,
-                    locale: locale,
-                    resource_type: class_name }
-          result_query = SearchableResource.where(query)
-          if scope_ids.present?
-            if spaces.present?
-              # If searching a scope AND a space, then should look in BOTH
-              # => scope || space.
-              space_query = query.dup
-              space_query.update(decidim_participatory_space: spaces)
-              result_query = result_query.or(
-                SearchableResource.where(space_query)
-              )
-            end
-
-            result_query = result_query.and(SearchableResource.where(decidim_scope_id: scope_ids))
-          elsif spaces.present?
-            result_query = result_query.where(decidim_participatory_space: spaces) if spaces.present?
+        def scope_ids_params
+          @scope_ids_params ||= normalized_filters.select { |f| f[:scope_filter].present? }.map do |filter|
+            filter[:scope_filter][:scope_id]
           end
-          result_query = result_query.where(resource_id: id) if id.present?
-          result_query = result_query.order("datetime DESC")
-          result_query = result_query.global_search(I18n.transliterate(term)) if term.present?
-          result_query
         end
 
-        def fetch_results(data)
-          # Apply resource specific filtering
-          active_filters.map do |filter|
-            matches = data[filter.model_klass] || []
-            filter.apply_filters(matches)
-          end.flatten
+        def id_params
+          nil
         end
 
-        def count_results(data)
+        def active_space_filters
+          @active_space_filters ||= active_filters.select(&:participatory_space?)
+        end
+
+        def resource_filters
+          @resource_filters ||= begin
+            resource_type = normalized_filters.find { |f| f[:resource_type_filter].present? }
+            filters = if participatory_spaces
+                        participatory_spaces_types = participatory_spaces.collect { |ps| ps[:participatory_space_type] }
+                        active_filters.select { |filter| filter.component? || participatory_spaces_types.include?(filter.model_klass) }
+                      else
+                        active_filters
+            end
+            if resource_type
+              # Search only for a resource type
+              class_name = resource_type.resource_type_filter.resource_type
+              return filters if class_name == "all"
+
+              filters.select do |filter|
+                filter.model_klass == class_name
+              end
+            else
+              filters
+            end
+          end
+        end
+
+        def fetch_results
           # Apply resource specific filtering
-          active_filters.map do |filter|
-            matches = data[filter.model_klass] || []
-            filter.apply_filters(matches).count
+          resource_filters.map do |filter|
+            [filter, filter.results(scope_ids_params, id_params)]
+          end
+        end
+
+        def count_results
+          # Apply resource specific filtering
+          resource_filters.map do |filter|
+            matches = filter.results(scope_ids_params, id_params)
+            matches.count
           end.sum
-        end
-
-        def data_by_resource_type(searchable_results)
-          results = {}
-          # Fetch resources, and store them by type
-          searchable_results.select("resource_id,resource_type").each do |resource|
-            if results[resource.resource_type].blank?
-              results[resource.resource_type] =
-                []
-            end
-            results[resource.resource_type].push(resource.resource_id)
-          end
-          results
         end
       end
     end

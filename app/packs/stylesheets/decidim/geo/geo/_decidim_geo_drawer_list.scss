@@ -1,10 +1,10 @@
 .decidimGeo__container .js-decidimgeo.decidimgeo__map {
   .decidimGeo__drawer__list {
     @include decidimGeo__drawerContainer;
-    min-height: 400px;
+    min-height: 210px;
     margin-left: 16px;
 
-    transform: translateY(31px);
+    transform: translateY(20px);
     padding: 4px 16px;
     background: #f0f0f0;
     box-shadow: 0px -1px 0px 0px #e0e0e0 inset;

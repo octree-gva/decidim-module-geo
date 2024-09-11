@@ -12,14 +12,31 @@ module Decidim
           :assembly_filter
         end
 
-        def apply_filters(assembly_ids)
-          return [] unless manifest # Not registered as Decidim participatory space.
+        def apply_filters(assemblies)
+          matches = scoped_by_geoencoded(scoped_by_time(assemblies))
+          if assembly_filter.empty?
+            matches
+          else
+            matches.where(id: assembly_filter).or(matches.where(parent_id: assembly_filter))
+          end
+        end
 
-          assemblies = Decidim::Assembly.visible_for(current_user).where(id: assembly_ids)
-          scoped_by_geoencoded(scoped_by_time(assemblies))
+        def search_context
+          klass.visible_for(current_user)
         end
 
         private
+
+        def assembly_filter
+          @assembly_filter ||= begin
+            processes = filters.select { |f| f[:assembly_filter].present? }
+            if processes.empty?
+              []
+            else
+              processes.collect { |f| f[:assembly_filter][:id] }
+            end
+          end
+        end
 
         def scoped_by_geoencoded(assemblies)
           if !geoencode_filtered?
@@ -43,12 +60,6 @@ module Decidim
             assemblies.where("duration > ?", Time.zone.now)
           else
             assemblies
-          end
-        end
-
-        def manifest
-          @manifest ||= Decidim.participatory_space_manifests.find do |manifest|
-            manifest.name == :assemblies
           end
         end
       end

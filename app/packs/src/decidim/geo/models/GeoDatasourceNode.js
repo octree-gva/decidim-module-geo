@@ -27,6 +27,7 @@ export default class GeoDatasourceNode {
           pinPoint == `${this.data.id}`
         ) {
           this.marker.setStyle(this.selectedState);
+          this.marker.bringToFront();
         } else {
           this.marker.setStyle(this.staledState);
         }

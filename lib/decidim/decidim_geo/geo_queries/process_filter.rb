@@ -12,43 +12,52 @@ module Decidim
           :process_filter
         end
 
-        def apply_filters(process_ids)
-          return [] unless manifest # Not registered as Decidim participatory space.
+        def apply_filters(processes)
+          matches = scoped_by_geoencoded(scoped_by_time(processes))
+          if process_filter.empty?
+            matches
+          else
+            matches.where(id: process_filter)
+          end
+        end
 
-          public_spaces = manifest.participatory_spaces.call(organization).public_spaces.where(id: process_ids)
-          return public_spaces if filters.empty?
-
-          scoped_by_geoencoded(scoped_by_time(public_spaces))
+        def search_context
+          klass.visible_for(current_user)
         end
 
         private
 
-        def scoped_by_geoencoded(public_spaces)
-          if !geoencode_filtered?
-            public_spaces.left_joins(:decidim_geo_space_location)
-          elsif only_geoencoded?
-            public_spaces.joins(:decidim_geo_space_location).where.not(decidim_geo_space_location: { latitude: nil })
-          elsif exclude_geoencoded?
-            public_spaces.left_joins(:decidim_geo_space_location).where(decidim_geo_space_location: { latitude: nil })
+        def process_filter
+          @process_filter ||= begin
+            processes = filters.select { |f| f[:process_filter].present? }
+            if processes.empty?
+              []
+            else
+              processes.collect { |f| f[:process_filter][:id] }
+            end
           end
         end
 
-        def scoped_by_time(public_spaces)
+        def scoped_by_geoencoded(processes)
+          if !geoencode_filtered?
+            processes.left_joins(:decidim_geo_space_location)
+          elsif only_geoencoded?
+            processes.joins(:decidim_geo_space_location).where.not(decidim_geo_space_location: { latitude: nil })
+          elsif exclude_geoencoded?
+            processes.left_joins(:decidim_geo_space_location).where(decidim_geo_space_location: { latitude: nil })
+          end
+        end
+
+        def scoped_by_time(processes)
           case time_filter
           when "active"
-            public_spaces.active_spaces
+            processes.active_spaces
           when "future"
-            public_spaces.future_spaces
+            processes.future_spaces
           when "past"
-            public_spaces.past_spaces
+            processes.past_spaces
           else
-            public_spaces
-          end
-        end
-
-        def manifest
-          @manifest ||= Decidim.participatory_space_manifests.find do |manifest|
-            manifest.name == :participatory_processes
+            processes
           end
         end
       end

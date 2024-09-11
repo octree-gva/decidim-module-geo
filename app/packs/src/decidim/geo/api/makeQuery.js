@@ -13,4 +13,4 @@ const makeQuery =
     return response.data[_responseKey];
   };
 
-  export default makeQuery
+export default makeQuery;

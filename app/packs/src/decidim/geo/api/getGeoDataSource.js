@@ -1,4 +1,4 @@
-import {_getGeoDataSource, _getGeoDataSourceIds} from "./queries";
+import { _getGeoDataSource, _getGeoDataSourceIds } from "./queries";
 
 const getGeoDataSource = async (params = {}, fetchAll = true) => {
   let results = [];
@@ -33,4 +33,4 @@ const getGeoDataSource = async (params = {}, fetchAll = true) => {
 
   return { nodes: results };
 };
-  export default getGeoDataSource;
+export default getGeoDataSource;

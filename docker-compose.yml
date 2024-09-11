@@ -32,11 +32,13 @@ services:
     networks:
       - private
       - default
+
   pg:
     image: postgis/postgis:14-3.4-alpine
     restart: always
     volumes:
       - pg_data:/var/lib/postgresql/data
+      - .dump/:/tmp/dump
     environment:
       - POSTGRES_PASSWORD=insecure-password
       - POSTGRES_USER=decidim

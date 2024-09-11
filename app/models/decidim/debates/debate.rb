@@ -25,7 +25,7 @@ module Decidim
       include Decidim::Endorsable
       include Decidim::Randomable
 
-      if Decidim.version == "0.27.4"
+      if Decidim.version >= "0.27.4"
         include Decidim::DownloadYourData
         include Decidim::FilterableResource
       end
@@ -59,7 +59,7 @@ module Decidim
         )
       }
 
-      scope_search_multi :with_any_state, [:open, :closed] if Decidim.version == "0.27.4"
+      scope_search_multi :with_any_state, [:open, :closed] if Decidim.version >= "0.27.4"
 
       def self.log_presenter_class_for(_log)
         Decidim::Debates::AdminLog::DebatePresenter

@@ -46,6 +46,7 @@ const store = createStore(
     setFilter(name, value) {
       set((state) => ({
         selectedFilters: {
+          ...state.defaultFilters,
           ...state.selectedFilters,
           [`${name}`]: value || state.defaultFilters[`${name}`]
         }
