@@ -1,6 +1,6 @@
 export const geoDatasource = `
   query geoDatasourceQuery ($defaultLocale: String!, $locale: String!, $filters: [GeoDatasourceFilter!], $after: String) {
-    geoDatasource(filters: $filters, locale: $locale, after: $after, first: 500){
+    geoDatasource(filters: $filters, locale: $locale, after: $after, first: 50){
       pageInfo {
         hasPreviousPage
         startCursor
@@ -45,7 +45,7 @@ export const geoDatasource = `
   }`;
 export const geoDatasourceIds = `
   query geoDatasourceQueryIds ($locale: String!, $filters: [GeoDatasourceFilter!], $after: String) {
-    geoDatasource(filters: $filters, locale: $locale, after: $after){
+    geoDatasource(filters: $filters, locale: $locale, after: $after, first: 50){
       pageInfo {
         hasPreviousPage
         startCursor

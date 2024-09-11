@@ -20,7 +20,7 @@ export default class GeoScope {
   }
 
   isEmpty() {
-    if(this.data.geom === null) return true
+    if (this.data.geom === null) return true;
     const { points } = pointStore.getState();
     const currentScopeId = this.id;
     return !points.find(({ scopeId }) => `${scopeId}` === `${currentScopeId}`);
@@ -90,7 +90,7 @@ export default class GeoScope {
     );
   }
   scopeClickHandler() {
-    this.select("layer")
+    this.select("layer");
   }
   init() {
     const { map } = configStore.getState();

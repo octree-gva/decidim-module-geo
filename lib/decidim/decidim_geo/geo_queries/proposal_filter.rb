@@ -8,9 +8,13 @@ module Decidim
           "Decidim::Proposals::Proposal"
         end
 
-        def apply_filters(proposal_ids)
-          proposals = Decidim::Proposals::Proposal.where(id: proposal_ids).includes(:component, :scope).left_joins(:attachments).published
+        def apply_filters(proposals)
+          proposals = proposals.left_joins(:attachments)
           scoped_by_geoencoded(scoped_by_time(proposals))
+        end
+
+        def search_context
+          Decidim::Proposals::Proposal.published.joins(:component).where.not(component: { published_at: nil })
         end
 
         private
@@ -22,6 +26,8 @@ module Decidim
             proposals.where.not(latitude: nil)
           elsif exclude_geoencoded?
             proposals.where(latitude: nil)
+          else
+            proposals
           end
         end
 

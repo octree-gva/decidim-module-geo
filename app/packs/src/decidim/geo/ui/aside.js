@@ -11,13 +11,16 @@ const createControl = (position) =>
     children: [],
     container: null,
     repaint() {
-      const { isAsideOpen } = configStore.getState();
+      const { isAsideOpen, map, mapReady } = configStore.getState();
       this.container.className =
         "leaflet-control " +
         createClasses("decidimGeo__aside", [isAsideOpen ? "open" : "closed"]);
       const [mapContainer] = document.getElementsByClassName("js-decidimgeo");
       if (!mapContainer) throw new Error("Can not find .js-decidimgeo element in DOM");
       mapContainer.setAttribute("data-fill", isAsideOpen ? "stretch" : "truncated");
+      if (mapReady) {
+        setTimeout(() => map.invalidateSize(), 64);
+      }
     },
     onAdd(map) {
       this.container = L.DomUtil.create(
@@ -27,7 +30,7 @@ const createControl = (position) =>
       this.children.map((ChildKlass) => {
         const comp = new ChildKlass(this.container);
         comp.onAdd(map);
-      })
+      });
       geoStore.subscribe(
         (state) => [state.selectedScope, state.selectedPoint],
         () => this.repaint()
@@ -47,7 +50,7 @@ async function aside(children) {
   const asideComponent = new controlKlass();
   children.map((child) => {
     asideComponent.children.push(child);
-  })
+  });
   map.addControl(asideComponent);
 }
 

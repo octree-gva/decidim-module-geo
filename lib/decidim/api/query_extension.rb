@@ -45,18 +45,23 @@ module Decidim
 
       def geo_datasource(**kwargs)
         locale = kwargs[:locale] || I18n.locale
-        ::Decidim::Geo::Api::GeoQuery.new(
-          current_organization,
-          current_user,
-          kwargs[:filters],
-          locale
-        ).results
+        ::Decidim::Geo::GeoDatasourceConnection.new(
+          ::Decidim::Geo::Api::GeoQuery.new(
+            current_organization,
+            current_user,
+            kwargs[:filters],
+            locale
+          ).results
+        )
       end
 
       def geo_shapefiles(title: nil)
         return Decidim::Geo::Shapefile.where(title: title) if title.present?
 
-        Decidim::Geo::Shapefile.all
+        all_shapefiles = Decidim::Geo::Shapefile.all
+        Rails.cache.fetch("decidim_geo/#{all_shapefiles.cache_key_with_version}") do
+          all_shapefiles
+        end
       end
 
       def geo_shapedata(name: nil)
@@ -70,9 +75,9 @@ module Decidim
       end
 
       def geo_scope(id: [])
-        return Decidim::Scope.all if id.empty?
+        return Decidim::Scope.includes(:shapedata).all if id.empty?
 
-        Decidim::Scope.where(id: id)
+        Decidim::Scope.includes(:shapedata).where(id: id)
       end
 
       private

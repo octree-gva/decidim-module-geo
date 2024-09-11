@@ -27,8 +27,8 @@ const store = createStore(
     _lastFilter: "",
     _lastResponse: [],
     scopeForId: (scopeId) => {
-      const scope =  get().scopes.find(({ data }) => `${data.id}` === `${scopeId}`);
-      if(!scope || scope.isEmpty()) return null;
+      const scope = get().scopes.find(({ data }) => `${data.id}` === `${scopeId}`);
+      if (!scope || scope.isEmpty()) return null;
       return scope;
     },
     clearCache: () => {
@@ -44,16 +44,19 @@ const store = createStore(
     fetchAll: async (filters = []) => {
       const { points: fetchedPoints } = store.getState();
       if (fetchedPoints.length > 0) return;
+
       const locale = configStore.getState().locale;
       const defaultLocale = configStore.getState().defaultLocale;
       set(({ isLoading }) => ({ isLoading: isLoading + 1 }));
+      const filterWithoutTime = filters.filter(
+        (f) => typeof f.timeFilter === "undefined"
+      );
       const firstData = await getFirstGeoDataSource(
         {
-          variables: { filters, locale, defaultLocale }
+          variables: { filters: filterWithoutTime, locale, defaultLocale }
         },
         true
       );
-
       set(() => ({ points: firstData.nodes.map(mapNodeToPoint).filter(Boolean) }));
 
       const scopes = await getGeoScopes({
@@ -77,7 +80,11 @@ const store = createStore(
       if (firstData.hasMore) {
         const data = await getGeoDataSource(
           {
-            variables: { filters: filters, locale: locale, after: firstData.after }
+            variables: {
+              filters: filterWithoutTime,
+              locale: locale,
+              after: firstData.after
+            }
           },
           true
         );
@@ -122,7 +129,6 @@ const store = createStore(
         _lastResponse: filteredPoints,
         isLoading: isLoading - 1
       }));
-      console.log(ids.nodes.length, "LAST RESPONSE", filteredPoints)
       return filteredPoints;
     }
   }))

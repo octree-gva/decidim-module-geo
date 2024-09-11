@@ -42,7 +42,7 @@ const store = createStore(
       const activeFilters = _.sortBy(filters, [sortingIteratee]);
       set((state) => {
         if (_.isEqual(state.activeFilters, activeFilters)) return {};
-        return { activeFilters: activeFilters };
+        return { activeFilters };
       });
     },
     resetFilters: () => {
@@ -84,11 +84,13 @@ const store = createStore(
           const timeFilterMatch = filters.find(
             ({ timeFilter = undefined }) => timeFilter
           );
+
           if (!timeFilterMatch) return defaultFilters.GeoTimeFilter;
           const timeFilter = timeFilterMatch.timeFilter.time;
           if (timeFilter === "past") return "only_past";
           if (timeFilter === "active") return "only_active";
           if (timeFilter === "future") return "only_future";
+          if (timeFilter === "all") return "all";
           return defaultFilters.GeoTimeFilter;
         case "GeoType":
           const typeFilterMatch = filters.find(

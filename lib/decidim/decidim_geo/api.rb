@@ -3,6 +3,7 @@
 module Decidim
   module Geo
     autoload :QueryExtension, "decidim/api/query_extension"
+    autoload :GeoDatasourceConnection, "decidim/api/geo_datasource_connection"
     autoload :GeoShapefileType, "decidim/api/geo_shapefile_type"
     autoload :GeoShapedataType, "decidim/api/geo_shapedata_type"
     autoload :GeoConfigType, "decidim/api/geo_config_type"

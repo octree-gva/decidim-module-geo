@@ -20,7 +20,10 @@ class FilterDropdown {
     );
     this.title = L.DomUtil.create(
       "h6",
-      createClasses("decidimGeo__filterDropdown__title", [this.isOpen() && "active", this.isEmpty() && "empty"]),
+      createClasses("decidimGeo__filterDropdown__title", [
+        this.isOpen() && "active",
+        this.isEmpty() && "empty"
+      ]),
       this.titleContainer
     );
     this.countBadge = L.DomUtil.create(
@@ -69,37 +72,33 @@ class FilterDropdown {
     );
     filterStore.subscribe(
       (state) => [state.activeFilters],
-      () => 
-        this.repaint()
-      
+      () => this.repaint()
     );
   }
   titleHandler() {
-    if(this.isEmpty()) return;
-      this.toggle();
-      this.repaint();
+    if (this.isEmpty()) return;
+    this.toggle();
+    this.repaint();
   }
-  applyBtnHandler(){
-      const { nextFilters, toggleOpen, applyNextFilters } =
-        dropdownFilterStore.getState();
-      this.applyValues(nextFilters);
-      applyNextFilters();
-      toggleOpen();
-      this.repaint();
+  applyBtnHandler() {
+    const { nextFilters, toggleOpen, applyNextFilters } = dropdownFilterStore.getState();
+    this.applyValues(nextFilters);
+    applyNextFilters();
+    toggleOpen();
+    this.repaint();
   }
-  resetBtnHandler(){
-      const {
-        resetFilters: resetDropdownFilter,
-        toggleOpen,
-        defaultFilters
-      } = dropdownFilterStore.getState();
-      resetDropdownFilter();
-      this.applyValues(defaultFilters);
-      toggleOpen();
+  resetBtnHandler() {
+    const {
+      resetFilters: resetDropdownFilter,
+      toggleOpen,
+      defaultFilters
+    } = dropdownFilterStore.getState();
+    resetDropdownFilter();
+    this.applyValues(defaultFilters);
+    toggleOpen();
   }
   isEmpty() {
-    const {_lastResponse} = pointStore.getState()
-    return _lastResponse.length < 2
+    return false;
   }
   defaultFilterFor(name) {
     const { toFilterOptions, defaultFilters } = filterStore.getState();
@@ -152,87 +151,141 @@ class FilterDropdown {
   }
 
   applyValues(filters) {
+    const defaultDropdownValues = {
+      GeoShowFilter: "all",
+      GeoTimeFilter: "only_active",
+      GeoType: "all"
+    };
     if (!filters) {
-      filters = {
-        GeoShowFilter: "all",
-        GeoTimeFilter: "all",
-        GeoType: "all"
-      };
+      filters = defaultDropdownValues;
     }
+    filters = { ...defaultDropdownValues, ...filters };
     const { setFilters, activeFilters, defaultFilters } = filterStore.getState();
-    const newFilters = activeFilters.filter((filter) => {
-      const [filterName] = Object.keys(filter);
-      return !["resourceTypeFilter", "timeFilter", "geoencodedFilter"].includes(
-        filterName
-      );
-    });
+    let newFilters = [...activeFilters];
+    const withoutGeoShowFilter = (filters) =>
+      filters.filter((f) => {
+        const [filterName] = Object.keys(f);
+        return filterName !== "geoencodedFilter";
+      });
+    const withoutTimeFilter = (filters) =>
+      filters.filter((f) => {
+        const [filterName] = Object.keys(f);
+        return filterName !== "timeFilter";
+      });
+    const withoutTypeFilter = (filters) =>
+      filters.filter((f) => {
+        const [filterName] = Object.keys(f);
+        return filterName !== "resourceTypeFilter";
+      });
     switch (filters.GeoShowFilter || defaultFilters.GeoShowFilter) {
       case "all":
+        newFilters = withoutGeoShowFilter(newFilters);
         break;
       case "only_geoencoded":
-        newFilters.push({
-          geoencodedFilter: { geoencoded: true }
-        });
+        newFilters = [
+          ...withoutGeoShowFilter(newFilters),
+          {
+            geoencodedFilter: { geoencoded: true }
+          }
+        ];
         break;
       case "only_virtual":
-        newFilters.push({
-          geoencodedFilter: { geoencoded: false }
-        });
+        newFilters = [
+          ...withoutGeoShowFilter(newFilters),
+          {
+            geoencodedFilter: { geoencoded: false }
+          }
+        ];
         break;
     }
+
     switch (filters.GeoTimeFilter || defaultFilters.GeoTimeFilter) {
       case "all":
-        newFilters.push({
-          timeFilter: { time: "all" }
-        });
+        newFilters = [
+          ...withoutTimeFilter(newFilters),
+          {
+            timeFilter: { time: "all" }
+          }
+        ];
         break;
       case "only_past":
-        newFilters.push({
-          timeFilter: { time: "past" }
-        });
+        newFilters = [
+          ...withoutTimeFilter(newFilters),
+          {
+            timeFilter: { time: "past" }
+          }
+        ];
         break;
       case "only_active":
-        newFilters.push({
-          timeFilter: { time: "active" }
-        });
+        newFilters = [
+          ...withoutTimeFilter(newFilters),
+          {
+            timeFilter: { time: "active" }
+          }
+        ];
         break;
       case "only_future":
-        newFilters.push({
-          timeFilter: { time: "future" }
-        });
+        newFilters = [
+          ...withoutTimeFilter(newFilters),
+          {
+            timeFilter: { time: "future" }
+          }
+        ];
         break;
     }
 
     switch (filters.GeoType || defaultFilters.GeoType) {
       case "all":
-        newFilters.push({
-          resourceTypeFilter: { resourceType: "all" }
-        });
+        newFilters = [
+          ...withoutTypeFilter(newFilters),
+          {
+            resourceTypeFilter: { resourceType: "all" }
+          }
+        ];
         break;
       case "only_processes":
-        newFilters.push({
-          resourceTypeFilter: { resourceType: "Decidim::ParticipatoryProcess" }
-        });
+        newFilters = [
+          ...withoutTypeFilter(newFilters),
+          {
+            resourceTypeFilter: { resourceType: "Decidim::ParticipatoryProcess" }
+          }
+        ];
         break;
       case "only_assemblies":
-        newFilters.push({ resourceTypeFilter: { resourceType: "Decidim::Assembly" } });
+        newFilters = [
+          ...withoutTypeFilter(newFilters),
+          {
+            resourceTypeFilter: { resourceType: "Decidim::Assembly" }
+          }
+        ];
         break;
       case "only_proposals":
-        newFilters.push({
-          resourceTypeFilter: { resourceType: "Decidim::Proposals::Proposal" }
-        });
+        newFilters = [
+          ...withoutTypeFilter(newFilters),
+          {
+            resourceTypeFilter: { resourceType: "Decidim::Proposals::Proposal" }
+          }
+        ];
         break;
       case "only_meetings":
-        newFilters.push({
-          resourceTypeFilter: { resourceType: "Decidim::Meetings::Meeting" }
-        });
+        newFilters = [
+          ...withoutTypeFilter(newFilters),
+          {
+            resourceTypeFilter: { resourceType: "Decidim::Meetings::Meeting" }
+          }
+        ];
+
         break;
       case "only_debates":
-        newFilters.push({
-          resourceTypeFilter: { resourceType: "Decidim::Debates::Debate" }
-        });
+        newFilters = [
+          ...withoutTypeFilter(newFilters),
+          {
+            resourceTypeFilter: { resourceType: "Decidim::Debates::Debate" }
+          }
+        ];
         break;
     }
+
     setFilters(newFilters);
   }
 
@@ -307,17 +360,14 @@ class FilterDropdown {
     const { filterCount } = dropdownFilterStore.getState();
     const { isOpen: isScopeOpen } = scopeDropdownStore.getState();
     const badgeCount = filterCount();
-    this.title.onclick = selectedPoint
-      ? () => {}
-      : this.titleHandler.bind(this);
+    this.title.onclick = selectedPoint ? () => {} : this.titleHandler.bind(this);
     this.countBadge.className = createClasses("decidimGeo__filterDropdown__counter", [
       badgeCount === 0 && "hidden"
     ]);
     this.countBadge.textContent = badgeCount;
     this.title.className = createClasses("decidimGeo__filterDropdown__title", [
       "button",
-      this.isOpen() && "active",
-
+      this.isOpen() && "active"
     ]);
     this.titleContainer.className = createClasses(
       "decidimGeo__filterDropdown__titleContainer",
