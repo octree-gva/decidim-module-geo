@@ -8,15 +8,14 @@ module Decidim
           "Decidim::Debates::Debate"
         end
 
-        def apply_filters(debate_ids)
-          debates = Decidim::Debates::Debate.where(id: debate_ids).includes(:component, :scope)
-          scoped_by_geoencoded(scoped_by_time(debates))
+        def apply_filters(debates)
+          scoped_by_geoencoded(scoped_by_time(debates.includes(:component, :scope)))
         end
 
         private
 
         def scoped_by_geoencoded(debates)
-          return [] if only_geoencoded?
+          return debates.where("1=0") if only_geoencoded?
 
           debates
         end

@@ -4,11 +4,12 @@
     position: absolute;
     z-index: 9999;
     background: white;
-    margin-top: 60px;
-    width: 206px;
-    margin-left: 17px;
+    margin-top: 48px;
+    width: 300px;
+    margin-left: 15px;
     max-height: 75vh;
     border-top: #cccccc 1px solid;
+    border-bottom: #cccccc 1px solid;
     overflow-y: auto;
     list-style: none;
     &--closed {
@@ -106,7 +107,6 @@
     & .decidimGeo__scopesDropdown__titleIcn {
       display: none;
       margin-top: 3px;
-
     }
     &--button {
       padding-top: 0;

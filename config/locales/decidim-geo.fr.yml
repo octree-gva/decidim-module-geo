@@ -75,22 +75,27 @@ fr:
       scopes:
         dropdown: "Régions"
         all: "Toutes les régions"
+      actions:
+        view: Parcourir
       mobile:
         open: "Ouvrir la carte"
-        open_fullscreen: "Open the map in fullscreen"
-        close_fullscreen: "Close Map"
+        open_fullscreen: "Ouvrir en plein écran"
+        close_fullscreen: "Fermer"
       filters:
         back: "Retour"
-        button: "Filtrer"
-        reset_button: "Rétablir"
-        apply_button: "Appliquer"
+        button: "Filtres"
+        reset_button: "Annuler"
+        apply_button: "Afficher"
+        empty:
+          message: "Aucun résultat"
+          reset_button: "Retour"
         geo:
           label: Localisation
           all: Tout
           only_geoencoded: "Éléments localisés"
           only_virtual: "Autres éléments"
         time:
-          label: "Par temps"
+          label: "Période"
           all: "Tout"
           only_past: "Passé"
           only_active: "Actif"
@@ -102,7 +107,7 @@ fr:
           only_assemblies: "Assemblées"
           only_proposals: "Propositions"
           only_meetings: "Réunions"
-          only_debates: "Debates"
+          only_debates: "Débats"
     components:
       geo:
         name: Géo

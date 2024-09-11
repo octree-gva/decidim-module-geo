@@ -1,4 +1,4 @@
-<h1 align="center"><img src="https://github.com/octree-gva/meta/blob/main/decidim/static/header.png?raw=true" alt="Decidim - Octree Participatory democracy on a robust and open source solution" /></h1>
+<h1 align="center"><img src="https://github.com/octree-gva/decidim-geo/blob/main/parners.png?raw=true" alt="Decidim - Octree Participatory democracy on a robust and open source solution" /></h1>
 <h4 align="center">
     <a href="https://octreegva.notion.site/Roadmap-Decidim-GEO-f191fcb9e220401f8135514a7bd41aab">Roadmap</a> |
     <a href="https://drive.google.com/file/d/1lfQJumDg0Ic-RZi-R3MM8frYtKN7PB_S/view?usp=sharing">Presentation</a> |
@@ -95,7 +95,7 @@ From the participatory budget page, you will see all the points in the neighborh
 
 
 ## Documentation
-You can consult our documentation on the [decidim-geo website](decidim-geo.octree.ch)
+You can consult our documentation on the [decidim-geo documentation website](https://octree-gva.github.io/decidim-module-geo/)
 
 ## Contributions
 
