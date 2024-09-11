@@ -75,8 +75,9 @@ pt:
       scopes:
         dropdown: "Scopes"
         all: "All Scopes"
+      actions:
+        view: View
       mobile:
-        open: "Open Map"
         open_fullscreen: "Open the map in fullscreen"
         close_fullscreen: "Close Map"
       filters:
@@ -84,6 +85,9 @@ pt:
         button: "Filters"
         reset_button: "Reset"
         apply_button: "Apply"
+        empty:
+          message: "No data with these filters"
+          reset_button: "Reset filters"
         geo:
           label: Show
           all: All

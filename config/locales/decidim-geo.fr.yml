@@ -78,7 +78,6 @@ fr:
       actions:
         view: Parcourir
       mobile:
-        open: "Ouvrir la carte"
         open_fullscreen: "Ouvrir en plein écran"
         close_fullscreen: "Fermer"
       filters:
