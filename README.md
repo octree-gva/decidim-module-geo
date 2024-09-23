@@ -12,8 +12,6 @@
     <a href="https://matrix.to/#/+decidim:matrix.org">Decidim Community (Matrix+Element.io)</a>
 </h4>
 
-
-
 # Decidim::Geo
 Have you ever wondered to centralize all the participation in a map? Well, we do and that is the purpose of Decidim GEO. 
 Participation on the map, means: 

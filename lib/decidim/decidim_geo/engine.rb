@@ -29,6 +29,12 @@ module Decidim
         Decidim::ParticipatoryProcesses::Admin::ParticipatoryProcessForm.include(Decidim::Geo::ParticipatoryProcessFormOverride)
         Decidim::ParticipatoryProcesses::Admin::CreateParticipatoryProcess.include(Decidim::Geo::ParticipatoryProcessCommandOverride)
         Decidim::ParticipatoryProcesses::Admin::UpdateParticipatoryProcess.include(Decidim::Geo::ParticipatoryProcessCommandOverride)
+
+        Decidim::Accountability::Result.include(Decidim::Geo::SpaceOverride)
+        Decidim::Accountability::Admin::ResultForm.include(Decidim::Geo::AccountabilityFormOverride)
+        Decidim::Accountability::Admin::UpdateResult.include(Decidim::Geo::AccountabilityUpdateCommandOverride)
+        Decidim::Accountability::Admin::CreateResult.include(Decidim::Geo::AccountabilityCreateCommandOverride)
+
       end
 
       initializer "decidim_geo.content_blocks" do

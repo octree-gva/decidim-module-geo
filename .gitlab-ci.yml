@@ -52,8 +52,8 @@ mr-translations:
     - crowdin status --no-progress
     - export BRANCH_NAME="i18n/$(date +%Y%m%d%H%M%S)"
     - export ORIGIN="crowndin_$(date +%Y%m%d%H%M%S)"
-    - echo "add $ORIGIN=https://$GIT_USERNAME:$ACCESS_TOKEN@git.octree.ch/decidim/decidim-module-geo.git"
-    - git remote add $ORIGIN https://$GIT_USERNAME:$ACCESS_TOKEN@git.octree.ch/decidim/decidim-module-geo.git
+    - echo "add $ORIGIN=https://$GIT_USERNAME:$ACCESS_TOKEN@git.octree.ch/$CI_PROJECT_PATH.git"
+    - git remote add $ORIGIN https://$GIT_USERNAME:$ACCESS_TOKEN@git.octree.ch/$CI_PROJECT_PATH.git
     - git checkout -b $BRANCH_NAME
     - git add config/locales
     - git commit -m "Update translations"
