@@ -3,116 +3,116 @@ pt:
   activemodel:
     attributes:
       assembly:
-        decidim_geo_space_address: Address
+        decidim_geo_space_address: Endereço
   decidim:
     assemblies:
       admin:
         assemblies:
           form:
-            decidim_geo_space_address: Fisical Address
-            decidim_geo_space_address_help: If the Assembly has a fisical address, fill this field with its address.
+            decidim_geo_space_address: Endereço físico
+            decidim_geo_space_address_help: Caso a reunião possua um endereço físico, preencha este campo com seu endereço.
       show:
-        decidim_geo_space_location: Address
+        decidim_geo_space_location: Endereço
     participatory_processes:
       admin:
         participatory_processes:
           form:
-            decidim_geo_space_address: Fisical Address
-            decidim_geo_space_address_help: If the Process has a fisical address, fill this field with its address.
+            decidim_geo_space_address: Endereço físico
+            decidim_geo_space_address_help: Se o processo tiver um endereço físico, preencha este campo com um endereço.
       show:
-        decidim_geo_space_address: Address
+        decidim_geo_space_address: Endereço
     geo:
       admin:
         geo_configs:
-          map_config_title: Map Configurations
-          spaces_config_title: Participatory Spaces Configurations
-          only_assemblies: Display only assemblies in Assemblies
-          only_processes: Display only processes in Processes
+          map_config_title: Configurações do mapa
+          spaces_config_title: Configurações de espaços participativos
+          only_assemblies: Exibir apenas reuniões em Reuniões
+          only_processes: Exibir apenas processos em Processos
           index:
-            title: Configurations
-            save: Save
+            title: Configurações
+            save: Salvar
           edit:
-            title: Configurations
-            save: Save
+            title: Configurações
+            save: Salvar
           fields:
-            zoom: Zoom
+            zoom: Ampliar
             longitude: Longitude
             latitude: Latitude
-            tile: Tile
+            tile: Telha
           actions:
             update:
-              success: Configurations Updated
+              success: Configurações atualizadas
         shapefiles:
-          title: Shapefiles
+          title: Formato de arquivos
           new:
-            title: Upload Shapefile
-            create: Create
+            title: Carregar formato de arquivos
+            create: Criar
           actions:
-            new_shapefile: New Shapefile
+            new_shapefile: Novo formato de arquivos
             new:
-              attachment_legend: Put your zip file here
+              attachment_legend: Coloque seu aquivo zip aqui
             create:
-              success: File uploaded
-              invalid: File upload failed
+              success: Arquivo carregado
+              invalid: Carregamento de arquivo falhou
           fields:
-            title: Name
+            title: Nome
             url: URL
-            file_name: Filename
-            created_at: Created at
-            description: Description
-            actions: Actions
+            file_name: Nome do arquivo
+            created_at: Criado em
+            description: Descrição
+            actions: Ações
           form:
-            attachment_legend: Upload shapefile compacted as a zip file
-            attachment_format: Shapefile has to be in WGS84 Datum
-            attachment_max_size: Max size - 10 MB
-            support_shape_overlaping: Overlapping shapes are not currently supported
+            attachment_legend: Carregar formato de aquivo compactado como um arquivo zip
+            attachment_format: Shapefile deve estar no Datum WGS84
+            attachment_max_size: Tamanho máximo - 10 MB
+            support_shape_overlaping: No momento, formas sobrepostas não são suportadas
       content_blocks:
-        name: Geo Maps
+        name: Mapas geográficos
         fields:
-          zoom: Zoom
+          zoom: Ampliar
           lng: Longitude
           lat: Latitude
       scopes:
-        dropdown: "Scopes"
-        all: "All Scopes"
+        dropdown: "Alcance"
+        all: "Todo alcance"
       actions:
-        view: View
+        view: Visão
       mobile:
-        open_fullscreen: "Open the map in fullscreen"
-        close_fullscreen: "Close Map"
+        open_fullscreen: "Abrir o mapa em tela cheia"
+        close_fullscreen: "Fechar o mapa"
       filters:
-        back: "Back"
-        button: "Filters"
-        reset_button: "Reset"
-        apply_button: "Apply"
+        back: "Voltar"
+        button: "Filtros"
+        reset_button: "Restaurar"
+        apply_button: "Aplicar"
         empty:
-          message: "No data with these filters"
-          reset_button: "Reset filters"
+          message: "Não há dados com esses filtros"
+          reset_button: "Restaurar filtros"
         geo:
-          label: Show
-          all: All
-          only_geoencoded: "Mapped activity only"
-          only_virtual: "Other activity only"
+          label: Mostrar
+          all: Todos
+          only_geoencoded: "Somente atividade mapeada"
+          only_virtual: "Apenas outra atividade"
         time:
-          label: "By Time"
-          all: "All"
-          only_past: "Past"
-          only_active: "Active"
-          only_future: "Future"
+          label: "Por tempo"
+          all: "Todos"
+          only_past: "Passado"
+          only_active: "Ativar"
+          only_future: "Futuro"
         type:
-          label: "Filter By Type"
-          all: "All"
-          only_processes: "Processes"
-          only_assemblies: "Assemblies"
-          only_proposals: "Proposals"
-          only_meetings: "Meetings"
-          only_debates: "Debates"
+          label: "Filtrar por tipo"
+          all: "Todos"
+          only_processes: "Processos"
+          only_assemblies: "Reuniões"
+          only_proposals: "Sugestão"
+          only_meetings: "Reunião"
+          only_debates: "Debate"
     components:
       geo:
-        name: Geo
+        name: Localização geográfica
         settings:
           global:
-            announcement: Announcement
+            announcement: Anúncio
           step:
-            announcement: Announcement
+            announcement: Anúncio
 
