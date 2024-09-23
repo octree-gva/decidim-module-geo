@@ -22,19 +22,11 @@ publish_gem:
 upload-translations:
   stage: translations
   image: node:16.18
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-      when: never
-    - if: '$CI_COMMIT_BRANCH == "main"'
-      when: always
-    - if: '$CI_COMMIT_TAG'
-      when: always
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: manual
+  when: manual
   script:
     - npm install -g @crowdin/cli
-    - crowdin upload --no-progress
-    - crowdin status --no-progress
+    - crowdin upload -T $CROWDIN_PERSONAL_TOKEN -i $CROWDIN_PROJECT_ID --no-progress || exit 1
+    - crowdin status -T $CROWDIN_PERSONAL_TOKEN -i $CROWDIN_PROJECT_ID --no-progress || exit 1
 
 # Create a MR with the new translation
 mr-translations:
@@ -48,8 +40,8 @@ mr-translations:
     - git config --global user.email "mr-translations"
     - git config --global user.name "$GIT_USERNAME"
     - npm install -g @crowdin/cli
-    - crowdin download --no-progress
-    - crowdin status --no-progress
+    - crowdin download  -T $CROWDIN_PERSONAL_TOKEN -i $CROWDIN_PROJECT_ID --no-progress
+    - crowdin status -T $CROWDIN_PERSONAL_TOKEN -i $CROWDIN_PROJECT_ID --no-progress || exit 1
     - export BRANCH_NAME="i18n/$(date +%Y%m%d%H%M%S)"
     - export ORIGIN="crowndin_$(date +%Y%m%d%H%M%S)"
     - echo "add $ORIGIN=https://$GIT_USERNAME:$ACCESS_TOKEN@git.octree.ch/$CI_PROJECT_PATH.git"
