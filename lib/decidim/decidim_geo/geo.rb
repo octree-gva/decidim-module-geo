@@ -30,7 +30,8 @@ module Decidim
         "Decidim::Geo::Api::AssemblyFilter",
         "Decidim::Geo::Api::ProposalFilter",
         "Decidim::Geo::Api::DebateFilter",
-        "Decidim::Geo::Api::MeetingFilter"
+        "Decidim::Geo::Api::MeetingFilter",
+        "Decidim::Geo::Api::AccountabilityFilter",
       ]
     end
 

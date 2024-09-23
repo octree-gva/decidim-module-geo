@@ -1,0 +1,2 @@
+<!-- insert_after "erb[loud]:contains('form.date_field :end_date')" -->
+<div class="help-text"><%= t("decidim_geo_filter_help_text", scope: "decidim.accountability.admin.results.form") %></div>

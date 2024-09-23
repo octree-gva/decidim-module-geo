@@ -9,6 +9,9 @@ require "decidim/decidim_geo/api"
 require "decidim/decidim_geo/admin_engine"
 require "decidim/decidim_geo/load_shp/app_load_shp"
 require "decidim/decidim_geo/space_location/space_override"
+require "decidim/decidim_geo/space_location/accountability_form_override"
+require "decidim/decidim_geo/space_location/accountability_update_command_override"
+require "decidim/decidim_geo/space_location/accountability_create_command_override"
 require "decidim/decidim_geo/space_location/assembly_form_override"
 require "decidim/decidim_geo/space_location/assembly_create_command_override"
 require "decidim/decidim_geo/space_location/assembly_update_command_override"
@@ -21,6 +24,7 @@ require "decidim/decidim_geo/geo_queries/debate_filter"
 require "decidim/decidim_geo/geo_queries/meeting_filter"
 require "decidim/decidim_geo/geo_queries/process_filter"
 require "decidim/decidim_geo/geo_queries/proposal_filter"
+require "decidim/decidim_geo/geo_queries/accountability_filter"
 
 module Decidim
   # This namespace holds the logic of the `Geo` component. This component

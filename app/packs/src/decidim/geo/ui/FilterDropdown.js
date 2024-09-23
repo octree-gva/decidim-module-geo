@@ -284,6 +284,14 @@ class FilterDropdown {
           }
         ];
         break;
+      case "only_accountabilities":
+        newFilters = [
+          ...withoutTypeFilter(newFilters),
+          {
+            resourceTypeFilter: { resourceType: "Decidim::Accountability::Result" }
+          }
+        ];
+        break;
     }
 
     setFilters(newFilters);
@@ -331,12 +339,16 @@ class FilterDropdown {
     const hasAssemblies = points.find((p) => p.type === "Decidim::Assembly");
     const hasProcesses = points.find((p) => p.type === "Decidim::ParticipatoryProcess");
     const hasDebates = points.find((p) => p.type === "Decidim::Debates::Debate");
+    const hasAccountabilities = points.find(
+      (p) => p.type === "Decidim::Accountability::Result"
+    );
     const disabledOptions = [];
     if (!hasMeetings) disabledOptions.push("only_meetings");
     if (!hasProposals) disabledOptions.push("only_proposals");
     if (!hasAssemblies) disabledOptions.push("only_assemblies");
     if (!hasProcesses) disabledOptions.push("only_processes");
     if (!hasDebates) disabledOptions.push("only_debates");
+    if (!hasAccountabilities) disabledOptions.push("only_accountabilities");
 
     if (isProcessOnly() || isAssemblyOnly()) disabledOptions.push("all");
 
@@ -349,7 +361,8 @@ class FilterDropdown {
         [i18n[`${i18nPrefix}.type.only_assemblies`], "only_assemblies"],
         [i18n[`${i18nPrefix}.type.only_proposals`], "only_proposals"],
         [i18n[`${i18nPrefix}.type.only_meetings`], "only_meetings"],
-        [i18n[`${i18nPrefix}.type.only_debates`], "only_debates"]
+        [i18n[`${i18nPrefix}.type.only_debates`], "only_debates"],
+        [i18n[`${i18nPrefix}.type.only_accountabilities`], "only_accountabilities"]
       ],
       disabledOptions
     );

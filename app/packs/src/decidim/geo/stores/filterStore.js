@@ -102,6 +102,7 @@ const store = createStore(
           if (resourceType === "Decidim::Proposals::Proposal") return "only_proposals";
           if (resourceType === "Decidim::Meetings::Meeting") return "only_meetings";
           if (resourceType === "Decidim::Debates::Debate") return "only_debates";
+          if (resourceType === "Decidim::Accountability::Result") return "only_accountabilities";
           if (resourceType === "Decidim::ParticipatoryProcess") return "only_processes";
           if (resourceType === "all") return "all";
           return defaultFilters.GeoType;
