@@ -32,8 +32,7 @@ upload-translations:
 mr-translations:
   stage: translations
   image: node:16.18
-  needs: 
-    - "upload-translations"
+  when: manual
   before_script:
     - apt-get update && apt-get install -y git
   script:
