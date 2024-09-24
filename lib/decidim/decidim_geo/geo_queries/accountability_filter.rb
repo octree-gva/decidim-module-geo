@@ -40,12 +40,12 @@ module Decidim
                 end_date: nil, 
                 start_date: nil
               ).or(
-                results.where('end_date IS NOT NULL && end_date >= ?', Time.zone.now)
+                results.where('end_date IS NOT NULL AND end_date >= ?', Time.zone.now)
               ).or(
-                results.where('start_date IS NOT NULL && start_date <= ?', Time.zone.now)
+                results.where('start_date IS NOT NULL AND start_date <= ?', Time.zone.now)
               )
             when "future"
-              results.where("start_date IS NOT NULL && start_date > ?", Time.zone.now)
+              results.where("start_date IS NOT NULL AND start_date > ?", Time.zone.now)
             else
               results
             end
