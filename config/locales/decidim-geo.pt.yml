@@ -5,6 +5,13 @@ pt:
       assembly:
         decidim_geo_space_address: Endereço
   decidim:
+    accountability:
+      admin:
+        results:
+          form:
+            decidim_geo_space_address: Fisical Address
+            decidim_geo_space_address_help: If the Result has a fisical address, fill this field with its address.
+            decidim_geo_filter_help_text: If empty the project remains forever active
     assemblies:
       admin:
         assemblies:
@@ -107,6 +114,7 @@ pt:
           only_proposals: "Sugestão"
           only_meetings: "Reunião"
           only_debates: "Debate"
+          only_accountabilities: "Accountabilities"
     components:
       geo:
         name: Localização geográfica
