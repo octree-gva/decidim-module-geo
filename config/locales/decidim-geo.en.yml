@@ -15,23 +15,23 @@ en:
       admin:
         results:
           form:
-            decidim_geo_space_address: Fisical Address
-            decidim_geo_space_address_help: If the Result has a fisical address, fill this field with its address.
+            decidim_geo_space_address: Physical Address
+            decidim_geo_space_address_help: If the Result has a physical address, fill this field with its address.
             decidim_geo_filter_help_text: If empty the project remains forever active
     assemblies:
       admin:
         assemblies:
           form:
-            decidim_geo_space_address: Fisical Address
-            decidim_geo_space_address_help: If the Assembly has a fisical address, fill this field with its address.
+            decidim_geo_space_address: Physical Address
+            decidim_geo_space_address_help: If the Assembly has a physical address, fill this field with its address.
       show:
         decidim_geo_space_location: Address
     participatory_processes:
       admin:
         participatory_processes:
           form:
-            decidim_geo_space_address: Fisical Address
-            decidim_geo_space_address_help: If the Process has a fisical address, fill this field with its address.
+            decidim_geo_space_address: Physical Address
+            decidim_geo_space_address_help: If the Process has a physical address, fill this field with its address.
       show:
         decidim_geo_space_address: Address
     geo:

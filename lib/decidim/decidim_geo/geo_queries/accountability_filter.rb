@@ -36,11 +36,16 @@ module Decidim
             when "past"
               results.where("end_date IS NOT NULL AND end_date < ?", Time.zone.now)
             when "active"
-              results.where(end_date: nil).or(results.where('end_date >= ?', Time.zone.now)).or(
-                results.where(start_date: nil)
-              ).or(results.where('start_date <= ?', Time.zone.now))
+              results.where(
+                end_date: nil, 
+                start_date: nil
+              ).or(
+                results.where('end_date IS NOT NULL && end_date >= ?', Time.zone.now)
+              ).or(
+                results.where('start_date IS NOT NULL && start_date <= ?', Time.zone.now)
+              )
             when "future"
-              results.where.not(start_date: nil).where("start_date > ?", Time.zone.now)
+              results.where("start_date IS NOT NULL && start_date > ?", Time.zone.now)
             else
               results
             end
