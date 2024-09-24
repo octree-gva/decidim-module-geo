@@ -18,6 +18,11 @@ module Decidim
         def self.model_klass
           raise "not implemented.@see #{name}#model_klass"
         end
+        ##
+        # If the filter is active for this manifest
+        def self.active_for_manifest?(manifest_name)
+          raise "not implemented.@see #{name}#active_for_manifest?"
+        end
 
         def model_klass
           self.class.model_klass
@@ -69,10 +74,23 @@ module Decidim
         #
         def results(scope_ids = [], id = nil)
           matches = if component?
-                      search_context.joins(:component)
+                      if !participatory_spaces.empty? && participatory_spaces.size == 1 && participatory_spaces.first[:participatory_space_id].size == 1
+                        search_context.joins(:component)
+                      else
+                        search_context
+                          .joins(:component)
+                          .joins(<<~SQL
+                          INNER JOIN "decidim_geo_no_indexes" 
+                          ON 
+                            "decidim_geo_no_indexes"."decidim_component_type" = 'Decidim::Component' 
+                            AND "decidim_geo_no_indexes"."decidim_component_id" = "component"."id"
+                            AND "decidim_geo_no_indexes"."no_index" IS FALSE
+SQL
+                          )
+                      end
                     else
                       search_context
-          end
+                    end
           matches = apply_filters(matches)
 
           matches = if scope_ids.empty?
@@ -83,7 +101,10 @@ module Decidim
 
           matches = if component? && !participatory_spaces.empty?
                       if participatory_spaces.size == 1
-                        matches = matches.where(component: participatory_spaces.first)
+                        
+                        participatory_space = participatory_spaces.first
+                        matches = matches.where(component: participatory_space)
+                        
                       else
                         first_participatory_space = participatory_spaces.first
                         filtered_matches = matches

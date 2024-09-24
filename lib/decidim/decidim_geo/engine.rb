@@ -35,6 +35,12 @@ module Decidim
         Decidim::Accountability::Admin::UpdateResult.include(Decidim::Geo::AccountabilityUpdateCommandOverride)
         Decidim::Accountability::Admin::CreateResult.include(Decidim::Geo::AccountabilityCreateCommandOverride)
 
+
+        Decidim::Admin::ComponentForm.include(Decidim::Geo::ComponentFormOverride)
+        Decidim::Component.include(Decidim::Geo::ComponentNoIndexAttr)
+        Decidim::Admin::CreateComponent.include(Decidim::Geo::CreateComponentCommandOverride)
+        Decidim::Admin::UpdateComponent.include(Decidim::Geo::UpdateComponentCommandOverride)
+        
       end
 
       initializer "decidim_geo.content_blocks" do

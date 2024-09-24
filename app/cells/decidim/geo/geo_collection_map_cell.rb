@@ -53,13 +53,15 @@ module Decidim
           {
             id: "Assemblies",
             filters: assemblies_filter,
-            scopes: assemblies_scopes
+            scopes: assemblies_scopes,
+            is_index: true
           }
         when "decidim/participatory_processes/participatory_processes:index"
           {
             id: "Processes",
             filters: processes_filter,
-            scopes: processes_scopes
+            scopes: processes_scopes,
+            is_index: true
           }
         else
           {}

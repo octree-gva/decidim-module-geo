@@ -14,6 +14,7 @@ const store = createStore(
     tile: undefined,
     map: undefined,
     mapReady: false,
+    isIndex: false,
     mapID: "Generic",
     map_config: {},
     i18n: {},
@@ -33,7 +34,8 @@ const store = createStore(
         mapID: mapConfig.mapID,
         map_config: mapConfig.map_config,
         i18n: mapConfig.i18n,
-        images: mapConfig.images || {}
+        images: mapConfig.images || {},
+        isIndex: mapConfig.is_index,
       }));
       const { setDefaultFilters, setFilters, toFilterOptions } = filterStore.getState();
       setDefaultFilters(mapConfig.filters);

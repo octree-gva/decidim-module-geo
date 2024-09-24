@@ -48,7 +48,8 @@ module Decidim
               lng: geo_config[:longitude],
               tile_layer: geo_config[:tile],
               zoom: geo_config[:zoom]
-            }
+            },
+            is_index: @options.key?(:is_index) ? @options[:is_index] : true
           }.with_indifferent_access
 
           content_tag(

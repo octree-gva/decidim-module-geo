@@ -7,7 +7,9 @@ module Decidim
         def self.model_klass
           "Decidim::Meetings::Meeting"
         end
-
+        def self.active_for_manifest?(manifest_name)
+          manifest_name.to_s == "meetings"
+        end
         def apply_filters(meetings)
           meetings = meetings.visible_for(
             current_user

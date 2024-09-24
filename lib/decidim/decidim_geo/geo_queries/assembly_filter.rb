@@ -25,6 +25,10 @@ module Decidim
           klass.visible_for(current_user)
         end
 
+        def self.active_for_manifest?(manifest_name)
+          manifest_name.to_s == "assembly"
+        end
+
         private
 
         def assembly_filter

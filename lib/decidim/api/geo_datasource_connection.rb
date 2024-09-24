@@ -94,20 +94,18 @@ module Decidim
       def resource_cache_key
         @resource_cache_key ||= begin
           cache_key = "geo_datasource/#{Digest::MD5.hexdigest(arguments.to_json)}/#{(context[:current_user] && context[:current_user].id) || 0}"
-          last_updated = supported_filters.map do |filter|
-            last_updated = filter.order(updated_at: :desc).last
-            if last_updated
-              last_updated.updated_at
-            else
-              1.year.from_now
-            end
-          end.max
+          last_updated = [
+            Decidim::Component.maximum(:updated_at),
+            supported_filters.map do |filter|
+              filter.maximum(:updated_at) || 1.year.from_now
+            end.max
+          ].max
           "#{cache_key}/#{last_updated.to_i}"
         end
       end
 
       def supported_filters
-        ::Decidim::Geo.config.supported_filters.map do |filter|
+        @supported_filters ||= ::Decidim::Geo.config.supported_filters.map do |filter|
           filter.constantize.new(self).klass
         end
       end
