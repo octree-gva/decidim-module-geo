@@ -4,7 +4,13 @@ en:
     attributes:
       assembly:
         decidim_geo_space_address: Address
+      component:
+        decidim_geo_avoid_index: Hide geolocated points outside this process
   decidim:
+    admin:
+      components:
+        form:
+          geo_avoid_index: If checked, points will be hidden of other maps on the platform such as the homepage
     accountability:
       admin:
         results:

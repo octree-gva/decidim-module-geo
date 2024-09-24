@@ -2,4 +2,5 @@
 <%= cell(
     "decidim/geo/geo_collection_map", 
     id: "Indexes",
+    is_index: false
 ) %>

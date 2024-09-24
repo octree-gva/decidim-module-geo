@@ -7,6 +7,9 @@ module Decidim
         def self.model_klass
           "Decidim::Debates::Debate"
         end
+        def self.active_for_manifest?(manifest_name)
+          manifest_name.to_s == "debates"
+        end
 
         def apply_filters(debates)
           scoped_by_geoencoded(scoped_by_time(debates.includes(:component, :scope)))

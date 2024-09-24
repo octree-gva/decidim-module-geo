@@ -7,7 +7,9 @@ module Decidim
         def self.model_klass
           "Decidim::ParticipatoryProcess"
         end
-
+        def self.active_for_manifest?(manifest_name)
+          manifest_name.to_s == "participatory_processes"
+        end
         def self.graphql_key
           :process_filter
         end

@@ -11,6 +11,7 @@ iter_children(current_participatory_space, assemblies) unless current_participat
 <%= cell("decidim/geo/content_blocks/geo_maps", current_participatory_space, 
     id: "Assembly",
     hide_empty: true,
+    is_index: false,
     filters: if current_participatory_space.scope.present?
         [
           { scopeFilter: { scopeId: current_participatory_space.scope.id } }

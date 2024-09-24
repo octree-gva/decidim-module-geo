@@ -7,6 +7,9 @@ module Decidim
         def self.model_klass
           "Decidim::Proposals::Proposal"
         end
+        def self.active_for_manifest?(manifest_name)
+          manifest_name.to_s == "proposals" || manifest_name.to_s == "reporting_proposals"
+        end
 
         def apply_filters(proposals)
           proposals = proposals.left_joins(:attachments)

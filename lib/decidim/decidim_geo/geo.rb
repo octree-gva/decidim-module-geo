@@ -34,6 +34,18 @@ module Decidim
         "Decidim::Geo::Api::AccountabilityFilter",
       ]
     end
+    
+    def self.supported_filters
+      ::Decidim::Geo.config.supported_filters.map do |filter|
+        filter.constantize
+      end
+    end
+
+    def self.supported_filter_models
+      self.supported_filters.map do |filter|
+        filter.model_klass.constantize
+      end
+    end
 
     config_accessor :experimental_features do
       # By default enable experimental feature while developping

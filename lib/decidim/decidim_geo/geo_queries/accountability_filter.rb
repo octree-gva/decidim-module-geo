@@ -11,6 +11,9 @@ module Decidim
           def apply_filters(results)
             scoped_by_geoencoded(scoped_by_time(results.includes(:component, :scope)))
           end
+          def self.active_for_manifest?(manifest_name)
+            manifest_name.to_s == "accountability"
+          end
   
           private
   

@@ -40,6 +40,7 @@ module Decidim
           argument :filters, [Decidim::Geo::GeoDatasourceInputFilter], "This argument let's you filter the results",
                    required: false
           argument :locale, type: String, required: false
+          argument :is_index, GraphQL::Types::Boolean, required: false, default_value: false
         end
       end
 

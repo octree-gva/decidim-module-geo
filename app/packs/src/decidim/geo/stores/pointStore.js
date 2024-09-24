@@ -45,8 +45,8 @@ const store = createStore(
       const { points: fetchedPoints } = store.getState();
       if (fetchedPoints.length > 0) return;
 
-      const locale = configStore.getState().locale;
-      const defaultLocale = configStore.getState().defaultLocale;
+      const {locale, isIndex, defaultLocale} = configStore.getState();
+
       set(({ isLoading }) => ({ isLoading: isLoading + 1 }));
       const filterWithoutTime = filters.filter(
         (f) => typeof f.timeFilter === "undefined"
@@ -83,6 +83,7 @@ const store = createStore(
             variables: {
               filters: filterWithoutTime,
               locale: locale,
+              is_index: isIndex,
               after: firstData.after
             }
           },
@@ -96,7 +97,7 @@ const store = createStore(
       }));
     },
     pointsForFilters: async (filters = [], forceRefresh = false) => {
-      const locale = configStore.getState().locale;
+      const {locale, isIndex} = configStore.getState();
       const {
         points,
         _lastFilter: lastFilter,
@@ -111,7 +112,7 @@ const store = createStore(
       set(({ isLoading }) => ({ isLoading: isLoading + 1 }));
       const ids = await getGeoDataSource(
         {
-          variables: { filters, locale: locale }
+          variables: { filters, locale: locale,               is_index: isIndex,          }
         },
         false
       );
