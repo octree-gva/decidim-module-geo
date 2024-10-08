@@ -28,14 +28,19 @@ async function prepareLeaflet(isSmallScreen) {
   configStore.setState(() => ({ map, tile, isSmallScreen }));
 }
 async function fetchData() {
-  const { addProcess, removeProcess } = pointStore.getState();
-  const { fetchAll, pointsForFilters, clearCache } = pointStore.getState();
+  const { addProcess, removeProcess, fetchAll, pointsForFilters } = pointStore.getState();
   addProcess();
   // Fetch all the data
-  await fetchAll(filterStore.getState().defaultFilters);
-  clearCache();
-  await pointsForFilters(filterStore.getState().defaultFilters);
-  removeProcess();
+  await Promise.allSettled([
+    fetchAll(filterStore.getState().defaultFilters),
+    pointsForFilters(filterStore.getState().defaultFilters, true)
+  ]).then((results) => {
+    const rejected = results.filter((result) => result.status === "rejected");
+    if (rejected.length > 0)
+      console.error("ERR: fail to fetchData." + rejected.map((r) => r.reason).join("."));
+    removeProcess();
+    return results.map(({ value }) => value);
+  });
 }
 async function displayMap() {
   try {
@@ -59,7 +64,7 @@ async function displayMap() {
     pointStore.subscribe(
       (state) => [!!state.isLoading, state.getFilteredPoints, state._lastResponse],
       ([isLoading, getFilteredPoints]) => {
-        if (isLoading) return;
+        if (isLoading > 0) return;
         const { space_ids: spaceIds, map } = configStore.getState();
         const { selectedPoint, selectedScope } = geoStore.getState();
         const { savedCenter } = memoryStore.getState();
@@ -73,7 +78,9 @@ async function displayMap() {
           map.fitBounds(selectedScope.layer.getBounds(), { padding: [64, 64] });
         }
 
-        const pointInMap = getFilteredPoints().filter((node) => node.isGeoLocated());
+        const pointInMap = getFilteredPoints().filter(
+          (node) => typeof node.isGeoLocated !== "undefined" && node.isGeoLocated()
+        );
         if (pointInMap.length > 0) {
           pointInMap.forEach(({ marker }) => {
             pointsLayer.addLayer(marker);

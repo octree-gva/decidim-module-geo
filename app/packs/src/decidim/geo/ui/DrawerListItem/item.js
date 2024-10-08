@@ -3,7 +3,7 @@ import { fallback, meetings } from ".";
 
 const item = (node) => {
   switch (node.type) {
-    case "Decidim::Meetings::Meeting":
+    case "meetings":
       return meetings(node);
     default:
       return fallback(node);

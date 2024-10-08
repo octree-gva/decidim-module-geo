@@ -9,7 +9,9 @@ export default class GeoDatasourceNode {
     this.map = map;
     this.marker = undefined;
   }
-
+  get isFetched() {
+    return true;
+  }
   isGeoLocated() {
     return !!this.marker;
   }
@@ -71,7 +73,7 @@ export default class GeoDatasourceNode {
   }
 
   get scopeId() {
-    return parseInt(`${this.data.scope?.id}`) || undefined;
+    return parseInt(`${this.data.scopeId}`) || undefined;
   }
 
   get selectedState() {

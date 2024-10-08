@@ -8,14 +8,6 @@ module Decidim
 
       field :latitude, GraphQL::Types::Float, "Latitude of this coordinate", null: true
       field :longitude, GraphQL::Types::Float, "Longitude of this coordinate", null: true
-
-      def latitude
-        object[:latitude]
-      end
-
-      def longitude
-        object[:longitude]
-      end
     end
   end
 end

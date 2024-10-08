@@ -24,7 +24,7 @@ module Decidim
         end
 
         def data_count
-          @data_count ||= ::Decidim::Geo::Api::GeoQuery.new(current_organization, current_user, filters, current_locale).results_count
+          @data_count ||= ::Decidim::Geo::Api::GeoQuery.new(current_organization, current_user, {filters: filters}, current_locale).results_count
         end
 
         def filters
@@ -49,6 +49,7 @@ module Decidim
               tile_layer: geo_config[:tile],
               zoom: geo_config[:zoom]
             },
+            active_manifests: ::Decidim::Geo.registry.active_manifests(&:keys),
             is_index: @options.key?(:is_index) ? @options[:is_index] : true
           }.with_indifferent_access
 
@@ -71,10 +72,12 @@ module Decidim
         end
 
         def geo_i18n
-          supported_models = ::Decidim::Geo.config.supported_filters.map do |filter|
-            filter.constantize.new(self).klass
+          supported_models = ::Decidim::Geo.registry.active_manifests do |manifests|
+            manifests.map do |manifest_name, manifest_config|
+              [manifest_name, manifest_config[:model].model_name.human]
+            end
           end
-          geo_i18n = supported_models.to_h { |klass| [klass.name, klass.model_name.human] }
+          geo_i18n = supported_models.to_h
           {
             **geo_i18n,
             "decidim.geo.mobile.open_fullscreen": t("decidim.geo.mobile.open_fullscreen"),
@@ -87,21 +90,21 @@ module Decidim
             "decidim_geo.filters.apply_button": t("decidim.geo.filters.apply_button"),
             "decidim_geo.filters.geo.label": t("decidim.geo.filters.geo.label"),
             "decidim_geo.filters.geo.all": t("decidim.geo.filters.geo.all"),
-            "decidim_geo.filters.geo.only_geoencoded": t("decidim.geo.filters.geo.only_geoencoded"),
-            "decidim_geo.filters.geo.only_virtual": t("decidim.geo.filters.geo.only_virtual"),
+            "decidim_geo.filters.geo.geoencoded": t("decidim.geo.filters.geo.only_geoencoded"),
+            "decidim_geo.filters.geo.virtual": t("decidim.geo.filters.geo.only_virtual"),
             "decidim_geo.filters.time.label": t("decidim.geo.filters.time.label"),
             "decidim_geo.filters.time.all": t("decidim.geo.filters.time.all"),
-            "decidim_geo.filters.time.only_past": t("decidim.geo.filters.time.only_past"),
-            "decidim_geo.filters.time.only_active": t("decidim.geo.filters.time.only_active"),
-            "decidim_geo.filters.time.only_future": t("decidim.geo.filters.time.only_future"),
+            "decidim_geo.filters.time.past": t("decidim.geo.filters.time.only_past"),
+            "decidim_geo.filters.time.active": t("decidim.geo.filters.time.only_active"),
+            "decidim_geo.filters.time.future": t("decidim.geo.filters.time.only_future"),
             "decidim_geo.filters.type.label": t("decidim.geo.filters.type.label"),
             "decidim_geo.filters.type.all": t("decidim.geo.filters.type.all"),
-            "decidim_geo.filters.type.only_processes": t("decidim.geo.filters.type.only_processes"),
-            "decidim_geo.filters.type.only_assemblies": t("decidim.geo.filters.type.only_assemblies"),
-            "decidim_geo.filters.type.only_proposals": t("decidim.geo.filters.type.only_proposals"),
-            "decidim_geo.filters.type.only_meetings": t("decidim.geo.filters.type.only_meetings"),
-            "decidim_geo.filters.type.only_debates": t("decidim.geo.filters.type.only_debates"),
-            "decidim_geo.filters.type.only_accountabilities": t("decidim.geo.filters.type.only_accountabilities"),
+            "decidim_geo.filters.type.participatory_processes": t("decidim.geo.filters.type.only_processes"),
+            "decidim_geo.filters.type.assemblies": t("decidim.geo.filters.type.only_assemblies"),
+            "decidim_geo.filters.type.proposals": t("decidim.geo.filters.type.only_proposals"),
+            "decidim_geo.filters.type.meetings": t("decidim.geo.filters.type.only_meetings"),
+            "decidim_geo.filters.type.debates": t("decidim.geo.filters.type.only_debates"),
+            "decidim_geo.filters.type.accountability": t("decidim.geo.filters.type.only_accountabilities"),
             "decidim_geo.filters.empty_message": t("decidim.geo.filters.empty.message"),
             "decidim_geo.filters.empty_reset_button": t("decidim.geo.filters.empty.reset_button"),
             "decidim_geo.actions.view": t("decidim.geo.actions.view")

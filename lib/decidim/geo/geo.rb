@@ -21,35 +21,27 @@ module Decidim
     autoload :GeoDatasourceType, "decidim/api/geo_datasource_type"
     autoload :GeoDatasourcesType, "decidim/api/geo_datasources_type"
     autoload :GeoCoordinatesType, "decidim/api/geo_coordinates_type"
-
-    ##
-    # Active model filters for the API.
-    config_accessor :supported_filters do
-      [
-        "Decidim::Geo::Api::ProcessFilter",
-        "Decidim::Geo::Api::AssemblyFilter",
-        "Decidim::Geo::Api::ProposalFilter",
-        "Decidim::Geo::Api::DebateFilter",
-        "Decidim::Geo::Api::MeetingFilter",
-        "Decidim::Geo::Api::AccountabilityFilter",
-      ]
-    end
     
-    def self.supported_filters
-      ::Decidim::Geo.config.supported_filters.map do |filter|
-        filter.constantize
-      end
+    def self.registry
+        Decidim::Geo::ManifestRegistry.instance
     end
 
-    def self.supported_filter_models
-      self.supported_filters.map do |filter|
-        filter.model_klass.constantize
-      end
+    def self.enable(*manifest_names)
+        self.registry.enable(*manifest_names)
     end
 
-    config_accessor :experimental_features do
-      # By default enable experimental feature while developping
-      ENV.fetch("RAILS_ENV", "production") == "development"
+    def self.register(manifest_name, time_filter:, model:, updater: )
+        self.registry.register(
+          manifest_name, 
+          time_filter: time_filter, 
+          model: model, 
+          updater: updater
+        )
     end
+
+    def self.point_factory
+      RGeo::Geos.factory(srid: 4326)
+    end
+
   end
 end

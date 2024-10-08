@@ -153,7 +153,7 @@ class FilterDropdown {
   applyValues(filters) {
     const defaultDropdownValues = {
       GeoShowFilter: "all",
-      GeoTimeFilter: "only_active",
+      GeoTimeFilter: "active",
       GeoType: "all"
     };
     if (!filters) {
@@ -177,11 +177,12 @@ class FilterDropdown {
         const [filterName] = Object.keys(f);
         return filterName !== "resourceTypeFilter";
       });
+
     switch (filters.GeoShowFilter || defaultFilters.GeoShowFilter) {
       case "all":
         newFilters = withoutGeoShowFilter(newFilters);
         break;
-      case "only_geoencoded":
+      case "geoencoded":
         newFilters = [
           ...withoutGeoShowFilter(newFilters),
           {
@@ -189,7 +190,7 @@ class FilterDropdown {
           }
         ];
         break;
-      case "only_virtual":
+      case "virtual":
         newFilters = [
           ...withoutGeoShowFilter(newFilters),
           {
@@ -199,101 +200,24 @@ class FilterDropdown {
         break;
     }
 
-    switch (filters.GeoTimeFilter || defaultFilters.GeoTimeFilter) {
-      case "all":
-        newFilters = [
-          ...withoutTimeFilter(newFilters),
-          {
-            timeFilter: { time: "all" }
-          }
-        ];
-        break;
-      case "only_past":
-        newFilters = [
-          ...withoutTimeFilter(newFilters),
-          {
-            timeFilter: { time: "past" }
-          }
-        ];
-        break;
-      case "only_active":
-        newFilters = [
-          ...withoutTimeFilter(newFilters),
-          {
-            timeFilter: { time: "active" }
-          }
-        ];
-        break;
-      case "only_future":
-        newFilters = [
-          ...withoutTimeFilter(newFilters),
-          {
-            timeFilter: { time: "future" }
-          }
-        ];
-        break;
+    const timeFilter = filters.GeoTimeFilter || defaultFilters.GeoTimeFilter;
+    if (timeFilter)
+      newFilters = [
+        ...withoutTimeFilter(newFilters),
+        {
+          timeFilter: { time: timeFilter }
+        }
+      ];
+
+    const resourceType = filters.GeoType || defaultFilters.GeoType;
+    if (resourceType) {
+      newFilters = [
+        ...withoutTypeFilter(newFilters),
+        {
+          resourceTypeFilter: { resourceType: resourceType }
+        }
+      ];
     }
-
-    switch (filters.GeoType || defaultFilters.GeoType) {
-      case "all":
-        newFilters = [
-          ...withoutTypeFilter(newFilters),
-          {
-            resourceTypeFilter: { resourceType: "all" }
-          }
-        ];
-        break;
-      case "only_processes":
-        newFilters = [
-          ...withoutTypeFilter(newFilters),
-          {
-            resourceTypeFilter: { resourceType: "Decidim::ParticipatoryProcess" }
-          }
-        ];
-        break;
-      case "only_assemblies":
-        newFilters = [
-          ...withoutTypeFilter(newFilters),
-          {
-            resourceTypeFilter: { resourceType: "Decidim::Assembly" }
-          }
-        ];
-        break;
-      case "only_proposals":
-        newFilters = [
-          ...withoutTypeFilter(newFilters),
-          {
-            resourceTypeFilter: { resourceType: "Decidim::Proposals::Proposal" }
-          }
-        ];
-        break;
-      case "only_meetings":
-        newFilters = [
-          ...withoutTypeFilter(newFilters),
-          {
-            resourceTypeFilter: { resourceType: "Decidim::Meetings::Meeting" }
-          }
-        ];
-
-        break;
-      case "only_debates":
-        newFilters = [
-          ...withoutTypeFilter(newFilters),
-          {
-            resourceTypeFilter: { resourceType: "Decidim::Debates::Debate" }
-          }
-        ];
-        break;
-      case "only_accountabilities":
-        newFilters = [
-          ...withoutTypeFilter(newFilters),
-          {
-            resourceTypeFilter: { resourceType: "Decidim::Accountability::Result" }
-          }
-        ];
-        break;
-    }
-
     setFilters(newFilters);
   }
 
@@ -308,10 +232,10 @@ class FilterDropdown {
       "GeoShowFilter",
       [
         [i18n[`${i18nPrefix}.geo.all`], "all"],
-        [i18n[`${i18nPrefix}.geo.only_geoencoded`], "only_geoencoded"],
-        [i18n[`${i18nPrefix}.geo.only_virtual`], "only_virtual"]
+        [i18n[`${i18nPrefix}.geo.geoencoded`], "geoencoded"],
+        [i18n[`${i18nPrefix}.geo.virtual`], "virtual"]
       ],
-      hasGeoLocated && hasPhysical ? [] : ["only_geoencoded", "only_virtual"]
+      hasGeoLocated && hasPhysical ? [] : ["geoencoded", "virtual"]
     );
   }
   repaintOptions() {
@@ -322,47 +246,56 @@ class FilterDropdown {
     this.geoFields(points);
     this.field(i18n[`${i18nPrefix}.time.label`], "GeoTimeFilter", [
       [i18n[`${i18nPrefix}.time.all`], "all"],
-      [i18n[`${i18nPrefix}.time.only_past`], "only_past"],
-      [i18n[`${i18nPrefix}.time.only_active`], "only_active"],
-      [i18n[`${i18nPrefix}.time.only_future`], "only_future"]
+      [i18n[`${i18nPrefix}.time.past`], "past"],
+      [i18n[`${i18nPrefix}.time.active`], "active"],
+      [i18n[`${i18nPrefix}.time.future`], "future"]
     ]);
     this.typeFields(points);
   }
 
   typeFields(points) {
     const { isProcessOnly, isAssemblyOnly } = filterStore.getState();
+    const activeManifests = configStore.getState().activeManifests || [];
 
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
-    const hasMeetings = points.find((p) => p.type === "Decidim::Meetings::Meeting");
-    const hasProposals = points.find((p) => p.type === "Decidim::Proposals::Proposal");
-    const hasAssemblies = points.find((p) => p.type === "Decidim::Assembly");
-    const hasProcesses = points.find((p) => p.type === "Decidim::ParticipatoryProcess");
-    const hasDebates = points.find((p) => p.type === "Decidim::Debates::Debate");
-    const hasAccountabilities = points.find(
-      (p) => p.type === "Decidim::Accountability::Result"
-    );
+    const hasMeetings = points.find((p) => p.type === "meetings");
+    const hasProposals = points.find((p) => p.type === "proposals");
+    const hasAssemblies = points.find((p) => p.type === "debates");
+    const hasProcesses = points.find((p) => p.type === "participatory_processes");
+    const hasDebates = points.find((p) => p.type === "debates");
+    const hasAccountabilities = points.find((p) => p.type === "accountability");
     const disabledOptions = [];
-    if (!hasMeetings) disabledOptions.push("only_meetings");
-    if (!hasProposals) disabledOptions.push("only_proposals");
-    if (!hasAssemblies) disabledOptions.push("only_assemblies");
-    if (!hasProcesses) disabledOptions.push("only_processes");
-    if (!hasDebates) disabledOptions.push("only_debates");
-    if (!hasAccountabilities) disabledOptions.push("only_accountabilities");
+    if (!hasMeetings) disabledOptions.push("meetings");
+    if (!hasProposals) disabledOptions.push("proposals");
+    if (!hasAssemblies) disabledOptions.push("assemblies");
+    if (!hasProcesses) disabledOptions.push("processes");
+    if (!hasDebates) disabledOptions.push("debates");
+    if (!hasAccountabilities) disabledOptions.push("accountability");
 
-    if (isProcessOnly() || isAssemblyOnly()) disabledOptions.push("all");
+    const fieldLabel = i18n[`${i18nPrefix}.type.label`];
+    if (isProcessOnly()) {
+      this.field(fieldLabel, "GeoType", [
+        [i18n[`${i18nPrefix}.type.processes`], "processes"]
+      ]);
+      return;
+    }
+    if (isAssemblyOnly()) {
+      this.field(fieldLabel, "GeoType", [
+        [i18n[`${i18nPrefix}.type.assemblies`], "assemblies"]
+      ]);
+      return;
+    }
 
     this.field(
       i18n[`${i18nPrefix}.type.label`],
       "GeoType",
       [
         [i18n[`${i18nPrefix}.type.all`], "all"],
-        [i18n[`${i18nPrefix}.type.only_processes`], "only_processes"],
-        [i18n[`${i18nPrefix}.type.only_assemblies`], "only_assemblies"],
-        [i18n[`${i18nPrefix}.type.only_proposals`], "only_proposals"],
-        [i18n[`${i18nPrefix}.type.only_meetings`], "only_meetings"],
-        [i18n[`${i18nPrefix}.type.only_debates`], "only_debates"],
-        [i18n[`${i18nPrefix}.type.only_accountabilities`], "only_accountabilities"]
+        ...activeManifests.map((manifestName) => [
+          i18n[`${i18nPrefix}.type.${manifestName}`],
+          manifestName
+        ])
       ],
       disabledOptions
     );

@@ -1,5 +1,5 @@
 <!-- insert_after "erb[silent]:contains('if form.object.settings?')" -->
-<% if ::Decidim::Geo.supported_filters.any? {|filter| filter.active_for_manifest?(form.object.manifest.name)} %>
+<% if ::Decidim::Geo.registry.active_manifests(&:keys).any? {|manifest_name| manifest_name.to_s == form.object.manifest.name.to_s } %>
     <div class="decidim-geo decidim-geo--admin form-field">
         <%= form.check_box :decidim_geo_avoid_index %>
         <p class="help-text" style="transform: translateY(-0.5rem)"><%= t("geo_avoid_index", scope: "decidim.admin.components.form") %></p>

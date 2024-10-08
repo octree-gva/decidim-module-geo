@@ -2,8 +2,7 @@
 
 module Decidim
   module Geo
-    module LoadShp
-      class AppLoadShp
+    class ShapefileLoader
         def initialize(shapefile)
           logger.info "⚙️ starts shapefile loader (##{now})"
           @shapefile = shapefile
@@ -79,7 +78,6 @@ module Decidim
         def logs_path
           @logs_path ||= "#{ENV.fetch("RAILS_ROOT")}/log"
         end
-      end
     end
   end
 end

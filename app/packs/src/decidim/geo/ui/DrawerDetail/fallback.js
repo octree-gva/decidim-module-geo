@@ -34,9 +34,7 @@ const fallback = (container, node) => {
       "decidimGeo__drawer__listCardDescription decidimGeo__drawer__listCardDescription--large",
       container
     );
-    infoDescription.textContent = _.truncate(node.description.translation, {
-      length: 2500
-    });
+    infoDescription.innerHTML = node.description.translation;
   }
 };
 export default fallback;
