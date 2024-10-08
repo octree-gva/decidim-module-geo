@@ -18,7 +18,6 @@ require "decidim/geo/geo_index_methods"
 require "decidim/geo/resource_wrapper"
 require "decidim/geo/update_geo_component"
 
-
 require "decidim/geo/component/overrides/component_no_index_attr"
 require "decidim/geo/component/overrides/component_form_override"
 require "decidim/geo/component/overrides/create_component_command_override"

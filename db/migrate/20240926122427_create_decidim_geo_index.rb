@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateDecidimGeoIndex < ActiveRecord::Migration[6.1]
   def change
     create_table :decidim_geo_indexes do |t|
@@ -28,6 +30,4 @@ class CreateDecidimGeoIndex < ActiveRecord::Migration[6.1]
       t.index [:resource_type, :resource_id], unique: true, name: "decidim_geo_indx_resource"
     end
   end
-
 end
-

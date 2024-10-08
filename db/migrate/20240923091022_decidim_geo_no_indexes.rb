@@ -13,10 +13,5 @@ class DecidimGeoNoIndexes < ActiveRecord::Migration[6.0]
               [:decidim_component_id],
               unique: true,
               name: "decidim_geo_uniq_no_index"
-
-    Decidim::Component.all.each do |model|
-      model.decidim_geo_avoid_index ||= Decidim::Geo::NoIndex.new
-      model.save
-    end
   end
 end

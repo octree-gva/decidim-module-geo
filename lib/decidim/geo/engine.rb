@@ -39,10 +39,10 @@ module Decidim
         Decidim::Admin::ComponentForm.include(Decidim::Geo::ComponentFormOverride)
         Decidim::Component.include(Decidim::Geo::ComponentNoIndexAttr)
         Decidim::Component.include(Decidim::Geo::UpdateGeoComponent)
-        
+
         Decidim::Admin::CreateComponent.include(Decidim::Geo::CreateComponentCommandOverride)
         Decidim::Admin::UpdateComponent.include(Decidim::Geo::UpdateComponentCommandOverride)
-        
+
         # Setup registry
         registry = Decidim::Geo::ManifestRegistry.instance
         if "Decidim::Meetings::Meeting".safe_constantize
@@ -112,7 +112,6 @@ module Decidim
         registry.enable(*registry.registered_manifests)
       end
 
-
       initializer "decidim_geo.content_blocks" do
         Decidim.content_blocks.register(:homepage, :geo_maps) do |content_block|
           content_block.cell = "decidim/geo/content_blocks/geo_maps"
@@ -128,7 +127,7 @@ module Decidim
         Rails.logger.warn("GEOS is not available, but is required for correct interpretation of polygons in shapefiles") unless RGeo::Geos.supported?
       end
 
-      initializer "decidim_geo.configure_rgeo" do 
+      initializer "decidim_geo.configure_rgeo" do
         RGeo::ActiveRecord::SpatialFactoryStore.instance.tap do |config|
           config.default = RGeo::Geos.factory
           config.register(RGeo::Geographic.spherical_factory(srid: 4326), geo_type: "point")

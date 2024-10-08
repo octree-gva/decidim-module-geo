@@ -1,57 +1,63 @@
-require 'singleton'
+# frozen_string_literal: true
+
+require "singleton"
 module Decidim
-    module Geo
-        class ManifestRegistry
-            include Singleton
-            
-            def registered_manifests
-                @_registration_manifest.keys
-            end
+  module Geo
+    class ManifestRegistry
+      include Singleton
 
-            def active_manifests
-                yield(@_registration_manifest.select {|_k, v| v[:enabled] }) if block_given?
-            end
+      def registered_manifests
+        @_registration_manifest.keys
+      end
 
-            def model_for(manifest)
-                raise "unknown manifest: #{manifest}" unless @_registration_manifest.key? manifest
-                @_registration_manifest[manifest][:model]
-            end
+      def active_manifests
+        yield(@_registration_manifest.select { |_k, v| v[:enabled] }) if block_given?
+      end
 
-            def updater_for(manifest)
-                raise "unknown manifest: #{manifest}" unless @_registration_manifest.key? manifest
-                @_registration_manifest[manifest][:updater]
-            end
+      def model_for(manifest)
+        raise "unknown manifest: #{manifest}" unless @_registration_manifest.has_key? manifest
 
-            def time_filter_for(manifest)
-                raise "unknown manifest: #{manifest}" unless @_registration_manifest.key? manifest
-                @_registration_manifest[manifest][:time_filter]
-            end
+        @_registration_manifest[manifest][:model]
+      end
 
-            def register(manifest_name, time_filter:, model: , updater:)
-                @_registration_manifest[manifest_name.to_s] = {
-                    time_filter: time_filter,
-                    model: model,
-                    updater: updater,
-                    enabled: false
-                }
-            end
+      def updater_for(manifest)
+        raise "unknown manifest: #{manifest}" unless @_registration_manifest.has_key? manifest
 
-            def enable(*manifest_names)
-                manifest_names_options = manifest_names.map {|name| "#{name}"}
-                @_registration_manifest.each do |manifest, config|
-                    config[:enabled] = manifest_names_options.include? manifest
-                end
-            end
+        @_registration_manifest[manifest][:updater]
+      end
 
-            def enabled?(manifest_name)
-                manifest = "#{manifest_name}".to_sym
-                @_registration_manifest.key? manifest
-            end
-            private
+      def time_filter_for(manifest)
+        raise "unknown manifest: #{manifest}" unless @_registration_manifest.has_key? manifest
 
-            def initialize
-              @_registration_manifest = {}.with_indifferent_access
-            end
+        @_registration_manifest[manifest][:time_filter]
+      end
+
+      def register(manifest_name, time_filter:, model:, updater:)
+        @_registration_manifest[manifest_name.to_s] = {
+          time_filter: time_filter,
+          model: model,
+          updater: updater,
+          enabled: false
+        }
+      end
+
+      def enable(*manifest_names)
+        manifest_names_options = manifest_names.map(&:to_s)
+        @_registration_manifest.each do |manifest, config|
+          config[:enabled] = manifest_names_options.include? manifest
         end
+      end
+
+      def enabled?(manifest_name)
+        manifest = manifest_name.to_s.to_sym
+        @_registration_manifest.has_key? manifest
+      end
+
+      private
+
+      def initialize
+        @_registration_manifest = {}.with_indifferent_access
+      end
     end
+  end
 end

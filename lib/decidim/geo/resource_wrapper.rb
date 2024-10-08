@@ -1,11 +1,13 @@
-module Decidim
-    module Geo
-        class ResourceWrapper
-            include Decidim::Geo::GeoIndexMethods
+# frozen_string_literal: true
 
-            def initialize(resource)
-                @resource = resource
-            end
-        end
+module Decidim
+  module Geo
+    class ResourceWrapper
+      include Decidim::Geo::GeoIndexMethods
+
+      def initialize(resource)
+        @resource = resource
+      end
     end
+  end
 end

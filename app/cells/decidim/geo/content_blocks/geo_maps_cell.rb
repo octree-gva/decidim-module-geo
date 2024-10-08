@@ -24,7 +24,7 @@ module Decidim
         end
 
         def data_count
-          @data_count ||= ::Decidim::Geo::Api::GeoQuery.new(current_organization, current_user, {filters: filters}, current_locale).results_count
+          @data_count ||= ::Decidim::Geo::Api::GeoQuery.new(current_organization, current_user, { filters: filters }, current_locale).results_count
         end
 
         def filters
@@ -50,7 +50,7 @@ module Decidim
               zoom: geo_config[:zoom]
             },
             active_manifests: ::Decidim::Geo.registry.active_manifests(&:keys),
-            is_index: @options.key?(:is_index) ? @options[:is_index] : true
+            is_index: @options.has_key?(:is_index) ? @options[:is_index] : true
           }.with_indifferent_access
 
           content_tag(
