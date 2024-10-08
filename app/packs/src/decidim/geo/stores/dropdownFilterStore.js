@@ -7,12 +7,12 @@ const store = createStore(
     isOpen: false,
     defaultFilters: {
       GeoShowFilter: "all",
-      GeoTimeFilter: "only_active",
+      GeoTimeFilter: "active",
       GeoType: "all"
     },
     selectedFilters: {
       GeoShowFilter: "all",
-      GeoTimeFilter: "only_active",
+      GeoTimeFilter: "active",
       GeoType: "all"
     },
     nextFilters: undefined,

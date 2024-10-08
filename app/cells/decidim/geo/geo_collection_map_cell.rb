@@ -93,14 +93,14 @@ module Decidim
       end
 
       def assemblies_filter
-        return [{ resourceTypeFilter: { resourceType: "Decidim::Assembly" } }] if geo_config.only_assemblies
+        return [{ resourceTypeFilter: { resourceType: "assemblies" } }] if geo_config.only_assemblies
 
         # Filter only content that are bound to one of the displayed assemblies
         visible_assemblies.map { |assembly| { assemblyFilter: { id: assembly.id } } }
       end
 
       def processes_filter
-        return [{ resourceTypeFilter: { resourceType: "Decidim::ParticipatoryProcess" } }] if geo_config.only_processes
+        return [{ resourceTypeFilter: { resourceType: "participatory_processes" } }] if geo_config.only_processes
 
         # Filter only content that are bound to one of the displayed processes
         visible_processes.map { |process| { processFilter: { id: process.id } } }

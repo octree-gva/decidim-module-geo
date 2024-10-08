@@ -50,6 +50,10 @@ const store = createStore(
         activeFilters: state.defaultFilters
       }));
     },
+    /**
+     * Check if the map to displays is only for processes
+     * @returns bool if serverside required  a participatory process type map only
+     */
     isProcessOnly() {
       const { defaultFilters } = get();
       const resourceFilter = defaultFilters.find(
@@ -57,8 +61,12 @@ const store = createStore(
       );
       if (!resourceFilter) return false;
       const { resourceType } = resourceFilter.resourceTypeFilter;
-      return resourceType === "Decidim::ParticipatoryProcess";
+      return resourceType === "participatory_processes";
     },
+    /**
+     *
+     * @returns bool if serverside require a assembly type map only
+     */
     isAssemblyOnly() {
       const { defaultFilters } = get();
       const resourceFilter = defaultFilters.find(
@@ -66,7 +74,7 @@ const store = createStore(
       );
       if (!resourceFilter) return false;
       const { resourceType } = resourceFilter.resourceTypeFilter;
-      return resourceType === "Decidim::Assembly";
+      return resourceType === "assemblies";
     },
     toFilterOptions: (name, filters) => {
       const { defaultFilters } = dropdownFilterStore.getState();
@@ -77,8 +85,8 @@ const store = createStore(
           );
           if (!showFilterMatch) return defaultFilters.GeoShowFilter;
           const geoencodedFilter = showFilterMatch.geoencodedFilter.geoencoded;
-          if (geoencodedFilter === true) return "only_geoencoded";
-          if (geoencodedFilter === false) return "only_virtual";
+          if (geoencodedFilter === true) return "geoencoded";
+          if (geoencodedFilter === false) return "virtual";
           return defaultFilters.GeoShowFilter;
         case "GeoTimeFilter":
           const timeFilterMatch = filters.find(
@@ -87,10 +95,7 @@ const store = createStore(
 
           if (!timeFilterMatch) return defaultFilters.GeoTimeFilter;
           const timeFilter = timeFilterMatch.timeFilter.time;
-          if (timeFilter === "past") return "only_past";
-          if (timeFilter === "active") return "only_active";
-          if (timeFilter === "future") return "only_future";
-          if (timeFilter === "all") return "all";
+          if (timeFilter) return timeFilter;
           return defaultFilters.GeoTimeFilter;
         case "GeoType":
           const typeFilterMatch = filters.find(
@@ -98,13 +103,7 @@ const store = createStore(
           );
           if (!typeFilterMatch) return defaultFilters.GeoType;
           const resourceType = typeFilterMatch.resourceTypeFilter.resourceType;
-          if (resourceType === "Decidim::Assembly") return "only_assemblies";
-          if (resourceType === "Decidim::Proposals::Proposal") return "only_proposals";
-          if (resourceType === "Decidim::Meetings::Meeting") return "only_meetings";
-          if (resourceType === "Decidim::Debates::Debate") return "only_debates";
-          if (resourceType === "Decidim::Accountability::Result") return "only_accountabilities";
-          if (resourceType === "Decidim::ParticipatoryProcess") return "only_processes";
-          if (resourceType === "all") return "all";
+          if (resourceType) return `${resourceType}`;
           return defaultFilters.GeoType;
       }
     }

@@ -33,8 +33,8 @@ export default class Drawer {
   }
 
   repaintList(points) {
-    points.map(({ menuItem }) => {
-      this.cardList.appendChild(menuItem);
+    points.map((point) => {
+      this.cardList.appendChild(point.menuItem);
     });
   }
   repaintEmpty() {
@@ -107,7 +107,7 @@ export default class Drawer {
       listCard
     );
     switch (node.type) {
-      case "Decidim::Meetings::Meeting":
+      case "meetings":
         meetingDetails(info, node);
         break;
       default:
@@ -121,11 +121,11 @@ export default class Drawer {
   }
   repaint() {
     L.DomUtil.empty(this.cardList);
-    const { isLoading, getFilteredPoints } = pointStore.getState();
+    const { loading, getFilteredPoints } = pointStore.getState();
     const { selectedPoint } = geoStore.getState();
     const pointsInMap = getFilteredPoints();
 
-    if (isLoading) {
+    if (loading()) {
       return this.repaintLoading();
     }
     if (selectedPoint) {
@@ -139,17 +139,17 @@ export default class Drawer {
     }
 
     this.cardList.className = createClasses("decidimGeo__drawer__list", [
-      isLoading && "loading",
+      loading() && "loading",
       this.isEmpty() && "empty"
     ]);
   }
   onAdd() {
     if (!this.parent) throw new Error("no this.parent ");
-    const { isLoading } = pointStore.getState();
+    const { loading } = pointStore.getState();
     this.cardList = L.DomUtil.create(
       "ul",
       createClasses("decidimGeo__drawer__list", [
-        isLoading && "loading",
+        loading() && "loading",
         this.isEmpty() && "empty"
       ]),
       this.parent
@@ -165,9 +165,9 @@ export default class Drawer {
     );
 
     pointStore.subscribe(
-      (state) => [state.isLoading, state._lastResponse, state._lastFilter],
-      ([isLoading, lastResponse, lastFilter]) => {
-        if (isLoading) return;
+      (state) => [state.isLoading, state.loading, state._lastResponse, state._lastFilter],
+      ([_isLoading, loading]) => {
+        if (loading()) return;
         this.repaint();
       }
     );

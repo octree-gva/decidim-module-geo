@@ -36,7 +36,7 @@ module Decidim
           argument :id, type: [Integer], required: false
         end
 
-        type.field :geo_datasource, Decidim::Geo::GeoDatasourceType.connection_type, null: true do
+        type.field :geo_datasource, Decidim::Geo::GeoDatasourceType.connection_type, null: true, extras: [:lookahead] do
           argument :filters, [Decidim::Geo::GeoDatasourceInputFilter], "This argument let's you filter the results",
                    required: false
           argument :locale, type: String, required: false
@@ -46,14 +46,26 @@ module Decidim
 
       def geo_datasource(**kwargs)
         locale = kwargs[:locale] || I18n.locale
-        ::Decidim::Geo::GeoDatasourceConnection.new(
+        
+        selects = if kwargs[:lookahead] &&  kwargs[:lookahead].selects?(:nodes) && kwargs[:lookahead].selection(:nodes).selections.size > 1
+            kwargs[:lookahead].selection(:nodes).selections.map(&:name)
+        else
+          []
+        end
+        
+        selects.push(:lonlat) if selects.delete(:coordinates)
+        selects.push(:id)
+        
+        connection = ::Decidim::Geo::GeoDatasourceConnection.new(
           ::Decidim::Geo::Api::GeoQuery.new(
             current_organization,
             current_user,
-            kwargs[:filters],
+            kwargs,
             locale
           ).results
         )
+        connection.selected_attributes = selects
+        connection
       end
 
       def geo_shapefiles(title: nil)

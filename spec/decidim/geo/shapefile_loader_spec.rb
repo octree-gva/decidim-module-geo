@@ -6,8 +6,7 @@ require "spec_helper"
 
 module Decidim
   module Geo
-    module LoadShp
-      describe AppLoadShp do
+      describe ShapefileLoader do
         let(:shapefile) { double("shapefile", shapefile: double("path", path: "/path/to/shapefile.zip")) }
         let(:app_load_shp) { described_class.new(shapefile) }
 
@@ -52,6 +51,5 @@ module Decidim
           end
         end
       end
-    end
   end
 end

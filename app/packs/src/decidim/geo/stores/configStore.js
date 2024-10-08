@@ -8,7 +8,7 @@ const store = createStore(
     locale: "en",
     defaultLocale: "en",
     selected_component: undefined,
-    selected_point: undefined,
+    defaultSelectedPoint: undefined,
     space_ids: [],
     images: {},
     tile: undefined,
@@ -21,6 +21,7 @@ const store = createStore(
     isAsideOpen: false,
     isFullscreen: false,
     isSmallScreen: false,
+    activeManifests: [],
     closeAside: () => set({ isAsideOpen: false }),
     setFullscreen: (fullscreen) => set({ isFullscreen: !!fullscreen }),
     setReady: () => set({ mapReady: true }),
@@ -30,12 +31,13 @@ const store = createStore(
         defaultLocale: mapConfig.default_locale,
         selected_component: mapConfig.selected_component,
         space_ids: mapConfig.space_ids,
-        selected_point: mapConfig.selected_point,
+        defaultSelectedPoint: mapConfig.selected_point,
         mapID: mapConfig.mapID,
         map_config: mapConfig.map_config,
         i18n: mapConfig.i18n,
         images: mapConfig.images || {},
         isIndex: mapConfig.is_index,
+        activeManifests: mapConfig.active_manifests
       }));
       const { setDefaultFilters, setFilters, toFilterOptions } = filterStore.getState();
       setDefaultFilters(mapConfig.filters);

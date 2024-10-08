@@ -2,7 +2,7 @@
 
 $LOAD_PATH.push File.expand_path("lib", __dir__)
 
-require "decidim/decidim_geo/version"
+require "decidim/geo/version"
 
 Gem::Specification.new do |s|
   s.version = Decidim::Geo.version

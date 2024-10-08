@@ -57,7 +57,7 @@ export default class ScopeDropdown {
     return geoStore.getState().selectedScope;
   }
   initMenuElements() {
-    const { isLoading } = pointStore.getState();
+    const { loading } = pointStore.getState();
     const { isOpen } = scopeDropdownStore.getState();
 
     this.heading = L.DomUtil.create(
@@ -79,7 +79,7 @@ export default class ScopeDropdown {
       "h6",
       createClasses("decidimGeo__scopesDropdown__title", [
         isOpen ? "open" : "closed",
-        isLoading && "loading",
+        loading() && "loading",
         this.hasOneOption() && "alone",
         this.isEmpty() && "empty"
       ]),

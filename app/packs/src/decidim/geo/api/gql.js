@@ -1,6 +1,6 @@
 export const geoDatasource = `
-  query geoDatasourceQuery ($defaultLocale: String!, $locale: String!, $filters: [GeoDatasourceFilter!], $after: String) {
-    geoDatasource(filters: $filters, locale: $locale, after: $after, first: 50){
+ query geoDatasourceQuery ($defaultLocale: String!, $locale: String!, $isIndex: Boolean, $filters: [GeoDatasourceFilter!], $after: String) {
+    geoDatasource(filters: $filters, locale: $locale, after: $after, isIndex: $isIndex, first: 50){
       pageInfo {
         hasPreviousPage
         startCursor
@@ -9,13 +9,13 @@ export const geoDatasource = `
       }
       nodes {
         id
-        link
+        link:resourceUrl
         participatorySpaceId
         participatorySpaceType
         componentId
-        type
-        startTime
-        endTime
+        type:resourceType
+        startTime:startDate
+        endTime:startDate
         title{
           translation(locale: $locale)
           defaultTranslation: translation(locale: $defaultLocale)
@@ -24,28 +24,22 @@ export const geoDatasource = `
           translation(locale: $locale)
           defaultTranslation: translation(locale: $defaultLocale)
         }
-        description {
+        description:descriptionHtml {
           translation(locale: $locale)
           defaultTranslation: translation(locale: $defaultLocale)
         }
-        bannerImage
+        bannerImage:imageUrl
         coordinates{
           latitude
           longitude
         }
-        scope {
-          id
-          name {
-            translation(locale: $locale)
-            defaultTranslation: translation(locale: $defaultLocale)
-          }
-        }
+        scopeId:geoScopeId
       }
     }
   }`;
 export const geoDatasourceIds = `
-  query geoDatasourceQueryIds ($locale: String!, $filters: [GeoDatasourceFilter!], $after: String) {
-    geoDatasource(filters: $filters, locale: $locale, after: $after, first: 50){
+  query geoDatasourceQueryIds ($locale: String!, $filters: [GeoDatasourceFilter!], $isIndex: Boolean, $after: String) {
+    geoDatasource(filters: $filters, locale: $locale, after: $after, isIndex: $isIndex, first: 50){
       pageInfo {
         hasPreviousPage
         startCursor
@@ -54,7 +48,7 @@ export const geoDatasourceIds = `
       }
       nodes {
         id
-        type
+        type:resourceType
       }
     }
   }`;
