@@ -21,27 +21,30 @@ module Decidim
     autoload :GeoDatasourceType, "decidim/api/geo_datasource_type"
     autoload :GeoDatasourcesType, "decidim/api/geo_datasources_type"
     autoload :GeoCoordinatesType, "decidim/api/geo_coordinates_type"
-    
+
     def self.registry
-        Decidim::Geo::ManifestRegistry.instance
+      Decidim::Geo::ManifestRegistry.instance
     end
 
     def self.enable(*manifest_names)
-        self.registry.enable(*manifest_names)
+      registry.enable(*manifest_names)
     end
 
-    def self.register(manifest_name, time_filter:, model:, updater: )
-        self.registry.register(
-          manifest_name, 
-          time_filter: time_filter, 
-          model: model, 
-          updater: updater
-        )
+    def self.register(manifest_name, time_filter:, model:, updater:)
+      registry.register(
+        manifest_name,
+        time_filter: time_filter,
+        model: model,
+        updater: updater
+      )
     end
 
     def self.point_factory
       RGeo::Geos.factory(srid: 4326)
     end
 
+    def self.point_factory
+      RGeo::Geos.factory(srid: 4326)
+    end
   end
 end

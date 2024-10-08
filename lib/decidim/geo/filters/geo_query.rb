@@ -21,27 +21,34 @@ module Decidim
           query = query.geolocated if geolocated?
           query = query.virtual if virtual?
           # Filter on scopes
-          query = query.where(
-            geo_scope_id: scope_ids_params,
-          ) unless scope_ids_params.empty?
+          unless scope_ids_params.empty?
+            query = query.where(
+              geo_scope_id: scope_ids_params
+            )
+          end
 
           # Filter on spaces
-          query = query.where(
-            participatory_space_type: :participatory_processes, 
-            participatory_space_id: process_params
-          ) unless process_params.empty?
-          
-          query = query.where(
-            participatory_space_type: :assemblies, 
-            participatory_space_id: assembly_params
-          ) unless assembly_params.empty?
-          
-          query = query.where(
-            resource_type: resource_type_params
-          ) if !resource_type_params.empty? && resource_type_params.first != "all"
-          
+          unless process_params.empty?
+            query = query.where(
+              participatory_space_type: :participatory_processes,
+              participatory_space_id: process_params
+            )
+          end
+
+          unless assembly_params.empty?
+            query = query.where(
+              participatory_space_type: :assemblies,
+              participatory_space_id: assembly_params
+            )
+          end
+
+          if !resource_type_params.empty? && resource_type_params.first != "all"
+            query = query.where(
+              resource_type: resource_type_params
+            )
+          end
+
           active_time_filter = time_filter_params && time_filter_params[:time_filter][:time]
-          
 
           if active_time_filter && active_time_filter != "all"
             time_filters = resource_type_params.map do |manifest|
@@ -58,7 +65,6 @@ module Decidim
                 raise "Unkown time filter #{active_time_filter}"
               end
             end
-            
             unless time_filters.empty?
               query = begin
                 time_filter_chain = time_filters.pop
@@ -72,11 +78,8 @@ module Decidim
           query
         end
 
-        def results_count
-          results.count
-        end
+        delegate :count, to: :results, prefix: true
 
-      
         private
 
         def active_manifests_names
@@ -98,7 +101,7 @@ module Decidim
         end
 
         def only_indexed?
-          params.key?(:is_index) && params[:is_index]
+          params.has_key?(:is_index) && params[:is_index]
         end
 
         def assembly_params
@@ -107,7 +110,6 @@ module Decidim
           end
         end
 
-        
         def resource_type_params
           @resource_type_params ||= begin
             match = graphql_params.find { |f| f[:resource_type_filter].present? }
@@ -132,14 +134,14 @@ module Decidim
 
         def geolocated?
           geolocated_params &&
-          geolocated_params[:geoencoded_filter] &&
-          geolocated_params[:geoencoded_filter][:geoencoded]
+            geolocated_params[:geoencoded_filter] &&
+            geolocated_params[:geoencoded_filter][:geoencoded]
         end
 
         def virtual?
           geolocated_params &&
-          geolocated_params[:geoencoded_filter] &&
-          !geolocated_params[:geoencoded_filter][:geoencoded]
+            geolocated_params[:geoencoded_filter] &&
+            !geolocated_params[:geoencoded_filter][:geoencoded]
         end
 
         def geolocated_params
@@ -152,10 +154,9 @@ module Decidim
           end
         end
 
-
         def time_filters
           @time_filters ||= ::Decidim::Geo.registry.active_manifests do |manifests|
-            manifests.map {|config| config[:time_filter].new(self) }
+            manifests.map { |config| config[:time_filter].new(self) }
           end
         end
 
@@ -166,7 +167,6 @@ module Decidim
         def components_time_filter
           @components_time_filter ||= time_filters.select(&:component?)
         end
-
       end
     end
   end

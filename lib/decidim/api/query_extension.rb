@@ -46,16 +46,16 @@ module Decidim
 
       def geo_datasource(**kwargs)
         locale = kwargs[:locale] || I18n.locale
-        
-        selects = if kwargs[:lookahead] &&  kwargs[:lookahead].selects?(:nodes) && kwargs[:lookahead].selection(:nodes).selections.size > 1
-            kwargs[:lookahead].selection(:nodes).selections.map(&:name)
-        else
-          []
+
+        selects = if kwargs[:lookahead] && kwargs[:lookahead].selects?(:nodes) && kwargs[:lookahead].selection(:nodes).selections.size > 1
+                    kwargs[:lookahead].selection(:nodes).selections.map(&:name)
+                  else
+                    []
         end
-        
+
         selects.push(:lonlat) if selects.delete(:coordinates)
         selects.push(:id)
-        
+
         connection = ::Decidim::Geo::GeoDatasourceConnection.new(
           ::Decidim::Geo::Api::GeoQuery.new(
             current_organization,

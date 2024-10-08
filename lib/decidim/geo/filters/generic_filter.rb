@@ -17,9 +17,11 @@ module Decidim
         def filter_past(_query)
           raise "not implemented.@see #{self.class.name} #filter_past"
         end
+
         def filter_active(_query)
           raise "not implemented.@see #{self.class.name} #filter_active"
         end
+
         def filter_future(_query)
           raise "not implemented.@see #{self.class.name} #filter_future"
         end

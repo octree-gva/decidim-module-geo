@@ -1,0 +1,387 @@
+[
+  {
+    "key": "activemodel.attributes.assembly.decidim_geo_space_address",
+    "value": "Address",
+    "locale": "en"
+  },
+  {
+    "key": "activemodel.attributes.component.decidim_geo_avoid_index",
+    "value": "Hide geolocated points outside this process",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.admin.components.form.geo_avoid_index",
+    "value": "If checked, points will be hidden of other maps on the platform such as the homepage",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.accountability.admin.results.form.decidim_geo_space_address",
+    "value": "Physical Address",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.accountability.admin.results.form.decidim_geo_space_address_help",
+    "value": "If the Result has a physical address, fill this field with its address.",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.accountability.admin.results.form.decidim_geo_filter_help_text",
+    "value": "If empty the project remains forever active",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.assemblies.admin.assemblies.form.decidim_geo_space_address",
+    "value": "Physical Address",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.assemblies.admin.assemblies.form.decidim_geo_space_address_help",
+    "value": "If the Assembly has a physical address, fill this field with its address.",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.assemblies.show.decidim_geo_space_location",
+    "value": "Address",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.participatory_processes.admin.participatory_processes.form.decidim_geo_space_address",
+    "value": "Physical Address",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.participatory_processes.admin.participatory_processes.form.decidim_geo_space_address_help",
+    "value": "If the Process has a physical address, fill this field with its address.",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.participatory_processes.show.decidim_geo_space_address",
+    "value": "Address",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.map_config_title",
+    "value": "Map Configurations",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.spaces_config_title",
+    "value": "Participatory Spaces Configurations",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.only_assemblies",
+    "value": "Display only assemblies in Assemblies",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.only_processes",
+    "value": "Display only processes in Processes",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.index.title",
+    "value": "Configurations",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.index.save",
+    "value": "Save",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.edit.title",
+    "value": "Configurations",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.edit.save",
+    "value": "Save",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.fields.zoom",
+    "value": "Zoom",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.fields.longitude",
+    "value": "Longitude",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.fields.latitude",
+    "value": "Latitude",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.fields.tile",
+    "value": "Tile",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.actions.update.success",
+    "value": "Configurations Updated",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.title",
+    "value": "Shapefiles",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.new.title",
+    "value": "Upload Shapefile",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.new.create",
+    "value": "Create",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.actions.new_shapefile",
+    "value": "New Shapefile",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.actions.new.attachment_legend",
+    "value": "Put your zip file here",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.actions.create.success",
+    "value": "File uploaded",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.actions.create.invalid",
+    "value": "File upload failed",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.fields.title",
+    "value": "Name",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.fields.url",
+    "value": "URL",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.fields.file_name",
+    "value": "Filename",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.fields.created_at",
+    "value": "Created at",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.fields.description",
+    "value": "Description",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.fields.actions",
+    "value": "Actions",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.form.attachment_legend",
+    "value": "Upload shapefile compacted as a zip file",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.form.attachment_format",
+    "value": "Shapefile has to be in WGS84 Datum",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.form.attachment_max_size",
+    "value": "Max size - 10 MB",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.shapefiles.form.support_shape_overlaping",
+    "value": "Overlapping shapes are not currently supported",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.content_blocks.name",
+    "value": "Geo Maps",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.content_blocks.fields.zoom",
+    "value": "Zoom",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.content_blocks.fields.lng",
+    "value": "Longitude",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.content_blocks.fields.lat",
+    "value": "Latitude",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.scopes.dropdown",
+    "value": "Scopes",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.scopes.all",
+    "value": "All Scopes",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.actions.view",
+    "value": "View",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.mobile.open_fullscreen",
+    "value": "Open the map in fullscreen",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.mobile.close_fullscreen",
+    "value": "Close Map",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.back",
+    "value": "Back",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.button",
+    "value": "Filters",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.reset_button",
+    "value": "Reset",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.apply_button",
+    "value": "Apply",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.empty.message",
+    "value": "No data with these filters",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.empty.reset_button",
+    "value": "Reset filters",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.geo.label",
+    "value": "Show",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.geo.all",
+    "value": "All",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.geo.only_geoencoded",
+    "value": "Mapped activity only",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.geo.only_virtual",
+    "value": "Other activity only",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.time.label",
+    "value": "By Time",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.time.all",
+    "value": "All",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.time.only_past",
+    "value": "Past",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.time.only_active",
+    "value": "Active",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.time.only_future",
+    "value": "Future",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.type.label",
+    "value": "Filter By Type",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.type.all",
+    "value": "All",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.type.only_processes",
+    "value": "Processes",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.type.only_assemblies",
+    "value": "Assemblies",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.type.only_proposals",
+    "value": "Proposals",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.type.only_meetings",
+    "value": "Meetings",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.type.only_debates",
+    "value": "Debates",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.type.only_accountabilities",
+    "value": "Accountabilities",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.components.geo.name",
+    "value": "Geo",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.components.geo.settings.global.announcement",
+    "value": "Announcement",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.components.geo.settings.step.announcement",
+    "value": "Announcement",
+    "locale": "en"
+  }
+]

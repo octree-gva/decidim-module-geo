@@ -6,7 +6,6 @@ module Decidim
   module Geo
     class GeoDatasourceType < Decidim::Api::Types::BaseObject
       description "A datasource for all decidim geo support"
-     
       field :id, ID, null: false
       field :resource_id, ID, null: false
       field :resource_type, String, null: false
