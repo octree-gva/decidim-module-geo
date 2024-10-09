@@ -17,6 +17,7 @@ module Decidim
         def results
           query = Decidim::Geo::Index.all
           return query.indexed if graphql_params.empty?
+
           query = query.indexed if only_indexed?
           query = query.geolocated if geolocated?
           query = query.virtual if virtual?

@@ -74,6 +74,10 @@ class FilterDropdown {
       (state) => [state.activeFilters],
       () => this.repaint()
     );
+    pointStore.subscribe(
+      (state) => [state.loading],
+      () => this.repaint()
+    );
   }
   titleHandler() {
     if (this.isEmpty()) return;
@@ -132,6 +136,8 @@ class FilterDropdown {
       dropdownFilterStore.getState().setNextFilter(name, evt.target.value);
     };
     options.forEach(([key, value]) => {
+      if(!key)
+      return
       const option = L.DomUtil.create(
         "option",
         "decidimGeo__filterDropdown__option",
@@ -239,6 +245,8 @@ class FilterDropdown {
     );
   }
   repaintOptions() {
+    const { isProcessOnly, isAssemblyOnly } = filterStore.getState();
+
     L.DomUtil.empty(this.dropDownOptions);
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
@@ -250,21 +258,24 @@ class FilterDropdown {
       [i18n[`${i18nPrefix}.time.active`], "active"],
       [i18n[`${i18nPrefix}.time.future`], "future"]
     ]);
-    this.typeFields(points);
+    if (!isProcessOnly() && !isAssemblyOnly()) {
+      this.typeFields(points);
+
+    }
+
   }
 
   typeFields(points) {
-    const { isProcessOnly, isAssemblyOnly } = filterStore.getState();
     const activeManifests = configStore.getState().activeManifests || [];
 
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
-    const hasMeetings = points.find((p) => p.type === "meetings");
-    const hasProposals = points.find((p) => p.type === "proposals");
-    const hasAssemblies = points.find((p) => p.type === "debates");
-    const hasProcesses = points.find((p) => p.type === "participatory_processes");
-    const hasDebates = points.find((p) => p.type === "debates");
-    const hasAccountabilities = points.find((p) => p.type === "accountability");
+    const hasMeetings = points.find((p) => p.resourceType === "meetings");
+    const hasProposals = points.find((p) => p.resourceType === "proposals");
+    const hasAssemblies = points.find((p) => p.resourceType === "debates");
+    const hasProcesses = points.find((p) => p.resourceType === "participatory_processes");
+    const hasDebates = points.find((p) => p.resourceType === "debates");
+    const hasAccountabilities = points.find((p) => p.resourceType === "accountability");
     const disabledOptions = [];
     if (!hasMeetings) disabledOptions.push("meetings");
     if (!hasProposals) disabledOptions.push("proposals");
@@ -274,21 +285,9 @@ class FilterDropdown {
     if (!hasAccountabilities) disabledOptions.push("accountability");
 
     const fieldLabel = i18n[`${i18nPrefix}.type.label`];
-    if (isProcessOnly()) {
-      this.field(fieldLabel, "GeoType", [
-        [i18n[`${i18nPrefix}.type.processes`], "processes"]
-      ]);
-      return;
-    }
-    if (isAssemblyOnly()) {
-      this.field(fieldLabel, "GeoType", [
-        [i18n[`${i18nPrefix}.type.assemblies`], "assemblies"]
-      ]);
-      return;
-    }
 
     this.field(
-      i18n[`${i18nPrefix}.type.label`],
+      fieldLabel,
       "GeoType",
       [
         [i18n[`${i18nPrefix}.type.all`], "all"],

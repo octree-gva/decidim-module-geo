@@ -3,8 +3,8 @@ import createClasses from "../createClasses";
 import _ from "lodash";
 
 const fallback = (node) => {
-  const { i18n, images } = configStore.getState();
-  const hasImage = !_.isEmpty(node.bannerImage);
+  const { i18n, images, locale, defaultLocale } = configStore.getState();
+  const hasImage = !_.isEmpty(node.imageUrl);
   const listCard = L.DomUtil.create("li", "decidimGeo__drawer__listCard");
 
   const info = L.DomUtil.create(
@@ -14,16 +14,16 @@ const fallback = (node) => {
   );
 
   const infoType = L.DomUtil.create("div", "decidimGeo__drawer__listCardType", info);
-  infoType.textContent += i18n[node.type];
+  infoType.textContent += i18n[node.resourceType];
   const notGeoEncodedIcon = L.DomUtil.create(
     "img",
-    createClasses("decidimGeo__drawer__listCardIcon", [node.coordinates && "hidden"]),
+    createClasses("decidimGeo__drawer__listCardIcon", [node.lonlat && "hidden"]),
     infoType
   );
   notGeoEncodedIcon.src = images?.not_geolocated;
 
   const infoTitle = L.DomUtil.create("div", "decidimGeo__drawer__listCardTitle", info);
-  infoTitle.textContent = node.title.translation || node.title.defaultTranslation;
+  infoTitle.textContent = node.title[locale] || node.title[defaultLocale];
 
   if (node.shortDescription) {
     const infoDescription = L.DomUtil.create(
@@ -32,12 +32,12 @@ const fallback = (node) => {
       info
     );
     infoDescription.textContent =
-      node.shortDescription.translation || node.shortDescription.defaultTranslation;
+      node.shortDescription[locale] || node.shortDescription[defaultLocale];
   }
 
   if (hasImage) {
     const image = L.DomUtil.create("img", "decidimGeo__drawer__listCardImg", listCard);
-    image.src = node.bannerImage;
+    image.src = node.imageUrl;
   }
   return listCard;
 };

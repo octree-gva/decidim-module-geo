@@ -11,7 +11,12 @@ module Decidim
       isolate_namespace Decidim::Geo
 
       routes do
-        # Custom routes
+        scope :api do
+          scope :"decidim-geo" do
+            resources :geo_scopes, only: [:index, :show]
+            resources :points, only: [:index]
+          end
+        end
       end
 
       config.to_prepare do
@@ -110,6 +115,11 @@ module Decidim
         end
         # By default, enable all registered manifests
         registry.enable(*registry.registered_manifests)
+      end
+      initializer "decidim_geo.mount_routes" do
+        Decidim::Core::Engine.routes do
+          mount Decidim::Geo::Engine, at: "/", as: "decidim_geo"
+        end
       end
 
       initializer "decidim_geo.content_blocks" do

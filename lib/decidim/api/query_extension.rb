@@ -4,20 +4,6 @@ module Decidim
   module Geo
     # GeoQueryExtension
     module QueryExtension
-      def self.geo_manifests
-        {
-          "Decidim::Meetings::Meeting": true,
-          "Decidim::Proposals::Proposal": true,
-          "Decidim::Assembly": true,
-          "Decidim::ParticipatoryProcess": true,
-          "Decidim::Debates::Debate": false
-        }
-      end
-
-      def self.supported_geo_components
-        geo_manifests.keys
-      end
-
       def self.included(type)
         type.field :geo_shapefiles, [Decidim::Geo::GeoShapefileType], description: "Return's information about the shapefiles", null: true do
           argument :title, [String], required: false
@@ -35,37 +21,6 @@ module Decidim
                                                                 null: true do
           argument :id, type: [Integer], required: false
         end
-
-        type.field :geo_datasource, Decidim::Geo::GeoDatasourceType.connection_type, null: true, extras: [:lookahead] do
-          argument :filters, [Decidim::Geo::GeoDatasourceInputFilter], "This argument let's you filter the results",
-                   required: false
-          argument :locale, type: String, required: false
-          argument :is_index, GraphQL::Types::Boolean, required: false, default_value: false
-        end
-      end
-
-      def geo_datasource(**kwargs)
-        locale = kwargs[:locale] || I18n.locale
-
-        selects = if kwargs[:lookahead] && kwargs[:lookahead].selects?(:nodes) && kwargs[:lookahead].selection(:nodes).selections.size > 1
-                    kwargs[:lookahead].selection(:nodes).selections.map(&:name)
-                  else
-                    []
-        end
-
-        selects.push(:lonlat) if selects.delete(:coordinates)
-        selects.push(:id)
-
-        connection = ::Decidim::Geo::GeoDatasourceConnection.new(
-          ::Decidim::Geo::Api::GeoQuery.new(
-            current_organization,
-            current_user,
-            kwargs,
-            locale
-          ).results
-        )
-        connection.selected_attributes = selects
-        connection
       end
 
       def geo_shapefiles(title: nil)

@@ -1,8 +1,8 @@
 import { customMarker } from ".";
 
 const nodeMarker = (node) => {
-  if (!node.coordinates?.latitude || !node.coordinates?.longitude) return null;
-  const location = [node.coordinates.latitude, node.coordinates.longitude];
+  if (!node.lonlat?.latitude || !node.lonlat?.longitude) return null;
+  const location = [node.lonlat.latitude, node.lonlat.longitude];
   return customMarker(location);
 };
 
