@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "activerecord-postgis-adapter", ">= 6.0"
   s.add_dependency "decidim-admin", Decidim::Geo.decidim_version
+  s.add_dependency "decidim-api", Decidim::Geo.decidim_version
   s.add_dependency "decidim-core", Decidim::Geo.decidim_version
   s.add_dependency "deface", ">= 1.8.1"
   s.add_dependency "ffi-geos", "~> 2.4"

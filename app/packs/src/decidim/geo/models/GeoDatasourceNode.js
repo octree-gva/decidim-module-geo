@@ -63,13 +63,15 @@ export default class GeoDatasourceNode {
   }
 
   get type() {
-    if (!this.data.id || !this.data.type) return undefined;
-    return this.data.type;
+    if (!this.data.id || !this.data.resourceType) return undefined;
+    return this.data.resourceType;
+  }
+  get resourceType() {
+    return this.type;
   }
 
   get id() {
-    if (!this.data.id || !this.data.type) return undefined;
-    return `${this.data.type}::${this.data.id}`;
+    return parseInt(`${this.data.id}`) || undefined;
   }
 
   get scopeId() {
@@ -105,7 +107,7 @@ export default class GeoDatasourceNode {
   }
 
   init() {
-    if (this.data?.coordinates?.latitude && this.data?.coordinates?.longitude) {
+    if (this.data?.lonlat?.latitude && this.data?.lonlat?.longitude) {
       this.marker = nodeMarker(this.data);
       this.marker.on("click", this.select.bind(this));
       this.marker.bringToFront();

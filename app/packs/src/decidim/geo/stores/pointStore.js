@@ -1,7 +1,7 @@
 import { createStore } from "zustand/vanilla";
 import configStore from "./configStore";
 
-import { getGeoDataSource, getGeoScopes, getFirstGeoDataSource } from "../api";
+import { getGeoDataSource, getGeoScopes } from "../api";
 import GeoDatasourceNode from "../models/GeoDatasourceNode";
 import GeoScope from "../models/GeoScope";
 import { subscribeWithSelector } from "zustand/middleware";
@@ -16,6 +16,13 @@ const mapNodeToPoint = (node) => {
   }
   return undefined;
 };
+
+const filteredIdsStore = createStore((set, get) => ({
+  activeFilterIds: [],
+ 
+}));
+let fetchAllCalled = false;
+
 const store = createStore(
   subscribeWithSelector((set, get) => ({
     /**
@@ -24,10 +31,9 @@ const store = createStore(
     points: [],
     scopes: [],
     isLoading: 0,
-    _fetchedAll: false,
-    _prefetched: [],
     _lastFilter: "",
     _lastResponse: [],
+    fetchesRunning: 0,
     scopeForId: (scopeId) => {
       const scope = get().scopes.find(({ data }) => `${data.id}` === `${scopeId}`);
       if (!scope || scope.isEmpty()) return null;
@@ -43,10 +49,20 @@ const store = createStore(
       set(({ isLoading }) => ({ isLoading: isLoading - 1 }));
     },
     loading() {
-      const { isLoading, _fetchedAll } = store.getState();
-      return isLoading > 0 || !_fetchedAll;
+      const { isLoading, fetchesRunning } = store.getState();
+      return isLoading > 0 || !fetchAllCalled || fetchesRunning;
     },
     getFilteredPoints: () => store.getState()._lastResponse,
+    _updateCache: () => {
+      const filteredPoints = filteredIdsStore.getState().activeFilterIds;
+      const points = get().points;
+      set(() => ({
+        _lastResponse: filteredPoints.map(({ id: needleId }) => {
+          return points.find(({ id }) => `${needleId}` === `${id}`);
+        })
+        .filter(Boolean)
+      }))
+    },
     fetchAll: async (filters = []) => {
       const { points: fetchedPoints } = store.getState();
       if (fetchedPoints.length > 0) return;
@@ -57,27 +73,15 @@ const store = createStore(
       const filterWithoutTime = filters.filter(
         (f) => typeof f.timeFilter === "undefined"
       );
-      promises.push(
-        getGeoDataSource(
-          {
-            variables: { filters: filterWithoutTime, locale, defaultLocale, isIndex }
-          },
-          true
-        ).then((data) => {
-          const points = data.nodes.map(mapNodeToPoint).filter(Boolean);
-          set(({ _prefetched }) => ({
-            points: points,
-            _lastResponse: _prefetched
-              .map(({ id: needleId, type: needleType }) => {
-                return points.find(({ id }) => `${needleType}::${needleId}` === id);
-              })
-              .filter(Boolean),
-            _prefetched: [],
-            _fetchedAll: true
-          }));
-          return { points };
-        })
-      );
+      set(({fetchesRunning}) => ({fetchesRunning: fetchesRunning + 1}))
+      getGeoDataSource({ filters: filterWithoutTime, locale, isIndex }, true, (data, hasMore) => {
+        console.log("received ", data)
+        const points = data.map(mapNodeToPoint).filter(Boolean);
+        store.setState(({points: prevPoints}) => ({points: [...prevPoints, ...points]}));
+        fetchAllCalled = !hasMore;
+        get()._updateCache();
+        set(({fetchesRunning}) => ({fetchesRunning: fetchesRunning - (hasMore ? 0 : 1)}))
+      })
 
       promises.push(
         getGeoScopes({
@@ -112,8 +116,6 @@ const store = createStore(
     pointsForFilters: async (filters = [], forceRefresh = false) => {
       const { locale, isIndex } = configStore.getState();
       const {
-        points,
-        _fetchedAll,
         _lastFilter: lastFilter,
         _lastResponse: lastResponse
       } = store.getState();
@@ -122,33 +124,16 @@ const store = createStore(
       if (cacheKey === lastFilter && !forceRefresh) {
         return lastResponse;
       }
+      set(({fetchesRunning}) => ({fetchesRunning: fetchesRunning + 1,  _lastFilter: cacheKey}))
+      filteredIdsStore.setState(() => ({activeFilterIds: []}))
 
-      const ids = await getGeoDataSource(
-        {
-          variables: { filters, locale: locale, isIndex }
-        },
-        false
-      );
-      if (!ids?.nodes) {
-        return [];
-      }
-      let filteredPoints = ids.nodes;
-      if (_fetchedAll) {
-        filteredPoints = filteredPoints.map(({ id: needleId, type: needleType }) => {
-          return points.find(({ id }) => `${needleType}::${needleId}` === id);
-        });
-        set(() => ({
-          _lastFilter: cacheKey,
-          _lastResponse: filteredPoints.filter(Boolean)
+      getGeoDataSource({ filters, locale: locale, isIndex }, false, (data, hasMore) => {
+        filteredIdsStore.setState(({activeFilterIds}) => ({
+          activeFilterIds: activeFilterIds.concat(data || [])
         }));
-        return;
-      }
-
-      set(() => ({
-        _lastFilter: cacheKey,
-        _prefetched: filteredPoints.filter(Boolean)
-      }));
-      return filteredPoints;
+        set(({fetchesRunning}) => ({fetchesRunning: fetchesRunning - (hasMore ? 0 : 1)}))
+        get()._updateCache();
+      });
     }
   }))
 );

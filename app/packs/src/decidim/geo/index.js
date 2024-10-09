@@ -28,19 +28,11 @@ async function prepareLeaflet(isSmallScreen) {
   configStore.setState(() => ({ map, tile, isSmallScreen }));
 }
 async function fetchData() {
-  const { addProcess, removeProcess, fetchAll, pointsForFilters } = pointStore.getState();
+  const { addProcess, removeProcess, fetchAll } = pointStore.getState();
   addProcess();
   // Fetch all the data
-  await Promise.allSettled([
-    fetchAll(filterStore.getState().defaultFilters),
-    pointsForFilters(filterStore.getState().defaultFilters, true)
-  ]).then((results) => {
-    const rejected = results.filter((result) => result.status === "rejected");
-    if (rejected.length > 0)
-      console.error("ERR: fail to fetchData." + rejected.map((r) => r.reason).join("."));
-    removeProcess();
-    return results.map(({ value }) => value);
-  });
+  await fetchAll(filterStore.getState().defaultFilters)
+  removeProcess();
 }
 async function displayMap() {
   try {
@@ -62,19 +54,19 @@ async function displayMap() {
     });
 
     pointStore.subscribe(
-      (state) => [!!state.isLoading, state.getFilteredPoints, state._lastResponse],
-      ([isLoading, getFilteredPoints]) => {
+      (state) => [!!state.isLoading, state.getFilteredPoints, state.fetchesRunning, state._lastResponse],
+      ([isLoading, getFilteredPoints, fetchesRunning]) => {
         if (isLoading > 0) return;
         const { space_ids: spaceIds, map } = configStore.getState();
         const { selectedPoint, selectedScope } = geoStore.getState();
         const { savedCenter } = memoryStore.getState();
         pointsLayer.clearLayers();
         let boudingBoxFilter = () => true;
-        if (!selectedPoint && !selectedScope && spaceIds) {
+        if (!fetchesRunning && !selectedPoint && !selectedScope && spaceIds) {
           boudingBoxFilter = (node) =>
             node.isGeoLocated() && spaceIds.includes(`${node.scopeId}`);
         }
-        if (selectedScope?.layer && selectedScope && !selectedPoint) {
+        if (!fetchesRunning && selectedScope?.layer && selectedScope && !selectedPoint) {
           map.fitBounds(selectedScope.layer.getBounds(), { padding: [64, 64] });
         }
 
@@ -94,7 +86,7 @@ async function displayMap() {
               : idealBoundingBox,
             { updateWhenZooming: true }
           );
-          if (!savedCenter && boundingBox && !selectedScope && !selectedPoint) {
+          if (!fetchesRunning && !savedCenter && boundingBox && !selectedScope && !selectedPoint) {
             map.fitBounds(boundingBox.getBounds(), { padding: [64, 64] });
           }
         }

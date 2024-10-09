@@ -98,7 +98,7 @@ export default class Drawer {
       this.cardList
     );
     listCard.onclick = () => {
-      location.href = node.link;
+      location.href = node.resourceUrl;
     };
 
     const info = L.DomUtil.create(
@@ -106,7 +106,7 @@ export default class Drawer {
       "decidimGeo__drawer__listCardInfo decidimGeo__drawer__listCardInfo--large",
       listCard
     );
-    switch (node.type) {
+    switch (node.resourceType) {
       case "meetings":
         meetingDetails(info, node);
         break;
@@ -116,7 +116,7 @@ export default class Drawer {
     }
     const viewBtn = L.DomUtil.create("a", "decidimGeo__drawer__viewBtn", listCard);
     viewBtn.textContent = this.i18n()["decidim_geo.actions.view"];
-    viewBtn.href = node.link;
+    viewBtn.href = node.resourceUrl;
     return listCard;
   }
   repaint() {
