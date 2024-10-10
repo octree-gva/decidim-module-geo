@@ -6,7 +6,7 @@ implementing BEM (https://getbem.com/introduction/) and remove !important rules*
     position: static;
   }
   .leaflet-control-container {
-    z-index: 9999;
+    z-index: 2000;
   }
   .leaflet-left > .leaflet-control-zoom {
     display: none;

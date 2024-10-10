@@ -7,9 +7,10 @@ import filterStore from "./stores/filterStore";
 import geoStore from "./stores/geoStore";
 import memoryStore from "./stores/memoryStore";
 import dropdownFilterStore from "./stores/dropdownFilterStore";
-import { initMap, ScopeDropdown, Drawer, aside } from "./ui";
+import { initMap, DrawerHeader, Drawer, aside } from "./ui";
 import bootstrap from "./bootstrap";
 import registerMobile from "./ui/mobile/registerMobile";
+import FilterControl from "./ui/FilterControl";
 
 window.debug = window.debug || {};
 window.debug.stores = () => ({
@@ -28,71 +29,92 @@ async function prepareLeaflet(isSmallScreen) {
   configStore.setState(() => ({ map, tile, isSmallScreen }));
 }
 async function fetchData() {
-  const { addProcess, removeProcess, fetchAll } = pointStore.getState();
+  const { addProcess, removeProcess, fetchAll, pointsForFilters } = pointStore.getState();
+  const { defaultFilters, activeFilters } = filterStore.getState();
   addProcess();
   // Fetch all the data
-  await fetchAll(filterStore.getState().defaultFilters)
+  await Promise.all([fetchAll(defaultFilters), pointsForFilters(activeFilters)]);
   removeProcess();
 }
 async function displayMap() {
   try {
     const { addProcess, removeProcess } = pointStore.getState();
     const { moveHandler, setSavedPosition } = memoryStore.getState();
-    const { map } = configStore.getState();
+    const { map, pointsLayer, scopeLayer } = configStore.getState();
     addProcess();
 
     // Be sure to fit all the points whenever you change
     // any filter.
-    const pointsLayer = L.layerGroup();
+    map.addLayer(scopeLayer);
     map.addLayer(pointsLayer);
+
     map.whenReady(async () => {
+      // Add the aside to the map
+      aside([DrawerHeader, Drawer]);
+
+      map.addControl(new FilterControl());
+
       // Save the first loaded position.
       await new Promise((resolve) => setTimeout(resolve, 120));
-      setSavedPosition();
       configStore.getState().setReady();
       removeProcess();
+      setTimeout(setSavedPosition, 320);
     });
 
     pointStore.subscribe(
-      (state) => [!!state.isLoading, state.getFilteredPoints, state.fetchesRunning, state._lastResponse],
+      (state) => [
+        !!state.isLoading,
+        state.getFilteredPoints,
+        state.fetchesRunning,
+        state._lastResponse
+      ],
       ([isLoading, getFilteredPoints, fetchesRunning]) => {
-        if (isLoading > 0) return;
-        const { space_ids: spaceIds, map } = configStore.getState();
+        if (isLoading > 0) {
+          return;
+        }
+        const { map, pointsLayer } = configStore.getState();
         const { selectedPoint, selectedScope } = geoStore.getState();
         const { savedCenter } = memoryStore.getState();
         pointsLayer.clearLayers();
-        let boudingBoxFilter = () => true;
-        if (!fetchesRunning && !selectedPoint && !selectedScope && spaceIds) {
-          boudingBoxFilter = (node) =>
-            node.isGeoLocated() && spaceIds.includes(`${node.scopeId}`);
-        }
-        if (!fetchesRunning && selectedScope?.layer && selectedScope && !selectedPoint) {
-          map.fitBounds(selectedScope.layer.getBounds(), { padding: [64, 64] });
+        if (
+          fetchesRunning === 0 &&
+          selectedScope?.layer &&
+          selectedScope &&
+          !selectedPoint
+        ) {
+          map.setView(selectedScope.layer.getBounds().getCenter(), map.getZoom(), {
+            animation: true
+          });
         }
 
         const pointInMap = getFilteredPoints().filter(
           (node) => typeof node.isGeoLocated !== "undefined" && node.isGeoLocated()
         );
+
         if (pointInMap.length > 0) {
           pointInMap.forEach(({ marker }) => {
             pointsLayer.addLayer(marker);
           });
-          const idealBoundingBox = pointInMap
-            .filter(boudingBoxFilter)
-            .map(({ marker }) => marker);
+        }
+        if (
+          pointInMap.length > 0 &&
+          !fetchesRunning &&
+          !savedCenter &&
+          !selectedScope &&
+          !selectedPoint
+        ) {
+          const idealBoundingBox = pointInMap.map(({ marker }) => marker);
           const boundingBox = L.featureGroup(
             _.isEmpty(idealBoundingBox)
               ? pointInMap.map(({ marker }) => marker)
               : idealBoundingBox,
             { updateWhenZooming: true }
           );
-          if (!fetchesRunning && !savedCenter && boundingBox && !selectedScope && !selectedPoint) {
-            map.fitBounds(boundingBox.getBounds(), { padding: [64, 64] });
-          }
+
+          map.fitBounds(boundingBox.getBounds(), { padding: [64, 64] });
         }
       }
     );
-    aside([ScopeDropdown, Drawer]);
 
     // Set active class on dropdown element
     geoStore.subscribe(
@@ -100,40 +122,38 @@ async function displayMap() {
       ([geoScope]) => {
         // Remove all active classes.
         const activeList = document.getElementsByClassName(
-          "decidimGeo__scopesDropdown__listItem--active"
+          "decidimGeo__drawerHeader__listItem--active"
         );
         for (const domEl of activeList) {
           domEl.className = domEl.className
-            .replace("decidimGeo__scopesDropdown__listItem--active", "")
+            .replace("decidimGeo__drawerHeader__listItem--active", "")
             .trim();
         }
-        const [container] = document.querySelectorAll(
-          ".decidimGeo__scopesDropdown__list"
-        );
+        const [container] = document.querySelectorAll(".decidimGeo__drawerHeader__list");
         if (!container) return;
         if (geoScope?.id) {
           const [active] = document.querySelectorAll(
-            `.decidimGeo__scopesDropdown__listItem[data-scope='${geoScope.id}']`
+            `.decidimGeo__drawerHeader__listItem[data-scope='${geoScope.id}']`
           );
           if (active) {
-            active.className += " decidimGeo__scopesDropdown__listItem--active";
+            active.className += " decidimGeo__drawerHeader__listItem--active";
             container.scrollBy(active.getBoundingClientRect().left, 0);
           }
         } else {
           const [active] = document.querySelectorAll(
-            `.decidimGeo__scopesDropdown__listItem[data-scope='all']`
+            `.decidimGeo__drawerHeader__listItem[data-scope='all']`
           );
           if (active) {
-            active.className += " decidimGeo__scopesDropdown__listItem--active";
+            active.className += " decidimGeo__drawerHeader__listItem--active";
             container.scrollBy(active.getBoundingClientRect().left, 0);
           }
         }
       }
     );
     const [active] = document.querySelectorAll(
-      `.decidimGeo__scopesDropdown__listItem[data-scope='all']`
+      `.decidimGeo__drawerHeader__listItem[data-scope='all']`
     );
-    if (active) active.className += " decidimGeo__scopesDropdown__listItem--active";
+    if (active) active.className += " decidimGeo__drawerHeader__listItem--active";
 
     map.on("moveend", moveHandler);
   } catch (e) {

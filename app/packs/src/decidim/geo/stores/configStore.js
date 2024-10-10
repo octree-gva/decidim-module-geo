@@ -14,6 +14,8 @@ const store = createStore(
     tile: undefined,
     map: undefined,
     mapReady: false,
+    pointsLayer: L.layerGroup(),
+    scopeLayer: L.layerGroup(),
     isIndex: false,
     mapID: "Generic",
     map_config: {},
@@ -23,6 +25,7 @@ const store = createStore(
     isSmallScreen: false,
     activeManifests: [],
     closeAside: () => set({ isAsideOpen: false }),
+    openAside: () => set({ isAsideOpen: true }),
     setFullscreen: (fullscreen) => set({ isFullscreen: !!fullscreen }),
     setReady: () => set({ mapReady: true }),
     setConfig: (mapConfig) => {
@@ -44,6 +47,7 @@ const store = createStore(
       setFilters(mapConfig.filters);
 
       dropdownFilterStore.getState().setDefaultFilters({
+        GeoScopeFilter: toFilterOptions("GeoScopeFilter", mapConfig.filters),
         GeoShowFilter: toFilterOptions("GeoShowFilter", mapConfig.filters),
         GeoTimeFilter: toFilterOptions("GeoTimeFilter", mapConfig.filters),
         GeoType: toFilterOptions("GeoType", mapConfig.filters)
@@ -51,5 +55,10 @@ const store = createStore(
     }
   }))
 );
-
+store.subscribe(
+  ({ isAsideOpen }) => [isAsideOpen],
+  ([isAsideOpen], [wasAsideOpen]) => {
+    if (isAsideOpen && !wasAsideOpen) dropdownFilterStore.getState().close();
+  }
+);
 export default store;

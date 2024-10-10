@@ -19,6 +19,7 @@ module Decidim
         etag = query.cache_key_with_version + "/params-" + Digest::MD5.hexdigest(permitted_params.to_json)
         if stale?(last_modified: last_modified.utc, etag: etag)
           last_id = query.maximum(:id)
+          geo_scope_ids = query.select(:geo_scope_id).group(:geo_scope_id).pluck(:geo_scope_id).select {|id| !id.nil?}
           render json: {
             meta: {
               fields: permitted_fields_params,
@@ -28,7 +29,8 @@ module Decidim
               default_locale: current_organization.default_locale,
               first: first_params,
               after: after_params,
-              has_more: results.last && results.last.id != last_id
+              has_more: results.last && results.last.id != last_id,
+              geo_scope_ids: geo_scope_ids || []
             },
             data: results
           }

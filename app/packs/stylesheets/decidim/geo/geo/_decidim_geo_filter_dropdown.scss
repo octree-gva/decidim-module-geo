@@ -1,24 +1,36 @@
 .decidimGeo__container .js-decidimgeo.decidimgeo__map {
-  .decidimGeo__filterDropdown__container {
-    position: relative;
+  .leaflet-control.decidimGeo__filter {
+    margin-bottom: 16px;
   }
-  .decidimGeo__filterDropdown__dropdown {
-    width: 300px;
-    height: auto;
+  .decidimGeo__fitlerModal__container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &--closed {
+      display: none;
+    }
+  }
+  .decidimGeo__fitlerModal__form {
+    flex: 1;
+
     max-height: 400px;
+    background: white;
+    border-radius: 8px;
     border-top: #cccccc 1px solid;
     border-bottom: #cccccc 1px solid;
 
-    overflow: auto;
     list-style: none;
     transition: 0.3s;
     background: white;
-    margin: 0;
-    padding: 0;
-    margin-top: 48px;
-    margin-left: 16px;
-    margin-bottom: 0;
-    padding-bottom: 10px;
+    margin: 48px 16px;
+    padding: 32px;
+
     position: absolute;
     z-index: 9999;
     &--closed {
@@ -29,9 +41,38 @@
     }
   }
 
-  .decidimGeo__filterDropdown__counter {
+  .decidimGeo__fitlerToggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 16px;
+    background: white;
+    border-radius: 4px;
+    padding: 4px;
+    &--disabled .decidimGeo__fitlerToggle__button,
+    &--disabled .decidimGeo__fitlerToggle__counter {
+      opacity: 0.3;
+      cursor: initial;
+    }
+  }
+
+  .decidimGeo__fitlerToggle__button {
+    @include decidimGeo__clickableText;
+    padding: 8px;
+    text-transform: uppercase;
+    font-family: $header-font-family;
+    letter-spacing: 0.2px;
+    margin-bottom: 0;
+    color: #808080 !important;
+  }
+
+  .decidimGeo__fitlerToggle__counter {
     border-radius: 50%;
-    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(50%) translateY(-50%);
     display: flex;
     width: 20px;
     height: 20px;
@@ -41,63 +82,38 @@
     align-items: center;
     gap: 10px;
     flex-shrink: 0;
-    background: rgba(var(--primary-rgb), 0.25);
+    background: var(--primary);
+    color: white;
     &--hidden {
       display: none;
     }
   }
 
-  .decidimGeo__filterDropdown__titleContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-right: 16px;
-    &--disabled {
-      opacity: 0.25;
-    }
-  }
-
-  .decidimGeo__filterDropdown__title {
-    @include decidimGeo__clickableText;
-    padding: 8px 10px 8px 8px;
-    float: right;
-    text-transform: uppercase;
-    font-family: $header-font-family;
-    letter-spacing: 0.2px;
-    margin-bottom: 0;
-    color: #3d393c;
-    &:not(.decidimGeo__filterDropdown__title):hover,
-    &--active {
-      color: var(--primary);
-    }
-    &--empty {
-      display: none;
-    }
-  }
-
-  .decidimGeo__filterDropdown__list {
+  .decidimGeo__fitlerModal__fieldset {
     display: flex;
     flex-direction: column;
     gap: 8px;
     list-style: none;
     margin: 0;
     padding: 8px 8px;
+    margin-bottom: 16px;
   }
-  .decidimGeo__filterDropdown__field {
+  .decidimGeo__fitlerModal__field {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    gap: 1rem;
   }
-  .decidimGeo__filterDropdown__label {
+  .decidimGeo__fitlerModal__label {
     @include decidimGeo__clickableText;
-    color: #1a181d;
+    color: #1a181d !important;
     padding: 8px 16px 8px 8px;
     font-size: 14px;
     text-wrap: nowrap;
   }
 
-  .decidimGeo__filterDropdown__select,
-  .decidimGeo__filterDropdown__select:focus {
+  .decidimGeo__fitlerModal__select,
+  .decidimGeo__fitlerModal__select:focus {
     margin-bottom: 0;
     max-width: 100%;
     border: 0;
@@ -105,15 +121,15 @@
     box-shadow: none;
     color: #1a181d;
   }
-  .decidimGeo__filterDropdown__resetBtn,
-  .decidimGeo__filterDropdown__applyBtn {
+  .decidimGeo__fitlerModal__resetBtn,
+  .decidimGeo__fitlerModal__applyBtn {
     @include decidimGeo__clickableText;
     padding: 8px 16px;
     letter-spacing: 0.2px;
     color: #3d393c;
     text-transform: uppercase;
   }
-  .decidimGeo__filterDropdown__applyBtn {
+  .decidimGeo__fitlerModal__applyBtn {
     color: var(--primary);
     float: right;
   }

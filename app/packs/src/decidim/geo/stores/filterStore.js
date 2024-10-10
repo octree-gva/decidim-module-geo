@@ -4,7 +4,7 @@ import { subscribeWithSelector } from "zustand/middleware";
 import pointStore from "./pointStore";
 import geoStore from "./geoStore";
 import dropdownFilterStore from "../stores/dropdownFilterStore";
-
+import memoryStore from "../stores/memoryStore";
 const sortingIteratee = (filter) => JSON.stringify(filter);
 const store = createStore(
   subscribeWithSelector((set, get) => ({
@@ -88,6 +88,14 @@ const store = createStore(
           if (geoencodedFilter === true) return "geoencoded";
           if (geoencodedFilter === false) return "virtual";
           return defaultFilters.GeoShowFilter;
+        case "GeoScopeFilter":
+          const filterGeoScope = filters.find(
+            ({ scopeFilter = undefined }) => scopeFilter
+          );
+          if (!filterGeoScope) {
+            return defaultFilters.GeoScopeFilter;
+          }
+          return `${filterGeoScope.scopeFilter.scopeId}`;
         case "GeoTimeFilter":
           const timeFilterMatch = filters.find(
             ({ timeFilter = undefined }) => timeFilter
@@ -114,11 +122,17 @@ const onFilteredByScope = (filters) => {
   const { scopeFilter } = store.getState();
   const { scopeForId } = pointStore.getState();
   let scopeId;
+  const { selectedScope: previousScope } = geoStore.getState();
+  const { selectScope } = geoStore.getState();
   if ((scopeId = scopeFilter(filters))) {
-    const { selectScope, selectedScope: previousScope } = geoStore.getState();
     if (previousScope && `${scopeId}` === `${previousScope?.id}`) return;
     const selectedScope = scopeForId(scopeId);
     if (selectedScope) selectScope(selectedScope);
+  } else {
+    if (previousScope) {
+      previousScope.repaint();
+    }
+    selectScope(null);
   }
 };
 
@@ -127,12 +141,14 @@ const onFilteredByScope = (filters) => {
 store.subscribe(
   (state) => [state.activeFilters],
   async ([activeFilters], [previousActiveFilter]) => {
-    if (!previousActiveFilter || !_.isEqual(activeFilters, previousActiveFilter)) {
+    if (activeFilters && _.isEqual(activeFilters, previousActiveFilter)) return;
+    if (activeFilters) {
       await pointStore.getState().pointsForFilters(activeFilters);
       onFilteredByScope(activeFilters);
     }
     const { toFilterOptions } = store.getState();
     const { setFilter } = dropdownFilterStore.getState();
+    setFilter("GeoScopeFilter", toFilterOptions("GeoScopeFilter", activeFilters));
     setFilter("GeoShowFilter", toFilterOptions("GeoShowFilter", activeFilters));
     setFilter("GeoTimeFilter", toFilterOptions("GeoTimeFilter", activeFilters));
     setFilter("GeoType", toFilterOptions("GeoType", activeFilters));

@@ -1,10 +1,8 @@
 import { createStore } from "zustand/vanilla";
 import { subscribeWithSelector } from "zustand/middleware";
-import dataPointStore from "./pointStore";
 import filterStore from "./filterStore";
 import dropdownFilterStore from "./dropdownFilterStore";
 import memoryStore from "./memoryStore";
-import scopeDropdownStore from "../stores/scopeDropdownStore";
 import configStore from "./configStore";
 const store = createStore(
   subscribeWithSelector((set, get) => ({
@@ -25,6 +23,7 @@ const store = createStore(
     hasNoScopeSelected: () => {
       return !get().selectedScope || get().selectedScope === null;
     },
+
     /**
      * Action when we click on a point.
      */
@@ -33,9 +32,6 @@ const store = createStore(
       saveState();
       set((state) => ({
         ...state,
-        selectedScope: point
-          ? dataPointStore.getState().scopeForId(point.scopeId)
-          : undefined,
         selectedPoint: point,
         previousState: state
       }));
@@ -47,8 +43,12 @@ const store = createStore(
      */
     selectScope: (scope) => {
       const { saveState } = memoryStore.getState();
-      saveState();
 
+      saveState();
+      dropdownFilterStore.setState(({ nextFilters, selectedFilters }) => ({
+        nextFilters: { ...nextFilters, GeoScopeFilter: `${scope?.id || "all"}` },
+        selectedFilters: { ...selectedFilters, GeoScopeFilter: `${scope?.id || "all"}` }
+      }));
       set((state) => ({
         selectedScope: scope || null,
         ...(`${scope?.id}` !== `${state.selectedScope?.id}`
@@ -56,7 +56,7 @@ const store = createStore(
           : null),
         // unselect point when moving away from its scope
         selectedPoint:
-          state.selectedPoint && state.selectedPoint.scopeId === scope?.id
+          state.selectedPoint && state.selectedPoint.geoScopeId === scope?.id
             ? state.selectedPoint
             : null
       }));
@@ -114,23 +114,22 @@ store.subscribe(
       selectedScope.repaint();
     }
     dropdownFilterStore.getState().close();
-    scopeDropdownStore.getState().close();
   }
 );
 
 store.subscribe(
   (state) => [state.selectedPoint],
   async ([selectedPoint], [previousPoint]) => {
-    if (!selectedPoint || selectedPoint === previousPoint) {
+    if (!selectedPoint) {
       return;
     }
     // Close the filter dropdown
     dropdownFilterStore.getState().close();
+    // Open drawer
+    configStore.getState().openAside();
     // Center to the marker
     selectedPoint.repaint();
     await selectedPoint.panToMarker();
-    // Open drawer
-    configStore.setState(() => ({ isAsideOpen: true }));
 
     if (previousPoint) previousPoint.repaint();
   }

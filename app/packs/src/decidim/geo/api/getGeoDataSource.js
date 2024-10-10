@@ -1,7 +1,5 @@
 import { _getGeoDataSource, _getGeoDataSourceIds } from "./queries";
 
-
-
 const getGeoDataSource = async (params = {}, fetchAll = true, callback) => {
   const { filters = [], locale, isIndex = false, after = 0, first = 50 } = params;
   const fields = fetchAll
@@ -21,7 +19,7 @@ const getGeoDataSource = async (params = {}, fetchAll = true, callback) => {
         "imageUrl",
         "latitude",
         "longitude",
-        "scopeId",
+        "geoScopeId",
         "lonlat",
         "extendedData"
       ]
@@ -34,8 +32,8 @@ const getGeoDataSource = async (params = {}, fetchAll = true, callback) => {
     first
   });
   filters.forEach((f) => {
-    searchParams.append("filters[]", JSON.stringify(f))
-  })
+    searchParams.append("filters[]", JSON.stringify(f));
+  });
   fields.forEach((f) => searchParams.append("fields[]", f));
   let page;
   try {
@@ -48,7 +46,7 @@ const getGeoDataSource = async (params = {}, fetchAll = true, callback) => {
   }
   if (!page) return { nodes: [], edges: [] };
   const { has_more: hasMoreThanOne, end_cursor: endCursor } = page?.meta || {};
-  callback(page.data, hasMoreThanOne)
+  callback(page.data, hasMoreThanOne, page?.meta || {});
   if (!hasMoreThanOne) return;
 
   searchParams.set("after", endCursor);
@@ -62,10 +60,9 @@ const getGeoDataSource = async (params = {}, fetchAll = true, callback) => {
       return;
     }
     const { end_cursor: endCursor, has_more: hasMore } = page.meta || {};
-    callback(page.data, hasMore)
+    callback(page.data, hasMore, page?.meta || {});
     if (!hasMore) break;
     searchParams.set("after", endCursor);
   }
-
 };
 export default getGeoDataSource;
