@@ -18,7 +18,14 @@ const store = createStore(
       (e) => {
         const { map, mapReady } = configStore.getState();
         if (!mapReady) return;
-        set(() => ({ currentCenter: map.getCenter(), currentZoom: map.getZoom() }));
+        const currentCenter = map.getCenter();
+        const currentZoom = map.getZoom();
+        set(({ savedCenter, savedZoom }) => ({
+          currentCenter: currentCenter,
+          currentZoom: currentZoom,
+          savedCenter: savedCenter || currentCenter,
+          savedZoom: savedZoom || currentZoom
+        }));
       },
       320,
       { leading: true }
@@ -32,6 +39,7 @@ const store = createStore(
     popState: () => {
       const { savedCenter, savedZoom } = get();
       const { map, mapReady } = configStore.getState();
+      console.log("popState", { savedCenter, savedZoom, mapReady });
       if (!savedCenter || !savedZoom || !mapReady) return null;
       map.setView(savedCenter, savedZoom, { animate: false });
     }

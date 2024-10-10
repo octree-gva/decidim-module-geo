@@ -1,5 +1,5 @@
 .decidimGeo__container .js-decidimgeo.decidimgeo__map {
-  .decidimGeo__scopesDropdown__list {
+  .decidimGeo__drawerHeader__list {
     width: 100%;
     position: absolute;
     z-index: 9999;
@@ -20,8 +20,8 @@
     }
     transition: 0.3s;
   }
-  .decidimGeo__scopesDropdown,
-  .decidimGeo__scopesDropdown.leaflet-control {
+  .decidimGeo__drawerHeader,
+  .decidimGeo__drawerHeader.leaflet-control {
     @include decidimGeo__border;
     border-radius: 0;
     border-top-left-radius: 4px;
@@ -33,42 +33,46 @@
     z-index: 9999;
   }
 
-  .decidimGeo__scopesDropdown__heading {
+  .decidimGeo__drawerHeader__heading {
     width: 100%;
     display: flex;
     flex-direction: column;
   }
-  .decidimGeo__scopesDropdown__headingRow {
+  .decidimGeo__drawerHeaderRow {
     flex: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: white;
-    &--drawer-toggle {
+    &--aside-toggle {
       display: none;
     }
   }
-  .decidimGeo__scopesDropdown_overlay {
+  .decidimGeo__modalOverlay {
     &--open {
       display: block;
     }
-    &--closed {
-      display: none;
-    }
-    z-index: 2500;
+
+    z-index: 2400;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
+    background: black;
+    opacity: 0.3;
+    display: none;
   }
-  .decidimGeo__scopesDropdown__title {
+  .decidimGeo__drawerHeader__backButton {
+    display: none;
+    margin-top: 3px;
+  }
+  .decidimGeo__drawerHeader__backButton {
     @include decidimGeo__clickableText;
-    gap: 13px;
+    gap: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 32px 8px 16px;
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.2px;
@@ -76,48 +80,17 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-
-    &:after {
-      display: inline-block;
-      content: "\25BE";
-      color: #0c0c0c;
-      transform: rotate(-180deg);
-      transition: 0.3s;
-      position: absolute;
-      right: 16px;
-      top: 7px;
-    }
-    &--disabled {
-      cursor: normal;
-      opacity: 0.25;
-    }
-    &--button:after {
-      display: none;
+    padding-left: 16px;
+    span {
+      padding: 8px 32px 8px 0px;
     }
 
-    &--closed {
-      &:after {
-        transform: rotate(0);
-      }
-    }
-    &--empty {
-      opacity: 0.6;
-      cursor: unset;
-    }
-    & .decidimGeo__scopesDropdown__titleIcn {
-      display: none;
-      margin-top: 3px;
-    }
-    &--button {
-      padding-top: 0;
-      padding-bottom: 0;
-      .decidimGeo__scopesDropdown__titleIcn--back {
-        display: block;
-      }
+    &--hidden {
+      visibility: hidden !important;
     }
   }
 
-  .decidimGeo__scopesDropdown__reset {
+  .decidimGeo__drawerHeader__reset {
     @include decidimGeo__clickableText;
     padding: 8px 16px 8px 8px;
     float: right;
@@ -130,7 +103,7 @@
     }
   }
 
-  .decidimGeo__scopesDropdown__listItem {
+  .decidimGeo__drawerHeader__listItem {
     @include decidimGeo__clickableText;
     margin: 8px;
     padding-left: 16px;
@@ -139,19 +112,19 @@
     gap: 4px;
     align-items: center;
     justify-content: space-between;
-    .decidimGeo__scopesDropdown__listItemtxt {
+    .decidimGeo__drawerHeader__listItemtxt {
       max-width: 100%;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
     }
-    .decidimGeo__scopesDropdown__listItemIcn {
+    .decidimGeo__drawerHeader__listItemIcn {
       color: var(--primary);
       visibility: hidden;
     }
     &--active {
       color: #808080 !important;
-      .decidimGeo__scopesDropdown__listItemIcn {
+      .decidimGeo__drawerHeader__listItemIcn {
         visibility: visible;
       }
     }

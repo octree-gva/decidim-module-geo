@@ -53,7 +53,7 @@ export default class GeoDatasourceNode {
     const { map } = configStore.getState();
     map.eachLayer((layer) => {
       if (layer.feature) {
-        if (layer.feature.geometry.properties.id === this.scopeId) {
+        if (layer.feature.geometry.properties.id === this.geoScopeId) {
           layer.setStyle(this.selectedState);
         } else {
           layer.setStyle(this.staledState);
@@ -75,7 +75,10 @@ export default class GeoDatasourceNode {
   }
 
   get scopeId() {
-    return parseInt(`${this.data.scopeId}`) || undefined;
+    return parseInt(`${this.data.geoScopeId}`) || undefined;
+  }
+  get geoScopeId() {
+    return this.scopeId;
   }
 
   get selectedState() {

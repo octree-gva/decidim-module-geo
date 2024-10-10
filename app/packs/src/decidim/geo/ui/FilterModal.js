@@ -4,92 +4,46 @@ import geoStore from "../stores/geoStore";
 import configStore from "../stores/configStore";
 import filterStore from "../stores/filterStore";
 import pointStore from "../stores/pointStore";
-import scopeDropdownStore from "../stores/scopeDropdownStore";
-class FilterDropdown {
-  constructor(parent, asideEl) {
-    this.asideEl = asideEl;
+
+class FilterModal {
+  constructor(parent) {
     this.container = L.DomUtil.create(
       "div",
-      "decidimGeo__filterDropdown__container",
+      "decidimGeo__fitlerModal__container",
       parent
     );
-    this.titleContainer = L.DomUtil.create(
-      "div",
-      "decidimGeo__filterDropdown__titleContainer",
-      this.container
-    );
-    this.title = L.DomUtil.create(
-      "h6",
-      createClasses("decidimGeo__filterDropdown__title", [
-        this.isOpen() && "active",
-        this.isEmpty() && "empty"
-      ]),
-      this.titleContainer
-    );
-    this.countBadge = L.DomUtil.create(
-      "span",
-      createClasses("decidimGeo__filterDropdown__counter", ["hidden"]),
-      this.titleContainer
-    );
-    this.countBadge.textContent = 0;
 
     this.dropdown = L.DomUtil.create(
       "div",
-      createClasses("decidimGeo__filterDropdown__dropdown", [!this.isOpen() && "closed"]),
-      this.asideEl
+      createClasses("decidimGeo__fitlerModal__form", [!this.isOpen() && "closed"]),
+      this.container
     );
     this.dropDownOptions = L.DomUtil.create(
       "ul",
-      "decidimGeo__filterDropdown__list",
+      "decidimGeo__fitlerModal__fieldset",
       this.dropdown
     );
     this.resetBtn = L.DomUtil.create(
       "button",
-      "decidimGeo__filterDropdown__resetBtn",
+      "decidimGeo__fitlerModal__resetBtn",
       this.dropdown
     );
     this.resetBtn.textContent = this.i18n()["decidim_geo.filters.reset_button"];
     this.resetBtn.onclick = this.resetBtnHandler.bind(this);
     this.applyBtn = L.DomUtil.create(
       "button",
-      "decidimGeo__filterDropdown__applyBtn",
+      "decidimGeo__fitlerModal__applyBtn",
       this.dropdown
     );
     this.applyBtn.textContent = this.i18n()["decidim_geo.filters.apply_button"];
-
     this.applyBtn.onclick = this.applyBtnHandler.bind(this);
-
-    this.title.textContent = this.i18n()["decidim_geo.filters.button"];
-    this.title.onclick = this.titleHandler.bind(this);
-
-    dropdownFilterStore.subscribe(
-      (state) => [state.isOpen],
-      () => this.repaint()
-    );
-    scopeDropdownStore.subscribe(
-      (state) => [state.isOpen],
-      () => this.repaint()
-    );
-    filterStore.subscribe(
-      (state) => [state.activeFilters],
-      () => this.repaint()
-    );
-    pointStore.subscribe(
-      (state) => [state.loading],
-      () => this.repaint()
-    );
   }
-  titleHandler() {
-    if (this.isEmpty()) return;
-    this.toggle();
-    this.repaint();
-  }
+
   applyBtnHandler() {
     const { nextFilters, toggleOpen, applyNextFilters } = dropdownFilterStore.getState();
     this.applyValues(nextFilters);
     applyNextFilters();
     toggleOpen();
-    this.repaint();
   }
   resetBtnHandler() {
     const {
@@ -101,9 +55,11 @@ class FilterDropdown {
     this.applyValues(defaultFilters);
     toggleOpen();
   }
+
   isEmpty() {
     return false;
   }
+
   defaultFilterFor(name) {
     const { toFilterOptions, defaultFilters } = filterStore.getState();
     return toFilterOptions(name, defaultFilters);
@@ -112,15 +68,14 @@ class FilterDropdown {
     const { nextFilters } = dropdownFilterStore.getState();
     const selectedValue =
       (nextFilters && nextFilters[name]) || this.defaultFilterFor(name);
-
     const fieldGroup = L.DomUtil.create(
       "li",
-      "decidimGeo__filterDropdown__field",
+      "decidimGeo__fitlerModal__field",
       this.dropDownOptions
     );
     const labelTag = L.DomUtil.create(
       "label",
-      "decidimGeo__filterDropdown__label",
+      "decidimGeo__fitlerModal__label",
       fieldGroup
     );
     labelTag.htmlFor = name;
@@ -128,7 +83,7 @@ class FilterDropdown {
 
     const selectTag = L.DomUtil.create(
       "select",
-      "decidimGeo__filterDropdown__select",
+      "decidimGeo__fitlerModal__select",
       fieldGroup
     );
     selectTag.id = name;
@@ -136,11 +91,10 @@ class FilterDropdown {
       dropdownFilterStore.getState().setNextFilter(name, evt.target.value);
     };
     options.forEach(([key, value]) => {
-      if(!key)
-      return
+      if (!key) return;
       const option = L.DomUtil.create(
         "option",
-        "decidimGeo__filterDropdown__option",
+        "decidimGeo__fitlerModal__option",
         selectTag
       );
       option.name = name.toLowerCase();
@@ -158,6 +112,7 @@ class FilterDropdown {
 
   applyValues(filters) {
     const defaultDropdownValues = {
+      GeoScopeFilter: "all",
       GeoShowFilter: "all",
       GeoTimeFilter: "active",
       GeoType: "all"
@@ -183,10 +138,16 @@ class FilterDropdown {
         const [filterName] = Object.keys(f);
         return filterName !== "resourceTypeFilter";
       });
+    const withoutGeoScopeFilter = (filters) =>
+      filters.filter((f) => {
+        const [filterName] = Object.keys(f);
+        return filterName !== "scopeFilter";
+      });
 
     switch (filters.GeoShowFilter || defaultFilters.GeoShowFilter) {
       case "all":
         newFilters = withoutGeoShowFilter(newFilters);
+
         break;
       case "geoencoded":
         newFilters = [
@@ -201,6 +162,21 @@ class FilterDropdown {
           ...withoutGeoShowFilter(newFilters),
           {
             geoencodedFilter: { geoencoded: false }
+          }
+        ];
+        break;
+    }
+    const filteredScopeId = filters.GeoScopeFilter || defaultFilters.GeoScopeFilter;
+
+    switch (filteredScopeId) {
+      case "all":
+        newFilters = withoutGeoScopeFilter(newFilters);
+        break;
+      default:
+        newFilters = [
+          ...withoutGeoShowFilter(newFilters),
+          {
+            scopeFilter: { scopeId: `${filteredScopeId}` }
           }
         ];
         break;
@@ -226,11 +202,25 @@ class FilterDropdown {
     }
     setFilters(newFilters);
   }
-
+  scopeFields(scopes) {
+    const i18n = this.i18n();
+    const i18nPrefix = "decidim_geo.scopes";
+    return this.field(
+      i18n[`${i18nPrefix}.dropdown`],
+      "GeoScopeFilter",
+      [[i18n[`${i18nPrefix}.all`], "all"]].concat(
+        scopes.map((scope) => [
+          scope.data.name.translation || scope.data.name.defaultTranslation,
+          `${scope.id}`
+        ])
+      ),
+      []
+    );
+  }
   geoFields(points) {
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
-    _;
+
     const hasGeoLocated = points.find((p) => p.isGeoLocated());
     const hasPhysical = points.find((p) => !p.isGeoLocated());
     return this.field(
@@ -250,7 +240,8 @@ class FilterDropdown {
     L.DomUtil.empty(this.dropDownOptions);
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
-    const { points } = pointStore.getState();
+    const { points, scopes } = pointStore.getState();
+    this.scopeFields(scopes);
     this.geoFields(points);
     this.field(i18n[`${i18nPrefix}.time.label`], "GeoTimeFilter", [
       [i18n[`${i18nPrefix}.time.all`], "all"],
@@ -260,9 +251,7 @@ class FilterDropdown {
     ]);
     if (!isProcessOnly() && !isAssemblyOnly()) {
       this.typeFields(points);
-
     }
-
   }
 
   typeFields(points) {
@@ -270,20 +259,10 @@ class FilterDropdown {
 
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
-    const hasMeetings = points.find((p) => p.resourceType === "meetings");
-    const hasProposals = points.find((p) => p.resourceType === "proposals");
-    const hasAssemblies = points.find((p) => p.resourceType === "debates");
-    const hasProcesses = points.find((p) => p.resourceType === "participatory_processes");
-    const hasDebates = points.find((p) => p.resourceType === "debates");
-    const hasAccountabilities = points.find((p) => p.resourceType === "accountability");
-    const disabledOptions = [];
-    if (!hasMeetings) disabledOptions.push("meetings");
-    if (!hasProposals) disabledOptions.push("proposals");
-    if (!hasAssemblies) disabledOptions.push("assemblies");
-    if (!hasProcesses) disabledOptions.push("processes");
-    if (!hasDebates) disabledOptions.push("debates");
-    if (!hasAccountabilities) disabledOptions.push("accountability");
 
+    const disabledOptions = activeManifests.filter((manifestName) => {
+      return !points.find((p) => p.resourceType === manifestName);
+    });
     const fieldLabel = i18n[`${i18nPrefix}.type.label`];
 
     this.field(
@@ -301,25 +280,10 @@ class FilterDropdown {
   }
 
   repaint() {
-    const { selectedPoint } = geoStore.getState();
-    const { filterCount } = dropdownFilterStore.getState();
-    const { isOpen: isScopeOpen } = scopeDropdownStore.getState();
-    const badgeCount = filterCount();
-    this.title.onclick = selectedPoint ? () => {} : this.titleHandler.bind(this);
-    this.countBadge.className = createClasses("decidimGeo__filterDropdown__counter", [
-      badgeCount === 0 && "hidden"
+    this.container.className = createClasses("decidimGeo__fitlerModal__container", [
+      !this.isOpen() && "closed"
     ]);
-    this.countBadge.textContent = badgeCount;
-    this.title.className = createClasses("decidimGeo__filterDropdown__title", [
-      "button",
-      this.isOpen() && "active"
-    ]);
-    this.titleContainer.className = createClasses(
-      "decidimGeo__filterDropdown__titleContainer",
-      [(selectedPoint || isScopeOpen) && "disabled"]
-    );
-
-    this.dropdown.className = createClasses("decidimGeo__filterDropdown__dropdown", [
+    this.dropdown.className = createClasses("decidimGeo__fitlerModal__form", [
       !this.isOpen() && "closed"
     ]);
 
@@ -341,6 +305,25 @@ class FilterDropdown {
   config() {
     return configStore.getState();
   }
+
+  onAdd(_map) {
+    dropdownFilterStore.subscribe(
+      (state) => [state.isOpen, state.selectedFilters],
+      () => this.repaint()
+    );
+    filterStore.subscribe(
+      (state) => [state.activeFilters],
+      () => this.repaint()
+    );
+    pointStore.subscribe(
+      (state) => [state.loading],
+      () => this.repaint()
+    );
+    geoStore.subscribe(
+      (state) => [state.selectedScope],
+      () => this.repaint()
+    );
+  }
 }
 
-export default FilterDropdown;
+export default FilterModal;

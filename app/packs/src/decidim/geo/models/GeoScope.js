@@ -2,7 +2,6 @@ import { scopeDropdownItem, scopeGeoLayer } from "./../ui";
 import geoStore from "../stores/geoStore";
 import pointStore from "../stores/pointStore";
 import configStore from "../stores/configStore";
-import scopeDropdownStore from "../stores/scopeDropdownStore";
 import polylabel from "polylabel";
 import _ from "lodash";
 
@@ -19,11 +18,11 @@ export default class GeoScope {
     return { fillColor: "#2952A370", color: "#2952A3" };
   }
 
-  isEmpty() {
+  isEmpty(points = undefined) {
+    if (!points) points = pointStore.getState().points;
     if (this.data.geom === null) return true;
-    const { points } = pointStore.getState();
     const currentScopeId = this.id;
-    return !points.find(({ scopeId }) => `${scopeId}` === `${currentScopeId}`);
+    return !points.find(({ geoScopeId }) => `${geoScopeId}` === `${currentScopeId}`);
   }
 
   isLoading() {
@@ -46,7 +45,7 @@ export default class GeoScope {
    */
   isActive() {
     const { selectedScope } = geoStore.getState();
-    if (selectedScope) return selectedScope === this;
+    if (selectedScope) return selectedScope.id === this.id;
     return false;
   }
 
@@ -72,7 +71,9 @@ export default class GeoScope {
   nodesForScope() {
     const { points } = pointStore.getState();
     const currentScopeId = this.id;
-    return points.filter(({ scopeId }) => scopeId === currentScopeId).filter(Boolean);
+    return points
+      .filter(({ geoScopeId }) => `${geoScopeId}` === `${currentScopeId}`)
+      .filter(Boolean);
   }
 
   markersForScope() {
@@ -89,17 +90,20 @@ export default class GeoScope {
         .filter(Boolean)
     );
   }
+
   scopeClickHandler() {
     this.select("layer");
   }
-  init() {
+  remove() {
     const { map } = configStore.getState();
+    map.removeLayer(this.layer);
+  }
+  init(mapLayer) {
     this.markers_group = this.markersForScope();
     const [itm, repaintItm] = scopeDropdownItem({
       scopeId: this.id,
       label: this.name,
       onClick: () => {
-        scopeDropdownStore.getState().toggleOpen();
         geoStore.getState().selectScope(this);
         this.repaint();
       }
@@ -116,7 +120,7 @@ export default class GeoScope {
         onClick: this.scopeClickHandler.bind(this)
       });
       this.layer.bringToBack();
-      map.addLayer(this.layer);
+      mapLayer.addLayer(this.layer);
 
       // Add the layer only when we are sure there is some point
       // in the layer.

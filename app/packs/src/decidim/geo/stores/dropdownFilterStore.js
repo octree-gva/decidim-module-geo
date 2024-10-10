@@ -1,16 +1,17 @@
 import { createStore } from "zustand/vanilla";
 import { subscribeWithSelector } from "zustand/middleware";
-import scopeDropdownStore from "../stores/scopeDropdownStore";
-import configStore from "./configStore";
+
 const store = createStore(
   subscribeWithSelector((set, get) => ({
     isOpen: false,
     defaultFilters: {
+      GeoScopeFilter: "all",
       GeoShowFilter: "all",
       GeoTimeFilter: "active",
       GeoType: "all"
     },
     selectedFilters: {
+      GeoScopeFilter: "all",
       GeoShowFilter: "all",
       GeoTimeFilter: "active",
       GeoType: "all"
@@ -44,6 +45,8 @@ const store = createStore(
       set(() => ({ defaultFilters: newFilters, selectedFilters: newFilters }));
     },
     setFilter(name, value) {
+      const prevState = get().selectedFilters;
+      if (prevState[name] === value) return;
       set((state) => ({
         selectedFilters: {
           ...state.defaultFilters,
@@ -61,13 +64,4 @@ const store = createStore(
   }))
 );
 
-store.subscribe(
-  (state) => [state.isOpen],
-  ([isOpen]) => {
-    if (isOpen) {
-      scopeDropdownStore.getState().close();
-      configStore.setState(() => ({ isAsideOpen: true }));
-    }
-  }
-);
 export default store;
