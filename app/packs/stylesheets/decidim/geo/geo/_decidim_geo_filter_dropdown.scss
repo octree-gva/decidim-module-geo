@@ -101,9 +101,10 @@
   .decidimGeo__filterModal__actions {
     margin-top: 32px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 1rem;
+    padding: 0 16px;
   }
   .decidimGeo__filterModal__field {
     display: flex;
@@ -141,6 +142,10 @@
     gap: 4px;
     align-items: center;
     justify-content: center;
+    padding-left: 0;
+    svg {
+      transform: translateX(-4px);
+    }
     &:focus {
       outline: 0;
     }

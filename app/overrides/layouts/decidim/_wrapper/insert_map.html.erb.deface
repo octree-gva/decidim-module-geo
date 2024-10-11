@@ -1,4 +1,4 @@
-<!-- insert_after '.show-for-medium > .navbar' -->
+<!-- insert_before '#content' -->
 <%= cell(
     "decidim/geo/geo_collection_map", 
     id: "Indexes",

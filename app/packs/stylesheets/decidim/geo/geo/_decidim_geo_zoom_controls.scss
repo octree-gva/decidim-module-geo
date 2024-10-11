@@ -1,4 +1,16 @@
 .decidimGeo__container .js-decidimgeo.decidimgeo__map {
+  .leaflet-control-container .leaflet-bar a.leaflet-control-zoom-fullscreen.fullscreen-icon {
+    margin-top: 8px;
+    height: 43px;
+    padding: 0 27px;
+    padding-bottom: 0px;
+    border-radius: 43px !important;
+    border: 1px solid transparent !important;
+    box-shadow: unset;
+    display: none;
+    align-items: flex-end;
+  }
+
   .leaflet-control-zoom {
     margin-bottom: 32px;
     flex-direction: column !important;
