@@ -4,56 +4,69 @@ import geoStore from "../stores/geoStore";
 import configStore from "../stores/configStore";
 import filterStore from "../stores/filterStore";
 import pointStore from "../stores/pointStore";
-
+import pointCounterStore from "../stores/pointCounterStore";
 class FilterModal {
   constructor(parent) {
     this.container = L.DomUtil.create(
       "div",
-      "decidimGeo__fitlerModal__container",
+      "decidimGeo__filterModal__container",
       parent
     );
-
-    this.dropdown = L.DomUtil.create(
+    this.applyDisabled = true;
+    this.form = L.DomUtil.create(
       "div",
-      createClasses("decidimGeo__fitlerModal__form", [!this.isOpen() && "closed"]),
+      createClasses("decidimGeo__filterModal__form", [!this.isOpen() && "closed"]),
       this.container
     );
-    this.dropDownOptions = L.DomUtil.create(
+    this.fieldset = L.DomUtil.create(
       "ul",
-      "decidimGeo__fitlerModal__fieldset",
-      this.dropdown
+      "decidimGeo__filterModal__fieldset",
+      this.form
     );
+    this.helptext = L.DomUtil.create("div", "decidimGeo__filterModalHelpText", this.form);
+
+    this.actions = L.DomUtil.create("div", "decidimGeo__filterModal__actions", this.form);
     this.resetBtn = L.DomUtil.create(
       "button",
-      "decidimGeo__fitlerModal__resetBtn",
-      this.dropdown
+      "decidimGeo__filterModal__resetBtn",
+      this.actions
     );
-    this.resetBtn.textContent = this.i18n()["decidim_geo.filters.reset_button"];
+    this.resetBtn.innerHTML = `<svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#clip0_1419_471)">
+          <path d="M12.1114 4.3585C14.2114 4.3585 16.2114 5.1585 17.7114 6.6585C20.8114 9.7585 20.8114 14.8585 17.7114 17.9585C15.9114 19.8585 13.4114 20.5585 11.0114 20.2585L11.5114 18.2585C13.2114 18.4585 15.0114 17.8585 16.3114 16.5585C18.6114 14.2585 18.6114 10.4585 16.3114 8.0585C15.2114 6.9585 13.6114 6.3585 12.1114 6.3585V10.9585L7.11136 5.9585L12.1114 0.958496V4.3585ZM6.41136 17.9585C3.81136 15.3585 3.41136 11.3585 5.21136 8.2585L6.71136 9.7585C5.61136 11.9585 6.01136 14.7585 7.91136 16.5585C8.41136 17.0585 9.01136 17.4585 9.71136 17.7585L9.11136 19.7585C8.11136 19.3585 7.21136 18.7585 6.41136 17.9585Z" fill="currentColor"/>
+          </g>
+          <defs>
+          <clipPath id="clip0_1419_471">
+          <rect width="24" height="24" fill="white" transform="translate(0.111328 0.358398)"/>
+          </clipPath>
+          </defs>
+        </svg>
+        <span>${this.i18n()["decidim_geo.filters.reset_button"]}
+        </span>
+    `;
     this.resetBtn.onclick = this.resetBtnHandler.bind(this);
     this.applyBtn = L.DomUtil.create(
       "button",
-      "decidimGeo__fitlerModal__applyBtn",
-      this.dropdown
+      "decidimGeo__filterModal__applyBtn",
+      this.actions
     );
     this.applyBtn.textContent = this.i18n()["decidim_geo.filters.apply_button"];
     this.applyBtn.onclick = this.applyBtnHandler.bind(this);
   }
 
   applyBtnHandler() {
+    if (this.applyDisabled) return;
     const { nextFilters, toggleOpen, applyNextFilters } = dropdownFilterStore.getState();
     this.applyValues(nextFilters);
     applyNextFilters();
     toggleOpen();
   }
+
   resetBtnHandler() {
-    const {
-      resetFilters: resetDropdownFilter,
-      toggleOpen,
-      defaultFilters
-    } = dropdownFilterStore.getState();
+    const { resetFilters: resetDropdownFilter, defaultFilters } =
+      dropdownFilterStore.getState();
     resetDropdownFilter();
     this.applyValues(defaultFilters);
-    toggleOpen();
   }
 
   isEmpty() {
@@ -70,12 +83,12 @@ class FilterModal {
       (nextFilters && nextFilters[name]) || this.defaultFilterFor(name);
     const fieldGroup = L.DomUtil.create(
       "li",
-      "decidimGeo__fitlerModal__field",
-      this.dropDownOptions
+      "decidimGeo__filterModal__field",
+      this.fieldset
     );
     const labelTag = L.DomUtil.create(
       "label",
-      "decidimGeo__fitlerModal__label",
+      "decidimGeo__filterModal__label",
       fieldGroup
     );
     labelTag.htmlFor = name;
@@ -83,7 +96,7 @@ class FilterModal {
 
     const selectTag = L.DomUtil.create(
       "select",
-      "decidimGeo__fitlerModal__select",
+      "decidimGeo__filterModal__select",
       fieldGroup
     );
     selectTag.id = name;
@@ -94,7 +107,7 @@ class FilterModal {
       if (!key) return;
       const option = L.DomUtil.create(
         "option",
-        "decidimGeo__fitlerModal__option",
+        "decidimGeo__filterModal__option",
         selectTag
       );
       option.name = name.toLowerCase();
@@ -121,87 +134,12 @@ class FilterModal {
       filters = defaultDropdownValues;
     }
     filters = { ...defaultDropdownValues, ...filters };
-    const { setFilters, activeFilters, defaultFilters } = filterStore.getState();
-    let newFilters = [...activeFilters];
-    const withoutGeoShowFilter = (filters) =>
-      filters.filter((f) => {
-        const [filterName] = Object.keys(f);
-        return filterName !== "geoencodedFilter";
-      });
-    const withoutTimeFilter = (filters) =>
-      filters.filter((f) => {
-        const [filterName] = Object.keys(f);
-        return filterName !== "timeFilter";
-      });
-    const withoutTypeFilter = (filters) =>
-      filters.filter((f) => {
-        const [filterName] = Object.keys(f);
-        return filterName !== "resourceTypeFilter";
-      });
-    const withoutGeoScopeFilter = (filters) =>
-      filters.filter((f) => {
-        const [filterName] = Object.keys(f);
-        return filterName !== "scopeFilter";
-      });
 
-    switch (filters.GeoShowFilter || defaultFilters.GeoShowFilter) {
-      case "all":
-        newFilters = withoutGeoShowFilter(newFilters);
-
-        break;
-      case "geoencoded":
-        newFilters = [
-          ...withoutGeoShowFilter(newFilters),
-          {
-            geoencodedFilter: { geoencoded: true }
-          }
-        ];
-        break;
-      case "virtual":
-        newFilters = [
-          ...withoutGeoShowFilter(newFilters),
-          {
-            geoencodedFilter: { geoencoded: false }
-          }
-        ];
-        break;
-    }
-    const filteredScopeId = filters.GeoScopeFilter || defaultFilters.GeoScopeFilter;
-
-    switch (filteredScopeId) {
-      case "all":
-        newFilters = withoutGeoScopeFilter(newFilters);
-        break;
-      default:
-        newFilters = [
-          ...withoutGeoShowFilter(newFilters),
-          {
-            scopeFilter: { scopeId: `${filteredScopeId}` }
-          }
-        ];
-        break;
-    }
-
-    const timeFilter = filters.GeoTimeFilter || defaultFilters.GeoTimeFilter;
-    if (timeFilter)
-      newFilters = [
-        ...withoutTimeFilter(newFilters),
-        {
-          timeFilter: { time: timeFilter }
-        }
-      ];
-
-    const resourceType = filters.GeoType || defaultFilters.GeoType;
-    if (resourceType) {
-      newFilters = [
-        ...withoutTypeFilter(newFilters),
-        {
-          resourceTypeFilter: { resourceType: resourceType }
-        }
-      ];
-    }
-    setFilters(newFilters);
+    const { setFilters } = filterStore.getState();
+    const { fromOptionsToFilters } = dropdownFilterStore.getState();
+    setFilters(fromOptionsToFilters(filters));
   }
+
   scopeFields(scopes) {
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.scopes";
@@ -237,7 +175,7 @@ class FilterModal {
   repaintOptions() {
     const { isProcessOnly, isAssemblyOnly } = filterStore.getState();
 
-    L.DomUtil.empty(this.dropDownOptions);
+    L.DomUtil.empty(this.fieldset);
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
     const { points, scopes } = pointStore.getState();
@@ -280,13 +218,16 @@ class FilterModal {
   }
 
   repaint() {
-    this.container.className = createClasses("decidimGeo__fitlerModal__container", [
+    this.container.className = createClasses("decidimGeo__filterModal__container", [
       !this.isOpen() && "closed"
     ]);
-    this.dropdown.className = createClasses("decidimGeo__fitlerModal__form", [
+    this.form.className = createClasses("decidimGeo__filterModal__form", [
       !this.isOpen() && "closed"
     ]);
-
+    this.applyBtn.className = createClasses("decidimGeo__filterModal__applyBtn", [
+      this.applyDisabled && "disabled"
+    ]);
+    this.applyBtn.disabled = this.applyDisabled;
     this.repaintOptions();
   }
 
@@ -322,6 +263,16 @@ class FilterModal {
     geoStore.subscribe(
       (state) => [state.selectedScope],
       () => this.repaint()
+    );
+    pointCounterStore.subscribe(
+      (state) => [state.nextCount, state.isLoading],
+      ([count]) => {
+        const applyDisabled = count === 0;
+        if (applyDisabled !== this.applyDisabled) {
+          this.applyDisabled = applyDisabled;
+          this.repaint();
+        }
+      }
     );
   }
 }

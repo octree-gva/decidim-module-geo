@@ -15,6 +15,7 @@ module Decidim
           scope :"decidim-geo" do
             resources :geo_scopes, only: [:index, :show]
             resources :points, only: [:index]
+            get "points/count", to: "points#count", as: :count_point
           end
         end
       end

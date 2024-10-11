@@ -98,6 +98,11 @@ en:
         button: "Filters"
         reset_button: "Reset"
         apply_button: "Apply"
+        results:
+          warn_empty: Nothing here, change filters to update
+          zero: no results
+          one: 1 result
+          other: "%count% results"
         empty:
           message: "No data with these filters"
           reset_button: "Reset filters"

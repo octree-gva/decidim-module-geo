@@ -4,7 +4,7 @@ import { subscribeWithSelector } from "zustand/middleware";
 import pointStore from "./pointStore";
 import geoStore from "./geoStore";
 import dropdownFilterStore from "../stores/dropdownFilterStore";
-import memoryStore from "../stores/memoryStore";
+import pointCounterStore from "../stores/pointCounterStore";
 const sortingIteratee = (filter) => JSON.stringify(filter);
 const store = createStore(
   subscribeWithSelector((set, get) => ({
@@ -142,16 +142,24 @@ store.subscribe(
   (state) => [state.activeFilters],
   async ([activeFilters], [previousActiveFilter]) => {
     if (activeFilters && _.isEqual(activeFilters, previousActiveFilter)) return;
+
+    // Select/Unselect scopes if a scopeFilter is present
     if (activeFilters) {
       await pointStore.getState().pointsForFilters(activeFilters);
       onFilteredByScope(activeFilters);
     }
+
+    // Update the filter modal state
     const { toFilterOptions } = store.getState();
     const { setFilter } = dropdownFilterStore.getState();
     setFilter("GeoScopeFilter", toFilterOptions("GeoScopeFilter", activeFilters));
     setFilter("GeoShowFilter", toFilterOptions("GeoShowFilter", activeFilters));
     setFilter("GeoTimeFilter", toFilterOptions("GeoTimeFilter", activeFilters));
     setFilter("GeoType", toFilterOptions("GeoType", activeFilters));
+
+    // Update active counters.
+    const { updateCurrentCountForFilters } = pointCounterStore.getState();
+    await updateCurrentCountForFilters(activeFilters);
   }
 );
 

@@ -28,7 +28,7 @@ export default class DrawerHeader {
       ]),
       this.menu
     );
-    const firstRow = L.DomUtil.create(
+    this.backRow = L.DomUtil.create(
       "div",
       createClasses("decidimGeo__drawerHeaderRow", ["filters"]),
       this.heading
@@ -40,7 +40,7 @@ export default class DrawerHeader {
         "back",
         !selectedPoint && "hidden"
       ]),
-      firstRow
+      this.backRow
     );
     this.titleBack.innerHTML = `<svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path d="M16.0413 17.1115L11.4613 12.5315L16.0413 7.94149L14.6313 6.53149L8.63135 12.5315L14.6313 18.5315L16.0413 17.1115Z" fill="currentColor"/>
@@ -53,7 +53,9 @@ export default class DrawerHeader {
 
   repaint() {
     const { selectedPoint } = geoStore.getState();
-
+    this.backRow.className = createClasses("decidimGeo__drawerHeaderRow", [
+      !selectedPoint && "hidden"
+    ]);
     this.titleBack.className = createClasses("decidimGeo__drawerHeader__backButton", [
       "back",
       !selectedPoint && "hidden"
