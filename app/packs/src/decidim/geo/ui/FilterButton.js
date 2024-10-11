@@ -58,8 +58,9 @@ class FilterButton {
   }
 
   toggle() {
-    dropdownFilterStore.getState().toggleOpen();
-    configStore.getState().closeAside();
+    configStore.getState().closeAside().then(() => {
+      dropdownFilterStore.getState().toggleOpen();
+    })
   }
 
   i18n() {

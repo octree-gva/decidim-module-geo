@@ -1,0 +1,26 @@
+.decidimGeo__container .js-decidimgeo.decidimgeo__map {
+    .decidimGeo__pageName__container {
+        min-width: calc(100vw - 32px);
+        min-height: 43px;
+        background: white;
+        z-index: 2100;
+        border: 1px solid transparent;
+        border-radius: 43px;
+        margin-top: 24px;
+        display: none;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    .decidimGeo__pageName__text {
+        overflow: hidden;
+        text-wrap: nowrap;
+        max-width: 60vw;
+        text-overflow: ellipsis;
+        font-size: 17px;
+        font-weight: 600;
+        margin: 0;
+        padding-left: 16px;
+        flex-grow: 0;
+        color: #595959;
+    }
+}

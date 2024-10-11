@@ -4,7 +4,7 @@ module Decidim
   module Geo
     module ContentBlocks
       class GeoMapsCell < Decidim::ViewModel
-        # delegate :current_user, to: :controller
+        delegate :decidim_page_title, to: :view_context
         include Decidim::SanitizeHelper
         include Decidim::LayoutHelper
         def show
@@ -37,7 +37,7 @@ module Decidim
             locale: current_locale,
             default_locale: default_locale,
             space_ids: @options[:scopes] || [],
-            selected_component: current_component || nil,
+            selected_component: current_component_id || nil,
             selected_point: current_component? && params[:id] ? params[:id] : nil,
             images: {
               not_geolocated: ActionController::Base.helpers.asset_pack_path("media/images/not-geolocated.svg")
@@ -47,7 +47,7 @@ module Decidim
               lat: geo_config[:latitude],
               lng: geo_config[:longitude],
               tile_layer: geo_config[:tile],
-              zoom: geo_config[:zoom]
+              zoom: geo_config[:zoom],
             },
             active_manifests: ::Decidim::Geo.registry.active_manifests(&:keys),
             is_index: @options.has_key?(:is_index) ? @options[:is_index] : true
@@ -125,14 +125,21 @@ module Decidim
           current_organization.default_locale
         end
 
-        def current_component
-          return request.env["decidim.current_component"].id if current_component?
+        def current_component_id
+          return "none" unless current_component
+          current_component.id
+        end
 
-          "none"
+        def current_component
+          return request.env["decidim.current_component"]
+        end
+
+        def current_participatory_space
+          return request.env["decidim.current_participatory_space"]
         end
 
         def current_component?
-          request.env["decidim.current_component"].present?
+          current_component.present?
         end
 
         def geo_config
@@ -140,7 +147,7 @@ module Decidim
             latitude: model.try(:latitude).nil? ? geo_config_default.latitude : model.latitude,
             longitude: model.try(:longitude).nil? ? geo_config_default.longitude : model.longitude,
             tile: Decidim::Geo::GeoConfig.geo_config_default.tile,
-            zoom: Decidim::Geo::GeoConfig.geo_config_default.zoom
+            zoom: Decidim::Geo::GeoConfig.geo_config_default.zoom,
           }.to_h
         end
 

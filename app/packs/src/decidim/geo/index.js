@@ -12,6 +12,7 @@ import { initMap, DrawerHeader, Drawer, aside } from "./ui";
 import bootstrap from "./bootstrap";
 import registerMobile from "./ui/mobile/registerMobile";
 import FilterControl from "./ui/FilterControl";
+import PageNameControl from "./ui/PageNameControl";
 
 window.debug = window.debug || {};
 window.debug.stores = () => ({
@@ -58,7 +59,7 @@ async function displayMap() {
       aside([DrawerHeader, Drawer]);
 
       map.addControl(new FilterControl());
-
+      map.addControl(new PageNameControl());
       // Save the first loaded position.
       await new Promise((resolve) => setTimeout(resolve, 120));
       configStore.getState().setReady();

@@ -4,7 +4,7 @@ import filterStore from "./filterStore";
 import dropdownFilterStore from "./dropdownFilterStore";
 
 const store = createStore(
-  subscribeWithSelector((set) => ({
+  subscribeWithSelector((set, get) => ({
     locale: "en",
     defaultLocale: "en",
     selected_component: undefined,
@@ -12,6 +12,7 @@ const store = createStore(
     space_ids: [],
     images: {},
     tile: undefined,
+    pageName: "",
     map: undefined,
     mapReady: false,
     pointsLayer: L.layerGroup(),
@@ -24,14 +25,31 @@ const store = createStore(
     isFullscreen: false,
     isSmallScreen: false,
     activeManifests: [],
-    closeAside: () => set({ isAsideOpen: false }),
-    openAside: () => set({ isAsideOpen: true }),
+    closeAside: async () => {
+      const wasClosed = !get().isAsideOpen
+      if(wasClosed) return;
+
+      set(() => ({ isAsideOpen: false }))
+      return new Promise((resolve) => setTimeout(resolve, 520))
+    },
+    openAside: async () => {
+      const wasOpen = get().isAsideOpen
+      if(wasOpen) return;
+      set(() => ({ isAsideOpen: true }))
+      return  new Promise((resolve) => setTimeout(resolve, 520))
+    },
     setFullscreen: (fullscreen) => set({ isFullscreen: !!fullscreen }),
     setReady: () => set({ mapReady: true }),
     setConfig: (mapConfig) => {
+      const findPageName = () => {
+        const [titleTag] = document.getElementsByTagName("title");
+        const [titleContent] = (titleTag.textContent || "").split(" - ")
+        return titleContent || "Home";
+      }
       set(() => ({
         locale: mapConfig.locale,
         defaultLocale: mapConfig.default_locale,
+        pageName: findPageName(),
         selected_component: mapConfig.selected_component,
         space_ids: mapConfig.space_ids,
         defaultSelectedPoint: mapConfig.selected_point,
