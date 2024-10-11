@@ -10,17 +10,17 @@ class FilterButton {
 
     this.titleContainer = L.DomUtil.create(
       "div",
-      "decidimGeo__fitlerToggle",
+      "decidimGeo__filterToggle",
       this.parent
     );
     this.title = L.DomUtil.create(
       "h6",
-      "decidimGeo__fitlerToggle__button",
+      "decidimGeo__filterToggle__button",
       this.titleContainer
     );
     this.countBadge = L.DomUtil.create(
       "span",
-      createClasses("decidimGeo__fitlerToggle__counter", ["hidden"]),
+      createClasses("decidimGeo__filterToggle__counter", ["hidden"]),
       this.titleContainer
     );
     this.countBadge.textContent = 0;
@@ -47,12 +47,12 @@ class FilterButton {
     this.title.onclick = selectedPoint
       ? () => {}
       : this.handleFilterButtonClick.bind(this);
-    this.countBadge.className = createClasses("decidimGeo__fitlerToggle__counter", [
+    this.countBadge.className = createClasses("decidimGeo__filterToggle__counter", [
       badgeCount === 0 && "hidden"
     ]);
     this.countBadge.textContent = badgeCount;
-    this.title.className = "decidimGeo__fitlerToggle__button";
-    this.titleContainer.className = createClasses("decidimGeo__fitlerToggle", [
+    this.title.className = "decidimGeo__filterToggle__button";
+    this.titleContainer.className = createClasses("decidimGeo__filterToggle", [
       selectedPoint && "disabled"
     ]);
   }

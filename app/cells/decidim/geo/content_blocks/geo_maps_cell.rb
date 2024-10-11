@@ -84,6 +84,12 @@ module Decidim
             "decidim.geo.mobile.close_fullscreen": t("decidim.geo.mobile.close_fullscreen"),
             "decidim_geo.scopes.all": t("decidim.geo.scopes.all"),
             "decidim_geo.scopes.dropdown": t("decidim.geo.scopes.dropdown"),
+
+            "decidim_geo.filters.results.one": t("decidim.geo.filters.results.one"),
+            "decidim_geo.filters.results.zero": t("decidim.geo.filters.results.zero"),
+            "decidim_geo.filters.results.warn_empty": t("decidim.geo.filters.results.warn_empty"),
+            "decidim_geo.filters.results.other": t("decidim.geo.filters.results.other"),
+
             "decidim_geo.filters.back": t("decidim.geo.filters.back"),
             "decidim_geo.filters.button": t("decidim.geo.filters.button"),
             "decidim_geo.filters.reset_button": t("decidim.geo.filters.reset_button"),

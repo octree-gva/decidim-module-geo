@@ -130,6 +130,7 @@ const store = createStore(
         set(() => ({ fetchedGeoScopes }));
       });
     },
+
     pointsForFilters: async (filters = [], forceRefresh = false) => {
       const { locale, isIndex } = configStore.getState();
       const { _lastFilter: lastFilter, _lastResponse: lastResponse } = store.getState();

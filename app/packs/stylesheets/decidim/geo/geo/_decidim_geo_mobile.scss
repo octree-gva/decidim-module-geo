@@ -57,7 +57,7 @@
         margin-bottom: 90px;
       }
       .leaflet-control-container {
-        z-index: 9999;
+        z-index: 2000;
         .leaflet-bar a {
           border-color: #d9d9d9 !important;
           box-sizing: border-box;
@@ -106,8 +106,17 @@
     /* Setup controls (zoom, fullscreen btn) */
     /* === */
     @include breakpoint(medium down) {
-      .decidimGeo__fitlerModal__form {
+      .decidimGeo__filterModal__form {
         padding: 8px;
+      }
+      .decidimGeo__filterModal__actions {
+        margin-top: 8px;
+      }
+      .decidimGeo__filterModal__fieldset {
+        padding: 0;
+      }
+      .decidimGeo__filterModalHelpText__label {
+        padding-left: 8px;
       }
     }
 
@@ -122,10 +131,7 @@
           min-height: $edgeSliderHeight;
           max-height: $edgeSliderHeight;
         }
-        &.decidimGeo__aside--closed {
-          max-height: 72.5px;
-          min-height: 72.5px;
-        }
+
         transition: 0.3s;
       }
 
@@ -152,7 +158,7 @@
       .decidimGeo__drawerHeader.leaflet-control {
         position: relative;
         overflow: unset;
-        display: block;
+        display: flex;
         box-shadow: 0px -4px 4px 0px rgba(0, 0, 0, 0.12);
         border-bottom: 1px solid #e0e0e0;
         width: 100%;
@@ -174,6 +180,7 @@
         }
       }
       .decidimGeo__drawerHeader__backButton {
+        padding-left: 8px;
         &--hidden {
           visibility: hidden !important;
         }
@@ -187,48 +194,37 @@
         }
       }
 
-      .decidimGeo__drawerHeader__heading {
-        &,
-        &.leaflet-control,
-        &--closed {
-          position: relative;
-          width: 100%;
-          flex: 0;
-          min-height: 70px;
-          margin: 0 !important;
-          padding: 0;
-          display: flex;
-        }
-        &--alone,
+      .decidimGeo__aside.leaflet-control {
+        position: relative;
+        width: 100%;
+        flex: 0;
+        margin: 0 !important;
+        padding: 0;
+        display: flex;
         &--hidden {
           display: none;
         }
       }
-      .decidimGeo__drawerHeaderRow {
-        &--aside-toggle {
-          display: block;
-          color: rgba(0, 0, 0, 0.24);
-          text-align: center;
-          display: inline-block;
+      .decidimGeo__drawerHeader__drawerToggle {
+        &--link {
+          cursor: pointer;
         }
       }
       .decidimGeo__drawerHeader__drawerToggle {
-        padding-bottom: 8px;
-        display: block;
-        cursor: pointer;
+        padding: 8px;
       }
-      .decidimGeo__fitlerModal__fieldlist {
+      .decidimGeo__filterModal__fieldlist {
         padding: 8px;
         position: relative;
       }
-      .decidimGeo__fitlerModal__field {
+      .decidimGeo__filterModal__field {
         width: auto;
         gap: 8px;
         & > label,
         select {
           flex: 1;
         }
-        select.decidimGeo__fitlerModal__select {
+        select.decidimGeo__filterModal__select {
           text-align: left;
         }
       }
@@ -271,9 +267,18 @@
         min-height: 0;
         box-shadow: unset;
       }
+      .decidimGeo__aside--closed,
+      .decidimGeo__drawerHeader__drawerToggle--closed {
+        max-height: 72.5px;
+        min-height: 72.5px;
+      }
+      .decidimGeo__drawerHeader__drawerToggle--open {
+        max-height: 43px;
+        min-height: 43px;
+      }
       .decidimGeo__aside--open .decidimGeo__drawer__list {
-        min-height: calc($edgeSliderHeight - 72.5px) !important;
-        max-height: calc($edgeSliderHeight - 72.5px);
+        min-height: calc($edgeSliderHeight - 43px) !important;
+        max-height: calc($edgeSliderHeight - 43px);
       }
       .decidimGeo__drawer__listCard:first-child {
         margin-top: 0;

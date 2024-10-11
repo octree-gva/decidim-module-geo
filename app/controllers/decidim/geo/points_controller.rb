@@ -5,6 +5,10 @@ module Decidim
     class PointsController < ::Decidim::Api::ApplicationController
       before_action :set_default_format
 
+      def count
+        render json: { count: query.select(:id).where(query.arel_table[:id].gt(after_params)).count }
+      end
+
       def index
         results = query.select(
           permitted_fields_params
@@ -16,10 +20,10 @@ module Decidim
           id: :asc
         )
         last_modified = query.maximum(:updated_at) || 1.year.from_now
-        etag = query.cache_key_with_version + "/params-" + Digest::MD5.hexdigest(permitted_params.to_json)
+        etag = "#{query.cache_key_with_version}/params-#{Digest::MD5.hexdigest(permitted_params.to_json)}"
         if stale?(last_modified: last_modified.utc, etag: etag)
           last_id = query.maximum(:id)
-          geo_scope_ids = query.select(:geo_scope_id).group(:geo_scope_id).pluck(:geo_scope_id).select {|id| !id.nil?}
+          geo_scope_ids = query.select(:geo_scope_id).group(:geo_scope_id).pluck(:geo_scope_id).compact
           render json: {
             meta: {
               fields: permitted_fields_params,

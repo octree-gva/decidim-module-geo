@@ -1,6 +1,7 @@
 import FilterButton from "./FilterButton";
 import FilterModal from "./FilterModal";
 import FilterModalOverlay from "./FilterModalOverlay";
+import FilterModalHelpText from "./FilterModalHelpText";
 const FilterControl = L.Control.extend({
   options: {
     collapsed: false,
@@ -10,6 +11,7 @@ const FilterControl = L.Control.extend({
   button: null,
   overlay: null,
   modalOverlay: null,
+  modalHelpText: null,
   onAdd(map) {
     this.container = L.DomUtil.create("div", "leaflet-control decidimGeo__filter");
     L.DomEvent.disableClickPropagation(this.container);
@@ -27,6 +29,9 @@ const FilterControl = L.Control.extend({
 
     this.modalOverlay = new FilterModalOverlay(this.modal.container);
     this.modalOverlay.onAdd(map);
+
+    this.modalHelpText = new FilterModalHelpText(this.modal.helptext);
+    this.modalHelpText.onAdd(map);
 
     const [mapContainer] = document.getElementsByClassName("js-decidimgeo");
     if (!mapContainer) throw new Error("Map is not instancied");

@@ -44,7 +44,39 @@
     justify-content: space-between;
     align-items: center;
     background: white;
+
+    &--hidden {
+      display: none;
+    }
+  }
+
+  .decidimGeo__drawerHeader__drawerToggle {
+    padding: 6px;
+    display: block;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    &--open {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    cursor: initial;
+    &--link {
+      color: var(--primary);
+    }
+    &--text {
+      cursor: initial !important;
+    }
+  }
+  .decidimGeo__drawerHeaderRow {
     &--aside-toggle {
+      display: block;
+      color: rgba(0, 0, 0, 0.24);
+      text-align: center;
+      display: inline-block;
+    }
+    &--hidden {
       display: none;
     }
   }

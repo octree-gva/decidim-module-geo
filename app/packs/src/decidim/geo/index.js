@@ -4,6 +4,7 @@ import "src/decidim/map/icon";
 import configStore from "./stores/configStore";
 import pointStore from "./stores/pointStore";
 import filterStore from "./stores/filterStore";
+import pointCounterStore from "./stores/pointCounterStore";
 import geoStore from "./stores/geoStore";
 import memoryStore from "./stores/memoryStore";
 import dropdownFilterStore from "./stores/dropdownFilterStore";
@@ -19,7 +20,8 @@ window.debug.stores = () => ({
   geo: geoStore.getState(),
   point: pointStore.getState(),
   dropdownFilter: dropdownFilterStore.getState(),
-  memoryStore: memoryStore.getState()
+  memoryStore: memoryStore.getState(),
+  pointCounterStore: pointCounterStore.getState()
 });
 
 async function prepareLeaflet(isSmallScreen) {
@@ -49,6 +51,9 @@ async function displayMap() {
     map.addLayer(pointsLayer);
 
     map.whenReady(async () => {
+      pointCounterStore
+        .getState()
+        .updateCurrentCountForFilters(filterStore.getState().activeFilters);
       // Add the aside to the map
       aside([DrawerHeader, Drawer]);
 
