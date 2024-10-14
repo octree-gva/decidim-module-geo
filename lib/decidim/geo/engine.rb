@@ -51,7 +51,7 @@ module Decidim
 
         # Setup registry
         registry = Decidim::Geo::ManifestRegistry.instance
-        if "Decidim::Meetings::Meeting".safe_constantize
+        if Decidim.const_defined?("Meetings")
           registry.register(
             :meetings,
             time_filter: Decidim::Geo::Api::DefaultFilter,
@@ -60,7 +60,7 @@ module Decidim
           )
           Decidim::Meetings::Meeting.include(Decidim::Geo::UpdateGeoIndex)
         end
-        if "Decidim::Assembly".safe_constantize
+        if Decidim.const_defined?("Assembly")
           registry.register(
             :assemblies,
             time_filter: Decidim::Geo::Api::DefaultFilter,
@@ -69,7 +69,7 @@ module Decidim
           )
           Decidim::Assembly.include(Decidim::Geo::UpdateGeoIndex)
         end
-        if "Decidim::ParticipatoryProcess".safe_constantize
+        if Decidim.const_defined?("ParticipatoryProcess")
           registry.register(
             :participatory_processes,
             time_filter: Decidim::Geo::Api::DefaultFilter,
@@ -78,7 +78,7 @@ module Decidim
           )
           Decidim::ParticipatoryProcess.include(Decidim::Geo::UpdateGeoIndex)
         end
-        if "Decidim::Proposals::Proposal".safe_constantize
+        if Decidim.const_defined?("Proposals")
           registry.register(
             :proposals,
             time_filter: Decidim::Geo::Api::ProposalFilter,
@@ -87,7 +87,7 @@ module Decidim
           )
           Decidim::Proposals::Proposal.include(Decidim::Geo::UpdateGeoIndex)
         end
-        if "Decidim::ReportingProposals".safe_constantize
+        if Decidim.const_defined?("ReportingProposals")
           registry.register(
             :reporting_proposals,
             time_filter: Decidim::Geo::Api::ProposalFilter,

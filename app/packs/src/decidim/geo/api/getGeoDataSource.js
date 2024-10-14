@@ -27,10 +27,12 @@ const getGeoDataSource = async (params = {}, fetchAll = true, callback) => {
 
   const searchParams = new URLSearchParams({
     locale,
-    is_index: isIndex,
     after,
     first
   });
+  if(isIndex){
+    searchParams.append("is_index", "true")
+  }
   filters.forEach((f) => {
     searchParams.append("filters[]", JSON.stringify(f));
   });
