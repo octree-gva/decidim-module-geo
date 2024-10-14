@@ -57,7 +57,7 @@ const store = createStore(
         map_config: mapConfig.map_config,
         i18n: mapConfig.i18n,
         images: mapConfig.images || {},
-        isIndex: mapConfig.is_index,
+        isIndex: mapConfig.is_index === "true",
         activeManifests: mapConfig.active_manifests
       }));
       const { setDefaultFilters, setFilters, toFilterOptions } = filterStore.getState();

@@ -20,11 +20,16 @@ module Decidim
         end
 
         def empty_map?
-          data_count <= 1
+          data_count < 1
         end
 
         def data_count
-          @data_count ||= ::Decidim::Geo::Api::GeoQuery.new(current_organization, current_user, { filters: filters }, current_locale).results_count
+          @data_count ||= ::Decidim::Geo::Api::GeoQuery.new(
+            current_organization, 
+            current_user, 
+            { filters: filters, is_index: index? }, 
+            current_locale
+          ).results_count
         end
 
         def filters
@@ -50,7 +55,7 @@ module Decidim
               zoom: geo_config[:zoom],
             },
             active_manifests: ::Decidim::Geo.registry.active_manifests(&:keys),
-            is_index: @options.has_key?(:is_index) ? @options[:is_index] : true
+            is_index: index?
           }.with_indifferent_access
 
           content_tag(
@@ -66,7 +71,9 @@ module Decidim
             "data-i18n" => geo_i18n.to_json
           )
         end
-
+        def index?
+          @options.has_key?(:is_index) ? @options[:is_index] : true
+        end
         def insert_scopes_mobile
           content_tag(:div, "", class: ["js-decidimgeo"])
         end
