@@ -16,10 +16,10 @@ module Decidim
 
         def results
           query = Decidim::Geo::Index.all
+          query = query.geolocated if geolocated? || config.force_geoencoded?
           return query.indexed if graphql_params.empty?
 
           query = query.indexed if only_indexed?
-          query = query.geolocated if geolocated?
           query = query.virtual if virtual?
           # Filter on scopes
           unless scope_ids_params.empty?
@@ -82,6 +82,10 @@ module Decidim
         delegate :count, to: :results, prefix: true
 
         private
+
+        def config
+          @config ||= Decidim::Geo::GeoConfig.geo_config_default
+        end
 
         def active_manifests_names
           @active_manifests_names ||= ::Decidim::Geo.registry.active_manifests(&:keys)

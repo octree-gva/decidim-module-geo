@@ -5,7 +5,7 @@ module Decidim
     # The data store for geo configuration default.
     class GeoConfig < ApplicationRecord
       self.table_name = "decidim_geo_configs"
-
+      enum default_geoencoded_filter: { force_geoencoded: 0, no_force_geoencoded: 1 }
       validates :longitude, :latitude, :zoom, presence: true
 
       def self.geo_config_default
@@ -13,7 +13,8 @@ module Decidim
           .first_or_create(latitude: 0,
                            longitude: 0,
                            zoom: 13,
-                           tile: tile_layer_default)
+                           tile: tile_layer_default,
+                           default_geoencoded_filter: 1)
       end
 
       def self.tile_layer_default

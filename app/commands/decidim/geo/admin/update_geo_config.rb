@@ -46,7 +46,8 @@ module Decidim
             zoom: form.zoom,
             tile: form.tile,
             only_assemblies: form.only_assemblies,
-            only_processes: form.only_processes
+            only_processes: form.only_processes,
+            default_geoencoded_filter: form.default_geoencoded_filter
           }
         end
       end

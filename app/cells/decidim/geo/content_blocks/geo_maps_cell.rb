@@ -48,12 +48,7 @@ module Decidim
               not_geolocated: ActionController::Base.helpers.asset_pack_path("media/images/not-geolocated.svg")
             },
             filters: (@options[:filters] || []).concat([{ timeFilter: { time: "active" } }]),
-            map_config: {
-              lat: geo_config[:latitude],
-              lng: geo_config[:longitude],
-              tile_layer: geo_config[:tile],
-              zoom: geo_config[:zoom],
-            },
+            map_config: map_config,
             active_manifests: ::Decidim::Geo.registry.active_manifests(&:keys),
             is_index: index?
           }.with_indifferent_access
@@ -149,17 +144,18 @@ module Decidim
           current_component.present?
         end
 
-        def geo_config
+        def map_config
           {
-            latitude: model.try(:latitude).nil? ? geo_config_default.latitude : model.latitude,
-            longitude: model.try(:longitude).nil? ? geo_config_default.longitude : model.longitude,
-            tile: Decidim::Geo::GeoConfig.geo_config_default.tile,
-            zoom: Decidim::Geo::GeoConfig.geo_config_default.zoom,
+            lat: model.try(:latitude).nil? ? config.latitude : model.latitude,
+            lng: model.try(:longitude).nil? ? config.longitude : model.longitude,
+            tile_layer: config.tile,
+            zoom: config.zoom,
+            force_geo_filter: config.default_geoencoded_filter
           }.to_h
         end
 
-        def geo_config_default
-          Decidim::Geo::GeoConfig.geo_config_default
+        def config
+          @config ||= Decidim::Geo::GeoConfig.geo_config_default
         end
       end
     end

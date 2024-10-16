@@ -40,9 +40,20 @@ en:
       admin:
         geo_configs: 
           map_config_title: Map Configurations
-          spaces_config_title: Participatory Spaces Configurations
+          spaces_config_title: Configurations for Participatory Spaces
           only_assemblies: Display only assemblies in Assemblies
           only_processes: Display only processes in Processes
+
+          default_filter:
+            title: Available points
+            help_text: |
+              Configure the available points for Decidim Geo. This configuration applies to all the platform.
+            geoencoded_filter:
+              label: Filter points by location
+              fields:
+                force_geoencoded: "Only points in the map"
+                no_force_geoencoded: "All points"
+          default_geoencoded_filter: Filter 
           index: 
             title: Configurations
             save: Save

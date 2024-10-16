@@ -11,7 +11,8 @@ module Decidim
         attribute :tile, String
         attribute :only_assemblies, Boolean
         attribute :only_processes, Boolean
-
+        attribute :default_geoencoded_filter, Integer
+        
         alias organization current_organization
       end
     end
