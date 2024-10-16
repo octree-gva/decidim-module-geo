@@ -89,12 +89,14 @@ export default class GeoDatasourceNode {
     return { color: "#404040" };
   }
 
-  async panToMarker(zoom = 21) {
+  async panToMarker() {
+    const {map_config: mapConfig} = configStore.getState();
+    const {focus_zoom_level: focusZoomLevel = 21} = mapConfig;
     if (!this.isGeoLocated()) return;
     const { map } = configStore.getState();
     return new Promise((resolve) => {
       map
-        .flyTo(this.marker.getLatLng(), zoom, {
+        .flyTo(this.marker.getLatLng(), focusZoomLevel, {
           animate: false,
           noMoveStart: true
         })
