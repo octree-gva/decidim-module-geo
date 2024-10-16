@@ -5,33 +5,33 @@ de:
       assembly:
         decidim_geo_space_address: Adresse
       component:
-        decidim_geo_avoid_index: Hide geolocated points outside this process
+        decidim_geo_avoid_index: Lokalisierte Punkte ausserhalb dieses Prozesses verbergen
   decidim:
     admin:
       components:
         form:
-          geo_avoid_index: If checked, points will be hidden of other maps on the platform such as the homepage
+          geo_avoid_index: Wenn aktiviert, werden die Punkte auf anderen Karten der Plattform (z.B. der Homepage) ausgeblendet
     accountability:
       admin:
         results:
           form:
-            decidim_geo_space_address: Physical Address
-            decidim_geo_space_address_help: If the Result has a physical address, fill this field with its address.
-            decidim_geo_filter_help_text: If empty the project remains forever active
+            decidim_geo_space_address: Adresse
+            decidim_geo_space_address_help: Fallls das Resultat an einem Standort stattfindet, fülle hier seine Adresse ein.
+            decidim_geo_filter_help_text: Wenn leer bleibt das Projekt für immer aktiv
     assemblies:
       admin:
         assemblies:
           form:
-            decidim_geo_space_address: Physical Address
-            decidim_geo_space_address_help: If the Assembly has a physical address, fill this field with its address.
+            decidim_geo_space_address: Adresse
+            decidim_geo_space_address_help: Falls das Gremium an einen Standort tätig ist, fülle hier seine Adresse ein.
       show:
         decidim_geo_space_location: Adresse
     participatory_processes:
       admin:
         participatory_processes:
           form:
-            decidim_geo_space_address: Physical Address
-            decidim_geo_space_address_help: If the Process has a physical address, fill this field with its address.
+            decidim_geo_space_address: Adresse
+            decidim_geo_space_address_help: Fallls der Prozess an einem Standort stattfindet, fülle hier seine Adresse ein.
       show:
         decidim_geo_space_address: Adresse
     geo:
@@ -89,7 +89,7 @@ de:
         dropdown: "Bereiche"
         all: "Alle Bereiche"
       actions:
-        view: View
+        view: Anzeigen
       mobile:
         open_fullscreen: "Karte im Vollbildmodus öffnen"
         close_fullscreen: "Karte schliessen"
@@ -99,8 +99,8 @@ de:
         reset_button: "Zurücksetzen"
         apply_button: "Anwenden"
         empty:
-          message: "No data with these filters"
-          reset_button: "Reset filters"
+          message: "Keine Daten mit dieser Filterauswahl"
+          reset_button: "Filter zurücksetzen"
         geo:
           label: Zeigen
           all: Alle
@@ -120,7 +120,7 @@ de:
           only_proposals: "Vorschläge"
           only_meetings: "Veranstaltungen"
           only_debates: "Debatten"
-          only_accountabilities: "Accountabilities"
+          only_accountabilities: "Verantwortlichkeiten"
     components:
       geo:
         name: Geo
