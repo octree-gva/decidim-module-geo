@@ -12,6 +12,7 @@ module Decidim
         attribute :only_assemblies, Boolean
         attribute :only_processes, Boolean
         attribute :default_geoencoded_filter, Integer
+        attribute :focus_zoom_level, Integer
         
         alias organization current_organization
       end

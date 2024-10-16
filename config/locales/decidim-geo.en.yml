@@ -62,6 +62,7 @@ en:
             save: Save
           fields:
             zoom: Zoom
+            focus_zoom_level: Zoom on focus
             longitude: Longitude
             latitude: Latitude
             tile: Tile 

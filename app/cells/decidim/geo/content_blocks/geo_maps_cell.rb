@@ -150,6 +150,7 @@ module Decidim
             lng: model.try(:longitude).nil? ? config.longitude : model.longitude,
             tile_layer: config.tile,
             zoom: config.zoom,
+            focus_zoom_level: config.focus_zoom_level,
             force_geo_filter: config.default_geoencoded_filter
           }.to_h
         end
