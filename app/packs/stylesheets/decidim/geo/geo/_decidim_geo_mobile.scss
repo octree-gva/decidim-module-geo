@@ -5,11 +5,13 @@
     display: none;
   }
   @include breakpoint(medium down) {
+    padding: 0 !important;
     &:not(&--fullscreen) .js-decidimgeo.decidimgeo__map {
       z-index: 1;
       height: 30vh;
       max-height: 30vh;
       min-height: 140px;
+      border-radius: 0px;
       .leaflet-bar,
       .leaflet-control-container {
         display: none;
