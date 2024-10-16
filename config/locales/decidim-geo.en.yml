@@ -4,6 +4,8 @@ en:
     attributes:
       assembly:
         decidim_geo_space_address: Address
+      participatory_process:
+        decidim_geo_space_address: Adresse
       component:
         decidim_geo_avoid_index: Hide geolocated points outside this process
   decidim:
