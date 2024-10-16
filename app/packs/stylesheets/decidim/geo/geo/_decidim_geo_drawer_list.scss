@@ -124,15 +124,15 @@
   }
 
   .decidimGeo__drawer__metas {
-    display: inline-flex;
+    display: flex;
     gap: 0;
-    flex-direction: column;
+    justify-content: space-between;
     margin-bottom: 4px;
   }
 
   .decidimGeo__drawer__listCardStatus {
     flex: 0;
-    padding: 1px 8px;
+    padding: 1px 6px;
     background: white;
     border: 1px solid #808080;
     border-radius: 18px;
@@ -140,13 +140,23 @@
     line-height: 1em;
     text-align: center;
     text-transform: uppercase;
-    &--withdrawn {
+    text-wrap: nowrap;
+
+    &--withdrawn, 
+    &--rejected {
       border-color: var(--alert);
       color: var(--alert);
     }
     &--accepted {
       border-color: var(--success);
       color: var(--success);
+    }
+    &--evaluating {
+      border-color: var(--warning);
+      color: var(--warning);
+    }
+    &--published{
+      display: none;
     }
   }
   .decidimGeo__drawer__listCardTitle {
