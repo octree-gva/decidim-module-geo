@@ -1,6 +1,4 @@
-/* TODO: All these classes overrides may cause other parts of decidim's ui to break due to leaflet dependency.
-This module should therefore implement its own classes before being safely published, ideally by 
-implementing BEM (https://getbem.com/introduction/) and remove !important rules*/
+
 .decidimGeo__container {
   .leaflet-control {
     position: static;
