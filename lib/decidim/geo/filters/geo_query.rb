@@ -5,6 +5,7 @@ module Decidim
     module Api
       class GeoQuery
         attr_reader :locale, :graphql_params, :organization, :current_user, :params
+        delegate :count, to: :results, prefix: true
 
         def initialize(organization, current_user, params, locale)
           @locale = locale || I18n.locale
@@ -79,7 +80,6 @@ module Decidim
           query
         end
 
-        delegate :count, to: :results, prefix: true
 
         private
 

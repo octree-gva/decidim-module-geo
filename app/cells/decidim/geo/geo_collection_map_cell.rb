@@ -54,6 +54,7 @@ module Decidim
             id: "Assemblies",
             filters: assemblies_filter,
             scopes: assemblies_scopes,
+            hide_empty: true,
             is_index: true
           }
         when "decidim/participatory_processes/participatory_processes:index"
@@ -61,6 +62,7 @@ module Decidim
             id: "Processes",
             filters: processes_filter,
             scopes: processes_scopes,
+            hide_empty: true,
             is_index: true
           }
         else
