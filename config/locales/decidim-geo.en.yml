@@ -118,8 +118,8 @@ en:
           one: 1 result
           other: "%count% results"
         empty:
-          message: "No data with these filters"
-          reset_button: "Reset filters"
+          message: "Nothing here, change filters to update"
+          update_button: "Update"
         geo:
           label: Show
           all: All

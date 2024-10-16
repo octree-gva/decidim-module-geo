@@ -49,13 +49,13 @@ export default class Drawer {
       "decidimGeo__emptyDrawer__paragraph",
       emptyContainer
     );
-    emptyParagraph.textContent = this.i18n()["decidim_geo.filters.empty_message"];
+    emptyParagraph.textContent = i18n["decidim_geo.filters.empty.message"];
     const emptyAction = L.DomUtil.create(
       "button",
       "decidimGeo__emptyDrawer__button",
       emptyContainer
     );
-    emptyAction.textContent = this.i18n()["decidim_geo.filters.empty_reset_button"];
+    emptyAction.textContent = i18n["decidim_geo.filters.empty.update_button"];
     emptyAction.onclick = this.emptyActionHandler.bind(this);
   }
 
@@ -67,25 +67,8 @@ export default class Drawer {
     return configStore.getState();
   }
   emptyActionHandler() {
-    const { resetFilters } = filterStore.getState();
-    const { resetFilters: resetDropdownFilter } = dropdownFilterStore.getState();
-    const { selectScope } = geoStore.getState();
-    const { space_ids } = configStore.getState();
-    const { scopeForId } = pointStore.getState();
-
-    resetFilters();
-    resetDropdownFilter();
-    const scopes = space_ids.map((scope) => scopeForId(scope)).filter(Boolean);
-    if (scopes.length === 1) {
-      const scope = scopeForId(scopes[0]);
-      if (scope) {
-        selectScope(scope);
-        scope.repaint();
-      }
-    } else {
-      selectScope(null);
-    }
-    this.repaint();
+    const { open } = dropdownFilterStore.getState();
+    open();
   }
   repaintLoading() {
     const loadingElement = this.loadingDom();

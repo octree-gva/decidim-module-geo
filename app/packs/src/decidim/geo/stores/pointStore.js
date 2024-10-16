@@ -34,6 +34,7 @@ const store = createStore(
     isLoading: 0,
     _lastFilter: "",
     _lastResponse: [],
+    lastResponseCount: 0,
     fetchesRunning: 0,
     scopeForId: (scopeId) => {
       const scope = get().scopes.find(({ data }) => `${data.id}` === `${scopeId}`);
@@ -41,7 +42,7 @@ const store = createStore(
       return scope;
     },
     clearCache: () => {
-      set(() => ({ _lastFilter: "", _lastResponse: [] }));
+      set(() => ({ _lastFilter: "", _lastResponse: [], lastResponseCount: 0 }));
     },
     addProcess: () => {
       set(({ isLoading }) => ({ isLoading: isLoading + 1 }));
@@ -72,13 +73,14 @@ const store = createStore(
           return geoScope;
         })
         .filter(Boolean);
-
+        const responsePoints = filteredPoints
+        .map(({ id: needleId }) => {
+          return points.find(({ id }) => `${needleId}` === `${id}`);
+        })
+        .filter(Boolean)
       set(() => ({
-        _lastResponse: filteredPoints
-          .map(({ id: needleId }) => {
-            return points.find(({ id }) => `${needleId}` === `${id}`);
-          })
-          .filter(Boolean),
+        _lastResponse: responsePoints,
+        lastResponseCount: responsePoints.length,
         scopes: geoScopes
       }));
       scopeLayer.eachLayer(function (layer) {

@@ -3,6 +3,7 @@ import dropdownFilterStore from "../stores/dropdownFilterStore";
 import geoStore from "../stores/geoStore";
 import configStore from "../stores/configStore";
 import filterStore from "../stores/filterStore";
+import pointStore from "../stores/pointStore";
 
 class FilterButton {
   constructor(parent) {
@@ -29,6 +30,8 @@ class FilterButton {
 <path d="M4.198 0.548096H2.198V6.5481H4.198V0.548096ZM16.198 0.548096H14.198V10.5481H16.198V0.548096ZM0.197998 10.5481H2.198V18.5481H4.198V10.5481H6.198V8.5481H0.197998V10.5481ZM12.198 4.5481H10.198V0.548096H8.198V4.5481H6.198V6.5481H12.198V4.5481ZM8.198 18.5481H10.198V8.5481H8.198V18.5481ZM12.198 12.5481V14.5481H14.198V18.5481H16.198V14.5481H18.198V12.5481H12.198Z" fill="currentColor"/>
 </svg>`;
     this.title.onclick = this.handleFilterButtonClick.bind(this);
+
+    this.alertBadFilter = false;
   }
   handleFilterButtonClick() {
     this.toggle();
@@ -42,6 +45,14 @@ class FilterButton {
 
   repaint() {
     const { selectedPoint } = geoStore.getState();
+    if(!selectedPoint && this.alertBadFilter){
+      this.title.onclick = this.handleFilterButtonClick.bind(this);
+      this.countBadge.className = "decidimGeo__filterToggle__counter";
+      this.countBadge.textContent = "!";
+      this.title.className = "decidimGeo__filterToggle__button";
+      this.titleContainer.className = "decidimGeo__filterToggle";
+      return;
+    }
     const { filterCount } = dropdownFilterStore.getState();
     const badgeCount = filterCount();
     this.title.onclick = selectedPoint
@@ -72,6 +83,15 @@ class FilterButton {
   }
 
   onAdd(_map) {
+    pointStore.subscribe(
+      (state) => [state.lastResponseCount],
+      ([count]) => {
+        const alertBadFilter = count == 0;
+        if(alertBadFilter === this.alertBadFilter) return;
+        this.alertBadFilter = alertBadFilter;
+        this.repaint();
+      }
+    );
     dropdownFilterStore.subscribe(
       (state) => [state.isOpen, state.selectedFilters],
       () => this.repaint()

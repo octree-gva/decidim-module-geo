@@ -113,8 +113,8 @@ module Decidim
             "decidim_geo.filters.type.meetings": t("decidim.geo.filters.type.only_meetings"),
             "decidim_geo.filters.type.debates": t("decidim.geo.filters.type.only_debates"),
             "decidim_geo.filters.type.accountability": t("decidim.geo.filters.type.only_accountabilities"),
-            "decidim_geo.filters.empty_message": t("decidim.geo.filters.empty.message"),
-            "decidim_geo.filters.empty_reset_button": t("decidim.geo.filters.empty.reset_button"),
+            "decidim_geo.filters.empty.message": t("decidim.geo.filters.empty.message"),
+            "decidim_geo.filters.empty.update_button": t("decidim.geo.filters.empty.update_button"),
             "decidim_geo.actions.view": t("decidim.geo.actions.view")
           }
         end
