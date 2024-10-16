@@ -123,6 +123,32 @@
     min-height: 16px;
   }
 
+  .decidimGeo__drawer__metas {
+    display: inline-flex;
+    gap: 0;
+    flex-direction: column;
+    margin-bottom: 4px;
+  }
+
+  .decidimGeo__drawer__listCardStatus {
+    flex: 0;
+    padding: 1px 8px;
+    background: white;
+    border: 1px solid #808080;
+    border-radius: 18px;
+    font-size: 11px;
+    line-height: 1em;
+    text-align: center;
+    text-transform: uppercase;
+    &--withdrawn {
+      border-color: var(--alert);
+      color: var(--alert);
+    }
+    &--accepted {
+      border-color: var(--success);
+      color: var(--success);
+    }
+  }
   .decidimGeo__drawer__listCardTitle {
     color: var(--primary);
     font-size: 17px;

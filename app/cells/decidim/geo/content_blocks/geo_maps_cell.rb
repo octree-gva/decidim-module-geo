@@ -82,6 +82,7 @@ module Decidim
           geo_i18n = supported_models.to_h
           {
             **geo_i18n,
+            "decidim.geo.proposals.states": t("decidim.admin.filters.proposals.state_eq.values"),
             "decidim.geo.mobile.open_fullscreen": t("decidim.geo.mobile.open_fullscreen"),
             "decidim.geo.mobile.close_fullscreen": t("decidim.geo.mobile.close_fullscreen"),
             "decidim_geo.scopes.all": t("decidim.geo.scopes.all"),
