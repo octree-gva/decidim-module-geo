@@ -6,6 +6,8 @@
   }
   @include breakpoint(medium down) {
     padding: 0 !important;
+    z-index: 1200;
+
     &:not(&--fullscreen) .js-decidimgeo.decidimgeo__map {
       z-index: 1;
       height: 30vh;
