@@ -39,7 +39,6 @@ const store = createStore(
     popState: () => {
       const { savedCenter, savedZoom } = get();
       const { map, mapReady } = configStore.getState();
-      console.log("popState", { savedCenter, savedZoom, mapReady });
       if (!savedCenter || !savedZoom || !mapReady) return null;
       map.setView(savedCenter, savedZoom, { animate: false });
     }

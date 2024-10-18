@@ -13,7 +13,9 @@ export default class GeoDatasourceNode {
     return true;
   }
   isGeoLocated() {
-    return !!this.marker;
+    if(!this.marker) return false;
+    const latlng = this.marker.getLatLng()
+    return latlng.lat && latlng.lng;
   }
 
   repaint() {
