@@ -112,12 +112,12 @@ de:
         reset_button: "Zurücksetzen"
         apply_button: "Anwenden"
         results:
-          warn_empty: Keine Daten mit dieser Filterauswahl
+          warn_empty: Keine Daten mit dieser Filterauswahl, Filter ändern zu aktualisieren
           zero: no results
           one: 1 result
           other: "%count% results"
         empty:
-          message: "Keine Daten mit dieser Filterauswahl"
+          message: "Keine Daten mit dieser Filterauswahl, Filter ändern zu aktualisieren"
           update_button: "Update"
         geo:
           label: Zeigen

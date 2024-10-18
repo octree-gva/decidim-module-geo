@@ -7,52 +7,52 @@ fr:
       participatory_process:
         decidim_geo_space_address: Adresse
       component:
-        decidim_geo_avoid_index: Hide geolocated points outside this process
+        decidim_geo_avoid_index: Masquer les points géolocalisés en dehors de cette concertation
   decidim:
     admin:
       components:
         form:
-          geo_avoid_index: If checked, points will be hidden of other maps on the platform such as the homepage
+          geo_avoid_index: Si coché, les points seront cachés des autres cartes sur la plateforme comme la page d'accueil
     accountability:
       admin:
         results:
           form:
-            decidim_geo_space_address: Physical Address
-            decidim_geo_space_address_help: If the Result has a physical address, fill this field with its address.
-            decidim_geo_filter_help_text: If empty the project remains forever active
+            decidim_geo_space_address: Adresse physique
+            decidim_geo_space_address_help: Si le résultat a une adresse physique, remplissez ce champ avec son adresse.
+            decidim_geo_filter_help_text: Si vide, le projet reste indéfiniment actif
     assemblies:
       admin:
         assemblies:
           form:
-            decidim_geo_space_address: Physical Address
-            decidim_geo_space_address_help: If the Assembly has a physical address, fill this field with its address.
+            decidim_geo_space_address: Adresse physique
+            decidim_geo_space_address_help: Si l'assemblée possède une adresse physique, remplissez ce champ avec son adresse.
       show:
         decidim_geo_space_location: Adresse
     participatory_processes:
       admin:
         participatory_processes:
           form:
-            decidim_geo_space_address: Physical Address
-            decidim_geo_space_address_help: If the Process has a physical address, fill this field with its address.
+            decidim_geo_space_address: Adresse physique
+            decidim_geo_space_address_help: Si le processus a une adresse physique, remplissez ce champ avec son adresse.
       show:
         decidim_geo_space_address: Adresse
     geo:
       admin:
         geo_configs:
           map_config_title: Configurations de la carte
-          spaces_config_title: Configurations des Espaces Participatifs
+          spaces_config_title: Configurations pour les espaces participatifs
           only_assemblies: Afficher uniquement les assemblées dans Assemblées
           only_processes: Afficher uniquement les processus dans Processus
           default_filter:
-            title: Available points
+            title: Points disponibles
             help_text: |
-              Configure the available points for Decidim Geo. This configuration applies to all the platform.
+              Configurez les points disponibles pour Decidim Geo. Cette configuration s'applique à toute la plateforme.
             geoencoded_filter:
-              label: Filter points by location
+              label: Filtrer les points par emplacement
               fields:
-                force_geoencoded: "Only points in the map"
-                no_force_geoencoded: "All points"
-          default_geoencoded_filter: Filter
+                force_geoencoded: "Uniquement les points géolocalisé sur la carte"
+                no_force_geoencoded: "Tous les points"
+          default_geoencoded_filter: Filtre
           index:
             title: Configurations
             save: Sauvegarder
@@ -61,7 +61,7 @@ fr:
             save: Sauvegarder
           fields:
             zoom: Zoom
-            focus_zoom_level: Zoom on focus
+            focus_zoom_level: Zoom lors de la mise au point
             longitude: Longitude
             latitude: Latitude
             tile: Tuile
@@ -112,13 +112,13 @@ fr:
         reset_button: "Annuler"
         apply_button: "Afficher"
         results:
-          warn_empty: Aucun résultat, modifier les filters pour mettre à jour
-          zero: no results
-          one: 1 result
-          other: "%count% results"
+          warn_empty: Rien ici, changer les filtres pour mettre à jour
+          zero: aucun résultat
+          one: 1 résultat
+          other: "%count% résultats"
         empty:
-          message: "Aucun résultat, modifier les filters pour mettre à jour"
-          update_button: "Update"
+          message: "Rien ici, changer les filtres pour mettre à jour"
+          update_button: "Mettre à jour"
         geo:
           label: Localisation
           all: Tout
@@ -138,7 +138,7 @@ fr:
           only_proposals: "Propositions"
           only_meetings: "Réunions"
           only_debates: "Débats"
-          only_accountabilities: "Accountabilities"
+          only_accountabilities: "Projets"
     components:
       geo:
         name: Géo

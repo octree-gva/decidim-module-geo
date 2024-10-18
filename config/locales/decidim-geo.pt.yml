@@ -7,33 +7,33 @@ pt:
       participatory_process:
         decidim_geo_space_address: Endereço
       component:
-        decidim_geo_avoid_index: Hide geolocated points outside this process
+        decidim_geo_avoid_index: Ocultar pontos geolocalizados fora deste processo
   decidim:
     admin:
       components:
         form:
-          geo_avoid_index: If checked, points will be hidden of other maps on the platform such as the homepage
+          geo_avoid_index: Se marcada, os pontos ficarão ocultos de outros mapas na plataforma como a página inicial
     accountability:
       admin:
         results:
           form:
-            decidim_geo_space_address: Physical Address
-            decidim_geo_space_address_help: If the Result has a physical address, fill this field with its address.
-            decidim_geo_filter_help_text: If empty the project remains forever active
+            decidim_geo_space_address: Endereço físico
+            decidim_geo_space_address_help: Se o Resultado tiver um endereço físico, preencha este campo com seu endereço.
+            decidim_geo_filter_help_text: Se estiver vazio, o projeto continuará ativo para sempre
     assemblies:
       admin:
         assemblies:
           form:
-            decidim_geo_space_address: Physical Address
-            decidim_geo_space_address_help: If the Assembly has a physical address, fill this field with its address.
+            decidim_geo_space_address: Endereço físico
+            decidim_geo_space_address_help: Caso a assembleia tem um endereço físico, preencha este campo com seu endereço.
       show:
         decidim_geo_space_location: Endereço
     participatory_processes:
       admin:
         participatory_processes:
           form:
-            decidim_geo_space_address: Physical Address
-            decidim_geo_space_address_help: If the Process has a physical address, fill this field with its address.
+            decidim_geo_space_address: Endereço físico
+            decidim_geo_space_address_help: Se o processo tiver um endereço físico, preencha este campo com um endereço.
       show:
         decidim_geo_space_address: Endereço
     geo:
@@ -44,14 +44,14 @@ pt:
           only_assemblies: Exibir apenas reuniões em Reuniões
           only_processes: Exibir apenas processos em Processos
           default_filter:
-            title: Available points
+            title: Pontos disponíveis
             help_text: |
-              Configure the available points for Decidim Geo. This configuration applies to all the platform.
+              Configure os pontos disponíveis para o Decidim Geo. Esta configuração se aplica a toda a plataforma.
             geoencoded_filter:
-              label: Filter points by location
+              label: Filtrar pontos por localização
               fields:
-                force_geoencoded: "Only points in the map"
-                no_force_geoencoded: "All points"
+                force_geoencoded: "Apenas pontos no mapa"
+                no_force_geoencoded: "Todos os pontos"
           default_geoencoded_filter: Filter
           index:
             title: Configurações
@@ -61,7 +61,7 @@ pt:
             save: Salvar
           fields:
             zoom: Ampliar
-            focus_zoom_level: Zoom on focus
+            focus_zoom_level: Zoom no foco
             longitude: Longitude
             latitude: Latitude
             tile: Telha
@@ -112,13 +112,13 @@ pt:
         reset_button: "Restaurar"
         apply_button: "Aplicar"
         results:
-          warn_empty: Não há dados com esses filtros, muda os filtros para atualizar
-          zero: no results
-          one: 1 result
-          other: "%count% results"
+          warn_empty: Nada aqui, altere os filtros para atualizar
+          zero: sem resultados
+          one: 1 resultado
+          other: "%count% resultados"
         empty:
-          message: "Não há dados com esses filtros, muda os filtros para atualizar"
-          update_button: "Update"
+          message: "Nada aqui, altere os filtros para atualizar"
+          update_button: "Atualize"
         geo:
           label: Mostrar
           all: Todos
@@ -138,7 +138,7 @@ pt:
           only_proposals: "Sugestão"
           only_meetings: "Reunião"
           only_debates: "Debate"
-          only_accountabilities: "Accountabilities"
+          only_accountabilities: "Resultados"
     components:
       geo:
         name: Localização geográfica
