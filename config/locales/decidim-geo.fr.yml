@@ -40,7 +40,7 @@ fr:
       admin:
         geo_configs:
           map_config_title: Configurations de la carte
-          spaces_config_title: Configurations for Participatory Spaces
+          spaces_config_title: Configurations des Espaces Participatifs
           only_assemblies: Afficher uniquement les assemblées dans Assemblées
           only_processes: Afficher uniquement les processus dans Processus
           default_filter:
@@ -112,12 +112,12 @@ fr:
         reset_button: "Annuler"
         apply_button: "Afficher"
         results:
-          warn_empty: Nothing here, change filters to update
+          warn_empty: Aucun résultat, modifier les filters pour mettre à jour
           zero: no results
           one: 1 result
           other: "%count% results"
         empty:
-          message: "Nothing here, change filters to update"
+          message: "Aucun résultat, modifier les filters pour mettre à jour"
           update_button: "Update"
         geo:
           label: Localisation

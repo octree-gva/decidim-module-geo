@@ -40,7 +40,7 @@ de:
       admin:
         geo_configs:
           map_config_title: Kartenkonfigurationen
-          spaces_config_title: Configurations for Participatory Spaces
+          spaces_config_title: Einstellungen für partizipative Bereiche
           only_assemblies: Ausschliesslich Gremien auf der Gremienübersichtsseite anzeigen	
           only_processes: Ausschliesslich Prozesse auf der Prozessübersichtsseite anzeigen	
           default_filter:
@@ -112,12 +112,12 @@ de:
         reset_button: "Zurücksetzen"
         apply_button: "Anwenden"
         results:
-          warn_empty: Nothing here, change filters to update
+          warn_empty: Keine Daten mit dieser Filterauswahl
           zero: no results
           one: 1 result
           other: "%count% results"
         empty:
-          message: "Nothing here, change filters to update"
+          message: "Keine Daten mit dieser Filterauswahl"
           update_button: "Update"
         geo:
           label: Zeigen

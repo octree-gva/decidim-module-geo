@@ -5,7 +5,7 @@ pt:
       assembly:
         decidim_geo_space_address: Endereço
       participatory_process:
-        decidim_geo_space_address: Adresse
+        decidim_geo_space_address: Endereço
       component:
         decidim_geo_avoid_index: Hide geolocated points outside this process
   decidim:
@@ -40,7 +40,7 @@ pt:
       admin:
         geo_configs:
           map_config_title: Configurações do mapa
-          spaces_config_title: Configurations for Participatory Spaces
+          spaces_config_title: Configurações de espaços participativos
           only_assemblies: Exibir apenas reuniões em Reuniões
           only_processes: Exibir apenas processos em Processos
           default_filter:
@@ -112,12 +112,12 @@ pt:
         reset_button: "Restaurar"
         apply_button: "Aplicar"
         results:
-          warn_empty: Nothing here, change filters to update
+          warn_empty: Não há dados com esses filtros, muda os filtros para atualizar
           zero: no results
           one: 1 result
           other: "%count% results"
         empty:
-          message: "Nothing here, change filters to update"
+          message: "Não há dados com esses filtros, muda os filtros para atualizar"
           update_button: "Update"
         geo:
           label: Mostrar
