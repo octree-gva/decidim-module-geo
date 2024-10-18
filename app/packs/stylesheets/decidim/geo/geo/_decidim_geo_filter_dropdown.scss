@@ -29,7 +29,7 @@
     transition: 0.3s;
     background: white;
     margin: 48px 16px;
-    padding: 32px;
+    padding: 8px;
 
     position: absolute;
     z-index: 9999;
@@ -111,7 +111,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 3rem;
   }
   .decidimGeo__filterModal__label {
     @include decidimGeo__clickableText;
