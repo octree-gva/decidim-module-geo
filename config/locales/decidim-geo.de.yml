@@ -4,6 +4,8 @@ de:
     attributes:
       assembly:
         decidim_geo_space_address: Adresse
+      participatory_process:
+        decidim_geo_space_address: Adresse
       component:
         decidim_geo_avoid_index: Lokalisierte Punkte ausserhalb dieses Prozesses verbergen
   decidim:
@@ -41,6 +43,16 @@ de:
           spaces_config_title: Einstellungen für partizipative Bereiche
           only_assemblies: Ausschliesslich Gremien auf der Gremienübersichtsseite anzeigen	
           only_processes: Ausschliesslich Prozesse auf der Prozessübersichtsseite anzeigen	
+          default_filter:
+            title: Available points
+            help_text: |
+              Configure the available points for Decidim Geo. This configuration applies to all the platform.
+            geoencoded_filter:
+              label: Filter points by location
+              fields:
+                force_geoencoded: "Only points in the map"
+                no_force_geoencoded: "All points"
+          default_geoencoded_filter: Filter
           index:
             title: Einstellungen
             save: Speichern
@@ -49,6 +61,7 @@ de:
             save: Speichern
           fields:
             zoom: Zoomstufe
+            focus_zoom_level: Zoom on focus
             longitude: Längengrad
             latitude: Breitengrad
             tile: Kachel
@@ -98,9 +111,14 @@ de:
         button: "Filter"
         reset_button: "Zurücksetzen"
         apply_button: "Anwenden"
+        results:
+          warn_empty: Keine Daten mit dieser Filterauswahl
+          zero: no results
+          one: 1 result
+          other: "%count% results"
         empty:
           message: "Keine Daten mit dieser Filterauswahl"
-          reset_button: "Filter zurücksetzen"
+          update_button: "Update"
         geo:
           label: Zeigen
           all: Alle
