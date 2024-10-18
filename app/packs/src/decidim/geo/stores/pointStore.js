@@ -31,6 +31,7 @@ const store = createStore(
     scopes: [],
     fetchedGeoScopes: [],
     selectedGeoScopeIds: [],
+    isInitialized: false,
     isLoading: 0,
     _lastFilter: "",
     _lastResponse: [],
@@ -98,7 +99,7 @@ const store = createStore(
         (f) => typeof f.timeFilter === "undefined"
       );
       set(({ fetchesRunning }) => ({ fetchesRunning: fetchesRunning + 1 }));
-      getGeoDataSource(
+      await getGeoDataSource(
         { filters: filterWithoutTime, locale, isIndex },
         true,
         (data, hasMore, meta) => {
@@ -147,12 +148,12 @@ const store = createStore(
       }));
       filteredIdsStore.setState(() => ({ activeFilterIds: [] }));
 
-      getGeoDataSource({ filters, locale: locale, isIndex }, false, (data, hasMore) => {
+      await getGeoDataSource({ filters, locale: locale, isIndex }, false, (data, hasMore) => {
         filteredIdsStore.setState(({ activeFilterIds }) => ({
           activeFilterIds: activeFilterIds.concat(data || [])
         }));
-        set(({ fetchesRunning }) => ({
-          fetchesRunning: fetchesRunning - (hasMore ? 0 : 1)
+        set(({ fetchesRunning}) => ({
+          fetchesRunning: fetchesRunning - (hasMore ? 0 : 1),
         }));
         get()._updateCache();
       });

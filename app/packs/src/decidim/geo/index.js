@@ -37,8 +37,10 @@ async function fetchData() {
   addProcess();
   // Fetch all the data
   await Promise.all([fetchAll(defaultFilters), pointsForFilters(activeFilters)]);
+
   removeProcess();
 }
+
 async function displayMap() {
   try {
     const { addProcess, removeProcess } = pointStore.getState();
@@ -60,11 +62,13 @@ async function displayMap() {
 
       map.addControl(new FilterControl());
       map.addControl(new PageNameControl());
+      map.setMinZoom((configStore.getState().map_config.zoom || 15) - 2)
       // Save the first loaded position.
       await new Promise((resolve) => setTimeout(resolve, 120));
       configStore.getState().setReady();
       removeProcess();
       setTimeout(setSavedPosition, 320);
+
     });
 
     pointStore.subscribe(
@@ -75,9 +79,11 @@ async function displayMap() {
         state._lastResponse
       ],
       ([isLoading, getFilteredPoints, fetchesRunning]) => {
-        if (isLoading > 0) {
+        const {isInitialized} = pointStore.getState();
+        if (isLoading > 0 || !isInitialized) {
           return;
         }
+
         const { map, pointsLayer } = configStore.getState();
         const { selectedPoint, selectedScope } = geoStore.getState();
         const { savedCenter } = memoryStore.getState();
@@ -93,6 +99,7 @@ async function displayMap() {
           });
         }
 
+
         const pointInMap = getFilteredPoints().filter(
           (node) => typeof node.isGeoLocated !== "undefined" && node.isGeoLocated()
         );
@@ -102,23 +109,23 @@ async function displayMap() {
             pointsLayer.addLayer(marker);
           });
         }
-        if (
-          pointInMap.length > 0 &&
-          !fetchesRunning &&
-          !savedCenter &&
-          !selectedScope &&
-          !selectedPoint
-        ) {
-          const idealBoundingBox = pointInMap.map(({ marker }) => marker);
-          const boundingBox = L.featureGroup(
-            _.isEmpty(idealBoundingBox)
-              ? pointInMap.map(({ marker }) => marker)
-              : idealBoundingBox,
-            { updateWhenZooming: true }
-          );
-
-          map.fitBounds(boundingBox.getBounds(), { padding: [64, 64] });
-        }
+        // if (
+        //   pointInMap.length > 0 &&
+        //   !fetchesRunning &&
+        //   !selectedScope &&
+        //   !selectedPoint
+        // ) {
+        //   const boundingBox = L.featureGroup(pointInMap.map(({ marker }) => marker)).getBounds();
+        //   if(map.getBounds().contains(boundingBox)){
+        //     return;
+        //   }
+        //   map.fitBounds(
+        //     boundingBox, 
+        //     {
+        //       padding: configStore.getState().isFullScreen ? [8, 8] : [16, 16]
+        //     }
+        //   );
+        // }
       }
     );
 
@@ -188,10 +195,14 @@ async function main() {
   await fetchData();
 
   await displayMap();
+ 
+
 }
 
 window.addEventListener("load", function () {
   main().then(() => {
     console.log("decidim geo ready");
+    setTimeout(() => pointStore.setState(() => ({isInitialized: true})), 640)
+    
   });
 });
