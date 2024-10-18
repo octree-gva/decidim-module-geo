@@ -5,6 +5,11 @@
     "locale": "en"
   },
   {
+    "key": "activemodel.attributes.participatory_process.decidim_geo_space_address",
+    "value": "Adresse",
+    "locale": "en"
+  },
+  {
     "key": "activemodel.attributes.component.decidim_geo_avoid_index",
     "value": "Hide geolocated points outside this process",
     "locale": "en"
@@ -66,7 +71,7 @@
   },
   {
     "key": "decidim.geo.admin.geo_configs.spaces_config_title",
-    "value": "Participatory Spaces Configurations",
+    "value": "Configurations for Participatory Spaces",
     "locale": "en"
   },
   {
@@ -77,6 +82,36 @@
   {
     "key": "decidim.geo.admin.geo_configs.only_processes",
     "value": "Display only processes in Processes",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.default_filter.title",
+    "value": "Available points",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.default_filter.help_text",
+    "value": "Configure the available points for Decidim Geo. This configuration applies to all the platform.\n",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.default_filter.geoencoded_filter.label",
+    "value": "Filter points by location",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.default_filter.geoencoded_filter.fields.force_geoencoded",
+    "value": "Only points in the map",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.default_filter.geoencoded_filter.fields.no_force_geoencoded",
+    "value": "All points",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.default_geoencoded_filter",
+    "value": "Filter",
     "locale": "en"
   },
   {
@@ -102,6 +137,11 @@
   {
     "key": "decidim.geo.admin.geo_configs.fields.zoom",
     "value": "Zoom",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.admin.geo_configs.fields.focus_zoom_level",
+    "value": "Zoom on focus",
     "locale": "en"
   },
   {
@@ -275,13 +315,33 @@
     "locale": "en"
   },
   {
-    "key": "decidim.geo.filters.empty.message",
-    "value": "No data with these filters",
+    "key": "decidim.geo.filters.results.warn_empty",
+    "value": "Nothing here, change filters to update",
     "locale": "en"
   },
   {
-    "key": "decidim.geo.filters.empty.reset_button",
-    "value": "Reset filters",
+    "key": "decidim.geo.filters.results.zero",
+    "value": "no results",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.results.one",
+    "value": "1 result",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.results.other",
+    "value": "%count% results",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.empty.message",
+    "value": "Nothing here, change filters to update",
+    "locale": "en"
+  },
+  {
+    "key": "decidim.geo.filters.empty.update_button",
+    "value": "Update",
     "locale": "en"
   },
   {
