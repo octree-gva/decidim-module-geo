@@ -60,8 +60,11 @@
     justify-content: center;
     margin: 0 !important;
     border-color: transparent !important;
-    &:hover {
-      color: #808080;
+    &:hover, &:focus {
+      background-color: #f4f4f4;
+      text-decoration: none !important;
+      opacity: 1 !important;
+      color: var(--primary) !important;
     }
   }
 }
