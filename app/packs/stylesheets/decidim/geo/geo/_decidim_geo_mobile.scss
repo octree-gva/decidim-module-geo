@@ -107,6 +107,7 @@
     @include breakpoint(medium down) {
       .decidimGeo__filterModal__form {
         padding: 8px;
+        width: calc(100% - 32px);
       }
       .decidimGeo__filterModal__actions {
         margin-top: 8px;
