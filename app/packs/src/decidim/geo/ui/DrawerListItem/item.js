@@ -8,7 +8,7 @@ const item = (node) => {
       case "proposals":
         return proposals(node);
         case "reporting_proposals":
-          return reporting_proposals(node);
+          return proposals(node);
         default:
       return fallback(node);
   }
