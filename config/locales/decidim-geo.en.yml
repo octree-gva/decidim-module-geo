@@ -66,6 +66,7 @@ en:
             longitude: Longitude
             latitude: Latitude
             tile: Tile 
+            maptiler_api_key: Map tiler API Key (Optional)
           actions:
             update:
               success: Configurations Updated
