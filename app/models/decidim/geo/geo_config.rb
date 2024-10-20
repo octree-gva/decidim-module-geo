@@ -14,6 +14,8 @@ module Decidim
                            longitude: 0,
                            zoom: 13,
                            tile: tile_layer_default,
+                           maptiler_api_key: "",
+                           maptiler_style_id: "",
                            default_geoencoded_filter: 1)
       end
 

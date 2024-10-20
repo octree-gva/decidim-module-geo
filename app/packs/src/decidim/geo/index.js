@@ -13,7 +13,6 @@ import bootstrap from "./bootstrap";
 import registerMobile from "./ui/mobile/registerMobile";
 import FilterControl from "./ui/FilterControl";
 import PageNameControl from "./ui/PageNameControl";
-
 window.debug = window.debug || {};
 window.debug.stores = () => ({
   config: configStore.getState(),
@@ -29,7 +28,7 @@ async function prepareLeaflet(isSmallScreen) {
   bootstrap();
   // Parse and save server-side information.
   const { map, tile } = await initMap();
-  configStore.setState(() => ({ map, tile, isSmallScreen }));
+  configStore.setState(() => ({ map,  isSmallScreen }));
 }
 async function fetchData() {
   const { addProcess, removeProcess, fetchAll, pointsForFilters } = pointStore.getState();

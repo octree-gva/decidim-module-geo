@@ -150,6 +150,8 @@ module Decidim
             lat: model.try(:latitude).nil? ? config.latitude : model.latitude,
             lng: model.try(:longitude).nil? ? config.longitude : model.longitude,
             tile_layer: config.tile,
+            maptiler_api_key: config.maptiler_api_key,
+            maptiler_style_id: config.maptiler_style_id,
             zoom: config.zoom,
             focus_zoom_level: config.focus_zoom_level,
             force_geo_filter: config.default_geoencoded_filter

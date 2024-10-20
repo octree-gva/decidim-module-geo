@@ -45,6 +45,8 @@ module Decidim
             latitude: form.latitude,
             zoom: form.zoom,
             tile: form.tile,
+            maptiler_api_key: form.maptiler_api_key,
+            maptiler_style_id: form.maptiler_style_id,
             only_assemblies: form.only_assemblies,
             only_processes: form.only_processes,
             focus_zoom_level: form.focus_zoom_level,
