@@ -11,7 +11,9 @@ module Decidim
       alias proposal= resource=
 
       def perform(proposal_id)
-        @resource = Decidim::Proposals::Proposal.find(proposal_id)
+        @resource_id = proposal_id
+        @resource = Decidim::Proposals::Proposal.where(id: proposal_id).first
+        return remove_proposal unless resource
         sync_proposal
       end
 
@@ -53,7 +55,7 @@ module Decidim
       end
 
       def remove_proposal
-        match = Decidim::Geo::Index.find_by(resource_id: proposal.id, resource_type: manifest_name)
+        match = Decidim::Geo::Index.find_by(resource_id: resource_id, resource_type: manifest_name)
         match.destroy if match
       end
 
@@ -62,7 +64,7 @@ module Decidim
       end
 
       def manifest_name
-        proposal.component.manifest_name.to_s
+        "proposals"
       end
     end
   end

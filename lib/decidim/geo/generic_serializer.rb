@@ -7,6 +7,7 @@ module Decidim
 
       included do
         attr_accessor :resource
+        attr_accessor :resource_id
 
         def scope
           @scope ||= if resource.class.include? Decidim::HasComponent

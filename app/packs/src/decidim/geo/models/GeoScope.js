@@ -19,6 +19,7 @@ export default class GeoScope {
   }
 
   isEmpty(points = undefined) {
+
     if (!points) points = pointStore.getState().points;
     if (this.data.geom === null) return true;
     const currentScopeId = this.id;
@@ -96,7 +97,8 @@ export default class GeoScope {
   }
   remove() {
     const { map } = configStore.getState();
-    map.removeLayer(this.layer);
+    if(this.layer)
+      map.removeLayer(this.layer);
   }
   init(mapLayer) {
     this.markers_group = this.markersForScope();
@@ -131,7 +133,7 @@ export default class GeoScope {
           if (isLoading) return;
           // Points are loaded, we can check if the the layer is empty,
           // and thus remove it.
-          if (this.isEmpty()) {
+          if (this.isEmpty() && this.layer) {
             if (map.hasLayer(this.layer) && mapReady) {
               map.removeLayer(this.layer);
             }

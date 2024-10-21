@@ -11,14 +11,16 @@ module Decidim
       alias debate= resource=
 
       def perform(meeting_id)
-        @resource = Decidim::Debates::Debate.find(meeting_id)
+        @resource_id = meeting
+        @resource = Decidim::Debates::Debate.where(id: meeting_id).first
+        return remove_debate unless resource
         sync_meeting
       end
 
       private
 
       def sync_meeting
-        return remove_meeting if remove_from_index?
+        return remove_debate if remove_from_index?
 
         upsert_index(debate.id, manifest_name,
                      with_scope(
@@ -48,8 +50,8 @@ module Decidim
         resource.closed_at.to_date if resource.closed_at
       end
 
-      def remove_meeting
-        match = Decidim::Geo::Index.find_by(resource_id: debate.id, resource_type: manifest_name)
+      def remove_debate
+        match = Decidim::Geo::Index.find_by(resource_id: resource_id, resource_type: manifest_name)
         match.destroy if match
       end
 
@@ -58,7 +60,7 @@ module Decidim
       end
 
       def manifest_name
-        debate.component.manifest.name.to_s
+        "debates"
       end
     end
   end

@@ -11,7 +11,9 @@ module Decidim
       alias assembly= resource=
 
       def perform(assembly_id)
-        @resource = Decidim::Assembly.find(assembly_id)
+        @resource_id  = assembly_id
+        @resource = Decidim::Assembly.where(id: assembly_id).first
+        return remove_assembly unless resource
         sync_assembly
       end
 
@@ -51,9 +53,9 @@ module Decidim
         end
 
       def remove_assembly
-        match = Decidim::Geo::Index.find_by(resource_id: assembly.id, resource_type: manifest_name)
+        match = Decidim::Geo::Index.find_by(resource_id: resource_id, resource_type: manifest_name)
         match.destroy if match
-        decidim_geo_update_components!
+        decidim_geo_update_components!(Decidim::Assembly)
       end
 
       def remove_from_index?
@@ -61,7 +63,7 @@ module Decidim
       end
 
       def manifest_name
-        assembly.manifest.name.to_s
+        "assemblies"
       end
     end
   end

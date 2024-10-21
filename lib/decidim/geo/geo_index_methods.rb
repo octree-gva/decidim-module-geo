@@ -22,8 +22,7 @@ module Decidim
         index.resource_id = resource_id
         index.resource_type = resource_type
         index.save
-        decidim_geo_update_components!
-        end
+      end
 
       def with_scope(decidim_geo_hash)
         return decidim_geo_hash unless scope
@@ -55,19 +54,19 @@ module Decidim
         latitude && longitude
       end
 
-      def decidim_geo_update_components!
+      def decidim_geo_update_components!(space_klass)
         return unless resource.class.include? Decidim::ScopableParticipatorySpace
 
-        decidim_geo_linked_components.each(&:update_decidim_geo_index)
+        decidim_geo_linked_components(space_klass).each(&:update_decidim_geo_index)
       end
 
-      def decidim_geo_linked_components
+      def decidim_geo_linked_components(space_klass)
         @decidim_geo_linked_components ||= begin
           registry = Decidim::Geo::ManifestRegistry.instance
           active_manifest_names = registry.active_manifests(&:keys)
           Decidim::Component.where(
-            participatory_space_id: resource.id,
-            participatory_space_type: resource.class.name,
+            participatory_space_id: resource_id,
+            participatory_space_type: space_klass.name,
             manifest_name: active_manifest_names
           )
         end
