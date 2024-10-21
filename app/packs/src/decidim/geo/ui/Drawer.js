@@ -2,7 +2,6 @@ import createClasses from "./createClasses";
 import geoStore from "../stores/geoStore";
 import pointStore from "../stores/pointStore";
 import configStore from "../stores/configStore";
-import filterStore from "../stores/filterStore";
 import dropdownFilterStore from "../stores/dropdownFilterStore";
 import { meetings as meetingDetails, fallback as fallbackDetails } from "./DrawerDetail";
 
@@ -100,6 +99,7 @@ export default class Drawer {
     const viewBtn = L.DomUtil.create("a", "decidimGeo__drawer__viewBtn", listCard);
     viewBtn.textContent = this.i18n()["decidim_geo.actions.view"];
     viewBtn.href = node.resourceUrl;
+    this.cardList.scrollTo({top: 0})
     return listCard;
   }
   repaint() {

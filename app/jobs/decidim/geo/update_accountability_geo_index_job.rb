@@ -11,7 +11,9 @@ module Decidim
       alias accountability_result= resource=
 
       def perform(accountability_result_id)
-        @resource = Decidim::Accountability::Result.find(accountability_result_id)
+        @resource_id = accountability_result_id
+        @resource = Decidim::Accountability::Result.where(id: accountability_result_id).first
+        return remove_accountability_result unless resource
         sync_accountability_result
       end
 
@@ -43,7 +45,7 @@ module Decidim
       end
 
       def remove_accountability_result
-        match = Decidim::Geo::Index.find_by(resource_id: accountability_result.id, resource_type: manifest_name)
+        match = Decidim::Geo::Index.find_by(resource_id: resource_id, resource_type: manifest_name)
         match.destroy if match
       end
 
@@ -52,7 +54,7 @@ module Decidim
       end
 
       def manifest_name
-        accountability_result.component.manifest.name.to_s
+        "accountability"
       end
     end
   end

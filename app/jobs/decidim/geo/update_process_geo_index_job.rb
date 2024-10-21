@@ -11,7 +11,9 @@ module Decidim
       alias process= resource=
 
       def perform(process_id)
-        @resource = Decidim::ParticipatoryProcess.find(process_id)
+        @resource_id = process_id
+        @resource = Decidim::ParticipatoryProcess.where(id: process_id).first
+        return remove_process unless resource
         sync_process
       end
 
@@ -43,9 +45,9 @@ module Decidim
       end
 
       def remove_process
-        match = Decidim::Geo::Index.find_by(resource_id: process.id, resource_type: manifest_name)
+        match = Decidim::Geo::Index.find_by(resource_id: resource_id, resource_type: manifest_name)
         match.destroy if match
-        decidim_geo_update_components!
+        decidim_geo_update_components!(Decidim::ParticipatoryProcess)
       end
 
       def remove_from_index?
@@ -53,7 +55,7 @@ module Decidim
       end
 
       def manifest_name
-        process.manifest.name.to_s
+        "participatory_processes"
       end
     end
   end

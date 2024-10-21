@@ -11,7 +11,9 @@ module Decidim
       alias meeting= resource=
 
       def perform(meeting_id)
-        @resource = Decidim::Meetings::Meeting.find(meeting_id)
+        @resource_id = meeting_id
+        @resource = Decidim::Meetings::Meeting.where(id: meeting_id).first
+        return remove_meeting unless resource
         sync_meeting
       end
 
@@ -52,7 +54,7 @@ module Decidim
       end
 
       def remove_meeting
-        match = Decidim::Geo::Index.find_by(resource_id: meeting.id, resource_type: manifest_name)
+        match = Decidim::Geo::Index.find_by(resource_id: resource_id, resource_type: manifest_name)
         match.destroy if match
       end
 
@@ -61,7 +63,7 @@ module Decidim
       end
 
       def manifest_name
-        meeting.component.manifest.name.to_s
+        "meetings"
       end
     end
   end
