@@ -1,13 +1,26 @@
 ---
 sidebar_position: 1
-id: my-home-doc
+id: introduction
 slug: /
 ---
 
-# Decidim Geo
+# Participation on the map
 
-This project starts from a simple idea: if we display all a decidim platform participation on a map, participants will find easier how to participate locally. For platform that tries to enable small, local participation that would be essentials, and from a systemic perspective, this will allow us to zoom-in and zoom-out in a simple way to test and valorize participatory experiments. Here the [first presentation (french)](/decidim-geo-presentation-0.pdf) we did for the city of Lausanne, that kicks the project in!
+Decidim Geo module add interactive maps with great mobile experience to your platform. 
 
-## Decidim Geo enable participants to discover participation in a map. 
+## Features
 
+- Import custom shapefiles and link them to scopes
+- Filter by type, time, scopes and spaces
+- Make active participation easy to browse
+- Make surrounding activities discoverable
+- Configure custom map tiles
+- Mobile-First UI. 
 
+## Used & Supported by pionneers
+
+![City of Lausanne and Zürich supports development of Decidim Geo](/partners.png)
+
+## Events
+- **setember 2022** Ancrer la participation citoyenne sur le territoire. Geneva, Lausanne. [[Slides | FR](/decidim-geo-presentation-0.pdf)]
+- **october 2024** Explore local participation with Decidim Geo, Barcelona, DecidimFest 2024. [[Slides | EN](/explore-local-participation-decidim-fest-2024.pdf)]

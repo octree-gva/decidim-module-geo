@@ -14,7 +14,7 @@ module Decidim
 
         def filter_active(query)
           query.where(
-            "resource_type = ? AND (resource_status IN ('not_answered', 'evaluating') OR resource_status IS NULL) AND (end_date > ? OR end_date IS NULL)",
+            "resource_type = ? AND (resource_status IN ('not_answered', 'evaluating', 'accepted') OR resource_status IS NULL) AND (end_date > ? OR end_date IS NULL)",
             manifest_name,
             15.days.ago.to_date
           )
@@ -22,7 +22,7 @@ module Decidim
 
         def filter_future(query)
           query.where(
-            "resource_type = ? AND (resource_status IN ('not_answered', 'evaluating') OR resource_status IS NULL) AND (start_date > ? OR start_date IS NULL)",
+            "resource_type = ? AND (resource_status IN ('not_answered', 'evaluating', 'accepted') OR resource_status IS NULL) AND (start_date > ? OR start_date IS NULL)",
             manifest_name,
             15.days.ago.to_date
           )
