@@ -9,7 +9,7 @@ const proposals = (node) => {
   const listCard = L.DomUtil.create("li", "decidimGeo__drawer__listCard decidimGeo__drawer__listCard--proposals");
   const info = L.DomUtil.create(
     "div",
-    "decidimGeo__drawer__listCardInfo",
+    "decidimGeo__drawer__listCardInfo decidimGeo__drawer__listCardInfo--large",
     listCard
   );
   const metadatas = L.DomUtil.create("div", "decidimGeo__drawer__metas", info);
@@ -45,8 +45,8 @@ const proposals = (node) => {
       node.shortDescription[locale] || node.shortDescription[defaultLocale];
   }
   if (hasImage) {
-    const image = L.DomUtil.create("img", "decidimGeo__drawer__listCardImg", listCard);
-    image.src = node.imageUrl;
+    // const image = L.DomUtil.create("img", "decidimGeo__drawer__listCardImg", listCard);
+    // image.src = node.imageUrl;
   }
 
   return listCard;
