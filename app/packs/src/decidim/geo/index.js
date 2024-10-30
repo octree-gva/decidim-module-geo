@@ -108,23 +108,23 @@ async function displayMap() {
             pointsLayer.addLayer(marker);
           });
         }
-        // if (
-        //   pointInMap.length > 0 &&
-        //   !fetchesRunning &&
-        //   !selectedScope &&
-        //   !selectedPoint
-        // ) {
-        //   const boundingBox = L.featureGroup(pointInMap.map(({ marker }) => marker)).getBounds();
-        //   if(map.getBounds().contains(boundingBox)){
-        //     return;
-        //   }
-        //   map.fitBounds(
-        //     boundingBox, 
-        //     {
-        //       padding: configStore.getState().isFullScreen ? [8, 8] : [16, 16]
-        //     }
-        //   );
-        // }
+        if (
+          pointInMap.length > 0 &&
+          !fetchesRunning &&
+          !selectedScope &&
+          !selectedPoint
+        ) {
+          const boundingBox = L.featureGroup(pointInMap.map(({ marker }) => marker)).getBounds();
+          if(map.getBounds().contains(boundingBox)){
+            return;
+          }
+          // map.fitBounds(
+          //   boundingBox, 
+          //   {
+          //     padding: configStore.getState().isFullScreen ? [8, 8] : [16, 16]
+          //   }
+          // );
+        }
       }
     );
 
