@@ -119,6 +119,9 @@
     padding: 8px 16px 8px 8px;
     font-size: 14px;
     text-wrap: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .decidimGeo__filterModal__select,
