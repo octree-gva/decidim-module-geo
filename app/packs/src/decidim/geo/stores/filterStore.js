@@ -128,11 +128,13 @@ const onFilteredByScope = (filters) => {
     if (previousScope && `${scopeId}` === `${previousScope?.id}`) return;
     const selectedScope = scopeForId(scopeId);
     if (selectedScope) selectScope(selectedScope);
+    else selectScope(null)
   } else {
-    if (previousScope) {
-      previousScope.repaint();
-    }
+    const toRepaintScope = scopeForId(previousScope.id)
     selectScope(null);
+    if (toRepaintScope) {
+      toRepaintScope.repaint();
+    }
   }
 };
 
@@ -146,8 +148,8 @@ store.subscribe(
     // Select/Unselect scopes if a scopeFilter is present
     if (activeFilters) {
       await pointStore.getState().pointsForFilters(activeFilters);
-      onFilteredByScope(activeFilters);
     }
+    onFilteredByScope(activeFilters);
 
     // Update the filter modal state
     const { toFilterOptions } = store.getState();
