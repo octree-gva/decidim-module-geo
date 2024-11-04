@@ -14,7 +14,7 @@ module Decidim
 
         def filter_active(query)
           query.where(
-            "(resource_type = ? AND resource_status NOT IN ('rejected', 'withdrawn')) OR (resource_type = ? AND (end_date >= ? OR end_date IS NULL))",
+            "resource_type = ? AND resource_status NOT IN ('rejected', 'withdrawn') AND (end_date >= ? OR end_date IS NULL)",
             manifest_name,
             manifest_name,
             15.days.ago.to_date
