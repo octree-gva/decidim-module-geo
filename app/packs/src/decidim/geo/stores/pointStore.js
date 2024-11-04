@@ -62,18 +62,22 @@ const store = createStore(
       const { selectedGeoScopeIds, fetchedGeoScopes, points, scopes } = get();
       scopes.forEach((scope) => scope.remove());
       scopeLayer.clearLayers();
-      const geoScopes = selectedGeoScopeIds
+      let geoScopes = [];
+      
+      if(fetchedGeoScopes.length > 0 && selectedGeoScopeIds.length > 0) {
+        geoScopes = selectedGeoScopeIds
         .map((scopeId) => {
           const match = fetchedGeoScopes.find(({ id }) => `${id}` === `${scopeId}`);
-          if (!match) return null;
-
-          const geoScope = new GeoScope({
-            geoScope: match
-          });
-          geoScope.init(scopeLayer);
-          return geoScope;
-        })
-        .filter(Boolean);
+            if (!match) return null;
+            const geoScope = new GeoScope({
+              geoScope: match
+            });
+            geoScope.init(scopeLayer);
+            return geoScope;
+          })
+          .filter(Boolean);
+          
+        }  
         const responsePoints = filteredPoints
         .map(({ id: needleId }) => {
           return points.find(({ id }) => `${needleId}` === `${id}`);
@@ -131,6 +135,7 @@ const store = createStore(
           .filter(({ value }) => typeof value.geoScopes !== "undefined")
           .map(({ value: { geoScopes } }) => geoScopes);
         set(() => ({ fetchedGeoScopes }));
+        get()._updateCache()
       });
     },
 

@@ -85,7 +85,6 @@ async function displayMap() {
 
         const { map, pointsLayer } = configStore.getState();
         const { selectedPoint, selectedScope } = geoStore.getState();
-        const { savedCenter } = memoryStore.getState();
         pointsLayer.clearLayers();
         if (
           fetchesRunning === 0 &&
@@ -97,8 +96,6 @@ async function displayMap() {
             animation: true
           });
         }
-
-
         const pointInMap = getFilteredPoints().filter(
           (node) => typeof node.isGeoLocated !== "undefined" && node.isGeoLocated()
         );
@@ -118,12 +115,6 @@ async function displayMap() {
           if(map.getBounds().contains(boundingBox)){
             return;
           }
-          // map.fitBounds(
-          //   boundingBox, 
-          //   {
-          //     padding: configStore.getState().isFullScreen ? [8, 8] : [16, 16]
-          //   }
-          // );
         }
       }
     );

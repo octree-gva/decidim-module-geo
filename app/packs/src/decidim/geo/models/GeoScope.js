@@ -19,9 +19,8 @@ export default class GeoScope {
   }
 
   isEmpty(points = undefined) {
-
-    if (!points) points = pointStore.getState().points;
     if (this.data.geom === null) return true;
+    if (!points) points = pointStore.getState().points;
     const currentScopeId = this.id;
     return !points.find(({ geoScopeId }) => `${geoScopeId}` === `${currentScopeId}`);
   }
@@ -100,7 +99,7 @@ export default class GeoScope {
     if(this.layer)
       map.removeLayer(this.layer);
   }
-  init(mapLayer) {
+  init(scopeLayer) {
     this.markers_group = this.markersForScope();
     const [itm, repaintItm] = scopeDropdownItem({
       scopeId: this.id,
@@ -122,7 +121,7 @@ export default class GeoScope {
         onClick: this.scopeClickHandler.bind(this)
       });
       this.layer.bringToBack();
-      mapLayer.addLayer(this.layer);
+      scopeLayer.addLayer(this.layer);
 
       // Add the layer only when we are sure there is some point
       // in the layer.
