@@ -9,7 +9,6 @@ const FilterControl = L.Control.extend({
   },
   container: null,
   button: null,
-  overlay: null,
   modalOverlay: null,
   modalHelpText: null,
   onAdd(map) {
