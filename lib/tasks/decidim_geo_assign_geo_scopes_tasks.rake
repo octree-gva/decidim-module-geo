@@ -9,7 +9,7 @@ namespace :decidim_geo do
       raise "Decidim gem is not installed" if decidim_path.nil?
       raise "Decidim-Geo is not installed" unless Gem.loaded_specs.has_key?(gem_name)
 
-      
+      Decidim::Geo::AutomaticScopeJob.perform_now
     end
 
 
