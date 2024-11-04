@@ -214,6 +214,12 @@
       .decidimGeo__drawerHeader__drawerToggle {
         padding: 8px;
       }
+      .decidimGeo__filterModal__label {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    
+      }
       .decidimGeo__filterModal__fieldlist {
         padding: 8px;
         position: relative;
