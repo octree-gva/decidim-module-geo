@@ -10,16 +10,16 @@ module Decidim
       alias debate resource
       alias debate= resource=
 
-      def perform(meeting_id)
-        @resource_id = meeting
-        @resource = Decidim::Debates::Debate.where(id: meeting_id).first
+      def perform(debate_id)
+        @resource_id = debate_id
+        @resource = Decidim::Debates::Debate.where(id: debate_id).first
         return remove_debate unless resource
-        sync_meeting
+        sync_debate
       end
 
       private
 
-      def sync_meeting
+      def sync_debate
         return remove_debate if remove_from_index?
 
         upsert_index(debate.id, manifest_name,
