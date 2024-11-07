@@ -28,7 +28,7 @@ const store = createStore(
     },
     async updateCurrentCountForFilters(filters = []) {
       const count = await get().fetchCount(filters);
-      set(() => ({ count }));
+      set(() => ({ count, nextCount: count }));
       return count;
     },
     async updateNextCountForFilters(filters = []) {
