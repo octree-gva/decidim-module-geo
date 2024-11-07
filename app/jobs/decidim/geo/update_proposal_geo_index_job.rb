@@ -33,12 +33,14 @@ module Decidim
                          resource_status: proposal.state,
                          component_id: proposal.decidim_component_id,
                          participatory_space_id: proposal.participatory_space.id,
-                         participatory_space_type: proposal.participatory_space.manifest.name.to_s
+                         participatory_space_type: proposal.participatory_space.manifest.name.to_s,
+                         start_date: start_date,
+                         end_date: end_date
                        )
                      ))
         true
       rescue StandardError => e
-        Rails.logger.debug { "Can index #{e}" }
+        Rails.logger.warn { "ERROR:  #{e}" }
         false
       end
 
@@ -51,7 +53,7 @@ module Decidim
       end
 
       def space_wrapper
-        @space_wrapper ||= Decidim::Geo::ResourceWrapper.new(proposal.space)
+        @space_wrapper ||= Decidim::Geo::ResourceWrapper.new(proposal.participatory_space)
       end
 
       def remove_proposal
