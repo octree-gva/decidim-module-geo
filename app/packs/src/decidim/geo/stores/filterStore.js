@@ -130,7 +130,7 @@ const onFilteredByScope = (filters) => {
     if (selectedScope) selectScope(selectedScope);
     else selectScope(null)
   } else {
-    const toRepaintScope = scopeForId(previousScope.id)
+    const toRepaintScope = scopeForId(previousScope?.id)
     selectScope(null);
     if (toRepaintScope) {
       toRepaintScope.repaint();
@@ -161,7 +161,7 @@ store.subscribe(
 
     // Update active counters.
     const { updateCurrentCountForFilters } = pointCounterStore.getState();
-    await updateCurrentCountForFilters(activeFilters);
+    const _count = await updateCurrentCountForFilters(activeFilters);
   }
 );
 

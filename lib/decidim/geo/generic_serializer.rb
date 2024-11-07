@@ -28,11 +28,20 @@ module Decidim
         end
 
         def start_date
-          @start_date ||= (resource.start_time.to_date if resource.respond_to?(:start_time))
+          @start_date ||= if resource.respond_to?(:start_time)
+            resource.start_time.to_date
+          elsif resource.respond_to?(:start_date)
+            resource.start_date
+          end
+
         end
 
         def end_date
-          @end_date ||= (resource.end_time.to_date if resource.respond_to?(:end_time))
+          @end_date ||= if resource.respond_to?(:end_time)
+            resource.end_time.to_date
+          elsif resource.respond_to?(:end_date)
+            resource.end_date
+          end
         end
 
         def resource_url
