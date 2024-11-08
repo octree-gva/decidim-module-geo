@@ -5,19 +5,17 @@ description: Magically assign points to a scope
 ---
 
 # Automatic Scopes
-A recurrent task can assign auto-magically points to a region. This allows you to ask one thing less for the participant, and still map correctly the information.
 
-## What it does?
+A recurring task can automatically assign points to a region. This removes an extra step for participants while ensuring accurate mapping of information.
 
-Following the following rules, an automatic check will bind a resource to a shape. 
+## What It Does
+
+An automatic check will bind a resource to a shape based on the following conditions:
 
 - If the space (assembly, process) does not have scope enabled
 - If the component does not have any scope enabled
-- Then: All meetings, debates, accountability results, proposals that have a geolocation will be mapped automatically to a scope.
+- Then, all meetings, debates, accountability results, and proposals with geolocation will be mapped automatically to a scope.
 
+### Use Case: Participatory Budget
 
-### Use case: Participatory Budget
-
-On a proposal phase for a participatory budget, you can active geolocated proposals. 
-Once participant propose, they will be able to map an address. 
-After a while beeing published, an external process will check if this point is inside one of your scopes, and will assign it. 
+In a proposal phase for participatory budgeting, you can enable geolocated proposals. When participants submit proposals, they can map an address. After publication, an external process will verify if the point falls within one of your scopes and will assign it accordingly.

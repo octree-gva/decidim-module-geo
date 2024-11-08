@@ -22,6 +22,12 @@ We extract the start and end date for this resources, and apply the following lo
 
 ![Default time filtering](./time-filter/default-time-filter.png)
 
+## Accountability time filtering
+To keep accountabilities on the map, they react a bit differently than other resources. 
+Accountabilities that belongs to a past process/assembly will stay active as long as it has no end_date. 
+This means accountabilities that are still in implementation, even they started in the past, can be displayed in Decidim Geo Map. 
+
+
 
 ## Proposal time filtering
 Proposals does not have a start or end date, we choose then to classifies the proposal in the 
@@ -32,5 +38,5 @@ less frictional way.
 - If the proposal is in rejected or withdrawn status, we put as well in the past
 - Else, the proposal will appear in both filter: active and future.
 
-![Proposal Time Filter](./time-filter/default-time-filter.png)
+![Proposal Time Filter](./time-filter/proposal-time-filter.png)
 

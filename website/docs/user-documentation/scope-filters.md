@@ -1,29 +1,24 @@
 ---
 sidebar_position: 10
 title: Scope Filter
-description: Behaviour of the scope filter
+description: Behavior of the scope filter
 ---
 
-# Scope filter
+# Scope Filter
 
-In Decidim, points are assigned to a scope in different ways: 
+In Decidim, points can be assigned to a scope in various ways:
 
-- by an administrator, specifing a scope for the component or the space
-- by a user, while creating a meeting or a proposal
-- by a automatic process, finding the right scope looking at the geo location (see [Automatic Scope](./automatic-scopes.md))
+- By an administrator, specifying a scope for the component or the space
+- By a participant, while creating a meeting or proposal
+- By an automatic process that assigns a scope based on the geolocation (see [Automatic Scopes](./automatic-scopes.md))
 
-Decidim Geo filter points by scope, if participants filter scopes from the web plateform, or if they click on the shapes. 
+Decidim Geo filters points by scope, either when participants filter scopes from the web platform or when they click on shapes.
 
+**Only Scopes Linked to a Geo-Shape Are Available**  
+If points are linked to a scope that does not belong to a geo-friendly scope type or is not linked to a shape, it will not appear as a filterable option.
 
-**Only scopes linked to a geo-shape are available**<br />
-If points are linked to a scope that do not belongs to a geo-friendly scope type, or is not linked to a shape won't be display as option to be filtered. 
+**Empty Scopes Are Not Displayed**  
+To avoid filtering empty scopes, only scopes with points are available in the scope filter.
 
-
-**Empty scopes are not displayed**<br />
-To avoid to filter something that have nothing, scopes have no points won't be propose in scope filter. 
-
-
-**Scopes filter is not displayed if there is no scopes at all**<br />
-The scope filter input is hidden if no scopes are available.
-
-
+**Scope Filter Is Hidden if No Scopes Are Available**  
+The scope filter option is hidden if there are no available scopes.

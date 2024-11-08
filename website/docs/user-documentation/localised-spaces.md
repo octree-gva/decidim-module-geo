@@ -1,12 +1,13 @@
 ---
 sidebar_position: 7
-title: Assemblies/Processes on the map
-description: How to put assemblies and processes on the map
+title: Assemblies/Processes on the Map
+description: How to display assemblies and processes on the map
 ---
 
-# Work only with points in the map
-By default, Decidim Geo takes all the points, even they are not geolocated. This enable participants to discover broader participation, for example processes that effect all the spaces. 
+# Work Only with Points on the Map
 
-In some cases, you will like to use Decidim Geo to strictly uses points on the map. Hopefully, we have an option for that in the administration.
+By default, Decidim Geo includes all points, even those that are not geolocated. This feature allows participants to explore broader participation, such as processes that affect all spaces.
 
-![Configure Decidim Geo to display only points in the map](./localised-spaces/screenshot-01.png)
+In some cases, you may want Decidim Geo to strictly use only points with specific locations on the map. Fortunately, there is an option for this in the administration panel.
+
+![Configure Decidim Geo to display only points on the map](./localised-spaces/screenshot-01.png)

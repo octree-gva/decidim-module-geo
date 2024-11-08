@@ -17,6 +17,24 @@ Decidim Geo module add interactive maps with great mobile experience to your pla
 - Configure custom map tiles
 - Mobile-First UI. 
 
+## Want to start?
+
+<div style={{ "display": "flex", "gap": 32, "flex-wrap": "wrap", "textAlign": "center", justifyContent: "space-between", marginTop: 32 }}>
+    <a href="https://geo.demo.voca.city" target="_blank" style={{ flex: 1, maxWidth: "180px"}}>
+        <img src="./img/demo-btn.png" /><br />
+        <h3 style={{marginTop: 12}}>Go to demo</h3>
+    </a>
+    <a href="https://geo.demo.voca.city" target="_blank" style={{ flex: 1, maxWidth: "180px"}}>
+        <img src="./img/call-btn.png" /><br />
+        <h3 style={{marginTop: 12}}>Book a 1-1 call</h3>
+    </a>
+    <a href="https://geo.demo.voca.city" target="_blank" style={{ flex: 1, maxWidth: "180px"}}>
+        <img src="./img/play-btn.png" /><br />
+        <h3 style={{marginTop: 12}}>Watch the demo video</h3>
+    </a>
+</div>
+
+
 ## Used & Supported by pionneers
 
 ![City of Lausanne and Zürich supports development of Decidim Geo](/partners.png)

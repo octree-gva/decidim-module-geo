@@ -32,6 +32,6 @@ To use map tiler, you can create a new custom map in MapTiler, and once saved, u
 
 
 :::info
-We might change the internal library (leaflet) to have a native support on vector tiles (Map Liber). 
+We might change the internal library (leaflet) to have a native support on vector tiles (Map Libre). 
 But this is unplanned for now. 
 :::

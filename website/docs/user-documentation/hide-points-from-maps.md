@@ -1,18 +1,15 @@
 ---
 sidebar_position: 5
-title: Hide points
+title: Hide Points
 description: Customize visibility of points
 ---
 
-# Hide points from map
+# Hide Points from Map
 
-**Use case**<br />
-When you use proposals to gather data from citizen, you will have many points that are not necessarly related to participation. 
-When this is the case, you want to restrict the displaying of these points to only the space where they are. 
-For exemple, if you have a proposals in "Data Gathering Ideas", these proposals would be displayed only in the context of this Assembly, and won't see it in any other places, like the home page. 
+**Use Case**  
+When using proposals to gather data from citizens, you may have points not directly related to participation. In these cases, you may want to restrict the visibility of these points to their specific space. For example, if there are proposals within "Data Gathering Ideas," these proposals will only appear within the context of this Assembly and will not be visible in other areas, such as the homepage.
 
-## Configure 
+## Configuration
 
-In component configuration of the geo-friendly components, you can hide geolocated points outside this space (assembly/process).
-![Configure a component to avoid these points to be seen in other spaces](./hide-points-from-maps/screenshot-01.png)
-
+In the component configuration of geo-friendly components, you can hide geolocated points from appearing outside their designated space (assembly or process).
+![Configure a component to prevent these points from appearing in other spaces](./hide-points-from-maps/screenshot-01.png)
