@@ -73,7 +73,6 @@ const config: Config = {
           position: 'left',
           label: 'Documentation',
         },
-        {to: '/blog', label: 'Releases', position: 'left'},
         {
           href: 'https://git.octree.ch/decidim/decidim-module-geo',
           label: 'GitLab',
@@ -92,31 +91,18 @@ const config: Config = {
               to: '/',
             },
           ],
-        },
-        {
-          title: 'Community',
+        },{
+          title: 'More',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
-          ],
+              label: "Community (coming soon)",
+              to: "#coming-soon"
+            }
+          ]
         },
         {
           title: 'More',
           items: [
-            {
-              label: 'Releases',
-              to: '/blog',
-            },
             {
               label: 'GitLab',
               href: 'https://git.octree.ch/decidim/decidim-module-geo',
