@@ -9,8 +9,10 @@
                 else
                     "decidim_geo_avoid_index"
                 end
+        space_name = space.title[locale.to_s]
+        space_name = space.participatory_process_group.title[locale.to_s] if has_process_group
     %>
-        <%= form.check_box :decidim_geo_avoid_index, label: t(label, scope: "activemodel.attributes.component", space_name: space.title[locale.to_s]) %>
+        <%= form.check_box :decidim_geo_avoid_index, label: t(label, scope: "activemodel.attributes.component", space_name: space_name) %>
         <p class="help-text" style="transform: translateY(-0.5rem)"><%= t("geo_avoid_index", scope: "decidim.admin.components.form") %></p>
     </div>
 <% else %>
