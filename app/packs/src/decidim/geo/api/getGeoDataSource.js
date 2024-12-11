@@ -1,7 +1,7 @@
 import { _getGeoDataSource, _getGeoDataSourceIds } from "./queries";
 
 const getGeoDataSource = async (params = {}, fetchAll = true, callback) => {
-  const { filters = [], locale, isIndex = false, after = 0, first = 50 } = params;
+  const { filters = [], locale, isIndex = false, isGroup=false, after = 0, first = 50 } = params;
   const fields = fetchAll
     ? [
         "resourceUrl",
@@ -32,6 +32,9 @@ const getGeoDataSource = async (params = {}, fetchAll = true, callback) => {
   });
   if(isIndex){
     searchParams.append("is_index", "true")
+  }
+  if(isGroup){
+    searchParams.append("is_group", "true")
   }
   filters.forEach((f) => {
     searchParams.append("filters[]", JSON.stringify(f));

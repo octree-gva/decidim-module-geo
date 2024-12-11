@@ -27,7 +27,7 @@ module Decidim
           @data_count ||= ::Decidim::Geo::Api::GeoQuery.new(
             current_organization,
             current_user,
-            { filters: filters, is_index: index? },
+            { filters: filters, is_index: index?, is_group: group? },
             current_locale
           ).results_count
         end
@@ -50,7 +50,8 @@ module Decidim
             filters: (@options[:filters] || []).concat([{ timeFilter: { time: "active" } }]),
             map_config: map_config,
             active_manifests: ::Decidim::Geo.registry.active_manifests(&:keys),
-            is_index: index?
+            is_index: index?,
+            is_group: @options[:is_group] || false,
           }.with_indifferent_access
 
           content_tag(
@@ -69,6 +70,10 @@ module Decidim
 
         def index?
           @options.has_key?(:is_index) ? @options[:is_index] : true
+        end
+
+        def group?
+          @options.has_key?(:is_group) ? @options[:is_group] : false
         end
 
         def insert_scopes_mobile

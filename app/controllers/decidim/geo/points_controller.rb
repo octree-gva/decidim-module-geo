@@ -44,7 +44,7 @@ module Decidim
       private
 
       def permitted_params
-        @permitted_params ||= params.permit(:first, :after, :locale, :is_index, :format, fields: [], filters: [])
+        @permitted_params ||= params.permit(:first, :after, :locale, :is_index, :is_group, :format, fields: [], filters: [])
       end
 
       def first_params
@@ -61,14 +61,19 @@ module Decidim
           current_user,
           {
             filters: filters_params,
-            is_index: index_params?
+            is_index: index?,
+            is_group: group?
           },
           locale_param
         ).results
       end
 
-      def index_params?
-        @index_params ||= permitted_params[:is_index] || false
+      def index?
+        @index ||= permitted_params[:is_index] || false
+      end
+
+      def group?
+        @group ||= permitted_params[:is_group] || false
       end
 
       def locale_param

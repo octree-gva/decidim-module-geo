@@ -20,9 +20,9 @@ const store = createStore(
     isLoading: false,
 
     async fetchCount(filters) {
-      const { locale, isIndex } = configStore.getState();
+      const { locale, isIndex, isGroup } = configStore.getState();
       set(() => ({ isLoading: true }));
-      const count = await countGeoDataSource({ filters, locale: locale, isIndex });
+      const count = await countGeoDataSource({ filters, locale: locale, isIndex, isGroup});
       set(() => ({ isLoading: false }));
       return count;
     },
