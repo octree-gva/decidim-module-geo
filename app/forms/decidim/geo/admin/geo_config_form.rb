@@ -13,7 +13,7 @@ module Decidim
         attribute :maptiler_style_id, String
         attribute :only_assemblies, Boolean
         attribute :only_processes, Boolean
-        attribute :default_geoencoded_filter, Integer
+        attribute :default_geoencoded_filter, String
         attribute :focus_zoom_level, Integer
 
         alias organization current_organization
