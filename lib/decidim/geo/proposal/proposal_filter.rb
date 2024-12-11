@@ -5,7 +5,7 @@ module Decidim
     module Api
       class ProposalFilter < DefaultFilter
         def filter_past(query)
-          query.where( 
+          query.where(
             "resource_type = ? AND (resource_status IN ('rejected', 'withdrawn') OR end_date < ?)",
             manifest_name,
             15.days.ago.to_date

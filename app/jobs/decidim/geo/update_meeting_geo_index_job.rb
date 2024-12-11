@@ -14,6 +14,7 @@ module Decidim
         @resource_id = meeting_id
         @resource = Decidim::Meetings::Meeting.where(id: meeting_id).first
         return remove_meeting unless resource
+
         sync_meeting
       end
 

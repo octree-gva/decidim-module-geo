@@ -26,13 +26,10 @@ module Decidim
           @decidim_geo_manifest ||= if self.class.include? Decidim::HasComponent
                                       # It's a resource
                                       component.manifest.name if component && component.manifest
-                                    elsif instance_of?(Decidim::Component)
-                                      # It's a component
+                                    elsif instance_of?(Decidim::Component) || self.class.include?(Decidim::ScopableParticipatorySpace)
+                                      # It's a component or a participatory space
                                       manifest.name if manifest
-                                    elsif self.class.include? Decidim::ScopableParticipatorySpace
-                                      # It's a participatory space
-                                      manifest.name if manifest
-          end
+                                    end
         end
 
         def decidim_geo_enabled?

@@ -12,7 +12,6 @@ namespace :decidim_geo do
       Decidim::Geo::AutomaticScopeJob.perform_now
     end
 
-
     def decidim_geo_path
       @decidim_geo_path ||= Pathname.new(decidim_geo_gemspec.full_gem_path) if Gem.loaded_specs.has_key?(gem_name)
     end

@@ -16,7 +16,7 @@ module Decidim
                        scope_for_component
                      elsif resource.class.include? Decidim::ScopableParticipatorySpace
                        scope_for_participatory_space
-          end
+                     end
         end
 
         def image_url
@@ -24,24 +24,23 @@ module Decidim
                            resource.attached_uploader(:banner_image).url(only_path: true)
                          elsif resource.respond_to?(:attachments) && resource.attachments.first
                            resource.attachments.first.url
-          end
+                         end
         end
 
         def start_date
           @start_date ||= if resource.respond_to?(:start_time)
-            resource.start_time.to_date
-          elsif resource.respond_to?(:start_date)
-            resource.start_date
-          end
-
+                            resource.start_time.to_date
+                          elsif resource.respond_to?(:start_date)
+                            resource.start_date
+                          end
         end
 
         def end_date
           @end_date ||= if resource.respond_to?(:end_time)
-            resource.end_time.to_date
-          elsif resource.respond_to?(:end_date)
-            resource.end_date
-          end
+                          resource.end_time.to_date
+                        elsif resource.respond_to?(:end_date)
+                          resource.end_date
+                        end
         end
 
         def resource_url
@@ -53,7 +52,7 @@ module Decidim
                        resource.title
                      elsif resource.respond_to?(:name)
                        resource.name
-          end
+                     end
         end
 
         def short_description
@@ -71,7 +70,7 @@ module Decidim
                              truncate_translated(resource.body, keep_html: true)
                            elsif resource.respond_to?(:description)
                              truncate_translated(resource.description, keep_html: true)
-          end
+                           end
         end
 
         def latitude
@@ -79,7 +78,7 @@ module Decidim
                           location.latitude if location && location.latitude
                         else
                           resource.latitude
-          end
+                        end
         end
 
         def longitude
@@ -87,7 +86,7 @@ module Decidim
                            location.longitude if location && location.longitude
                          else
                            resource.longitude
-          end
+                         end
         end
 
         def location
@@ -119,7 +118,7 @@ module Decidim
                                tail_before_final_tag: false
                              ).perform
                            )
-                        end
+                         end
           end
           value
         end
@@ -136,7 +135,7 @@ module Decidim
                                      component.scope
                                    else
                                      scope_for_participatory_space(component.participatory_space)
-          end
+                                   end
         end
 
         def scope_for_resource

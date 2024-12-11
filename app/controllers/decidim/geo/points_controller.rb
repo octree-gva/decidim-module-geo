@@ -21,24 +21,24 @@ module Decidim
         )
         last_modified = query.maximum(:updated_at) || 1.year.from_now
         etag = "#{query.cache_key_with_version}/params-#{Digest::MD5.hexdigest(permitted_params.to_json)}"
-        if stale?(last_modified: last_modified.utc, etag: etag)
-          last_id = query.maximum(:id)
-          geo_scope_ids = query.select(:geo_scope_id).group(:geo_scope_id).pluck(:geo_scope_id).compact
-          render json: {
-            meta: {
-              fields: permitted_fields_params,
-              filters: filters_params,
-              organization: current_organization.id,
-              end_cursor: results.last && results.last.id,
-              default_locale: current_organization.default_locale,
-              first: first_params,
-              after: after_params,
-              has_more: results.last && results.last.id != last_id,
-              geo_scope_ids: geo_scope_ids || []
-            },
-            data: results
-          }
-        end
+        return unless stale?(last_modified: last_modified.utc, etag: etag)
+
+        last_id = query.maximum(:id)
+        geo_scope_ids = query.select(:geo_scope_id).group(:geo_scope_id).pluck(:geo_scope_id).compact
+        render json: {
+          meta: {
+            fields: permitted_fields_params,
+            filters: filters_params,
+            organization: current_organization.id,
+            end_cursor: results.last && results.last.id,
+            default_locale: current_organization.default_locale,
+            first: first_params,
+            after: after_params,
+            has_more: results.last && results.last.id != last_id,
+            geo_scope_ids: geo_scope_ids || []
+          },
+          data: results
+        }
       end
 
       private
@@ -61,14 +61,14 @@ module Decidim
           current_user,
           {
             filters: filters_params,
-            is_index: is_index_params
+            is_index: index_params?
           },
           locale_param
         ).results
       end
 
-      def is_index_params
-        @is_index_params ||= permitted_params[:is_index] || false
+      def index_params?
+        @index_params ||= permitted_params[:is_index] || false
       end
 
       def locale_param
@@ -113,7 +113,7 @@ module Decidim
           filtered_fields.push("id")
           filtered_fields.map(&:underscore)
         end
-        end
+      end
 
       def set_default_format
         request.format = :json

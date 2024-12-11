@@ -5,6 +5,7 @@ module Decidim
     module Api
       class GeoQuery
         attr_reader :locale, :graphql_params, :organization, :current_user, :params
+
         delegate :count, to: :results, prefix: true
 
         def initialize(organization, current_user, params, locale)
@@ -20,7 +21,7 @@ module Decidim
           query = query.geolocated if geolocated? || config.force_geoencoded?
           return query.indexed if graphql_params.empty?
 
-          query = query.indexed if only_indexed?
+          query = indexed_query(query) if only_indexed?
           query = query.virtual if virtual?
           # Filter on scopes
           unless scope_ids_params.empty?
@@ -80,8 +81,16 @@ module Decidim
           query
         end
 
-
         private
+
+        def indexed_query(query)
+          return query.indexed unless process_groups?
+
+          query.indexed.or(query.where(
+                             participatory_space_id: process_params,
+                             avoid_index: true
+                           ))
+        end
 
         def config
           @config ||= Decidim::Geo::GeoConfig.geo_config_default
@@ -107,6 +116,14 @@ module Decidim
 
         def only_indexed?
           params.has_key?(:is_index) && params[:is_index]
+        end
+
+        def process_groups?
+          process_params.size > 1
+        end
+
+        def assembly_groups?
+          assembly_params.size > 1
         end
 
         def assembly_params

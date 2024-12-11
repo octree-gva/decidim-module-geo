@@ -14,6 +14,7 @@ module Decidim
         @resource_id = proposal_id
         @resource = Decidim::Proposals::Proposal.where(id: proposal_id).first
         return remove_proposal unless resource
+
         sync_proposal
       end
 
@@ -70,4 +71,4 @@ module Decidim
       end
     end
   end
-  end
+end

@@ -7,7 +7,8 @@ en:
       participatory_process:
         decidim_geo_space_address: Adresse
       component:
-        decidim_geo_avoid_index: Hide geolocated points outside this process
+        decidim_geo_avoid_index: Hide geolocated points outside this process.
+        decidim_geo_avoid_index_within_group: Hide geolocated points outside process group %{space_name}
   decidim:
     admin:
       components:

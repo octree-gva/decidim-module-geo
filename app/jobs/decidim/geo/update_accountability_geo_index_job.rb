@@ -14,6 +14,7 @@ module Decidim
         @resource_id = accountability_result_id
         @resource = Decidim::Accountability::Result.where(id: accountability_result_id).first
         return remove_accountability_result unless resource
+
         sync_accountability_result
       end
 
@@ -58,4 +59,4 @@ module Decidim
       end
     end
   end
-  end
+end
