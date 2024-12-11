@@ -85,7 +85,6 @@ module Decidim
 
         def indexed_query(query)
           return query.indexed unless process_groups?
-
           query.indexed.or(query.where(
                              participatory_space_id: process_params,
                              avoid_index: true
@@ -119,7 +118,7 @@ module Decidim
         end
 
         def process_groups?
-          process_params.size > 1
+          params.has_key?(:is_group) && params[:is_group]
         end
 
         def assembly_groups?

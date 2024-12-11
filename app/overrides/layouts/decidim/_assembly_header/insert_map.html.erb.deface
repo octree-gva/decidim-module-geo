@@ -12,6 +12,7 @@ iter_children(current_participatory_space, assemblies) unless current_participat
     id: "Assembly",
     hide_empty: true,
     is_index: false,
+    is_group: false,
     filters: if current_participatory_space.scope.present?
         [
           { scopeFilter: { scopeId: current_participatory_space.scope.id } }
