@@ -14,6 +14,7 @@ module Decidim
         @resource_id = process_id
         @resource = Decidim::ParticipatoryProcess.where(id: process_id).first
         return remove_process unless resource
+
         sync_process
       end
 
@@ -41,7 +42,6 @@ module Decidim
       rescue StandardError => e
         Rails.logger.debug { "Can not index #{e}" }
         raise e
-        false
       end
 
       def remove_process
@@ -59,4 +59,4 @@ module Decidim
       end
     end
   end
-  end
+end

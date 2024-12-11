@@ -42,9 +42,5 @@ module Decidim
     def self.point_factory
       RGeo::Geos.factory(srid: 4326)
     end
-
-    def self.point_factory
-      RGeo::Geos.factory(srid: 4326)
-    end
   end
 end

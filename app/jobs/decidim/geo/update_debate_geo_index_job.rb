@@ -14,6 +14,7 @@ module Decidim
         @resource_id = debate_id
         @resource = Decidim::Debates::Debate.where(id: debate_id).first
         return remove_debate unless resource
+
         sync_debate
       end
 
@@ -64,4 +65,4 @@ module Decidim
       end
     end
   end
-  end
+end

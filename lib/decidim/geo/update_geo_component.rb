@@ -13,16 +13,18 @@ module Decidim
         def set_decidim_geo_trigger_changes
           @decidim_geo_trigger_changes = !changes.empty?
         end
+
         def update_decidim_geo_index
           return unless @decidim_geo_trigger_changes
+
           component_id = id
           registry = Decidim::Geo::ManifestRegistry.instance
           model_klass = registry.model_for(manifest_name)
 
           attached = model_klass.where(component: component_id)
-          Decidim::Geo::Index.where(component_id: component_id, resource_type: manifest_name).where.not(resource_id: attached.ids).each {|ind| ind.destroy }
+          Decidim::Geo::Index.where(component_id: component_id, resource_type: manifest_name).where.not(resource_id: attached.ids).each(&:destroy)
           attached.each(&:update_decidim_geo_index)
-        rescue StandardError => e
+        rescue StandardError => _e
           Rails.logger.debug { "ERROR: manifest #{manifest_name} not supported" }
         end
 

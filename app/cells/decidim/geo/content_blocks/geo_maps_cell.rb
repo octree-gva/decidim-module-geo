@@ -25,9 +25,9 @@ module Decidim
 
         def data_count
           @data_count ||= ::Decidim::Geo::Api::GeoQuery.new(
-            current_organization, 
-            current_user, 
-            { filters: filters, is_index: index? }, 
+            current_organization,
+            current_user,
+            { filters: filters, is_index: index? },
             current_locale
           ).results_count
         end
@@ -66,9 +66,11 @@ module Decidim
             "data-i18n" => geo_i18n.to_json
           )
         end
+
         def index?
           @options.has_key?(:is_index) ? @options[:is_index] : true
         end
+
         def insert_scopes_mobile
           content_tag(:div, "", class: ["js-decidimgeo"])
         end
@@ -130,15 +132,16 @@ module Decidim
 
         def current_component_id
           return "none" unless current_component
+
           current_component.id
         end
 
         def current_component
-          return request.env["decidim.current_component"]
+          request.env["decidim.current_component"]
         end
 
         def current_participatory_space
-          return request.env["decidim.current_participatory_space"]
+          request.env["decidim.current_participatory_space"]
         end
 
         def current_component?

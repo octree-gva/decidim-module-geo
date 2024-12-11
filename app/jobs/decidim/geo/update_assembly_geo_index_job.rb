@@ -11,9 +11,10 @@ module Decidim
       alias assembly= resource=
 
       def perform(assembly_id)
-        @resource_id  = assembly_id
+        @resource_id = assembly_id
         @resource = Decidim::Assembly.where(id: assembly_id).first
         return remove_assembly unless resource
+
         sync_assembly
       end
 
@@ -50,7 +51,7 @@ module Decidim
         decidim_geo_hash[:start_date] = assembly.included_at.to_date if assembly.included_at
         decidim_geo_hash[:end_date] = assembly.closing_date.to_date if assembly.closing_date
         decidim_geo_hash
-        end
+      end
 
       def remove_assembly
         match = Decidim::Geo::Index.find_by(resource_id: resource_id, resource_type: manifest_name)
@@ -67,4 +68,4 @@ module Decidim
       end
     end
   end
-  end
+end

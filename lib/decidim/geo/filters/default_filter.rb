@@ -19,6 +19,6 @@ module Decidim
           query.where("resource_type = ? AND start_date >= ?", manifest_name, Time.zone.now.to_date)
         end
       end
-      end
+    end
   end
 end

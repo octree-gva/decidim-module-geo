@@ -1,7 +1,16 @@
 <!-- insert_after "erb[silent]:contains('if form.object.settings?')" -->
 <% if ::Decidim::Geo.registry.active_manifests(&:keys).any? {|manifest_name| manifest_name.to_s == form.object.manifest.name.to_s } %>
     <div class="decidim-geo decidim-geo--admin form-field">
-        <%= form.check_box :decidim_geo_avoid_index %>
+    <% 
+        space = form.object.participatory_space
+        has_process_group = space.respond_to?(:participatory_process_group) ? space.participatory_process_group.present? : nil
+        label = if has_process_group
+                    "decidim_geo_avoid_index_within_group"
+                else
+                    "decidim_geo_avoid_index"
+                end
+    %>
+        <%= form.check_box :decidim_geo_avoid_index, label: t(label, scope: "activemodel.attributes.component", space_name: space.title[locale.to_s]) %>
         <p class="help-text" style="transform: translateY(-0.5rem)"><%= t("geo_avoid_index", scope: "decidim.admin.components.form") %></p>
     </div>
 <% else %>

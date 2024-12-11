@@ -31,7 +31,7 @@ module Decidim
         camelized.merge!(lonlat: coordinates) if camelized.has_key?("lonlat")
 
         camelized
+      end
     end
-     end
   end
 end
