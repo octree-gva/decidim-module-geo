@@ -59,7 +59,7 @@ module Decidim
       def latitude(resource)
         if location_overriden?(resource)
           location(resource).latitude if location(resource) && location(resource).latitude
-        else
+        elsif resource.respond_to?(:latitude)
           resource.latitude
         end
       end
@@ -67,7 +67,7 @@ module Decidim
       def longitude(resource)
         if location_overriden?(resource)
           location(resource).longitude if location(resource) && location(resource).longitude
-        else
+        elsif resource.respond_to?(:longitude)
           resource.longitude
         end
       end
