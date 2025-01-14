@@ -13,8 +13,8 @@ export default class GeoDatasourceNode {
     return true;
   }
   isGeoLocated() {
-    if(!this.marker) return false;
-    const latlng = this.marker.getLatLng()
+    if (!this.marker) return false;
+    const latlng = this.marker.getLatLng();
     return latlng.lat && latlng.lng;
   }
 
@@ -92,8 +92,8 @@ export default class GeoDatasourceNode {
   }
 
   async panToMarker() {
-    const {map_config: mapConfig} = configStore.getState();
-    const {focus_zoom_level: focusZoomLevel = 21} = mapConfig;
+    const { map_config: mapConfig } = configStore.getState();
+    const { focus_zoom_level: focusZoomLevel = 21 } = mapConfig;
     if (!this.isGeoLocated()) return;
     const { map } = configStore.getState();
     return new Promise((resolve) => {

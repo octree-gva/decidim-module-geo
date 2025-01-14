@@ -99,7 +99,7 @@ export default class Drawer {
     const viewBtn = L.DomUtil.create("a", "decidimGeo__drawer__viewBtn", listCard);
     viewBtn.textContent = this.i18n()["decidim_geo.actions.view"];
     viewBtn.href = node.resourceUrl;
-    this.cardList.scrollTo({top: 0})
+    this.cardList.scrollTo({ top: 0 });
     return listCard;
   }
   repaint() {

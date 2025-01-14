@@ -28,7 +28,7 @@ async function prepareLeaflet(isSmallScreen) {
   bootstrap();
   // Parse and save server-side information.
   const { map, tile } = await initMap();
-  configStore.setState(() => ({ map,  isSmallScreen }));
+  configStore.setState(() => ({ map, isSmallScreen }));
 }
 async function fetchData() {
   const { addProcess, removeProcess, fetchAll, pointsForFilters } = pointStore.getState();
@@ -61,13 +61,12 @@ async function displayMap() {
 
       map.addControl(new FilterControl());
       map.addControl(new PageNameControl());
-      map.setMinZoom((configStore.getState().map_config.zoom || 15) - 2)
+      map.setMinZoom((configStore.getState().map_config.zoom || 15) - 2);
       // Save the first loaded position.
       await new Promise((resolve) => setTimeout(resolve, 120));
       configStore.getState().setReady();
       removeProcess();
       setTimeout(setSavedPosition, 320);
-
     });
 
     pointStore.subscribe(
@@ -78,7 +77,7 @@ async function displayMap() {
         state._lastResponse
       ],
       ([isLoading, getFilteredPoints, fetchesRunning]) => {
-        const {isInitialized} = pointStore.getState();
+        const { isInitialized } = pointStore.getState();
         if (isLoading > 0 || !isInitialized) {
           return;
         }
@@ -111,8 +110,10 @@ async function displayMap() {
           !selectedScope &&
           !selectedPoint
         ) {
-          const boundingBox = L.featureGroup(pointInMap.map(({ marker }) => marker)).getBounds();
-          if(map.getBounds().contains(boundingBox)){
+          const boundingBox = L.featureGroup(
+            pointInMap.map(({ marker }) => marker)
+          ).getBounds();
+          if (map.getBounds().contains(boundingBox)) {
             return;
           }
         }
@@ -185,14 +186,11 @@ async function main() {
   await fetchData();
 
   await displayMap();
- 
-
 }
 
 window.addEventListener("load", function () {
   main().then(() => {
     console.log("decidim geo ready");
-    setTimeout(() => pointStore.setState(() => ({isInitialized: true})), 640)
-    
+    setTimeout(() => pointStore.setState(() => ({ isInitialized: true })), 640);
   });
 });

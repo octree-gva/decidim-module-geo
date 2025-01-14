@@ -26,26 +26,26 @@ const store = createStore(
     isSmallScreen: false,
     activeManifests: [],
     closeAside: async () => {
-      const wasClosed = !get().isAsideOpen
-      if(wasClosed) return;
+      const wasClosed = !get().isAsideOpen;
+      if (wasClosed) return;
 
-      set(() => ({ isAsideOpen: false }))
-      return new Promise((resolve) => setTimeout(resolve, 520))
+      set(() => ({ isAsideOpen: false }));
+      return new Promise((resolve) => setTimeout(resolve, 520));
     },
     openAside: async () => {
-      const wasOpen = get().isAsideOpen
-      if(wasOpen) return;
-      set(() => ({ isAsideOpen: true }))
-      return  new Promise((resolve) => setTimeout(resolve, 520))
+      const wasOpen = get().isAsideOpen;
+      if (wasOpen) return;
+      set(() => ({ isAsideOpen: true }));
+      return new Promise((resolve) => setTimeout(resolve, 520));
     },
     setFullscreen: (fullscreen) => set({ isFullscreen: !!fullscreen }),
     setReady: () => set({ mapReady: true }),
     setConfig: (mapConfig) => {
       const findPageName = () => {
         const [titleTag] = document.getElementsByTagName("title");
-        const [titleContent] = (titleTag.textContent || "").split(" - ")
+        const [titleContent] = (titleTag.textContent || "").split(" - ");
         return titleContent || "Home";
-      }
+      };
       set(() => ({
         locale: mapConfig.locale,
         defaultLocale: mapConfig.default_locale,

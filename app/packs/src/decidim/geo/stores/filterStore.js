@@ -128,9 +128,9 @@ const onFilteredByScope = (filters) => {
     if (previousScope && `${scopeId}` === `${previousScope?.id}`) return;
     const selectedScope = scopeForId(scopeId);
     if (selectedScope) selectScope(selectedScope);
-    else selectScope(null)
+    else selectScope(null);
   } else {
-    const toRepaintScope = scopeForId(previousScope?.id)
+    const toRepaintScope = scopeForId(previousScope?.id);
     selectScope(null);
     if (toRepaintScope) {
       toRepaintScope.repaint();

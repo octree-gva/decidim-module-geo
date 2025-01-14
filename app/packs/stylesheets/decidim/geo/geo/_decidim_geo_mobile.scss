@@ -58,7 +58,9 @@
       .decidimGeo__pageName__container {
         display: flex !important;
       }
-      .leaflet-control-container .leaflet-bar a.leaflet-control-zoom-fullscreen.fullscreen-icon {
+      .leaflet-control-container
+        .leaflet-bar
+        a.leaflet-control-zoom-fullscreen.fullscreen-icon {
         display: flex;
       }
       .leaflet-control-zoom {
@@ -81,7 +83,6 @@
           }
         }
 
-
         .leaflet-control-attribution.leaflet-control {
           top: 0;
           left: 0;
@@ -98,7 +99,6 @@
             font-family: $header-font-family;
           }
         }
-
       }
     }
 
@@ -218,7 +218,6 @@
         max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
-    
       }
       .decidimGeo__filterModal__fieldlist {
         padding: 8px;

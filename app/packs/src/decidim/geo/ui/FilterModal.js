@@ -156,8 +156,8 @@ class FilterModal {
     );
   }
   geoFields(points) {
-    const {map_config: mapConfig} = this.config();
-    if(mapConfig?.force_geo_filter === "force_geoencoded") return;
+    const { map_config: mapConfig } = this.config();
+    if (mapConfig?.force_geo_filter === "force_geoencoded") return;
     const i18n = this.i18n();
     const i18nPrefix = "decidim_geo.filters";
 

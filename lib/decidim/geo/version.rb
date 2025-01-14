@@ -4,7 +4,7 @@ module Decidim
   # This holds the decidim_geo version.
   module Geo
     def self.version
-      "0.2.4"
+      "0.2.5"
     end
 
     def self.decidim_version

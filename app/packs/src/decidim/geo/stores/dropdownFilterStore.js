@@ -149,7 +149,6 @@ const store = createStore(
     open() {
       set(() => ({ isOpen: true }));
     }
-
   }))
 );
 

@@ -16,7 +16,7 @@ class FilterModalOverlay {
   }
   toggleOpen() {
     dropdownFilterStore.setState(({ selectedFilters }) => ({
-      nextFilters: { ...selectedFilters },
+      nextFilters: { ...selectedFilters }
     }));
 
     dropdownFilterStore.getState().toggleOpen();

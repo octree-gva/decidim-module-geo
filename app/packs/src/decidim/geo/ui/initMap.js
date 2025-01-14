@@ -1,7 +1,7 @@
 import L from "leaflet";
 import configStore from "../stores/configStore";
 import "leaflet.fullscreen";
-import {init as initMapTiler} from "@maptiler/leaflet-maptilersdk";
+import { init as initMapTiler } from "@maptiler/leaflet-maptilersdk";
 const initMap = async () => {
   const {
     mapID,
@@ -14,23 +14,21 @@ const initMap = async () => {
     scrollWheelZoom: false,
     fullscreenControl: false
   });
-  
+
   map.zoomControl.setPosition("bottomright");
 
-  if(maptiler_api_key.length > 0){
-    initMapTiler()
+  if (maptiler_api_key.length > 0) {
+    initMapTiler();
     new L.MaptilerLayer({
       style: maptiler_style_id,
-      apiKey: maptiler_api_key}
-    ).addTo(map)
-
-  }else{
+      apiKey: maptiler_api_key
+    }).addTo(map);
+  } else {
     L.tileLayer(tile_layer, {
       maxZoom: 19,
       attribution:
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
-  
   }
   L.control
     .fullscreen({

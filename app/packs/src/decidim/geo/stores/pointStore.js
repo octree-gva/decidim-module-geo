@@ -63,11 +63,11 @@ const store = createStore(
       scopes.forEach((scope) => scope.remove());
       scopeLayer.clearLayers();
       let geoScopes = [];
-      
-      if(fetchedGeoScopes.length > 0 && selectedGeoScopeIds.length > 0) {
+
+      if (fetchedGeoScopes.length > 0 && selectedGeoScopeIds.length > 0) {
         geoScopes = selectedGeoScopeIds
-        .map((scopeId) => {
-          const match = fetchedGeoScopes.find(({ id }) => `${id}` === `${scopeId}`);
+          .map((scopeId) => {
+            const match = fetchedGeoScopes.find(({ id }) => `${id}` === `${scopeId}`);
             if (!match) return null;
             const geoScope = new GeoScope({
               geoScope: match
@@ -76,13 +76,12 @@ const store = createStore(
             return geoScope;
           })
           .filter(Boolean);
-          
-        }  
-        const responsePoints = filteredPoints
+      }
+      const responsePoints = filteredPoints
         .map(({ id: needleId }) => {
           return points.find(({ id }) => `${needleId}` === `${id}`);
         })
-        .filter(Boolean)
+        .filter(Boolean);
       set(() => ({
         _lastResponse: responsePoints,
         lastResponseCount: responsePoints.length,
@@ -96,7 +95,7 @@ const store = createStore(
       const { points: fetchedPoints } = store.getState();
       if (fetchedPoints.length > 0) return;
 
-      const { locale, isIndex, isGroup} = configStore.getState();
+      const { locale, isIndex, isGroup } = configStore.getState();
 
       const promises = [];
       const filterWithoutTime = filters.filter(
@@ -135,7 +134,7 @@ const store = createStore(
           .filter(({ value }) => typeof value.geoScopes !== "undefined")
           .map(({ value: { geoScopes } }) => geoScopes);
         set(() => ({ fetchedGeoScopes }));
-        get()._updateCache()
+        get()._updateCache();
       });
     },
 
@@ -153,15 +152,19 @@ const store = createStore(
       }));
       filteredIdsStore.setState(() => ({ activeFilterIds: [] }));
 
-      await getGeoDataSource({ filters, locale: locale, isIndex, isGroup }, false, (data, hasMore) => {
-        filteredIdsStore.setState(({ activeFilterIds }) => ({
-          activeFilterIds: activeFilterIds.concat(data || [])
-        }));
-        set(({ fetchesRunning}) => ({
-          fetchesRunning: fetchesRunning - (hasMore ? 0 : 1),
-        }));
-        get()._updateCache();
-      });
+      await getGeoDataSource(
+        { filters, locale: locale, isIndex, isGroup },
+        false,
+        (data, hasMore) => {
+          filteredIdsStore.setState(({ activeFilterIds }) => ({
+            activeFilterIds: activeFilterIds.concat(data || [])
+          }));
+          set(({ fetchesRunning }) => ({
+            fetchesRunning: fetchesRunning - (hasMore ? 0 : 1)
+          }));
+          get()._updateCache();
+        }
+      );
     }
   }))
 );

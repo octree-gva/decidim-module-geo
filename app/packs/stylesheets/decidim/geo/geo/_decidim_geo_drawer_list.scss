@@ -7,7 +7,7 @@
     transform: translateY(20px);
     padding: 4px 16px;
     background: #f0f0f0;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
     border-radius: 0px 0px 4px 4px;
     margin-top: 27px;
 
@@ -142,7 +142,7 @@
     text-transform: uppercase;
     text-wrap: nowrap;
 
-    &--withdrawn, 
+    &--withdrawn,
     &--rejected {
       border-color: var(--alert);
       color: var(--alert);
@@ -155,7 +155,7 @@
       border-color: var(--warning);
       color: var(--warning);
     }
-    &--published{
+    &--published {
       display: none;
     }
   }

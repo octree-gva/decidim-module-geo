@@ -45,7 +45,7 @@ class FilterButton {
 
   repaint() {
     const { selectedPoint } = geoStore.getState();
-    if(!selectedPoint && this.alertBadFilter){
+    if (!selectedPoint && this.alertBadFilter) {
       this.title.onclick = this.handleFilterButtonClick.bind(this);
       this.countBadge.className = "decidimGeo__filterToggle__counter";
       this.countBadge.textContent = "!";
@@ -69,9 +69,12 @@ class FilterButton {
   }
 
   toggle() {
-    configStore.getState().closeAside().then(() => {
-      dropdownFilterStore.getState().toggleOpen();
-    })
+    configStore
+      .getState()
+      .closeAside()
+      .then(() => {
+        dropdownFilterStore.getState().toggleOpen();
+      });
   }
 
   i18n() {
@@ -87,7 +90,7 @@ class FilterButton {
       (state) => [state.lastResponseCount],
       ([count]) => {
         const alertBadFilter = count == 0;
-        if(alertBadFilter === this.alertBadFilter) return;
+        if (alertBadFilter === this.alertBadFilter) return;
         this.alertBadFilter = alertBadFilter;
         this.repaint();
       }

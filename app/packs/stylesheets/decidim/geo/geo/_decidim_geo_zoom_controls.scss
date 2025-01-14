@@ -1,5 +1,7 @@
 .decidimGeo__container .js-decidimgeo.decidimgeo__map {
-  .leaflet-control-container .leaflet-bar a.leaflet-control-zoom-fullscreen.fullscreen-icon {
+  .leaflet-control-container
+    .leaflet-bar
+    a.leaflet-control-zoom-fullscreen.fullscreen-icon {
     margin-top: 8px;
     height: 43px;
     padding: 0 27px;
@@ -60,7 +62,8 @@
     justify-content: center;
     margin: 0 !important;
     border-color: transparent !important;
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: #f4f4f4;
       text-decoration: none !important;
       opacity: 1 !important;
