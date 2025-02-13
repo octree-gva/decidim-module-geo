@@ -13,13 +13,14 @@ description: Installation instructions
 | 0.28            | coming soon |
 | 0.29            | coming soon |
 
-To install Decidim Geo, you need a [Posgis](https://postgis.net/) extension installed.
+## Prerequisites
+To install Decidim Geo, ensure you have the [PostGIS](https://postgis.net/) extension installed and enabled on your PostgreSQL database.
 
 ### Install Decidim Geo
 
 Add the gem to your Gemfile
 ```
-    gem "decidim-decidim_geo", version: "~> 0.2.6"
+  gem 'decidim-decidim_geo', '~> 0.2.1'
 ```
 
 Add javascripts libraries
@@ -29,7 +30,7 @@ Add javascripts libraries
 
 Copy migrations and migrate
 ``` 
-    bundle exec rails decidim_geo:migration:install
+    bundle exec rails decidim_geo:install:migrations
     bundle exec rails db:migrate
 ```
 
@@ -47,4 +48,32 @@ All migrations should be up
 Assets compilations should pass. 
 ``` 
     bundle exec rails assets:precompile
+```
+### Tips for Installing [PostGIS](https://postgis.net/)
+If you haven't installed PostGIS yet, follow these steps:
+
+```sh
+sudo apt update && sudo apt install postgis postgresql-14-postgis-3
+```
+Enable the PostGIS extension inside your PostgreSQL database:
+```sql
+CREATE EXTENSION postgis;
+```
+
+Modify your `docker-compose.yml` file to use PostGIS:
+```yaml
+pg:
+  image: postgis/postgis:latest
+  environment:
+    POSTGRES_PASSWORD: postgres
+Run the following command to add the required gem:
+```sh
+echo 'gem "activerecord-postgis-adapter"' >> Gemfile
+```
+
+Modify the file database.yml, changing the adapter to ``postgis``
+
+Then, install the dependencies:
+```sh
+bundle install
 ```
